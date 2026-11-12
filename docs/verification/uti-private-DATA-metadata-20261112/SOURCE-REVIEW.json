@@ -1,0 +1,91 @@
+{
+  "schema": "mckernel.private-unselected-UTI-data-provider-independent-source-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Original M14-I01-E2/E3 util_thread DATA prerequisite only; private and unselected, with no wholebody, frontend, image or native acceptance.",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "reviewer": "/root/functional_delta_review; explicit gpt-6.1-sol/MAX; independent source/ABI/ownership review; no recursion",
+  "author": "/root/proc_vm_index_fix",
+  "decision": "GO_PRIVATE_UNSELECTED_DATA_SOURCE_ONLY__COMPILER_BINDING_CORRECTNESS_UNPROVED",
+  "operation_or_selection_or_compiler_admission": false,
+  "reviewed_inputs": {
+    "prepared_source_sha256": "d2384465d4dab6c9fb3a139d3bc51d973e9c81b8b0673b0fe23ee53738d6baf3",
+    "candidate": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/candidate/kernel/rust/uti_data_providers.rs",
+      "bytes": 6491,
+      "sha256": "4612b65d108e52e03c90b5fa7644c8e7ead74b9eef1b8070fa7ec4e8beb0a439"
+    },
+    "private_patch_sha256": "b2f52055d16d233a64cd31ac1aa291144c7a0ca49fd8f7192b55d72de52b338c",
+    "provider_ABI_and_callers_sha256": "cd7fd451d31892ef7043eafd313bdd7b202818ce3998b7e0c416264efd5c73b3",
+    "next_changed_check_sha256": "b205ac9919bf7644f864f57f27cdee75cb62e56e5b5b753819509ea923a85cf9",
+    "required_measured_private_ABI_type_patch_sha256": "00e8fdb4acd95433de3d178fe50d1851fd45e5be2cfdbc4e7b556ed6ed5084a4",
+    "required_measured_private_ABI_types_sha256": "c19d2f6f42f861e4b1dfe7af710fba024b93a5c17082bbdc5a2b4bf914278523"
+  },
+  "ABI35_reuse": {
+    "saved_result_path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-ABI35-rust-cwd-correction-1/execution-1/capture/RESULT.json",
+    "saved_result_sha256": "1d359e8c55101cbf0620ec3ae2195335a61d448ac95b0c27e68b1cb8b784e7e8",
+    "exact_named_rows_path": "passive_35word_result.named_words",
+    "raw_35word_sha256": "27859d4e73c746e0a5eccdeda7b72fa7da9eb8b66854649ebb0dc607c5b09b85",
+    "bytes_each": 280,
+    "C_object_sha256": "d1ca11962c943a68198f9cb3afa5140e62c0ec7cad72488bf201ac82458bfc51",
+    "Rust_object_sha256": "4fbb4de188077b247524532cb9065b170a36d55d8d56603c15feab1f897248b0",
+    "reported_names": 35,
+    "actual_names": 35,
+    "missing_extra_or_mismatched_named_values": [],
+    "uti_info_align": {"C":8,"Rust":8},
+    "reviewer_lookup_correction": "The first metadata query incorrectly looked for top-level named_words and raised KeyError. The exact saved path above resolves it. An earlier suspected uti_info.align omission was a reviewer misread: all35 table entries are present and match. No source/metadata correction, compiler/extractor rerun, denominator change or additional ABI acceptance was needed.",
+    "qualification_scope": "Reuse existing ABI35/Q43b DATA-only qualification. These saved values do not prove the new provider-address module typechecks or is linked/selected."
+  },
+  "typed_layout_review": {
+    "result": "SOURCE_MATCH_NO_LAYOUT_MISMATCH_FOUND",
+    "scalar_types": "Current abi.rs declares CInt=i32, CULong=u64 and SizeT=usize. Metadata's size/align/offset expressions therefore retain native usize types; no guessed scalar cast or mirrored numeric layout table is introduced.",
+    "expressions": "Candidate80-125 uses the genuine measured UtiInfo/UtiKattr/UtiAttr/UtiCtx/UtiCtxRefill types. Its23 UtiInfo size/align/field entries plus4 each for kattr/attr/context cover exactly35 values. The nested union expression offset_of!(UtiCtx,refill)+offset_of!(UtiCtxRefill,uti_refill_tid) agrees with the existing4096byte/align4 context/refilloffset0 proof.",
+    "representations": "Only the separate previously measured00e8/c19 ABI overlay defines repr(C) UtiInfo/UtiKattr. This new module does not duplicate them or define a C Layout16 replacement. Its Rust-only layout records are private metadata, not an external ABI passed to an existing caller.",
+    "partial_storage": "No UtiInfo/UtiKattr/UtiCtx instance is constructed, zeroed, copied, read or borrowed here. Offset expressions do not grant host-filled-slot initialization, ACK, lifetime, completion, conversion or final-stack access. Kernel12field/host9slot ownership and original uninitialized padding are untouched."
+  },
+  "seven_actual_function_address_contracts": [
+    {"field":"current_cpu_local","type":"unsafe extern C fn()->*mut CpuLocalVar","provider":"crate::cls::get_this_cpu_local_var","source_sha256":"c0260e7634d53fcc0873746af8bd16b6691ee0a4b7f394ca18896aef070f6bba","signature_source_match":true},
+    {"field":"allocate_tracked","type":"unsafe extern C fn(CInt,CULong,*mut i8,CInt)->*mut c_void","provider":"crate::mem_helpers::kmalloc_tracked","source_sha256":"f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680","signature_source_match":true},
+    {"field":"free_tracked","type":"unsafe extern C fn(*mut c_void,*mut i8,CInt)->()","provider":"crate::mem_helpers::kfree_tracked","source_sha256":"f544c5177156ad5de8544bb95c46bbc8e2ac870a25c4895ca4cefb7c8cc79680","signature_source_match":true},
+    {"field":"save_user_context","type":"unsafe extern C fn(*mut c_void,*mut X86UserContext)->()","provider":"crate::syscall_policy::save_uctx","source_sha256":"784822e941d09ede1c51a443e1e93c105ab089dc7cd33de9f16613533044c503","signature_source_match":true},
+    {"field":"virtual_to_physical","type":"unsafe extern C fn(*mut c_void)->CULong","provider":"crate::x86_memory_helpers::virt_to_phys","source_sha256":"19aa46052d53f7e725a787b5ad516ba3dec0c6680645d5dd00aad81b935d8156","signature_source_match":true},
+    {"field":"futex_queues","type":"unsafe extern C fn()->*mut FutexHashBucket","provider":"crate::futex::get_futex_queues","source_sha256":"ecfafb1d08247eec584c429c0bc9cd4fbd75d1bd8f01e10847e5dad796a6b4d7","signature_source_match":true},
+    {"field":"processor_id","type":"unsafe extern C fn()->CInt","provider":"crate::x86_local::ihk_mc_get_processor_id","source_sha256":"9f102654a22895615da854b08ea8e043a6c17b9157e4b77e5b58783e70abeb3f","signature_source_match":true,"cfg_scope":"Real production branch requires mckernel_equivalence absent; no provider invocation or MSR/currentCPU action occurs in this table."}
+  ],
+  "idle_halt_and_ownership_review": {
+    "result": "SOURCE_MATCH_EXISTING_STORAGE_ADDRESS_ONLY",
+    "provider_source_sha256": "34c7571f5a1f539e288b89c364a5cc93dcd86cd3be896b586424caec0eacaef3",
+    "existing_definition": "process_helpers.rs process_global_storage under cfg(process_global_storage_candidate) defines the existing no_mangle pub static mut idle_halt:CInt=0. Its current initialization/synchronization owner remains that existing selected candidate.",
+    "new_declaration": "New unsafe extern C static mut idle_halt:CInt is a declaration only; addr_of!(idle_halt) supplies *const CInt without a scalar snapshot, pointee read, initialized reference, new storage or Atomic/Send/Sync implementation. Constant type/visibility/raw-address compiler correctness remains unproved until the new metadata check.",
+    "no_provider_reimplementation": "All seven entries are typed addresses of genuine existing Rust functions; there is no function body, C facade, replacement callback, allocation/free call, lock/preemption action, lookup or conversion in this file. Metadata and addresses grant no ownership or completion.",
+    "caller_obligations": "Original caller retains currentCPU/thread exclusion and repeated lookup order; allocator AP_NOWAIT/filename/logical origins/null cleanup; embedded-slot versus VM/futex pointee address distinctions; live address conversion and peer ACK/free lifetimes. The file supplies no origins producer, dispatch, uti_desc, ACK, transport, terminate/exit or completion endpoint."
+  },
+  "unselected_source_graph": {
+    "patch_scope": "The private patch adds only candidate/kernel/rust/uti_data_providers.rs. No canonical/author dependency/build/cfg/caller file was edited by reviewer.",
+    "canonical_lib_rs_sha256": "5e41a37bf262dd91169c19bad2b69bdb06d9d5ea82582a1efd2bd82024b70575",
+    "canonical_module_declaration_absent": true,
+    "canonical_ABI_lacks_UtiInfo_UtiKattr": true,
+    "dependent_overlay_required_for_any_later_private_check": true,
+    "not_selected_or_retired": "No util_thread/bridge/old53634body, legacy producers, frontend, global cfg, C body retirement, image/module selection or runtime behavior change is introduced or approved."
+  },
+  "smallest_necessary_future_metadata_only_check_scope": {
+    "status": "SOURCE_HANDOFF_ONLY__EXACT_OPERATION_PACKET_AND_ADMISSION_UNISSUED",
+    "compiler_correctness": "UNPROVED",
+    "one_changed_check": "One genuine current Rust1.95 production-crate metadata-only typecheck with --emit=metadata and disjoint output. Use the actual previously qualified compiler/core/target/profile and real current provider modules. No object generation/link/extractor/C compiler/ABI35 replay or provider execution is needed.",
+    "only_private_source_inputs_changed": "A private crate-root overlay adds only this module declaration and points abi to the separate measured c19 overlay/00e8 type patch. Canonical lib.rs/abi/build/source remain untouched and no persistent module/cfg selection occurs. Keep the real current production provider/global-storage cfg; do not enable mckernel_equivalence, m14_private_frontend, util_thread or any body selector.",
+    "what_it_can_prove": "Syntax, field/union expression resolution, usize assignments, actual provider function-pointer coercions and visibility, unsafe external static/raw-address constant legality under the real language edition/cfg. It cannot prove link/provider/image/native/ACK/lifetime behavior or repeat ABI35 acceptance.",
+    "minimum_frozen_packet_before_any_compiler": "Exact compiler executable/sysroot/core/target/source/profile pins and actual production argv adapted only to private overlays/--emit=metadata/disjoint output, expected compiler result and capture/ownership/deadlines, current source permission/complete aggregate resource/account/service admission and separate independent operation review. Root alone admits and executes.",
+    "reuse": "Reuse actual ABI35/Q43b/Cd1ca/Rust4fbb/raw27859 and all unchanged provider/type results; no old green wholeobject build, C witness/extraction/ABI compare, control suite or runtime/native operation."
+  },
+  "concrete_type_or_provider_mismatches_found": [],
+  "operations_performed": {
+    "bounded_source_signature_layout_global_definition_and_patch_reads": true,
+    "current_focused_source_pins_and_saved_metadata_table_comparison": true,
+    "Rust_source_parse_compile_typecheck_import_extractor_or_object_readback_rerun": false,
+    "provider_call_partial_object_read_zero_or_reference_formation": false,
+    "canonical_author_source_module_cfg_or_inflight_edit": false,
+    "account_private_DATA_namespace_flags_native_or_probe_execution": false,
+    "execution_grant_original_acceptance_or_resource_release": false
+  },
+  "current_holds": "Root reports firstrepeat81012 now UNKNOWN_NATIVE_CUSTODY after watchdog/NativeParentRetirement558; retain1.5GiB/job1 and actual native/source/resource ownership, with no success/retry inferred. Same savedRoot/finite7c6, native12/historicalUNKNOWN/service/account/source holds persist. HOST0,6,7/max3/4GiB TOTAL including all overhead/retained slices/fresh26GiB/floors remain; no check is admitted by this review.",
+  "acceptance": "No C4/E2/E3/native/original M14/M15 or milestone credit. M14 before M15 remains; private source and a future metadata-only check do not retire C or accept an image.",
+  "rejected_exclusion": "worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02 signal/frame/xstate collector remains excluded from replay/rephrasing/reassignment. No recursive agents."
+}

@@ -1,0 +1,711 @@
+{
+  "schema": "mckernel.m15.f05.actual-public-create-three-local-libc-seams-and-new1gib-closure-qualification.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Actual public ihk_create_os valid-owned-fd0/fd7 result and one-close HOST behavior only.",
+  "reviewer": "/root/m15_installed_leaf_review; independent explicit gpt-6.1-sol/MAX; depth1/no recursion",
+  "qualified_at_utc": "2026-11-12T20:47:26.605Z",
+  "decision": "PASS_THREE_PUBLIC_CREATE_LOCAL_LIBC_SEAM_CASES_AND_ONLY_NEW_1073741824B_JOB1_RETIREMENT_ELIGIBLE",
+  "actual_evidence": {
+    "result": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/RESULT.json",
+      "bytes": 19253,
+      "sha256": "781a18b99fe7727ea456f735ed6643bbb5c139d57898d6021a43e0bb6586ea5b"
+    },
+    "outer_result": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/root-capture-1/RESULT.json",
+      "bytes": 2872,
+      "sha256": "1e3e06652ecb63632543e83a348a9e0391cabdceab5ae78ae966a74f35fcc756"
+    },
+    "outer_clients": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/root-capture-1/CLIENTS.json",
+      "bytes": 1480,
+      "sha256": "19d714078d72e0dffa72ca1f825f3d8684371de83db193b0de85bc763c13324f"
+    },
+    "original_initial": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/ROOT-ACTUAL-CREATE.INITIAL.json",
+      "bytes": 131,
+      "sha256": "fa706f66f0fae1da3846ba331dde46b5f23f0192db522d72d559a1cae4a87573"
+    },
+    "original_terminal_poll": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/ROOT-ACTUAL-CREATE.POLL-1.json",
+      "bytes": 223,
+      "sha256": "15df257eacc38ac2a49a93bff1585c97cd79fbe4cfc72fa3c95c15232b71fb66"
+    },
+    "passive_ELF_map": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/PASSIVE-QUALIFIED-ELF-MAP.json",
+      "bytes": 10307,
+      "sha256": "bec718b032547887b26a576ac439e1e21094d2d5f07848bc4854e521987934ea"
+    },
+    "run_stdout": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/run-logs.stdout",
+      "bytes": 435,
+      "sha256": "e0fc2980680ee31eda5b23289dc2dcf881e4737261780c76dea044e575dbc549"
+    },
+    "run_stderr": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/run-logs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compile_created": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/compile-created-profile.json",
+      "bytes": 14196,
+      "sha256": "be88c1feb1a615bcb73aad43d903582769c318ad0074d1c03701397d4b407aeb"
+    },
+    "compile_terminal": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/compile-terminal-profile.json",
+      "bytes": 14856,
+      "sha256": "5b3f24d8dc3e4790d46d56c88b98ac26ad4897924e49f751d9e000452379d51d"
+    },
+    "run_created": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/run-created-profile.json",
+      "bytes": 14158,
+      "sha256": "01d01cd7c459e6b7ca02114abea2f728538d3a6637bc268786c8d689cb4bd24d"
+    },
+    "run_terminal": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/execution-1/run-terminal-profile.json",
+      "bytes": 14818,
+      "sha256": "8dc2ea12faa3407debcea4f812ac518c56b2f50dea56d5448669738dfffb6681"
+    }
+  },
+  "source_operation_binding": {
+    "request": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/REQUEST.FROZEN.json",
+      "bytes": 47728,
+      "sha256": "39e72c160869b177f84aa933087b76df34baf3256d79cfe2b454a42cf444f329"
+    },
+    "independent_source_operation_review": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/independent-operation-review-1/OPERATION-REVIEW.json",
+      "bytes": 11202,
+      "sha256": "92a6e09200b9c2ae2f93b7024ecd9c443223d0ffefc41c0a167d0e26846d4e15"
+    },
+    "parent_sha256": "c83af612c3c4142a702b0c0fc2e76ae25dc9a04c2b7e6a0d2d7ac3e754de820e",
+    "outer_sha256": "b83ff22a2038bdc6844c055fdd81a4faf84a3cd0b0e3395050aae901365be0bf",
+    "actual23_field_grant": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/conditional-compiler-binding-companion-1/ROOT-ADMISSION.json",
+      "bytes": 5913,
+      "sha256": "2a2f98b86c7c9656921a39c8bc11ae9847891b2bcae91c1d76f27fcd61eb0f5e"
+    },
+    "source_caller_contract": {
+      "bytes": 14672,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2252903,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/F05-CREATE-CONTRACT.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/F05-CREATE-CONTRACT.json",
+      "sha256": "21b72387a4bbf33d7ccf34d4f4c026137548f5e3941f12e55a5b337168e51893",
+      "uid": 1000
+    },
+    "input_manifest": {
+      "bytes": 17425,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2253242,
+      "mode": "0o600",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/OBSERVER-INPUTS.json",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/OBSERVER-INPUTS.json",
+      "sha256": "76252af3ba3d9db02c76a846a374cd262d4140b1f5bc5b741f7843f97cc2c472",
+      "uid": 1000
+    },
+    "accepted_library_header_ABI_delivery_refs_reused": {
+      "CLI_current_c474": {
+        "bytes": 82223,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2234108,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/qualification-1/RESULT.json",
+        "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/qualification-1/RESULT.json",
+        "sha256": "c474796490bd8b443f66ceb49abb113bda1d9cadd6d0a9174c8f8a6506ed43e0",
+        "uid": 1000
+      },
+      "I01_whole_f36": {
+        "bytes": 79880,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2250874,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-whole-review-sdk-max-1/REVIEW.json",
+        "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-whole-review-sdk-max-1/REVIEW.json",
+        "sha256": "f36eab95902c566985e0491b707bc1533c314dade5e5a514b62348b21379d813",
+        "uid": 1000
+      },
+      "actual13_manifest": {
+        "bytes": 85890,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2250867,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-closure-publicabi-max-1/actual-runtime-whole-manifest-1/qualified-runtime-join-1/COMPLETE-13-DELIVERY-OWNERSHIP.JOIN.json",
+        "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/M15-i01-deployed-closure-publicabi-max-1/actual-runtime-whole-manifest-1/qualified-runtime-join-1/COMPLETE-13-DELIVERY-OWNERSHIP.JOIN.json",
+        "sha256": "876f4fdcdcd7b8468d3044467786f5dce891fe8a318fea8c858ed05bdd6c2111",
+        "uid": 1000
+      },
+      "installed_header_3f1e": {
+        "bytes": 4081,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2233529,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/qualification-1/STAGED-HEADERS.json",
+        "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/qualification-1/STAGED-HEADERS.json",
+        "sha256": "3f1e8b3ffa1d74c5aa8d32d93b1e33b070ebd36b0c6fc18cf86efe51d608251f",
+        "uid": 1000
+      },
+      "library_e530": {
+        "bytes": 213206,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2233530,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/qualification-1/RESULT.json",
+        "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/compiler195-binding-1/qualification-1/RESULT.json",
+        "sha256": "e530ac72b0c71f3f34d9eee1eef5bf256241cbb3bbdb9a2ea135a46442cac2cb",
+        "uid": 1000
+      }
+    },
+    "no_library_destroy_provider_ABI_compiler_observer_or_green_test_rerun_by_reviewer": true
+  },
+  "original_behavior_coverage": {
+    "original_leaf_id": "M15-F05-original-behavior",
+    "public_prototype": "int ihk_create_os(int index);",
+    "actual_public_entry": "ihk_create_os from actual unchanged Rust libihk.so b7bc; no public IHK body is defined in the observer.",
+    "provider": {
+      "bytes": 12095128,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2234050,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/lib64/libihk.so",
+      "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/cli-matching-provider-build-1/build-output/stage/lib64/libihk.so",
+      "sha256": "b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2",
+      "uid": 1000
+    },
+    "provider_runtime_join": "Actual dlopen('/provider/libihk.so',RTLD_NOW|RTLD_LOCAL), dlsym('ihk_create_os') and dladdr exact-path checks bind the public function to the mounted DSO. Source input pins/RO mount keep exact b7bc bytes before/after; no library rebuild.",
+    "seam_runtime_join": "Observer verifies the four RTLD_DEFAULT GLIBC_2.2.5-versioned access/open/ioctl/close symbols belong to its own observer ELF. This lower-effect control calls the real public Rust function while replacing only its local libc effects.",
+    "source_header_caller_pins_reused": [
+      {
+        "bytes": 1573,
+        "canonical_equals_producer_bytes": true,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47846370,
+        "line_contract": "11-18 public create body, finish closes fd0 andfd7 once; ret preserved",
+        "mode": "0o600",
+        "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs",
+        "producer_bound_source": {
+          "bytes": 1573,
+          "dev": 66306,
+          "gid": 1000,
+          "inode": 2232611,
+          "mode": "0o600",
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs",
+          "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs",
+          "sha256": "2818b2c0f1385555ac75c4e7ecd84c49165320a9607f3d6a064c332969d59441",
+          "uid": 1000
+        },
+        "resolved": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_os_instance_lifecycle.rs",
+        "sha256": "2818b2c0f1385555ac75c4e7ecd84c49165320a9607f3d6a064c332969d59441",
+        "uid": 1000
+      },
+      {
+        "bytes": 5325,
+        "canonical_equals_producer_bytes": true,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47845925,
+        "line_contract": "27-46 device path/readability/open and returned fd",
+        "mode": "0o600",
+        "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs",
+        "producer_bound_source": {
+          "bytes": 5325,
+          "dev": 66306,
+          "gid": 1000,
+          "inode": 2232596,
+          "mode": "0o600",
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs",
+          "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs",
+          "sha256": "f1b515fa9eceb75b2b912a9630641e663f21fa3ad06ab79b12d917492a9b22a2",
+          "uid": 1000
+        },
+        "resolved": "/home/holden/mckernel/ihk/linux/user/rust/whole70/accepted_host_root.assigned_memory_dependency_join.rs",
+        "sha256": "f1b515fa9eceb75b2b912a9630641e663f21fa3ad06ab79b12d917492a9b22a2",
+        "uid": 1000
+      },
+      {
+        "bytes": 5025,
+        "canonical_equals_producer_bytes": true,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47467154,
+        "line_contract": "90 int ihk_create_os(int index)",
+        "mode": "0o664",
+        "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihklib.h",
+        "producer_bound_source": {
+          "bytes": 5025,
+          "dev": 66306,
+          "gid": 1000,
+          "inode": 2232658,
+          "mode": "0o600",
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/include/ihk/ihklib.h",
+          "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/include/ihk/ihklib.h",
+          "sha256": "00b5bc8a195fbb94e2b14f73c6925bb85621da8a33aa349d32f20c70dcc4055a",
+          "uid": 1000
+        },
+        "resolved": "/home/holden/mckernel/ihk/linux/include/ihk/ihklib.h",
+        "sha256": "00b5bc8a195fbb94e2b14f73c6925bb85621da8a33aa349d32f20c70dcc4055a",
+        "uid": 1000
+      },
+      {
+        "bytes": 5704,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47467151,
+        "line_contract": "17 CREATE request0x112900",
+        "mode": "0o664",
+        "path": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_host_user.h",
+        "resolved": "/home/holden/mckernel/ihk/linux/include/ihk/ihk_host_user.h",
+        "sha256": "2335260024075a08becbe74651162a950aee8bea603e9a451cb8bcae3aa0ef97",
+        "uid": 1000
+      },
+      {
+        "bytes": 106408,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47460036,
+        "line_contract": "1960-1989 C parity,5255-5290 public OS-index caller",
+        "mode": "0o600",
+        "path": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+        "resolved": "/home/holden/mckernel/ihk/linux/user/ihklib.c",
+        "sha256": "53a2ab78b817271541796adc16bd529c0d2a540f97b5b1cd68bf0dca2de8a59d",
+        "uid": 1000
+      },
+      {
+        "bytes": 20937,
+        "canonical_equals_producer_bytes": true,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47846099,
+        "line_contract": "324-338 nonnegative returnedindex published beforeassignment",
+        "mode": "0o600",
+        "path": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+        "producer_bound_source": {
+          "bytes": 20937,
+          "dev": 66306,
+          "gid": 1000,
+          "inode": 2232599,
+          "mode": "0o600",
+          "path": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+          "resolved": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/ihklib-matching-provider-build-1/source/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+          "sha256": "2ad6733ffd47337533fbdfd57a2a31650c2a9d9ed13449a9215b66b12376fa7b",
+          "uid": 1000
+        },
+        "resolved": "/home/holden/mckernel/ihk/linux/user/rust/whole70/ihklib_create_os_environment.rs",
+        "sha256": "2ad6733ffd47337533fbdfd57a2a31650c2a9d9ed13449a9215b66b12376fa7b",
+        "uid": 1000
+      },
+      {
+        "bytes": 12348,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 47467164,
+        "line_contract": "194-204 raw CLI ioctl is a distinct caller",
+        "mode": "0o600",
+        "path": "/home/holden/mckernel/ihk/linux/user/ihkconfig.c",
+        "resolved": "/home/holden/mckernel/ihk/linux/user/ihkconfig.c",
+        "sha256": "f6d2bd3f8940f9c313aa6b7856484b44b5446b1440ba12752cb0e15b0a8aec64",
+        "uid": 1000
+      }
+    ],
+    "matched_contract": {
+      "call": "exactlyone synchronous ioctl after successfulopen, no retry/sleep",
+      "caller": "create_os_str Rust324/C5270 treatsnegative aserror and publishes nonnegativeindex unchanged; CLI do_create sends rawioctl and is distinct",
+      "cleanup": "finish closes any fd !=-1, includingFD0; oneclose for ownedFD0/FD7; capturedresult survives cleanup errnoECANCELED; no postclose errno promise",
+      "device": "devindex0 -> /dev/mcd0; R_OK then O_RDONLY; observer supplies only valid actual local /dev/null FD0 orFD7",
+      "implementation_defect_found": false,
+      "prototype": "int ihk_create_os(int index);",
+      "request": "0x112900 with variadic promoted c_int0",
+      "return": "nonnegative ioctl result remains0 or7 (OSindex); negative ioctl captures -errno beforeclose, EIO ->-5"
+    },
+    "case_results": [
+      {
+        "name": "fd0_index0",
+        "result": 0,
+        "owned_local_fd": 0,
+        "access": 1,
+        "open": 1,
+        "ioctl": 1,
+        "ioctl_argument": 0,
+        "close": 1,
+        "fd_closed": 1,
+        "trace": "AOIC",
+        "trace_ok": 1,
+        "errors": 0,
+        "status": "PASS"
+      },
+      {
+        "name": "fd7_index7",
+        "result": 7,
+        "owned_local_fd": 7,
+        "access": 1,
+        "open": 1,
+        "ioctl": 1,
+        "ioctl_argument": 0,
+        "close": 1,
+        "fd_closed": 1,
+        "trace": "AOIC",
+        "trace_ok": 1,
+        "errors": 0,
+        "status": "PASS"
+      },
+      {
+        "name": "fd7_eio",
+        "result": -5,
+        "owned_local_fd": 7,
+        "backend_errno": 5,
+        "access": 1,
+        "open": 1,
+        "ioctl": 1,
+        "ioctl_argument": 0,
+        "close": 1,
+        "fd_closed": 1,
+        "trace": "AOIC",
+        "trace_ok": 1,
+        "errors": 0,
+        "status": "PASS"
+      }
+    ],
+    "what_this_closes_at_its_scope": "Under the actual ordinary HOST46d/b7bc/header cohort, successful local owned fd0 and fd7 each reach one synchronous public-create ioctl and exactly one owned close; nonnegative OS indices0/7 are preserved, and ioctl EIO becomes-5 despite cleanup errno effects. Valid owned-fd0 is not treated as invalid. Actual callback order is AOIC and descriptor closure is checked by the observer.",
+    "fixture_custody": "Observer saves its own stdin into a new FD>=16, supplies actual local /dev/null FD0/7 only after proving the slot free, consumes the close once and checks F_GETFD/EBADF. Actual output confirms stdin_restored=1 and backup_closed=1. This is the observer's own process fixture, not another process's restoration.",
+    "scope_limits": [
+      "No actual /dev/mcd0 endpoint, IHK backend, module/native operation or deployed CLI/main behavior.",
+      "No proof of every public function/backend region, runtime key0 balanced arithmetic, zero-node/zero-compensation or any source-excluded domain.",
+      "No whole original F05 child/milestone acceptance, C retirement or automatic canonical credit."
+    ],
+    "earlier_destroy_public_consumer_ABI_provider_proof_reused_at_original_scope": true,
+    "original_complete_done_when_unchanged": true,
+    "whole_original_leaf_complete": false
+  },
+  "actual_compiler_and_passive_artifact": {
+    "compiler_argv": [
+      "/usr/bin/cc",
+      "-std=gnu11",
+      "-O0",
+      "-g0",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fPIE",
+      "-pie",
+      "-Wl,--export-dynamic",
+      "-Wl,-z,defs",
+      "-Wl,--version-script=/input/observer.versions",
+      "-Wl,-Map=/output/f05-public-create-observer.map",
+      "-I/headers",
+      "/input/f05-public-create-observer.c",
+      "-o",
+      "/output/f05-public-create-observer",
+      "-ldl"
+    ],
+    "compiler_exit": 0,
+    "compiler_direct_wait_joined": true,
+    "compiler_stdout_bytes": 0,
+    "compiler_stderr_bytes": 0,
+    "readelf_argv": [
+      "/usr/bin/readelf",
+      "--wide",
+      "--file-header",
+      "--program-headers",
+      "--dynamic",
+      "--dyn-syms",
+      "--version-info",
+      "/output/f05-public-create-observer"
+    ],
+    "readelf_exit": 0,
+    "readelf_direct_wait_joined": true,
+    "readelf_stderr_bytes": 0,
+    "artifact": {
+      "bytes": 17968,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255367,
+      "mode": "0o755",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/conditional-compiler-successor-1/compiler-output-new-1/f05-public-create-observer",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/conditional-compiler-successor-1/compiler-output-new-1/f05-public-create-observer",
+      "sha256": "d9db1b399436136dec8afe0b62e621706b448b6eda8d97beaddd82b3cf1e7afc",
+      "uid": 1000
+    },
+    "map": {
+      "bytes": 22463,
+      "dev": 66306,
+      "gid": 1000,
+      "inode": 2255366,
+      "mode": "0o644",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/conditional-compiler-successor-1/compiler-output-new-1/f05-public-create-observer.map",
+      "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/conditional-compiler-successor-1/compiler-output-new-1/f05-public-create-observer.map",
+      "sha256": "19b0dce98533b762bdc08c17cebcd167709c967f5964f04ba8e824559381ceae",
+      "uid": 1000
+    },
+    "new_ELF_and_map_hashes_and_physical_metadata_match": true,
+    "ELF_class": "ELF64",
+    "ELF_machine": "Advanced Micro Devices X86-64",
+    "ELF_type": "DYN/PIE",
+    "interpreter": "/lib64/ld-linux-x86-64.so.2",
+    "needed": [
+      "libc.so.6"
+    ],
+    "exported_seams": [
+      {
+        "binding": "GLOBAL",
+        "bytes": 166,
+        "kind": "FUNC",
+        "name": "access@@GLIBC_2.2.5",
+        "section": "15",
+        "value": 4712,
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "bytes": 277,
+        "kind": "FUNC",
+        "name": "open@@GLIBC_2.2.5",
+        "section": "15",
+        "value": 4878,
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "bytes": 416,
+        "kind": "FUNC",
+        "name": "ioctl@@GLIBC_2.2.5",
+        "section": "15",
+        "value": 5155,
+        "visibility": "DEFAULT"
+      },
+      {
+        "binding": "GLOBAL",
+        "bytes": 238,
+        "kind": "FUNC",
+        "name": "close@@GLIBC_2.2.5",
+        "section": "15",
+        "value": 5571,
+        "visibility": "DEFAULT"
+      }
+    ],
+    "raw_saved_readelf_stdout_sha256": "a8236e5b38ea95ea09d3fe2976f05c5059aa40516ccb20d967f14b60aa64203d",
+    "public_IHK_body_defined": false,
+    "passive_compiler_phase_executed_observer_main": false,
+    "actual_observer_execution_is_separate_run_phase": true,
+    "production_library_rebuilt": false,
+    "actual_readelf_or_compiler_invoked_by_reviewer": false
+  },
+  "actual_profile_qualification": {
+    "immutable_image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "both_phases_exact_complete_Config_equal_to_request": true,
+    "both_phases_exact_complete_HostConfig_equal_to_request": true,
+    "both_phases_all11_mounts_equal_to_request": true,
+    "labels": "Exact13 inherited immutable-image labels plus one fresh owner=14. No arbitrary label allowance.",
+    "comparison_scope": "Config.Env normalized only to a duplicate-free key/value map, HostConfig.Mounts sorted only by Source/Target, exactly as the approved comparator; all other fields compare completely. Created AppArmor empty, terminal docker-default; Driver overlay2/Platform linux.",
+    "container_profile": {
+      "UID_GID": "1000:1000",
+      "CPU": [
+        7
+      ],
+      "memory_and_swap_each": 1073741824,
+      "pids": 64,
+      "network": "none",
+      "ipc": "private",
+      "root_readonly": true,
+      "capdrop": [
+        "ALL"
+      ],
+      "no_new_privileges": true,
+      "tmpfs_tmp64MiB": true
+    },
+    "mount_output_modes": "Compile /output is the sole read-write output; run /output is read-only. Other ten selected bindings stay read-only.",
+    "actual_sudo04755_source_pin": {
+      "bytes": 166056,
+      "dev": 66306,
+      "gid": 0,
+      "inode": 1051377,
+      "mode": "0o4755",
+      "path": "/usr/bin/sudo",
+      "resolved": "/usr/bin/sudo",
+      "sha256": "aa14020c0639285fc2e4592eaf6a4e8e9c5fa799bc7bda3ee929a0b5593239dc",
+      "uid": 0
+    },
+    "HOST_permission_scope": "Full04755 sudo mode and exact host tool pins are checked by actual parent input bookends. No helper/credentials/config probe by reviewer."
+  },
+  "actual_container_and_namespace_disposition": {
+    "phase_count": 2,
+    "sequential_under_one_family": true,
+    "containers": [
+      {
+        "phase": "compile",
+        "CID": "629dd2e6fc235596698cd29bba2bcac2d769fa490cfa2258eb673d34d49729e6",
+        "created": "2026-11-12T20:35:00.61483947Z",
+        "exit": 0,
+        "OOMKilled": false,
+        "waiter_joined": true,
+        "captured_logs": true,
+        "removed": true,
+        "lifecycle_UNKNOWN": false,
+        "resource_charge_retained": false,
+        "state": "VERIFIED_TERMINAL_OWNED_REMOVED"
+      },
+      {
+        "phase": "run",
+        "CID": "533286b6bf673bcc69f00ae68dc756a633c7c13ae69f055c492bcfd7712a5d9a",
+        "created": "2026-11-12T20:35:01.494711621Z",
+        "exit": 0,
+        "OOMKilled": false,
+        "waiter_joined": true,
+        "captured_logs": true,
+        "removed": true,
+        "lifecycle_UNKNOWN": false,
+        "resource_charge_retained": false,
+        "state": "VERIFIED_TERMINAL_OWNED_REMOVED"
+      }
+    ],
+    "both_actual_terminal_profiles_exited0_nonOOM_Pid0": true,
+    "both_exact_nonforce_Docker_rm_returned_their_exact_CIDs": true,
+    "namespace_removal_basis": "The declared reviewed c83a route marks removed only after genuine Docker rm returns0 and exact CID. This is positive Docker API removal acknowledgement for these two exact owned namespaces, joined with terminal/containerwait/Owner/Root closure.",
+    "separate_post_rm_ps_or_inspect_observation": false,
+    "no_fabricated_all_container_absence_or_other_CID_release": true,
+    "no_extra_query_or_test_required_by_this_qualification": true
+  },
+  "actual_wait_stream_and_FD_closure": {
+    "original_initial": {
+      "chunk": "660e81",
+      "session_id": 39128
+    },
+    "genuine_original_terminal": {
+      "chunk": "909354",
+      "exit_code": 0,
+      "no_session": true
+    },
+    "original_Root_parent": {
+      "pid": 2031304,
+      "birth": "60196632",
+      "exit": 0,
+      "direct_wait_joined": true,
+      "streams_closed": true,
+      "receipt_persisted": true,
+      "lifecycle_UNKNOWN": false,
+      "resource_charge_retained": false,
+      "primary_error": null,
+      "secondary_errors": []
+    },
+    "Owner_cli_family_count": 16,
+    "all16_genuine_leader_and_descendant_waits0_streams_closed": true,
+    "all16_no_timeouts_group_signals_adopted_kills_reaps_remaining_children_or_errors": true,
+    "compiler_and_readelf_direct_waits0": true,
+    "parent_and_outer_remaining_direct_children": [],
+    "actual_observer_own_stdin_and_backup_closure": true,
+    "own_FD_basis": "Reviewed Python file readers/capture contexts, all completed Owner process-family/stream records, complete E088 parent wait and genuine original tool terminal0 close the compilation/run/capture own lifetimes. No live /proc/FD inventory or synthetic wait was produced by reviewer.",
+    "raw_pending_fullRoot_flags_preserved": true,
+    "full_external_Root_join_now_supplied_by_this_Q": true
+  },
+  "actual_admission_and_prerequisite": {
+    "complete_field_count": 23,
+    "new_family_bytes": 1073741824,
+    "new_jobs": 1,
+    "CPU": [
+      7
+    ],
+    "at_issue_other_retained_HOST_bytes": 603979776,
+    "at_issue_other_HOST_jobs": 1,
+    "at_issue_all_controller_worker_overhead_bytes": 1015590912,
+    "at_issue_aggregate_bytes": 2693312512,
+    "at_issue_aggregate_jobs": 2,
+    "other_retained_scope": "The actual grant retained TLS failed512MiB+64MiB/capture family; original97302/terminalCID5645 remains owned by its separate repair lane. This Q does not inspect, remove or release it.",
+    "actual_old_cleanup_nine_field_prerequisite": {
+      "CID": "a398c397a052b2bb878eae92e997b33281d77cd1840e39ccad7e9f54bd0d1300",
+      "actual_Root_scoped_retirement_ref": {
+        "bytes": 2082,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2255281,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/ROOT-CURRENT-RETIREMENT.CLEANUP-ONLY.json",
+        "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/ROOT-CURRENT-RETIREMENT.CLEANUP-ONLY.json",
+        "sha256": "14be0afb1ed3612838fcc2982e2944f0acf489182aa64612909a8bac2d993dc9",
+        "uid": 1000
+      },
+      "actual_cleanup_result_ref": {
+        "bytes": 2642,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2254936,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/execution-1/RESULT.json",
+        "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/execution-1/RESULT.json",
+        "sha256": "3d5d10b344e073b79012cb4c5068aad575de154d5c623da8dc6ff96e3a862c5c",
+        "uid": 1000
+      },
+      "actual_full_Root_tool_ref": {
+        "bytes": 357,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2254952,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/ROOT-ACTUAL-CLEANUP.FULL-TOOL.FINAL.json",
+        "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/ROOT-ACTUAL-CLEANUP.FULL-TOOL.FINAL.json",
+        "sha256": "5f0ec56b5b60cf1f558df7d3bf79efe6a22cc48ffb15a70a45a8ea74141670f4",
+        "uid": 1000
+      },
+      "actual_independent_cleanup_qualification_ref": {
+        "bytes": 23617,
+        "dev": 66306,
+        "gid": 1000,
+        "inode": 2255279,
+        "mode": "0o600",
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/independent-actual-qualification-1/QUALIFICATION.json",
+        "resolved": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F05-create-public-slice-1/full-mode-correction-1/created-config-labels-correction-1/exact-created-cleanup-1/invocation-identity-correction-1/independent-actual-qualification-1/QUALIFICATION.json",
+        "sha256": "0b8de46638165eb31ce7121a1cd525a2647af8401f9c435b89c68198fe47252f",
+        "uid": 1000
+      },
+      "cleanup_request_sha256": "c8b3bc1dde3c7367ea8e89283fa6c03389f8a597dcb38f839f7574ed55389ee8",
+      "native12_source_all_other_UNKNOWN_scopes_unchanged": true,
+      "old_F05_and_new_cleanup_only_scoped_retired": true,
+      "positive_cleanup_full_Root_and_independent_Q_verified": true
+    },
+    "old_cleanup_Root_receipt_14be_consumed_before_first_compiler": true,
+    "old_cleanup_not_requalified_or_retired_again": true,
+    "account_source_permission_and_current_owner_evidence_refs_reused_only": true,
+    "private_account_or_budget_contents_read_by_reviewer": false
+  },
+  "retirement_eligibility": {
+    "eligible": true,
+    "sole_owner": "/root",
+    "only_bytes": 1073741824,
+    "only_jobs": 1,
+    "only_scope": "This newly issued39e7/c83a/b83f public-create compiler/passive+run family, two sequential phase containers under one1GiB/job1 charge.",
+    "actual_Root_scoped_retirement_required": true,
+    "actual_retirement_performed_by_reviewer": false,
+    "do_not_double_retire_old_F05_cleanup_or_failed192": true,
+    "do_not_retire_TLS_603979776B_family_or_any_other_charge": true,
+    "native12_source_globalUNKNOWN_c309_normallease_partialinstall_raw621_unchanged": true
+  },
+  "findings": [],
+  "missing_required_declared_scope_closure_inputs": [],
+  "preserved_identity": {
+    "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+    "invocation": "20261112T094452Z-12a4bea0",
+    "same_Root_finite_credit_run_id": "7c6ef3604bfb4008a917bba8cfb6cfaa",
+    "private_budget_preserved_without_amount": true,
+    "M14_before_M15": true
+  },
+  "excluded_rejected_task": {
+    "request": "signal/frame/xstate collector; excluded from replay, rephrasing, reassignment or replacement",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "reviewer_actions": "Read exact saved result/profile/compiler/readelf/runtime-output/source/review/admission records; checked only new observer/map hashes and metadata; wrote this private Q. No library/destroy/provider/ABI/compiler/observer rerun, Docker/helper/parser import/test/live/native action, storage copy, source edit or ledger mutation.",
+  "source_behavior_coverage_only": true,
+  "whole_F05_or_milestone_credit": false,
+  "native_install_backend_acceptance": false,
+  "next_action": {
+    "owner": "/root",
+    "action": "Record only this new1GiB/job1 scoped retirement after consuming Q; carry the three-case public-create evidence at its exact ordinary-HOST local-libc-seam scope. Preserve TLS and all other real holds; keep broader original F05 coverage separate."
+  }
+}

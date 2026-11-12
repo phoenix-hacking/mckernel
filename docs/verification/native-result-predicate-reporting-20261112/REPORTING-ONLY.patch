@@ -1,0 +1,125 @@
+--- preimage/root_parent-current.py
++++ source/root_parent-current.py
+@@ -32,2 +32,46 @@
+ 
++_RESULT_VERIFY_RAW_PRIMARY = None
++_RESULT_VERIFY_RAW_SECONDARY = []
++_RESULT_VERIFY_SUBSTAGES = frozenset(('result_sealed_context', 'result_fresh_controls', 'result_post_controls', 'result_fields', 'result_installed_proof', 'result_proof_compare', 'result_keeper_journal', 'result_captures', 'result_durable', 'result_proof_cap', 'result_ack'))
++_RESULT_VERIFY_FIXED_CODES = {
++    stage: 'fixed source reporting span: ' + stage
++    for stage in _RESULT_VERIFY_SUBSTAGES | {'result_verify'}
++}
++
++
++def _result_verify_reporting_secondary(error):
++    # No formatting, message/args traversal, descriptor or process operation.
++    try:
++        tb = BaseException.__dict__['__traceback__'].__get__(error, type(error))
++        if len(_RESULT_VERIFY_RAW_SECONDARY) < 32:
++            _RESULT_VERIFY_RAW_SECONDARY.append((error, tb))
++    except BaseException:
++        pass
++
++
++def _retain_result_verify_primary(error):
++    # Called only after the existing operation has already failed.
++    global _RESULT_VERIFY_RAW_PRIMARY
++    try:
++        if _RESULT_VERIFY_RAW_PRIMARY is None:
++            tb = BaseException.__dict__['__traceback__'].__get__(error, type(error))
++            _RESULT_VERIFY_RAW_PRIMARY = (error, tb)
++    except BaseException as reporting_error:
++        _result_verify_reporting_secondary(reporting_error)
++
++
++def _result_verify_reported_stage(stage):
++    # Failure-report selection ONLY. Never invoke before a guard or catch its error.
++    try:
++        if stage == 'result_verify':
++            hint = direct_completion.RESULT_VERIFY_SUBSTAGE
++            if type(hint) is str and hint in _RESULT_VERIFY_SUBSTAGES:
++                return hint
++        elif type(stage) is str and stage in _RESULT_VERIFY_SUBSTAGES:
++            return stage
++    except BaseException as reporting_error:
++        _result_verify_reporting_secondary(reporting_error)
++    return stage
++
++
+ def ensure_capture():
+@@ -44,2 +88,3 @@
+ _FAILURE_STAGES=frozenset(('parent_prepare','keeper_fork','keeper_identity','lease_handoff','installer_handoff','go_handoff','result_handoff','result_verify','terminal_wait','child_setup','child_entry','retire_prepare','full_handoff','retirement_authority','lease_close','lease_close_journal','final_disposition'))
++_FAILURE_STAGES = _FAILURE_STAGES | _RESULT_VERIFY_SUBSTAGES
+ 
+@@ -70,4 +115,10 @@
+     try:
++        stage = _result_verify_reported_stage(stage)
+         if role not in ('root_parent','keeper') or stage not in _FAILURE_STAGES:return False
+-        category,message,policy,error_number=_failure_message(error)
++        if stage in _RESULT_VERIFY_FIXED_CODES:
++            category=type(error).__name__
++            if type(category) is not str or not category.isidentifier() or len(category)>80:category='UnknownException'
++            message=_RESULT_VERIFY_FIXED_CODES[stage];policy='exact_fixed';error_number=None
++        else:
++            category,message,policy,error_number=_failure_message(error)
+         obj={'record_type':'ROOT_INSTALL_FAILURE_DATA_V1','scope':'ROOT_CODE_INSTALL_ONLY',
+@@ -84,3 +135,5 @@
+         return True
+-    except BaseException:
++    except BaseException as reporting_error:
++        if type(stage) is str and stage in _RESULT_VERIFY_FIXED_CODES:
++            _result_verify_reporting_secondary(reporting_error)
+         return False
+@@ -327,3 +380,5 @@
+         result=frame['result']
++        stage='result_proof_cap'
+         if ipc.remaining(handoff_caps)<=0:raise Unknown('proof verification cap')
++        stage='result_ack'
+         ipc.send(parent_sock,{'type':'RESULT_ACK','nonce':nonce,'seq':4,'result_sha256':result_hash},[],handoff_caps)
+@@ -341,2 +396,4 @@
+     except BaseException as error:
++        if stage in _RESULT_VERIFY_FIXED_CODES:
++            _retain_result_verify_primary(error)
+         signal.setitimer(signal.ITIMER_REAL,0)
+
+--- preimage/install_completion.py
++++ source/install_completion.py
+@@ -9,2 +9,5 @@
+ MAX_JOURNAL=4*1024*1024
++
++# Fixed source state only; failure DATA is emitted after the original error.
++RESULT_VERIFY_SUBSTAGE = 'result_sealed_context'
+ 
+@@ -271,2 +274,3 @@
+ def _parent_context(frame,fds,admission_raw,review_raw,retained,phase1):
++    global RESULT_VERIFY_SUBSTAGE
+     import install_source_closure as install
+@@ -316,3 +320,5 @@
+     if not phase1 and frame.get('result',{}).get('creation_model')!=model:raise ValueError('result model differs')
++    if not phase1:RESULT_VERIFY_SUBSTAGE = 'result_fresh_controls'
+     issuer.fresh_controls(prelim,install,template,intent['phase1_deadline_boot_ns'] if phase1 else template['deadline_boot_ns'])
++    if not phase1:RESULT_VERIFY_SUBSTAGE = 'result_post_controls'
+     if (intent['service_status']!='NO_NEW_REJECTION' or type(intent['weekly_used_percent']) not in (int,float) or not 0<=intent['weekly_used_percent']<=100 or
+@@ -341,3 +347,6 @@
+ def verify_parent_result(frame,fds,admission_raw,review_raw,retained):
++    global RESULT_VERIFY_SUBSTAGE
++    RESULT_VERIFY_SUBSTAGE = 'result_sealed_context'
+     install,request,intent,template,root,code,closure,release=_parent_context(frame,fds,admission_raw,review_raw,retained,False)
++    RESULT_VERIFY_SUBSTAGE = 'result_fields'
+     result=frame.get('result');nonce=intent['nonce']
+@@ -349,4 +358,7 @@
+         not same_json(result.get('keeper'),{'pid':frame['keeper_pid'],'birth':frame['keeper_birth']})):raise ValueError('result scope/roles differ')
++    RESULT_VERIFY_SUBSTAGE = 'result_installed_proof'
+     proof=install_proof(install,root,code,closure,nonce,frame['release_sha256'],template,retained)
++    RESULT_VERIFY_SUBSTAGE = 'result_proof_compare'
+     if not same_json(proof,result.get('install_proof')):raise ValueError('independent installed proof differs')
++    RESULT_VERIFY_SUBSTAGE = 'result_keeper_journal'
+     journal=held_open(retained,'INSTALL-START-'+nonce+'.jsonl',os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=root)
+@@ -358,2 +370,3 @@
+     if not same_json(waits,[{'state':'INSTALLER_DIRECT_WAIT','installer_pid':frame['installer_pid'],'birth':frame['installer_birth'],'status':0}]):raise ValueError('direct wait journal')
++    RESULT_VERIFY_SUBSTAGE = 'result_captures'
+     captures=result.get('captures')
+@@ -370,2 +383,3 @@
+         if len(content)!=row['length'] or install.sha(content)!=row['sha256']:raise ValueError('capture bytes')
++    RESULT_VERIFY_SUBSTAGE = 'result_durable'
+     result_fd=held_open(retained,'INSTALL-RESULT-'+nonce+'.json',os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=root)

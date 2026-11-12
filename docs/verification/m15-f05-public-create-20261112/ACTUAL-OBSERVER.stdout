@@ -1,0 +1,5 @@
+provider=/provider/libihk.so public=ihk_create_os seam_version=GLIBC_2.2.5 seams=4
+case=fd0_index0 result=0 local_fd=0 ioctl=1 arg=0 close=1 fd_closed=1 trace_ok=1 errors=0 status=PASS
+case=fd7_index7 result=7 local_fd=7 ioctl=1 arg=0 close=1 fd_closed=1 trace_ok=1 errors=0 status=PASS
+case=fd7_eio result=-5 local_fd=7 ioctl=1 arg=0 close=1 fd_closed=1 trace_ok=1 errors=0 status=PASS
+fixture=closed stdin_restored=1 backup_closed=1

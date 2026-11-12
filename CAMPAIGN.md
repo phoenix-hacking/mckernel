@@ -1,46 +1,70 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T19:24:53.761882+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T20:57:05.351081+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
 
-Current reporting publication c309 / original session81691 failed at result_verify;
-that stage includes verification, proof-cap checks and ACK send. The original
-2GiB/job1 exclusive HOST family, roles, lease and captures remain retained.
-No installed generation or native acceptance is claimed.
+Current qualified results since checkpoint15788ef82:
+- c309 failed HOST scope CLOSED: actual one-parent9/127c75, ORIGINAL81691
+  outer9b1e7c0/genuine SUDOwait9/verified closed captures; separate Qb060+599a
+  and Rootbf366 retire ONLY old2GiB+newA256. Raw UNKNOWN/timed_out/data_error/
+  fullproofUNKNOWN/releasefalse and normallease/heldRootFD/keeperwait remain.
+- UTI private production-crate DATA metadata PASSED40277->660e0, Q3cec and
+  Root7f117 retire ONLY new2GiB. Actualrmeta5240/7814888B and all22mounts/9clients
+  qualify source/typecheck only; ABI35/Cproof reused, no body/ACK/C4/image/native.
+- F05 public ihk_create_os lower-libc cases PASSED39128->9093540: fd0->0,
+  fd7->7, EIO->-5, close1/FDclosed1 percase, all435B/e0fc/stdin+backup restored.
+  Compiler/passive/map/providerb7bc/versionedseams/fullConfig+HostConfig+11mounts/
+  full04755 and16Ownerfamilies/2phasecontainers qualify at Q a7e3490; Rootd2b102
+  retires ONLY new1GiB. No realIHKdevice/backend/wholeF05/milestone/native credit.
+- Minimal private parent6b27/completionfa2e reporting patch32fc has sourceGOeaaa.
+  Six genuinely changed controls PASSED431e820/exact479Bf5df, Q979d/Rootbdd0
+  retire ONLY new256. Four ValueError spans are distinguishable, secondaryreport
+  failure retains primary/custody, successACK/wait operationalAST unchanged.
+  Oldc309 firstpredicate stays UNPROVED; no validator/schema/model/value weakening.
+- F08 authenticated nested member-read PASSEDa13bcc0/Q0237/Root45a5; 10files/
+  100149B, no fetch/signature/extraction/helper replay. Sourcecontract519d/READY379b
+  derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
+  and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-The exact saved-result reader ACTUALLY PASSED once at 19:22:39Z: corrected
-requestd4b90 / actor87560 / parent49ed, independent GO290db and fresh complete
-30-field admissionaf997; outer tool7361bd exit0, own actor wait0/FDs/streams
-closed. RESULT47aaab45 / safe projectioncacd4334 contain 16 actual journal rows:
-installer directwait0, both capture writers closed, RESULT_DURABLE hash matching
-the saved result, and no RESULT_PARENT_ACK. The saved proof names30 source files
-and cataloguecb618; this DATA is not installed-file readback or publication
-closure. The newly observed directory is DATA, never original held-directory-FD
-proof. Reader Q7e77b6 and Root's scoped receipt now retire ONLY its256MiB/job1; the
-original c3092GiB/job1 remains held.
+CURRENT sole HOST payload charge: failed TLS576MiB/job1. Source4a151 actual
+97302->471fc51 compiled/linked the firstthree TLS C/ASM/payload steps successfully;
+exact saved artifacts19760B ELF/map/objects are reused. Step4 static generic
+collector failed cannotfind-lc in46d; commands5-7 remain unrun. PartialQd5d00579
+preserves terminal1/nonOOM/Pid0/CID5645...d93362, alloriginal waits/streams but no
+container removal. proc_vm_index_fix prepares ONLY missing helper/passive work via
+alreadyqualified HOSTGCC9/staticlibc route; old9a55/dc0e bind othercases and cannot
+substitute. native_current_binding independently reviews. Its exact terminalCID
+cleanup corrected affinity0 has GO20280f; Root next supplies fresh31fields and
+executes inspect/nonforce-rm/exactabsence, then actualQ/scopedretirement. No second
+wait/start/kill/force, no firstthree green compiler replay or native/TLS acceptance.
 
-Current accountable next actions, all six canonical owners explicit Sol/MAX:
-- native_binding_review completed reader Q7e77 and now reviews only the finite
-  current-family disposition.
-- native_current_binding authors that exact c309 disposition against actual
-  parent1995217/b59502337, keeper1995219/b59502349 and original81691 joins.
-- functional_delta_review compares only actual saved fields with the pinned
-  verifier/source to identify the first contradicted or still-unproved predicate.
-- proc_vm_index_fix finishes the ordinary TLS protected HOST packet; completed
-  time_functional_source supplies its independent operation review when frozen.
-- m15_installed_leaf_review's F08 bounded member-reader GO9bc7/argv921b is ready
-  and queued behind genuine c309 disposition. UTI metadataGO080f and F05GO8815
-  retain the same real resource gate; no successful signal prerequisite is added.
+Accountable remaining source/execution lanes (six existing Sol/MAX/depth1):
+- native_current_binding finishes TLS residual review, then may bind approved
+  twofile reporting source into the existing fixed30 normal producer after actual
+  sixcontrolQ/Rootbdd0; fresh normalissue/ACK/lease/fullRoot/physicalNEW30/Q still
+  precede bothCORE+provider generation binding and separate firstnative admission.
+- functional_delta_review completed sixcontrols; no oldeight rerun or newharness.
+- native_binding_review completed Q979d; next independent changed normal source/
+  operation review when actual producer handoff is frozen, no blind publisherretry.
+- proc_vm_index_fix owns TLS missing staticprovider/residual/capture with exact
+  payload and existing qualified provider identities, no new compilerfallback.
+- time_functional_source prepares only bounded READONLY existing real udev
+  service/socket/namespace metadata capture; no secret/environment/cmdline read,
+  event emission/service restart/mount/hostnet/capgrant or fake endpoint.
+- m15_installed_leaf_review completed actual F05Q. Retention handoffc85d maps54
+  paths to existing protected artifacts plus ONLY6 newfiles/67930797B proposed.
 
-Root next executes only an independently reviewed exact disposition under fresh
-actual admission, preserves original waits/streams, and retires matching scopes
-only after positive closure/qualification. Parent failure loop has no recovery
-RPC. No new nonce, issuer/native replay, verifier rerun, private-memory tracing,
-partial-generation adoption or source hotpatch. Both CORE/provider bindings7b62
-remain conditional. All native12/source/globalUNKNOWN and excluded collector
-holds, same finite7c6, original105/156 and70.00/74.59 remain unchanged.
+Stable-baseline guide was adopted byte-for-byte from40d359/SHA35458031. Current
+saved baseline remains c964/a2f with existing25readonly snapshot/cache, f133 stage
+and last successful PUBLICATION1f5f/physical30/407882B. New6 staging copies are
+NOT performed yet; no recopy/rebuild/promotion fromfailedc309420488B. Root will use
+existing preservation machinery only after exact review/current ownership permits.
+CAMPAIGN remains sole active plan. Original105/156, M14=70.00%,M15=74.59% unchanged;
+all native12/source/globalUNKNOWN/rejectedcollector/finite7c6/later-stop controls
+remain. Root sole compositor/native executor; HOST0,6,7/max3/4GiB alloverhead,
+fresh26GiB and actualfloors; no native2-5/12GiB borrowing or optional control project.
 
 Earlier81012A/B/C/failedHOSTQ/Root633f remain complete (old1.5GiB notretained).
 F08 realqualifiedquery306f29/Qa9b/Roote72d, actualsyntaxece463/extraction5880->
