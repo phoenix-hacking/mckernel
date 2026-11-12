@@ -1,0 +1,134 @@
+{
+  "NativeParentRetirement_created": false,
+  "action_state": {
+    "CAS_attempted": true,
+    "CAS_returned": true,
+    "new_exclusive_runtime_FLOCK": true,
+    "restored_flags_observed": true
+  },
+  "actual_cleanup_pid": 1978048,
+  "all_new_own_FDs_closed_runtime_last": true,
+  "before_private_ref": {
+    "Root_uid0_mode0600_and_directory0700": true,
+    "bytes": 3409,
+    "identity": {
+      "bytes": 3409,
+      "ctime_ns": 1794505427623166620,
+      "device": 66306,
+      "gid": 0,
+      "inode": 2253837,
+      "mode": 384,
+      "mtime_ns": 1794505427623166620,
+      "nlink": 1,
+      "uid": 0
+    },
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-failed-recovery-1/phase-C-current-1/Root-C-1978048-59169360-BEFORE/OWNER-RECORD.PRIVATE.json",
+    "sha256": "23c19576710bb9c72488e70b65b47f3ca0712b10f4436beecf98c6a0a7605e4a"
+  },
+  "device": 66306,
+  "inode": 1048651,
+  "native12_source_global_partialUNKNOWN_release": false,
+  "new_actor_close_errors": 0,
+  "original1_5GiB_resource_retirement_from_actor": false,
+  "original_failure_and_UNKNOWNs_preserved": true,
+  "own_runtime_FLOCK": [
+    1978048,
+    259,
+    2,
+    1048651,
+    "0",
+    "EOF"
+  ],
+  "persistent_control_package_I_unchanged": true,
+  "remaining_new_actor_direct_children": [],
+  "restored_flags": 524288,
+  "restored_private_ref": {
+    "Root_uid0_mode0600_and_directory0700": true,
+    "bytes": 3321,
+    "identity": {
+      "bytes": 3321,
+      "ctime_ns": 1794505427639167317,
+      "device": 66306,
+      "gid": 0,
+      "inode": 2253839,
+      "mode": 384,
+      "mtime_ns": 1794505427639167317,
+      "nlink": 1,
+      "uid": 0
+    },
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-failed-recovery-1/phase-C-current-1/Root-C-1978048-59169360-RESTORED/OWNER-RECORD.PRIVATE.json",
+    "sha256": "b4ce95f62fa036d78e63ac0682555c5e3b2a6eb0675a76db79e70cef6ca8bb2f"
+  },
+  "runtime": "/usr/bin/python3.8",
+  "runtime_sha256": "298a9e830ed52f36c299427565485d717d1ce0179c0597cc16560513eb780b06",
+  "scope_after": {
+    "actual_native_profile_members_counters": {
+      "members": {
+        "/sys/fs/cgroup/cpu/mckernel-dev/tasks": "",
+        "/sys/fs/cgroup/memory/mckernel-dev/tasks": "",
+        "/sys/fs/cgroup/pids/mckernel-dev/tasks": ""
+      },
+      "memory_usage_bytes": 0,
+      "pids": 0,
+      "profile": {
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+        "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+      }
+    },
+    "development_lock_observation": {
+      "absence_is_not_free_native_source_or_restoration_evidence": true,
+      "identity": null,
+      "matching_kernel_lock_rows": null,
+      "observation": "ABSENT_UNPROVEN",
+      "path": "/run/lock/mckernel-development.lock"
+    },
+    "matching_development_and_runtime_kernel_lock_rows": [
+      {
+        "device": 66306,
+        "inode": 1048651,
+        "raw": "1: FLOCK  ADVISORY  WRITE 1978048 103:02:1048651 0 EOF"
+      }
+    ],
+    "native_positive_idle_DATA_ONLY": true,
+    "no_native_source_or_runtime_release_or_C_gate_from_this_snapshot": true
+  },
+  "scope_preCAS": {
+    "actual_native_profile_members_counters": {
+      "members": {
+        "/sys/fs/cgroup/cpu/mckernel-dev/tasks": "",
+        "/sys/fs/cgroup/memory/mckernel-dev/tasks": "",
+        "/sys/fs/cgroup/pids/mckernel-dev/tasks": ""
+      },
+      "memory_usage_bytes": 0,
+      "pids": 0,
+      "profile": {
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_period_us": "100000",
+        "/sys/fs/cgroup/cpu/mckernel-dev/cpu.cfs_quota_us": "400000",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.limit_in_bytes": "12884901888",
+        "/sys/fs/cgroup/memory/mckernel-dev/memory.use_hierarchy": "1",
+        "/sys/fs/cgroup/pids/mckernel-dev/pids.max": "512"
+      }
+    },
+    "development_lock_observation": {
+      "absence_is_not_free_native_source_or_restoration_evidence": true,
+      "identity": null,
+      "matching_kernel_lock_rows": null,
+      "observation": "ABSENT_UNPROVEN",
+      "path": "/run/lock/mckernel-development.lock"
+    },
+    "matching_development_and_runtime_kernel_lock_rows": [
+      {
+        "device": 66306,
+        "inode": 1048651,
+        "raw": "1: FLOCK  ADVISORY  WRITE 1978048 103:02:1048651 0 EOF"
+      }
+    ],
+    "native_positive_idle_DATA_ONLY": true,
+    "no_native_source_or_runtime_release_or_C_gate_from_this_snapshot": true
+  },
+  "status": "CURRENT81012_TEMPORARY_RUNTIME_PRIOR_FLAGS_RESTORED_ONLY",
+  "supervisor_waitpid_or_signal_issued": false
+}

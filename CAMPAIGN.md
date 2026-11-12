@@ -1,9 +1,71 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T17:22:04.389633+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T18:04:11.551662+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+Current normalpublication PREISSUE result: consumable final9field GOcdc590 is
+ready/UNUSED. Rootdebc79 metadata helper failed BEFORE freshaccount/grant/nonce/
+issuer/sudo/installer at extraDockerps environment-filtered check; no new2GiB
+family admitted or issued. Rawfailure48376/Roottool preserved, stderr unavailable
+from the uncaught CalledProcessError; originalreason is not invented. Normal
+inheritedHOME/XDG present, DOCKERHOST/CONTEXT absent, RootASunlimited; helper
+removed normal context from its extra query. Existing native_current_binding
+authors one fresh-output context/capture correction and native_binding_review
+independently reviews against qualified normal CLI source/profile; no config
+credential reads, privilege/socket/context fallback or unchanged denied retry.
+Actual C/Q/Root633f retirement remains complete; current HOSTpayloads/jobs0/0 plus
+all overhead, native12/source/globalUNKNOWN unchanged. Next: corrected reviewed
+Rootpreflight, then SAME exactunused nine-field normalproducer once under actual
+fresh2GiB exclusiveHOSTadmission, admissionreceipt separate/stdoutnormal3.
+F08 passiveGO3fa6 remains queued until genuine currentDockercontext/resource
+admission and the normalpublisher exclusive lane. No originalcredit change.
+
+Current 17:43+ ACTUAL runtime restoration supersedes all retained81012HOST
+banners below. ReviewedC GO5db3/actual34grant37f3 executed ONCE6fac42/Root0:
+exactruntime66306:1048651/hash298a restored524304->prior524288, ownexclusiveFLOCK,
+realidlephysical0, exactjournal/input and persistentI checks passed; all ownFDs
+closed withruntimeLAST. Independent CQ63b4 +finalFAILED-HOSTQb495 and Root633f
+retire ONLY old81012HOST1.5GiB/job1 +newC256MiB/job1; oldA256cb507 excluded.
+Current HOSTpayloads/jobs0/0 plus all actual controller/worker overhead. Oldraw
+Timeout621/secondary1/lostsupervisorcause and native12/source/globalpartialUNKNOWN
+remain unchanged; no normalRetirement, native/source success or persistentI edit.
+
+Next critical action: final consumable9field INSTALL_ONLY review from existing
+functional_delta_review, using reportingfixed30sourceGO9b1791ed/controlsQea6aa/
+currentC+failedHOSTQ+Root633f. Root materialized declared privateowner706B/a51e
+at the new normal-operation path0600 without publishing values. Root then fresh
+admits one exclusive2GiB normalproducer/30files420488B, keeps admission output
+in separate receipt and exactraw3record completion; requires actualpositivelease/
+installer/caller/fullRootQ/onlycurrentretirement then strictphysicalNEW30/Q.
+Native_current_binding subsequently binds BOTH CORE and provider helper namespaces
+to that ACTUAL reportinggeneration, c964/a2f/f133 unchanged, before fresh native
+admission. Future persisted error/wait reports are evidence, never cleanup/retry
+permission. No previous-generation publication/readback/control replay.
+
+F08 passive-source extraction00195/f4d4 now operationGO3fa6, complete29field/CPU7/
+1.25GiB. Root serializes with exclusive normalpublisher, then may freshadmit exact
+two syntax/seven passive commands, actualsignature/key/SOURCEPACKAGE1/NVR/ARCH/
+spec+patch+source outputs and completecontainer/FD/waits/removal. No sourceRPM
+GET/install/service/daemon replay. ExactTLS ordinaryFS proposal5bffd/d640/4cad/a828
+is prepared by proc_vm_index_fix; time_functional_source independently reviews
+only C/assembly/ABI/oracle/proposedinput scope, no compilation/native or livecase
+change. All old holds, excludedcollector and original105/156/70.00/74.59 retained.
+
+Current scoped follow-through: independent A-onlyQ49aa/BQ7feb/combinedQ2c6f
+are complete; Rootcb507 retires ONLY the newA256MiB/job1. Current HOST payload
+charge is original81012/1.5GiB/job1 only, plus all actual overhead; native12 and
+source/globalUNKNOWN remain. Reporting fixed30 source/referenceGO9b1791ed is
+complete; final install-operationGO waits actual runtimeC/Q/old1.5retirement.
+The next producer will keep admission-status output in a separate receipt and
+preserve the standard raw three-record completion. m15_installed_leaf_review
+reviews exact passive SRPM/signature/source extraction00195/f4d4; no execution
+yet. Proc_vm_index_fix now prepares only the eligible ordinary TLS/arch_prctl
+source-bound case for originalM14-06-01-FUNCTIONAL, reusing existing cases first;
+no signal/frame/xstate collector equivalent, held exec/ACK/generic operation,
+compiler/native action or live repeat-binding change. Time source remains ready
+to derive exact downstream monitor context from actual authenticated extraction.
 
 Current 17:18+ result supersedes the older retained-process banners below: exact
 provider PhaseA ACTUALLY PASSED53950d/GO60609/actual32a33d, one pidfdTERM15 and
