@@ -1,0 +1,230 @@
+{
+  "actual_current_family_closure": {
+    "C_phase": {
+      "CID": "64d009ff645606f057bd5e9cdfbacfb8f605525ed004c56e6c33c59548b23775",
+      "OOMKilled": false,
+      "actual_exit": 0,
+      "approved_owned_remove_actual_stdout_matches_full_CID": true,
+      "container_wait_payload": "0",
+      "saved_successful_phase": {
+        "CID": "64d009ff645606f057bd5e9cdfbacfb8f605525ed004c56e6c33c59548b23775",
+        "OOMKilled": false,
+        "cgroup_samples": 1,
+        "client_wait_joined": true,
+        "exit": 0,
+        "owned_container_removed": true,
+        "phase": "uti-c-compile"
+      },
+      "terminal_Pid": 0,
+      "terminal_Running": false
+    },
+    "Rust_failed_phase": {
+      "CID": "c22adc9063197368adaecd89fea70b1a30aeb8c7e5db651f46418eaa6ab896aa",
+      "OOMKilled": false,
+      "actual_exit": 1,
+      "approved_failure_cleanup_remove_actual_stdout_matches_full_CID": true,
+      "container_wait_payload": "1",
+      "saved_failure_cleanup": {
+        "CID": "c22adc9063197368adaecd89fea70b1a30aeb8c7e5db651f46418eaa6ab896aa",
+        "OOMKilled": false,
+        "actual_exit": 1,
+        "closure": "POSITIVE_CONTAINER_FAMILY_ONLY_PENDING_OUTER_ROOT_WAIT",
+        "owned_removed": true,
+        "resource_charge_retained": true
+      },
+      "terminal_Pid": 0,
+      "terminal_Running": false
+    },
+    "all_original_direct_waits_joined": true,
+    "all_original_streams_closed": true,
+    "all_primary_client_errors_null": true,
+    "all_secondary_client_errors_empty": true,
+    "clients_nonzero": [
+      {
+        "actual_exit": 1,
+        "birth": "57866396",
+        "label": "uti-rust-compile-payload",
+        "pid": 1909469
+      }
+    ],
+    "direct_clients": 18,
+    "nonpayload_lifecycle_UNKNOWN_flags_false_and_receipts_positive": true,
+    "own_input_close_errors": [],
+    "payload_receipt_scope": "C/Rust original payload records carry positive direct_wait_joined/streams_closed/PID/birth and actual exit0/1; no absent optional lifecycle field is invented.",
+    "remaining_owned_containers": [],
+    "remaining_pending_direct_calls": [],
+    "valid_actual_pid_births_present": true
+  },
+  "actual_original_outer_tool": {
+    "actual_terminal_exit_code": 1,
+    "actual_terminal_session_id_absent": true,
+    "initial_original_session": 30846,
+    "initial_tool_id": "b0c1aa",
+    "outcome": "GENUINE_FAILED_COMPILE_WITH_POSITIVE_OUTER_TOOL_TERMINAL; never suite success",
+    "poll_actual_equals_final_actual": true,
+    "poll_and_final_bind_same_original_session": true,
+    "raw_primary_traceback_unchanged": true,
+    "terminal_tool_id": "a1fcbd"
+  },
+  "actual_refs": {
+    "Rust_stderr": {
+      "bytes": 75841,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/uti-rust-compile-payload.stderr",
+      "sha256": "383782498259f3c7601f8cdd3279c1fb1752672a9d42b1e1c15f5ab691811a3c"
+    },
+    "actual_failure_and_C_material": {
+      "bytes": 2723,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-request-1/protected-capture-1/custody-correction-1/ROOT-ACTUAL-EXECUTION-1/ACTUAL-FAILURE-CWD-AND-C-MATERIAL.json",
+      "sha256": "d87ae4a955c024aadae0568beaab69b496e284dfeee898f375db38bd9c95e53e"
+    },
+    "container_wait_terminal_remove_receipts": {
+      "failure-remove-c22adc906319": {
+        "bytes": 65,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/failure-remove-c22adc906319.stdout",
+        "sha256": "feaa1bf2f5a0be4c37cd3c84d96fa1d8985d459d858cf2aa30de5d23c72037ec"
+      },
+      "failure-terminal-c22adc906319": {
+        "bytes": 47404,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/failure-terminal-c22adc906319.stdout",
+        "sha256": "89dcb1ab03ef60b05324153fd7653c8498f74c4357e29ebd920883788dc0f1e9"
+      },
+      "owned-stop-wait-c22adc906319": {
+        "bytes": 2,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/owned-stop-wait-c22adc906319.stdout",
+        "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+      },
+      "uti-c-compile-container-wait": {
+        "bytes": 2,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/uti-c-compile-container-wait.stdout",
+        "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+      },
+      "uti-c-compile-owned-remove": {
+        "bytes": 65,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/uti-c-compile-owned-remove.stdout",
+        "sha256": "77b1e32c9a3b8ee32b03769119529d842ea7612065b3931a871626265f5813fe"
+      },
+      "uti-c-compile-terminal": {
+        "bytes": 39158,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/uti-c-compile-terminal.stdout",
+        "sha256": "1ff3cfa104542f24226617b385a15cf11293b8d768da7b5fd77556d379ebdae4"
+      },
+      "uti-rust-compile-terminal": {
+        "bytes": 47404,
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/uti-rust-compile-terminal.stdout",
+        "sha256": "488daf29ba4ac45fa8200b2ec037678ec6ce829caccea846ea9fde14572ad381"
+      }
+    },
+    "full_final_original_tool": {
+      "bytes": 2907,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-request-1/protected-capture-1/custody-correction-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-FINAL.json",
+      "sha256": "28a4da89e6bd6bda6154e3748e65db1ecbc745ed0148a68738db49436d6d7bb5"
+    },
+    "initial_original_tool": {
+      "bytes": 219,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-request-1/protected-capture-1/custody-correction-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-INITIAL.json",
+      "sha256": "d47014e940bde1a0a252c31a3936aebd25093a8511853debb33c12cbf17b92fc"
+    },
+    "original_terminal_poll": {
+      "bytes": 2907,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-request-1/protected-capture-1/custody-correction-1/ROOT-ACTUAL-EXECUTION-1/ROOT-TOOL-POLL-1.json",
+      "sha256": "28a4da89e6bd6bda6154e3748e65db1ecbc745ed0148a68738db49436d6d7bb5"
+    },
+    "raw_parent_result": {
+      "bytes": 40129,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/capture/RESULT.json",
+      "sha256": "c56e92724c72c8eeb182dcec5028bb339265a193fd3ed2756009751e4643cc73"
+    }
+  },
+  "already_qualified_operation_review_sha256": "148a66bcec2a2d22f313528d245ce262ee5b3eff243421320c3ca77c8e551638",
+  "at": "2026-11-12T14:15:23.403342+00:00",
+  "confirmed_failure": {
+    "actual_Rust_error_lines": [
+      "error: couldn't create a temp dir: Read-only file system (os error 30) at path \"/work/output/build/kernel/rmeta7Ab0JL\"",
+      "error: aborting due to 1 previous error; 198 warnings emitted"
+    ],
+    "no_Rust_object_or_ABI35_acceptance": true,
+    "only_reported_Rust_compiler_error": "Temporary rmeta directory creation in the readonly working directory failed with EROFS30;198 warnings and raw stderr preserved.",
+    "original_cwd": "/work/output/build/kernel",
+    "preservation": "Raw failed result deliberately retains charge/EXTERNAL_REQUIRED; this independent qualification supplies the actual original Root terminal1/closure without modifying it.",
+    "raw_Root_outer_wait": "EXTERNAL_REQUIRED",
+    "raw_parent_failure": {
+      "error": "AssertionError: ",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-request-1/protected-capture-1/custody-correction-1/run_root_once.py\", line 351, in main\n    result=run(args)\n  File \"/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-request-1/protected-capture-1/custody-correction-1/run_root_once.py\", line 316, in run\n    phase(capture_label,item['create_argv'],item['expected_mounts'],2147483648,256,item['max_wall_seconds'])\n  File \"/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-request-1/protected-capture-1/custody-correction-1/phase-cpu6-original-payload-custody.py\", line 62, in phase\n    terminal=json.loads(call(label+'-terminal',docker+['inspect',cid]))[0];save(label+'-TERMINAL.json',terminal);state=terminal['State'];assert rc==0 and state['ExitCode']==0 and not state['Running'] and state['Pid']==0 and not state['OOMKilled']\nAssertionError\n"
+    },
+    "raw_parent_status": "FAILED_PRESERVED_NO_UNCHANGED_REPLAY",
+    "raw_resource_charge_retained": true
+  },
+  "decision": "PASS_KNOWN_FAILED_CURRENT_UTI_FAMILY_CLOSURE_AND_C_MATERIAL_REUSE_AT_MATCHING_PROFILE__CURRENT2GiB_RETIREMENT_ELIGIBLE",
+  "explicit_nonclaims": {
+    "C4_retired": false,
+    "F08_retained_charge": "UNCHANGED_AT_ACTUAL_ROOT_ADMITTED_SCOPE",
+    "Rust_or_ABI35_GO": false,
+    "native12_historicalUNKNOWN_source_service_account_permission_finite7c6_privatebudget_and_dirty_state_holds": "PRESERVED",
+    "native_or_firstrepeat_changed": false,
+    "original_acceptance": false,
+    "raw_failure_or_resource_flags_rewritten": false
+  },
+  "genuine_C_material": {
+    "C_depfile_target_source_anchor": "/uti-output/C/syscall.c.o: /src/kernel/syscall.c /src/lib/include/types.h",
+    "ELF_metadata_passive_bytes_only": {
+      "class": "ELF64",
+      "e_type": "ET_REL(1)",
+      "endianness": "little",
+      "machine": "EM_X86_64(62)"
+    },
+    "compile_result": "C_PRODUCTION_PHASE_EXIT0_NONOOM_POSITIVELY_WAITED_AND_REMOVED",
+    "depfile": {
+      "bytes": 2734,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 2252990,
+      "mode": "0o644",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/compiler-output/C/syscall.c.o.d",
+      "regular": true,
+      "sha256": "8a77f2ba5f8a26ce1f906cad160b0017fae8e2510bd3a525a64ebf71a02eb839",
+      "uid": 1000
+    },
+    "not_proved": "No passive35word cross-language comparison or ABI35GO; C object alone does not accept Rust layout or functional behavior.",
+    "object": {
+      "bytes": 184128,
+      "device": 66306,
+      "gid": 1000,
+      "inode": 2253031,
+      "mode": "0o644",
+      "nlink": 1,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/production-layout-execution-1/compiler-output/C/syscall.c.o",
+      "regular": true,
+      "sha256": "d1ca11962c943a68198f9cb3afa5140e62c0ec7cad72488bf201ac82458bfc51",
+      "uid": 1000
+    },
+    "scope": "Only this C compile output/depfile at the original reviewed148a source/compiler/SDK/header/flag/target profile. Preserve exact hashes and matching input identity in Rust-only successor; do not recompile unchanged C."
+  },
+  "next_action": {
+    "action": "Freeze smallest Rust-only writable-CWD successor retaining exact original Rust tokens/inputs/profile and the genuine saved C object+depfile; independent source/profile/operation review and fresh all-owner admission precede the needed Rust compile and passive35word comparison. Preserve original failure; no unchanged C/green replay.",
+    "not_a_new_execution_grant": true,
+    "source_owner": "/root/proc_vm_index_fix"
+  },
+  "original_session": 30846,
+  "rejected_exclusion": {
+    "no_replay_rephrasing_reassignment": true,
+    "task": "signal/frame/xstate collector request",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f"
+  },
+  "reviewer": "/root/m15_installed_leaf_review; explicit gpt-6.1-sol/MAX; independent saved result/material/current-family qualifier; no recursion",
+  "reviewer_actions": "Only named saved tool/result/Docker-response/C-object/depfile/stderr bytes and ordinary metadata reads, standard passive ELF header/data comparison and this disjoint private qualification write. No compile, Docker/helper import/execution, account/protectedDATA/live proc/namespace/peerFD/signal/flags/FLOCK action, broad source audit, canonical/state/charge edit or recursion.",
+  "schema": "mckernel-actual-UTI-ABI35-failed-family-C-material-independent-qualification.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing. Exact original UTI ABI35 production-layout attempt current2GiB/job1 resource closure and genuine C material only; failed Rust/ABI35/C4/native/acceptance remain unaccepted.",
+  "supported_current_retirement_scope": {
+    "eligible_for_Root_to_record": true,
+    "exact_C_container": "64d009ff645606f057bd5e9cdfbacfb8f605525ed004c56e6c33c59548b23775",
+    "exact_Rust_container": "c22adc9063197368adaecd89fea70b1a30aeb8c7e5db651f46418eaa6ab896aa",
+    "exact_family_bytes": 2147483648,
+    "exact_family_jobs": 1,
+    "no_other_family_or_F08_retirement": true,
+    "positive_full_Root_exit1_plus18_original_direct_joins_and_both_containers_removed": true,
+    "reviewer_did_not_retire_or_edit_any_charge_or_ledger": true,
+    "scope": "ONLY_ORIGINAL_FAILED_UTI_ABI35_PRODUCTION_LAYOUT_ATTEMPT_SESSION30846"
+  }
+}

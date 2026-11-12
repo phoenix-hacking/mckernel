@@ -1,0 +1,112 @@
+{
+  "schema": "mckernel.m15.f08.independent-exact-failed-family-disposition-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "reviewer": "/root/functional_delta_review; explicit gpt-6.1-sol/MAX; independent source/operation review; no recursion",
+  "decision": "GO_F08_EXACT_FAILED_FAMILY_DISPOSITION",
+  "approved": {
+    "request_sha256": "2800a1f9bccf78c62a04f760511a05db7ab6d5ac5a09d8bbe0e644ee8e333a8a",
+    "capture_sha256": "8e74b2e41577541dd569a0ee4db6585893f75c08f80b8d35009279f03b814b64",
+    "inside_actor_sha256": "f07afd805187bd1e90968d03533e06770936cfd717cc8b6ab7058dcfe9c7aaf7",
+    "parent_actor_sha256": "6a211e4e915811ec7a453e027766babd2332e0e6ef134d8368ee1008b3e4b76b",
+    "pidfd_helper_sha256": "068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c",
+    "failed_request_sha256": "38083843445d78df554d1e3036c7602f097135cfa141b39683b56318400306f5"
+  },
+  "decision_scope": "Review of one exact failed-family disposition proposal under Root's explicit bounded recovery decision. Root alone supplies actual complete fresh admission and executes. This GO is separate from normalef1 and proves no actual signal/wait/closure, readiness, provider-map result, original acceptance or retirement.",
+  "ready_sha256": "810238e05506a1eab63e09de7659ec3b5efa50444231fc967f11e4c1d14984ec",
+  "source_closure_sha256": "54a3ea3947cc15c88ca0cc3643b22487b3a5b743070a9a8863b5ccd414e9e377",
+  "Root_field_union_sha256": "85404b8c292aa0421bf260629a6e7aaa4fa3576995c979130489ae89fb8d3774",
+  "author_guarded_argv_sha256": "03527419083f92f82440b4b95aa82cd0772c67c86f95b9c82657b71b571705a1",
+  "saved_failure_review": {
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-implementation-review-1/SAVED-READINESS-FAILURE-REVIEW.json",
+    "sha256": "ca7771442bac3a3c4da49a9672e07a489f3adf7c21c5bd3abd8053cfc2a501b2"
+  },
+  "authorized_exact_family": {
+    "CID": "94db26876ae5c049816c4e5e8efbd5967b94f4dab5d0a4f100110d7af25509ae",
+    "name": "/mck-m15-f08-owned-main-20261112-1",
+    "created": "2026-11-12T14:00:30.463398221Z",
+    "daemon": {"namespace_pid":9,"birth":"57829697","ppid":7},
+    "inside_original_owner": {"namespace_pid":7,"birth":"57829688","original_retained_pidfd":3},
+    "original_attached_CLI": {"HOST_pid":1907246,"birth":"57829671","attempt":3},
+    "protected_HOST_parent": {"pid":1907220,"birth":"57829625"},
+    "original_Root_session": 47250,
+    "signals_allowed_by_this_source_review": "One cleanup pidfdSIGTERM to exact daemon9; exact sameCID stop-time=-1/defaultTERM only after the original Owner's genuine late wait; one pidfdSIGTERM to exact empty HOSTparent1907220 after all preceding terminal/wait predicates. No controller/worker/server/guardian/group/otherPID signal, KILL fallback, retry or in-flight mutation."
+  },
+  "concrete_findings": [],
+  "source_review_results": [
+    {
+      "contract": "Inside actor identity and actual original-owner handle",
+      "result": "SOURCE_MATCH_ACTUALS_UNPROVED",
+      "evidence": "Inside actor65-90 fixes target arguments, UID/GID1000/CPU7 and exact PID/mount namespace inodes, binds saved UNKNOWN9e6d, Owner7/daemon9 births/PPID/UIDs/sole child, actual b9cf executable bytes/cmdline and original Owner7 fd3 fdinfoPid9. The additional pidfd uses unchanged helper068e, retains verification-error fd, requires a nonterminal exact endpoint and rechecks original births/parentage before its one SIGTERM. It does not replace the original Owner's pidfd or wait channel."
+    },
+    {
+      "contract": "Daemon TERM followed by genuine existing Owner late wait",
+      "result": "SOURCE_MATCH_ACTUALS_UNPROVED",
+      "evidence": "Inside actor91-111 prints a cleanup intent, marks one attempted call, sends one pidfdTERM and waits at most20s for endpoint termination AND the exact existing ihkmond-main-k0-i-1.LATE-WAITS-1-1.json path. It requires actual late_daemon_wait pid9/rawstatus0, daemon_parent_joinedtrue, original UNKNOWN status and Owner7 emptychildren before closing only its new pidfd and returning0. Unchanged c87f source144-193 really writes this late receipt after its original waitpid; no new child, invented RPC or nonchild wait supplies it. A missing, partial, denied or inconsistent observation fails/retains rather than being invented."
+    },
+    {
+      "contract": "Strict exact container and no timeout KILL fallback",
+      "result": "SOURCE_MATCH_ACTUALS_UNPROVED",
+      "evidence": "Capture374-387 joins original Id/Image/Name/Created/completeConfig/HostConfig/all seven full Mounts against pinned actual created5093, requires docker-default/Inittrue and absent configured StopSignal. Capture438-444 revalidates after the successful inside actor, invokes only docker stop --time=-1 for that exactCID, then requires actual terminal143/nonOOM/Pid0/noError and Dockerwait143. Existing immutable source/mounts are not edited; no force/kill/group fallback exists.",
+      "primary_contract_source": "https://docs.docker.com/reference/cli/docker/container/stop/",
+      "primary_source_scope": "Docker documents defaultTERM when no StopSignal is configured and no daemon timeout for the negative stop-timeout setting. This is a source/API contract, not an observed success of the future current Docker operation. Unsupported/denied API results must retain the family."
+    },
+    {
+      "contract": "Original attached CLI wait gates the single protected HOST-parent edge",
+      "result": "SOURCE_MATCH_ACTUALS_UNPROVED",
+      "evidence": "Capture445-454 waits for the original parent's real LATE-ORIGINAL-DIRECT-WAIT.json, requiring attempt3/pid1907246/birth57829671/exit143 and preserved original failure. The reused original1f668 helper actually writes that receipt after its same Popen.wait. Parent actor68-82 independently checks the preceding inside/terminal/attached receipts, exact target1907220 birth57829625/UIDs, full commandline hash, emptychildren and post-open birth/PPID/emptychildren bookends. The literal cmdline hash b9e4 was independently recomputed from immutable original ACTUAL-PARENT-ARGV a59e and matches. Capture456 excludes its own/currentRoot worker/server targets; no generic target argument exists."
+    },
+    {
+      "contract": "Parent endpoint and own FD closure do not fabricate an original wait",
+      "result": "SOURCE_MATCH_ACTUALS_UNPROVED",
+      "evidence": "Parent actor83-93 marks one pidfdTERM attempt, waits at most20s for that endpoint to become terminal and closes only its new descriptor. Its result explicitly leaves the original outer Popen wait and Root47250 external/unproved; it never calls waitpid for a nonchild. Endpoint polling is not presented as the original parent exit code or full-family closure."
+    },
+    {
+      "contract": "UNKNOWN retains both actual families and all original pending handles",
+      "result": "SOURCE_MATCH_ERROR_PATHS_UNEXECUTED",
+      "evidence": "Both actors46-60 retain raw primary/TB/secondaries and any newly opened pidfd, with no retry/second signal/close fallback or auto-exit after an ambiguous owned operation. Capture390-401 keeps the same source context and original E088 pending Popen objects on every post-attempt failure. Qualified five1f668 functions and unchanged E088 are reused; capture records fsynced attempts/argv before Popen and uses same-handle late waits. No source hotpatch, old4ca1 kill branch, resource release or original-case PASS is introduced."
+    }
+  ],
+  "guarded_stage_order": [
+    "Fresh Root actual complete source/account/service/permission/ownership/resource grant and actual runningCID set; strict exact liveCID/profile join.",
+    "One exact pinned inside actor via sameCID unprivileged dockerexec. Only daemon9 cleanupTERM; require actual existing Owner7 latewaitraw0/UNKNOWN/emptychildren and actor0/closed own new pidfd.",
+    "SameCID/profile revalidation; exactCID stop --time=-1; require terminal143/nonOOM/Pid0 and explicit Dockerwait143.",
+    "Genuine original attached1907246/b57829671 latewait143, with original failure preserved.",
+    "One pinned HOST actor for only empty parent1907220/b57829625; exact cmdline/birth/pidfd predicates, one TERM and endpoint, actual actor0/closed new pidfd.",
+    "Capture positive waits/streams for every own original CLI/actor and held input closure. No original47250 full-tool or CID removal/absence is inferred.",
+    "Root separately obtains ORIGINAL47250 actual wait/fulltool/streams, expected original failure and original parent-15; obtains disposition fulltool completion; then exact terminal ownedCID nonforce removal/positiveabsence and independent FAILED-scope Q before any scoped retirement."
+  ],
+  "Root_admission_union": {
+    "required_schema": "mckernel.Root-current-HOST-admission.f08-disposition.v1",
+    "contract_path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/ROOT-GRANT-CONTRACT.json",
+    "contract_sha256": "85404b8c292aa0421bf260629a6e7aaa4fa3576995c979130489ae89fb8d3774",
+    "exact_bindings": "The approved object above; exact failed_family/charge; savedRoot/invocation/finite7c6; independent review ref/hash; pinned actual current account/owner/source/permission/retained-owner/resource/original-family ownership witnesses; fresh nonce, actual runningCID list containing94db and matching liveps. Both UTC and monotonic issue ages must be0..60s at entry.",
+    "current_required_actual_fields": ["operation_review_ref","issued_utc_ns","issued_mono_ns","disposition_nonce","source_view_verified","complete_owner_accounting","native_and_historical_unknowns_preserved","current_HOST_jobs_before","other_current_HOST_payload_reserved_bytes","current_owned_controller_worker_overhead_bytes","MemAvailable_bytes","host_free_bytes","scratch_free_bytes","current_owner_validation_ref","scoped_resource_evidence_ref","retained_owner_dispositions_ref","source_custody_and_actual_permission_checks_ref","original_family_ownership_ref","allowed_running_container_ids"],
+    "original_retained_bytes": 805306368,
+    "original_retained_MiB": 768,
+    "new_proposed_bytes": 134217728,
+    "new_proposed_MiB": 128,
+    "jobs": "Existing original job1 remains; proposed newCPU7/job1 plus all other actual jobs <=3. Existing805306368B plus all other actual slices and measured/planned controller/worker/prospective HOST overhead plus new134217728B <=4GiB TOTAL.",
+    "resources": "HOST0,6,7 only/CPU1 excluded/native2-5/12GiB separate. Fresh26GiB memory and17/13GiB host/scratch floors, continuing22/16/12 floors, actual permissions and current account/service/source guards at each CLI boundary. HOST privileged CLI AS/CPU rlimits remain infinity; core0/fsize64MiB/nofile512. Inside new actor AS128MiB/core0/fsize8MiB/nofile64 under unchanged existing512MiB container.",
+    "nominal_caps": "Capture180s; inside actor20s after its one signal/CLI35s; exact container stop CLI60s; original-attached receipt20s; parent actor20s/CLI35s. Caps are failure/retention triggers, never authorization for a kill or another attempt.",
+    "issuer_and_executor": "Root alone after real current checks; no protected actual account/admission values were read or issued by this reviewer.",
+    "current_execution_grant_issued": false
+  },
+  "source_proof_and_acceptance_limits": {
+    "failure": "Reuse savedca777/24a389/UNKNOWN9e6d/388rows: readinessfalse, group0, no normal stop attempt, no actual daemon provider-map join. Actual prehashed provider files and prior pidfd-open/binding do not prove signal success or enabled monitor readiness.",
+    "inference": "Selected Rockypatched libudev SRPM/source and actual provider/runtime-precondition attribution remain unproved. Neither diagnosis nor observer-correction proposal8ff0 is approved as a new enabled-service acceptance criterion or future runtime profile by this disposition GO.",
+    "records": "Current cleanup observations are new disposition facts only. Preserve every original failed record/source/nonce/result at its existing scope. Do not count late cleanup termination as a passed normalef1 case.",
+    "external_closure": "Original session47250/fullRoot, current disposition fullRoot, exact removal/absence and independent failed-family qualification are required before Root may retire ONLY their proved old768MiB/new128MiB scopes. No native/globalUNKNOWN restoration or larger milestone credit."
+  },
+  "performed": {
+    "manual_frozen_actor_capture_fieldunion_stageargv_and_source_reads": true,
+    "exact_current_digest_binding_and_saved_cmdline_hash_derivation": true,
+    "primary_Docker_documentation_read": true,
+    "subject_source_parse_import_compiler_test_actor_Docker_probe_signal_execution": false,
+    "protected_account_private_DATA_or_actual_new_grant_reads": false,
+    "original_or_author_source_edits_inflight_mutation": false,
+    "actual_admission_retirement_or_acceptance_credit": false
+  },
+  "preservation": "Every actual source/service/account/resource/native12/historicalUNKNOWN hold and same finite7c6 remain. Root is sole compositor/executor/retirement owner. M14 before M15 remains. Rejected worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02 signal/frame/xstate collector request remains excluded from replay/rephrasing/reassignment. No recursive agents."
+}

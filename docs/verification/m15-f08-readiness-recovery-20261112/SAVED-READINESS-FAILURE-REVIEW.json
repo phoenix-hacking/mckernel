@@ -1,0 +1,104 @@
+{
+  "schema": "mckernel.m15.f08.independent-saved-readiness-failure-review.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "invocation": "invocation20261112T094452Z-12a4bea0",
+  "Root_thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+  "reviewer": "/root/functional_delta_review; explicit gpt-6.1-sol/MAX; independent saved-data review; no recursion",
+  "decision": "CONFIRM_SAVED_READINESS_FAILURE__RETAIN_ALL_CUSTODY__DISPOSITION_UNISSUED",
+  "saved_evidence": {
+    "Root_failure": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/ROOT-ACTUAL-EXECUTION-1/ACTUAL-READINESS-FAILURE-RETAINED.json",
+      "bytes": 9583,
+      "sha256": "24a389fefd01826f048d1564b63c22ef29b038ea5616279fb14b8907bfaf8d11"
+    },
+    "inside_UNKNOWN": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/execution-1/container-output/ihkmond-main-k0-i-1.UNKNOWN.json",
+      "bytes": 12943,
+      "sha256": "9e6d45ff388d207ebe6d89c4af6f2f98fe2358a27312ecd4d947e663fc3bebbb"
+    },
+    "readiness_rows": {
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/correction-1/execution-1/container-output/ihkmond-main-k0-i-1.readiness.jsonl",
+      "bytes": 1708910,
+      "sha256": "7b3956dcb7162f7e8989b8d73635360d69ae7bddbf59c14a2db3253c3dc4f057"
+    },
+    "container_identity_sha256": "e5fb8a0c3e582d9f73368dfa6ccfd5663a06869fd972a8f61a38b99ef1b968c9",
+    "container_birth_sha256": "89c96b9b9326c792e5cfc595bc0cefc20131323618a6a712ac0ce333122af860",
+    "request_sha256": "38083843445d78df554d1e3036c7602f097135cfa141b39683b56318400306f5",
+    "operation_review_sha256": "ef1ebe04854a774e4c9e2d77556ca47bd96c0bc8781658e9c24996b0a92551d2"
+  },
+  "saved_failure_facts": {
+    "primary": "TimeoutError: issued F08 deadline expired; custody retained",
+    "source_site": "owned_process.py504 -> remaining(ready_deadline)275",
+    "ready_timeout_seconds": 10,
+    "readiness_observed": false,
+    "stop_attempted": false,
+    "stop_successful": false,
+    "launcher": {"pid":8,"birth":"57829697","parent_joined":true,"exit":0},
+    "daemon": {"pid":9,"birth":"57829697","ppid":7,"parent_joined":false,"ELF_sha256":"b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447"},
+    "inside_owner": {"pid":7,"birth":"57829688","subreaper":1,"original_pidfd_retained":3,"pidfd_closed":false},
+    "namespace": {"mnt":4026532218,"pid":4026532236},
+    "root_identity": [71,2252852],
+    "pidfd_open_evidence": "Saved retained fd3 fdinfo binds Pid9/NSpid9 and an empty terminal poll before readiness. This proves this actual open/binding path at that time; send_signal was never attempted and remains unproved."
+  },
+  "all_saved_rows_summary": {
+    "rows": 388,
+    "sequence_first": 1,
+    "sequence_last": 388,
+    "ready_true_rows": 0,
+    "monotonic_first_to_last_seconds": 9.975422619027086,
+    "task9_only_rows": 388,
+    "startup_partial_rows": 1,
+    "stable_watch_and_netlink_rows": 387,
+    "stable_watches": [
+      {"fd":3,"events_decimal":25,"events_hex":"0x19","data":3,"role":"signalfd"},
+      {"fd":4,"events_decimal":25,"events_hex":"0x19","data":4,"role":"doneeventfd"},
+      {"fd":5,"events_decimal":25,"events_hex":"0x19","data":5,"role":"netlink monitor socket"}
+    ],
+    "epoll_fd": 6,
+    "signalfd_mask_hex": "0x4002",
+    "eventfd_count": 0,
+    "netlink": {"protocol":15,"port_id":9,"groups":0,"socket_inode":6915675,"matching_rows":387},
+    "epoll_wait232_rows": 387,
+    "last_actual_syscall": "232 0x6 0x7fff0a4a8b50 0x3 0xfa 0x10 0x8 0x7fff0a4a8ae8 0x7fc8b576c737",
+    "meaning": "Full event mask0x19 and FD userdata are accepted correctly by the unchanged oracle. Group0 fails its nonzero monitor-membership condition. Existing descriptors and epoll_wait do not establish an enabled receiving monitor. Do not weaken the membership oracle or mark this case PASS."
+  },
+  "provider_proof_boundary": {
+    "actual_prehashed_files": [
+      {"path":"/usr/local/sbin/ihkmond","sha256":"b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447"},
+      {"path":"/usr/local/lib64/libihk.so","sha256":"b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2"},
+      {"path":"/usr/lib64/libudev.so.1.7.10","sha256":"034fd62bb884d5ee2244966e96db2a40970de1a423f75057380fae67ea9d0cce"},
+      {"path":"/usr/lib64/libcap.so.2.69","sha256":"70e8dbe271e2ea63127fbc20270ce60541d1244f0b170888d258b86b2573bcbf"}
+    ],
+    "actual_daemon_provider_mapping_join": "NOT_REACHED",
+    "reason": "The unchanged method calls provider_mappings only after ready=true. UNKNOWN contains provider_namespace_inputs but no daemon_provider_mappings. File prehashes are not an actual same-child mapping result.",
+    "cause_inference": "Author proposes the selected libudev disabled-monitor branch when its actual service/runtime filesystem preconditions are absent. That remains an inference pending the exact selected Rocky/patched source and its provider precondition handoff. Saved netlink group0 alone neither proves a particular missing path nor permits a fabricated provider contract."
+  },
+  "retained_current_custody": {
+    "CID": "94db26876ae5c049816c4e5e8efbd5967b94f4dab5d0a4f100110d7af25509ae",
+    "name": "/mck-m15-f08-owned-main-20261112-1",
+    "created": "2026-11-12T14:00:30.463398221Z",
+    "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "original_Root_session": 47250,
+    "protected_HOST_parent": {"pid":1907220,"birth":"57829625","original_wait_joined":false},
+    "attached_start_CLI": {"pid":1907246,"birth":"57829671","original_wait_joined":false,"primary_timeout_seconds":45,"secondary_bounded_wait_timeout_seconds":6},
+    "planning_bytes": 805306368,
+    "jobs": 1,
+    "status": "RETAIN_ORIGINAL_OWNER_PIDFD_POPEN_CID_SESSION_CHARGE",
+    "proof_limit": "These are identities and outcomes in the saved Root/inside records, not a new live inspection. Source keepers deliberately do not auto-exit when original late waits finish. A terminal daemon or container alone cannot establish protected HOST-parent/outer/fullRoot closure or retire this live family."
+  },
+  "next_separate_handoffs": {
+    "finite_disposition_author": "/root/time_functional_source",
+    "review_trigger": "Frozen source-backed finite actor/request with exact target identities, argv/profile/capture and Root admission requirements, then independent review. No operation GO is issued by this saved-data review.",
+    "disposition_requirements": "Preserve original failure, raw evidence, source bytes and every original keeper/handle. Freshly bind only the known actual actor/container/targets under a separately reviewed Root operation. Do not reuse normal-case GO for a cleanup signal, infer a parent wait from pidfd poll, promote late wait into functional PASS, use automatic Docker kill/blanket stop/host signals, mutate the in-flight source or release a scope without full required closure.",
+    "proper_provider_successor": "Separate exact source-derived provider/runtime-precondition proposal. No new real case or new provider/source/mount/profile expansion is admitted here. No group0 acceptance or unchanged failed replay."
+  },
+  "review_actions": {
+    "only_explicit_saved_records_and_388_JSON_rows_read": true,
+    "saved_hash_binding_and_finite_row_projection": true,
+    "live_proc_container_Docker_probe_signal_remove_actor_execution": false,
+    "source_edit_or_inflight_mutation": false,
+    "account_private_DATA_or_new_admission_read_issued": false,
+    "original_acceptance_or_resource_retirement": false
+  },
+  "preservation": "HOST0,6,7/max3/4GiB TOTAL including every retained charge/worker/controller overhead; native2-5/12GiB separate. Every actual service/account/source/resource/historicalUNKNOWN hold and same finite7c6 remain. Original M14 before M15, no acceptance credit. Rejected worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02 signal/frame/xstate collector request stays excluded from replay/rephrasing/reassignment. No recursive agents."
+}

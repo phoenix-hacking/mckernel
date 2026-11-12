@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T13:54:37.591521+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T15:17:22.115071+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -19,16 +19,21 @@ validated against their current audited hashes; they are not exact GitHub quotes
 All new owners are explicitSol/MAX/depth1. HOST0,6,7/max3/4GiB total/fresh26GiB and
 16/12GiB disk floors; native2-5/12GiB one separate Root admission; CPU1 excluded.
 
-Six current owners: native_current_binding owns the corrected normal producer and
-next actual-generation repeat binding; native_binding_review prepares its final
-nine-field operation GO after current failed-scope retirement; time_functional_source
-repairs only the two finite F08 protected-capture findings, and functional_delta_review
-independently reviews that successor. proc_vm_index_fix delivered the exact failed
-publication actor; m15_installed_leaf_review qualifies its actual original-session
-closure. UTI ABI35 remains ready but queued behind exclusive heavy publication.
-Root is sole canonical integrator/native executor. Optional mailbox update
-at pinned ecc3ee6 is fetched for reuse but deferred behind ready original closure.
-Existing1200-second foreground steering is active; no new supervision plumbing.
+Six canonical owners (all explicitSol/MAX/depth1): native_current_binding froze
+actual1f5 firstrepeat source/outer; native_binding_review issued final89af operation
+GO. Root ACTUALLY issued that combined path in originalsession81012 under fresh
+complete12-field admission8ac40 and genuine11-key projection37c69. Its current
+1.5GiB/job1 HOST family remains retained through all original waits, runtime/source
+restoration and independent result qualification. No signal result is claimed yet.
+Time_functional_source now prepares only missing original time/vDSO capture/cohort
+inputs behind positive first-repeat cleanup. proc_vm_index_fix owns private UTI
+DATA provider binding after proved ABI35; no body/ACK/lifetime selection.
+M15_installed_leaf_review completed actual ABI35Q43b, and Root9044 retired ONLY
+that successful Rust2GiB/job1. Functional_delta_review completed failedF08 recovery
+Qa099; Root790d retired its old768+new128MiB after genuine original waits/removal.
+F05 public-createGOea33 queues behind first-native priority and its real empty-Docker
+preflight. Root remains sole compositor/native executor. No optional mailbox/pool
+project or green replay. Existing1200-second foreground steering remains active.
 
 Current operational disposition: reviewed a614 failed-publication recovery ACTUALLY
 PASSED at13:41:05 under request24662047/GO f8edc474 and fresh complete30-field
@@ -53,18 +58,38 @@ normal issuer ONCE, nonce1f5f59d7/originalsession5864. Actual01865f/a2644e are
 positive/fullRoot0: producerFULLca8490d5, installer andkeeperwait0, sudo0, lease
 VERIFIED_CLOSED/COMPLETE, resource_unknownfalse/data_errornull/observationerrors[].
 All five originalnewroles absent after positive originalwait; captures12974B/0B
-VERIFIED_CLOSED. m15_installed_leaf_review independently qualifies only this new
-producer and its current2GiB before Root retirement; physicalNEW30 remains unrun.
+VERIFIED_CLOSED. Independent producerQ67f3 and Root scopedretirement59c3 retire only
+this new2GiB/job1; all olda614/raw UNKNOWN and historical keeper waits remain intact.
+The physicalNEW30 subsequently passed as recorded below; publication alone
+remains code-only and grants no native acceptance.
 
 Root introduced an exact completion-consumer mismatch: the preissue utility printed
-one truthful nonfinancial admission-status line before exec. Honest fullcapsulea180
-therefore retains4 rawlines, while strictreader8bec requires3. No output was trimmed
-or rewritten; originalissuer/caller output and actualsuccess remain preserved.
-native_current_binding owns the one private admission-prefix-correction successor:
-validate this exact current source/prefix/admission provenance, preserve the normal
-strict path/23unchanged bodies and every closure/immutable-file guard. Independent
-native_binding_review and only affected saved-data controls precede exact readback;
-no republish or priornonce/readback replay. This reader contract is the next blocker.
+one truthful admission-status line before exec. Capsulea180 retains all4 rawlines.
+Reader3110 changes only check_tool_chain/exact provenance (23 other bodies and
+normal3line path unchanged). First control149a failed before any case because
+literal_eval rejected LIMIT=8*1024*1024; bounded exact-AST fixture6ffd/delta61a then
+ACTUALLYPASSED3d3e60 all10rows/1166B25eb, independentQc6cd, only128retired5367.
+First physicalreadback0eb1b7 passed input/read/closure code but failed persisting
+because Root omitted its outputparent; no serialized result or credit was claimed.
+Root created only approved empty UID1000:1000/0700 directory66306:2253075, preserved
+the failure, obtained exact deltaGOffd7/failedQe9ee and retired only128 via1bba.
+Necessary corrected physicalreadback ACTUALLYPASSED1f0f31/fullRoot408c: saved
+RESULT20144B93ae verifies all30/407882B/immutableflags/cataloguecc657/exactdev+inodes/
+prepostdirectory identity, owncloseerrors[]/secondary[]. IndependentactualQb35daa45
+and Rootreader-onlyretirementcbcb are complete; no readback/producer/control replay.
+
+Actual1f5 firstrepeat packet7a14 now binds BOTH CORE+threeprovider helper namespaces
+to genuine1f5/graph5073, actualphysical93ae/Qb35/producer67f3/Root59c+cbcb, unchanged
+53-sourcecut/c964/a2f/f133/qualifiedcase/runtime bodies. SourceGObc305 verifies these
+exact constants/closure/body joins. Author bound ONLY SourceGO ref/requestSHA/parenthash: finalrequest6fe931/parentb1fe.
+IndependentfinalSDKGO89af/fullshortargv4180 is now frozen. Root fresh current-owner
+account snapshot accepted actual durable read, verified all53 actualsource rows and
+canonical runtime298a/priorflags524288, empty native kernel groups/resource census,
+and produced11-key projection37c69/exact12-field admission8ac40. Actualouteraa047e
+originalsession81012 is running. The genuine publisher/provider/frontdoor must
+create/pin4-key immutable input, prove real claim/currentfree/caps/pidfds/effective
+source and report full native/source/runtime restoration. No application PASS or
+whole signal/frame/xstate/error acceptance is claimed from issuance.
 
 CURRENT custodyreaderabdd/GO5912 ACTUALLYPASSEDa6920b at13:04:10, Q480e verifies
 allnewinput/outputFD generations, ownwait/streams/fullRoot0; onlyreader256 retired
@@ -84,23 +109,51 @@ No first signal yet; c964/a2f/f133, native12 and all actual gates remain unchang
 
 IndependentF05 remainingpassive+3cases ACTUALLYPASS51c/GO9bcc/e36a at12:22:30,
 all16innerfamilies/twoCIDs/outer/fullRoot0; scopedonlynew1GiB retired1e54, actualQ0d8.
-No compilerreplay/native/device/fullF05credit. proc_vm_index_fix now derives only
-the adjacent actual ihk_create_os public HOST-observer slice from the same matched
-DSO, reusing destroy profile/provider/cleanup evidence; no actual device/native
-operation or whole-F05 credit. UTI2GiB remains queued to serialize with the next
-exclusive2GiB publisher. Timefuture43file/sourcepin/data conditionalGO07c69; no stage/run.
-F08 additiveOwner/callersourceGOa09a preservesoldprefix and realmain. Protected
-HOSTcapture59314 has finite source NO_GO c34675: both entries referenced unused
-save before definition, and exact created/terminal profile joins were incomplete.
-time_functional_source delivered preserved-candidate correction-1 READY6fc9/request3808
-(two alias lines, strict phase-aware Name/label/AppArmor/full-profile/mount checks
-and path/hash pins). Independent operationGOef1ebe04 now permits only two-file
-nonimporting syntax and one real installed HOST case after fresh805306368B CPU7/job1
-admission. No daemon/keeper/inside-source change or execution has occurred; reuse
-all unchanged source/provider proofs. Native current-generation binding still waits
-the actual strictNEW30 result; no source preparation earns original credit.
-Rootaloneexecutes/integrates. Native12/allhistoricalSource/globalUNKNOWNs/excluded
-collector remainheld/excluded. Originals105/156,M14=70.00,M15=74.59 unchanged.
+No compilerreplay/native/device/fullF05credit. Adjacent public ihk_create_os packet
+4d42/requestd4c5 has independentGOea33 for real sameb7bc DSO/localownedFD0/7 and
+returns0/7/-5/oneclose. Its exact empty-Docker preflight waits actual F08 restoration;
+no observer compile/runtime or whole-F05 credit yet.
+
+UTI ABI35 under148a ACTUALLY ran originalsession30846 (b0c1aa->a1fcbd terminal1):
+C production compile PASSED, object184128B d1ca1196/depfile8a77 reusable; Rust failed
+only temporary rmeta mkdir in read-only /work/output/build/kernel (errno30), 198
+warnings retained. Both containers removed/nonOOM/all18 clients joined/streams;
+independent failedscope/materialQf603/Root3149 retired only its2GiB. No C recompile.
+Rust-only successor dbb5/requestd402/GOd541 changes only writable /uti-output/Rust
+CWD/name/label/outputbind, all277 compiler tokens/96cfgs/22mount destinations/perms/
+threeDATA overlays retained. After realF08 closure/emptyDocker and fresh27-field
+admission it ACTUALLYPASSED original1870 (700c15->1f10ba fullRoot0) at15:02:47.
+SavedRESULT32589B1d359e8c has genuineRustobject21579864B4fbb4de1 versus reusedC;
+all35u64/280B identical rawSHA27859d4e, UtiInfo160/align8 andKattr144/align8, oneRust
+container exit0/nonOOM/removal/allclients+FDs closed. m15_installed_leaf_review
+qualified saved actualDATA/current-family closure as Q43b2889f. Root recorded
+only this successful2GiB/job1 retirement; all controller/worker overhead remains
+counted. No body selection,
+ACK/lifetime/zeroing/C4/default-image/native/originalacceptance from this DATA proof.
+
+F08 syntax ACTUALLYPASSEDd2cdfb, then corrected3808/GOef1 actual realcase issued
+originalsession47250 onCPU7 with805306368B/job1. It reached real installed ihkmond
+9/b57829697 under originalOwner7/b57829688/pidfd3. Actual388readiness rows (387stable)
+show netlink socketfd5/inode6915675/protocol15/group0 and epollfd6 watches3/4/5 with
+mask0x19; all remainunready. Timeout beforeTERM, no same-child provider-map join.
+Physicalprovider file identities were observed; no enabledmonitor/fullcase PASS.
+Exact F08failedfamily recovery request2800/GOea424 ACTUALLYPASSED original45639
+(ec6f87->2b46a2 fullRoot0): daemon9 onepidfdTERM, genuineoriginalOwner7latewait0,
+exactCID94db stop--time=-1/noKILLfallback/terminal143/nonOOM/Pid0/wait143, genuine
+attached1907246latewait143, then approvedemptyHOSTparent1907220/b57829625 single
+pidfdTERM/terminal. Root joined ORIGINAL47250 actual068bce exit1/noSession and
+originalouterPopen latewait-15/streams; rawCLIENTS UNKNOWN flags preserved. ExactCID
+nonforce rm af1a8d/fullID and absence a93b5a/empty0 passed. Independent actualfailedQ
+a0999bae and Root790d retire ONLY old805306368B/job1 plusnew134217728B/job1. NoF08
+case PASS/map proof/wholeacceptance/globalUNKNOWN release. All388false/group0 and
+initial failure remain unchanged; enabledmonitor needs its genuine provider context.
+A Root preissue q-field typo a6ba95 issued no operation and stays separate from the
+actual successful recovery. Current HOST payload is the newly issued native combined1.5GiB/job1/session81012
+only, after Rust-onlyQ43b2889f/Root9044 retirement; all measured controller/worker
+overhead remains counted. Native12/source/historicalglobalUNKNOWNs/excludedcollector remainheld.
+Originals105/156,M14=70.00,M15=74.59 unchanged. Timefuture source/data07c69 remains
+unrun; F05createGOea33 may run after fresh actual emptyDocker/resource admission,
+without replaying prior destroy/CLI checks. First native retains execution priority.
 
 Historical first attempt and changed-input evidence:
 Native sourceGOea3d/finaloperationGOce728 passed fresh Root measurement3640
