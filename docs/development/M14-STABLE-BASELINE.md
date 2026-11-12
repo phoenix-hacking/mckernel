@@ -1,6 +1,6 @@
-# M14 Stable Image Baseline and Fast Iteration
+# M14 Stable Image Baselines and Fast Iteration
 
-**Evidence snapshot:** November 10, 2026, from published checkpoint
+**Historical evidence snapshot:** November 10, 2026, from published checkpoint
 `e34b958d35d508d29fbfc9ee9b7efd868a331b80`.
 
 This guide records the successful McKernel image baseline and the procedure for
@@ -12,6 +12,121 @@ promptly.
 handoff. [AGENTS.md](../../AGENTS.md) supplies the current execution rules. This
 document is a technical reference and a dated snapshot; current assignments,
 resource availability, and milestone decisions belong in those existing records.
+
+## Current reusable baseline — November 12, 2026
+
+**Evidence checkpoint:** `15788ef8281952baf261a789e9ee6c3583d36e87`.
+Use the existing saved **c964/a2f image, f133 deployment manifest and successful
+1f5f installed control package** at their proven scopes. The November 10 record
+below remains a historical reference; its older image and C-symbol counts are
+not the current baseline.
+
+### The saved pieces and their exact scopes
+
+| Layer | Current retained identity | What is established |
+| --- | --- | --- |
+| Compute source and image | Source `c964be3917c8f4c5031108aa927c84894584b667`; image `a2f00a6105f20642db8ef95fe12ade0873120594531f325ef363a4bb59f0ff8a`, 13,349,576 bytes | Qualified build/link and existing selected/emitted ownership evidence; current native acceptance remains open |
+| Preserved build inputs | 25 separate read-only copies, including image/map and 13 qualified link constituents, configuration, recipes and dependencies | Independent saved copies match qualified inputs; original configured working cache remains intact |
+| Matching module/deployment inputs | Manifest `f13363e5eb31efee749e6fc2c9f9ca83f8d2304318e1b31c63318c20411f49d7` | Existing exact module, archived-image and provider joins; use the matched cohort together |
+| Successful installed control package | Generation `1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd`; 30 files / 407,882 bytes | Full publisher completion, positive original waits/lease closure, and independently qualified physical readback |
+| Changed reporting candidate | c309 attempt; 30-file / 420,488-byte candidate | Failed parent verification/acknowledgement stage; no promotion or current native acceptance |
+
+Sources: [preserved cohort][current-preserved],
+[independent preservation receipts][current-preserved-receipts],
+[current ownership scope][current-ownership],
+[module/deployment joins][current-modules],
+[delivery manifest references][current-delivery], [successful publisher][current-publisher],
+[physical package qualification][current-readback],
+[current candidate result][current-candidate].
+
+The successful publisher completed at **06:52:53 America/Boise / 13:52:53 UTC**
+on November 12. Full Root, sudo, installer and keeper completion were positive,
+and the lease was `VERIFIED_CLOSED`. The subsequent physical readback verified
+the actual immutable 30-file package and catalogue
+`cc6570624480a149fa5a8f448f09ac2f07f47d4057f15cf6696ff80576d5e479`.
+These are installation facts, not a claim that the installed native helper has
+passed every required application case.
+
+### Where the baseline is retained
+
+Current image and build-input snapshot:
+
+```text
+/home/holden/mckernel-work/m14-blocker-resolution-20261110/perf-core-integer-normal-image-p03-max-1/preserved-c964-a2f00a61-1/
+```
+
+Original configured working cache:
+
+```text
+/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build
+```
+
+Matched deployment staging and its manifest:
+
+```text
+/home/holden/mckernel-work/scratch/m14-native-c964-a2f00a61-staging-parent/native-signal-c964-a2f00a61-stage-20261111-1/native-diagnostic-manifest.json
+```
+
+Successful installed control package:
+
+```text
+/var/lib/mckernel-code-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd/installed-source-1f5f59d76bfeb43ce0f738ee07d7148fc5f7a69498273f0be498efcb4ea30cfd
+```
+
+Retain the exact source/configuration/toolchain/provider bindings in the
+[producer request][current-producer], [preserved manifest][current-preserved]
+and [module/deployment joins][current-modules]. The compute and Linux-module
+toolchains have distinct bindings; do not collapse them into one assumed compiler
+profile. The 25-file snapshot preserves artifacts and required link inputs; it
+does not replace the complete configured working tree at another location.
+
+The staged archives and assets have recorded identities under the staging path
+above. This guide does not establish a separate durable copy of every staging
+asset. Workstation Root should preserve only assets not already covered by an
+appropriate retained snapshot, using the existing preservation workflow after
+current resource ownership permits it, and record that disposition. Reuse the
+already-preserved image and receipts without another whole-tree copy or hash-only
+qualification round.
+
+### Reuse and promotion rules
+
+1. **Retain build evidence when consumed build inputs are unchanged.** A change
+   confined to the publisher, reporting code or documentation does not require
+   rebuilding c964/a2f or its unchanged modules. Name the changed implementation,
+   configuration, selector, compiler, ABI, provider or link input before scheduling
+   a rebuild. Use the existing incremental target when one is actually required.
+2. **Treat control-package changes at their own scope.** The reporting candidate
+   changes two package modules while reusing 28 files. Its new installed generation
+   needs its actual publication and matching readback; the old 407,882-byte
+   readback cannot verify new 420,488-byte contents. Image and module evidence
+   remains reusable where their inputs are unchanged.
+3. **Keep successful and candidate generations separate.** Preserve the prior
+   successful snapshot and configured cache. Promote only the affected baseline
+   entry after its complete success, matching qualification and necessary cleanup.
+   A candidate failure must not erase the previous saved artifacts or overwrite
+   their success records.
+4. **Reuse artifacts and proof, not live authority.** The consumed 1f5f nonce,
+   historical grants, process identities and leases are evidence, not fresh
+   issuance or execution permission. Current ownership/resource checks and native
+   requirements still apply.
+5. **Use exact failure locations to make repair finite.** The c309 parent groups
+   result verification, proof-cap handling and ACK sending under one stage.
+   Preserve a fixed first predicate/substage and exception class through the
+   existing reporter, even when arbitrary text remains redacted. Keep original
+   validation and custody behavior intact. The saved c309 fields have not
+   established a schema/model/size mismatch; do not invent one or rerun an
+   unchanged failing publication. [Source diagnosis][current-diagnosis]
+
+Root remains the sole compositor and operator. The current repair and retention
+instruction is [recorded in the mailbox][current-instruction]. The existing
+[recovery guide](M14-M15-NATIVE-RECOVERY-20261112.md) supplies the scoped native
+recovery details. This index introduces no new wrapper, retention service, test
+quota, milestone criterion or accepted runtime result.
+
+## Historical baseline — November 10, 2026
+
+The remaining sections retain the original snapshot and general iteration
+procedure. For the current artifact identities, use the index above.
 
 ## 1. Verified baseline identity
 
@@ -247,3 +362,15 @@ subsequent changes. [Pinned ledger][ledger-snapshot]
 [campaign-snapshot]: https://github.com/phoenix-hacking/mckernel/blob/e34b958d35d508d29fbfc9ee9b7efd868a331b80/CAMPAIGN.md
 [ledger-snapshot]: https://github.com/phoenix-hacking/mckernel/blob/e34b958d35d508d29fbfc9ee9b7efd868a331b80/docs/verification/m14-m15-closure-progress.json
 [live-status]: https://github.com/phoenix-hacking/mckernel/blob/codex/mckernel-control-mailbox/status.txt
+
+[current-preserved]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/m14-current-image-20261111/perf-supported-default-1/preserved-cohort/PRESERVED-COHORT.json
+[current-preserved-receipts]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/m14-current-image-20261111/perf-supported-default-1/actual-image-qualification/PRESERVED-COHORT-AND-INDEPENDENT-RECEIPTS.json
+[current-ownership]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json
+[current-modules]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/m15-i02-matched-artifacts-20261112/INDEPENDENT-EXACT-THREE-AND-COHORT-JOINS.json
+[current-producer]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/m14-current-image-20261111/perf-supported-default-1/actual-producer/REQUEST.json
+[current-publisher]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/native-code-publication-successor-20261112/ROOT-EXEC-COMPLETION.ACTUAL.json
+[current-readback]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/native-strict-code-readback-20261112/ACTUAL-PHYSICAL-30-QUALIFICATION.json
+[current-candidate]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/native-reporting-c309-saved-result-20261112/SAFE-SAVED-RESULT-PROJECTION.json
+[current-diagnosis]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/native-reporting-c309-failure-20261112/SOURCE-DIAGNOSIS.json
+[current-instruction]: https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6834295484
+[current-delivery]: https://github.com/phoenix-hacking/mckernel/blob/15788ef8281952baf261a789e9ee6c3583d36e87/docs/verification/m15-i01-deployed-20261112/WHOLE-REVIEW.json
