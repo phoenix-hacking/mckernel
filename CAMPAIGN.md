@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T01:53:16.470837+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-12T02:21:09.421668+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: explicitly resumed
@@ -32,7 +32,9 @@ E2/E3/ACCEPT=0 yields original I01 mean25; M14 exact70.00, M15 unchanged67.19.
 Checkpoint48 fd709dcf published the earlier E1 closure. PR3receipt
 [6807005440](https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6807005440)
 remains POSTED_CONFIRMED for the PRIOR70.00/67.19,99/156 pair. The new
-70.00/68.86,100/156 pair below is pending one report after fetched-byte verification.
+70.00/68.86,100/156 pair is now POSTED_CONFIRMED at PR3receipt6812117790
+(https://github.com/phoenix-hacking/mckernel/pull/3#issuecomment-6812117790),
+after fetched-byte checkpoint1e926302 verification. No duplicate report.
 
 **New original technical closure:** independent whole-leaf GO92b2554c closes
 ONLY M15-I02-matched-artifacts: exact099 threeKOs/config106055/Linux415b/Kbuild/
@@ -40,7 +42,7 @@ Rust+ASM/providers join c964/a2f BOTH staged image paths andf133/runtime. Origin
 I02 mean60→80; exact M15 becomes84835/1232=68.86%, delta5/3points; M14 remains70.
 All156 atomic rows/weights/criteria stay unchanged. Module load/native/I02parent
 and M14-before-M15 acceptance remain open. Root checkpoints this100th atomic
-check now; one changed-pair report follows fetched-byte verification.
+check in pushed/fetched1e926302; changed-pair PR3receipt6812117790 is confirmed.
 [Independent whole-leaf decision](docs/verification/m15-i02-matched-artifacts-20261112/INDEPENDENT-REVIEW.json).
 
 All33 unrelated tracked dirty paths and historical UNKNOWN/holds stay preserved.
@@ -234,18 +236,40 @@ only that exact mount predicate and legitimate owning-context cleanup; no retry,
 flagclear, installedhotpatch, signal or new native claim. Root keeps original
 live tool/streams/charge while the bounded diagnosis runs.
 
-**Parallel original execution:** P04Source's timeHOST packet/SDKGO8d9f obtained
-reviewed CPU7successor52bd/GOd948 to leaveCPU6 free. FreshRoot51a1 admission
-included live nativecontrol1.5GiB plus time768MiB plus864333824B overhead inside
-HOST4/max3; MemAvailable29.07GB/floors passed. ActualtimeHOST98af2c ran its three
-pure oracle controls, then Docker `ps` preflight exited2: Go failed to reserve
-page summary virtual memory under inherited256MiB-AS/512MiB-hard. No container,
-payload or collector compile ran. P04Tests owns the smallest actual DockerCLI
-virtual-AS profile correction using an existing qualified profile; retain oracle
-PASS and firstfailure, run only unstarted phases after independentGO/freshadmit.
-PublicABI prepares exact MCPSbfbc/MCINSPECT9af6 deployment in the genuinely matched
-46d provider namespace: UbuntuHOST lacks requiredGLIBC2.38 proof, privateDESTDIR
-alone stays insufficient. First c964/a2f/468d/f133 cohort remains unchanged.
+**Parallel original execution has a real passing compiler result.** CPU7 time
+successor e73b/GO8c029 ran02:02:42–51Z after fresh9032/AS∞/sharedHOST admission.
+Both new payload+collector compiles and passiveELF reads PASS;11clients/one
+containerterminal0/nonOOM/removal/fullRoot63807→3b63exit0 are positive. Actual
+Qd34bc441/handoff02fd1d8e qualifies10artifact identities/41input+receiptpins:
+payloada98d17960B dynamicx64ET_EXEC joins b058/0853, collectordc0e1029888B static
+ET_EXEC/nointerp/noNEEDED. ThreepriororaclePASS reused; no app/collectormain/native
+ran. Root retired onlycurrent768MiB/job1(0bb0); originalnative1.5GiB/job1 stays.
+The earlier inherited-AS Go failure/3f67 stays FAILED, not replayed.
+[Actual compiler/artifact qualification](docs/verification/m14-time-functional-host-20261112/STATUS.json).
+
+**Current recovery input:** SourceAcq2170 proves the current legal autofs51→
+binfmt_misc56 stack coversZEROSource53; installedgraph globallyrefusesduplicates.
+P04Source froze private mount-ID/held-FD-aware graphdce3/callera9b5/READY18b626,
+with topology and ambiguity refusals; SDK materialreview and changedHOSTtests
+remain pending. Pub prepares normal30/hashchain consequences, no installededit.
+Existing e81 holder has NO callable restore/handoff endpoint and no truthful
+NativeParentRetirement exists because launch was not attempted. P04Tests froze
+read-only priorrow+HELD/FLOCK/FD collector2deb; SourceAcq finite source/opreview
+includes a caught receipt-newline defect before any privileged collection.
+One bounded corrected packet follows review; no signal/flagclear/claim/release.
+Root retains original62718/sudo1634456/provider1634459/runtimeI/1.5GiB/native12
+pending actual legitimate ownership records and separate reviewed reconciliation.
+[Exact installed source, error, legalstack and recovery condition](docs/verification/native-admission-debug-20261112/actual-prelaunch-mount-failure-1/STATUS.json).
+
+**Independent M15 deployment attempted the genuine46d namespace.** AS-only
+successora5a77/GO2f73 ran after fresh55ba sharedadmission; no newbuild/private-
+DESTDIR shortcut. Actualldso-list-MCPS exited0 with savedrawoutput, but reader4668
+failed on one namelessaddressline before complete dependencyclassification or
+MCINSPECTloader. CID3af2 exited1/nonOOM/Pid0 and ownedremove0; nineouterclients,
+innerloaderfamily/fullRootec65→a757exit1 are positive (SDKQb211).
+Root retired onlythatcurrent768MiB/job1(a4e7), leaving nativeheld. Pub derives
+same-child auxiliary-vector/mapping identity and a strict classifier successor;
+no blanketunclassifiedallowance, wholeI01 credit, projectmain or nativecall.
 
 **Independent original work is preserved:** M14-I01-E1 whole956fecb2 alone is
 counted; C4/E2/E3/native stay open. F02actualABI Qcde503 proves624B/78words equal

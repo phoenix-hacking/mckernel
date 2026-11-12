@@ -1,0 +1,29 @@
+{
+  "actual_root": {
+    "birth": "53414308",
+    "pid": 1634459,
+    "ppid_after": 1634456,
+    "ppid_before": 1634456,
+    "state_after": "S",
+    "state_before": "S"
+  },
+  "decoded_path": "/proc/sys/fs/binfmt_misc",
+  "duplicate_groups_in_snapshot": 1,
+  "exact_rows": [
+    "51 25 0:46 / /proc/sys/fs/binfmt_misc rw,relatime shared:28 - autofs systemd-1 rw,fd=28,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=18576",
+    "56 51 0:48 / /proc/sys/fs/binfmt_misc rw,nosuid,nodev,noexec,relatime shared:33 - binfmt_misc binfmt_misc rw"
+  ],
+  "namespace_fd_stat_attempt": {
+    "errno": 13,
+    "outcome": "PermissionError",
+    "path": "/proc/1634459/ns/mnt",
+    "retried_or_elevated": false
+  },
+  "precision": "This is current same-birth mountinfo evidence and source-compatible cause. The exact historical failing row was not logged; do not assert its raw bytes were captured at the original throw.",
+  "raw_mountinfo_bytes": 9496,
+  "raw_mountinfo_sha256": "f79321b4dceb28ae7d58684102dfc8123829a2fc9d12b65bf301a018cecc71d6",
+  "schema": "current-actual-Root-mount-row-evidence.v1",
+  "source": "one bounded readable /proc/1634459/mountinfo snapshot during current live failure diagnosis",
+  "source53_count": 53,
+  "source53_paths_covered": []
+}
