@@ -1,9 +1,79 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T05:02:57.592469+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T06:43:58.435762+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+LATEST COMPLETED HOST SLICE: UTI private production object-only GO31aa/fresh28
+31a6cded ACTUALLY PASSED originalb9d59c/session90635->936d6d/Root0 at06:27:44-
+06:28:12. RESULTb660483c, Rustobjectbfab5eb4/21579328B, observed7FUNC+idle_halt
+OBJECT4/alignment4. M15Leaf actualQ29bc58e5/Rootc5c664b5 now retire ONLY2GiB/job1;
+16originalwaits/streams,2exactnonOOMcontainerremovals,inputFDs/fullRoot positive.
+ABI35/metadata/Cproof REUSED. No materializedUTIDATA/body/ACK/frontend/selection/
+C4retirement/fullproviderlink/native/originalacceptance. LatestallHOSTzero0d4fc3b0:
+payload/jobs0/0 BEFORE freshcontroller/workerRSS,account/source/resource admission.
+Native12/source/runtime/account/lease/globalUNKNOWN and all historical holds persist.
+
+NEXT SHARED M14-I03-E2/E3/M15-I04: NativeCurrent freshnormalnamespace canonical-
+argv-route-successor-1 is FROZEN HANDOFF9da2b1bb/PREPAREDf045cf77. FinalBOOT03020217
+was rebound FIRST, profileb3717c8f.argv16 derived from EXACT finalbytes, callerc046
+andissuerd4c7 dependentpins;4strictconjuncts/account/ownership bodies unchanged.
+NativeBinding is ACTIVE on onlychangedsource/reference+ninefield/whole-route review.
+True latestUTIQ29bc/Rootc5c/zero0d4 supplied for requiredactual-literal binding.
+Existing owner706/a51 materialization8a is referencedwithoutrecopy; 29ed+97a6 issued
+nonces excluded in2existingNONACCOUNTguards only. Package30/420499/catalogue249342
+5060B and24reader bodies REUSED. No newentry/admission/nonce/publisher issued yet.
+Required next: exactfinalGO -> genuinefreshnewestACCEPTED/paired25s/owner/source/
+permission/lease/exclusive2GiB admission -> ONE distinct normalproducer -> actual
+ACK/installer/keeper/caller/waits/captures/fullRootQ/scopedreceipt -> NEW30physicalQ.
+Onlyactualpassinggeneration may bind BOTH CORE+provider before separate native gates.
+Original signal.alternate-repeat/c964-a2f-f133 remains first functionalnativecase;
+no native12/currentfree/claim/restoration clearance from HOSTzero or sourceGO.
+
+Canonicalargvfailure d3c395 is NOW Q a0b8cbf2/Root05141be5 retired ONLYits2GiB/
+job1; actualnonce97a6df10... is permanentlyexcluded (serviceledgerconsumedstatus
+NOTREAD/INFERRED), privateissuance/cap/control/account artifacts allpreserved.
+Proc6b7a+TimeSource06e0 prove ONLYprofile.argv16 stalebootstrapb66 differs; all
+other argc22/prefix16/suffix5 andallguardsbodies match. CurrentpinnedBOOT76bf stays
+exact inminimalcorrection, calleronlyPROFILE_SHA90c->31df. NativeCurrent owns
+freshnormalnamespace: finalize actualBOOT paths/hash FIRST thenderiveargv16 exact
+fromthoseFINALbytes, thenallprofile/caller/issuer/request/9/reader/route refs. Reuse
+existingowner706/a51/8a atsameinputrole WITHOUTrecopy, newgeneratedoutputs only,
+97a6+29ed source-nonaccountdenial onlyadditive. No source/normalexecutionGO yet.
+
+HISTORICAL FAILURE NOW QUALIFIED/RETIRED ABOVE: owner-correctedG finalGO2e87/helperd557 ranONCE
+originald3c395/terminal1/noSession/2133B534tokens, fullrawpreserved. Real706/a51
+ownerstage passed; canonical final-source-1/normal-operation-1/prepare_current.py
+base_check115 refused ValueError("exact argv binding") via473/569/34. Root does
+NOT infer nonce/account/lease/install boundary from this traceback; NativeBinding
+qualifies original savedphase/custody and any consumednonce. Current2GiB/job1
+staysheld. Proc is focused newARGV-source/input diagnosis owner, NativeCurrent
+retainsnormalrouting, NativeBinding separate outcome/fixreview. No guardrelaxation,
+missing-data default, SourceGuess or unchangedretry; any issuednonce staysconsumed.
+Ownercopy8a and completedF06/ABC/failed4a scopes remain unchanged, neverreplayed.
+
+CURRENT OWNER-INPUT REPAIR IS MATERIALIZED. Root safe receipt8a295e76 proves
+exact706B/a51 existing owner copied once to unchanged declared normal-operation-1/
+CURRENT-ACTUAL-OWNER.json: no rawdata parsing/logging, NOFOLLOW/EXCL/0600uid1000/
+nlink1/fsync/readback/source+destbookends/distinctinode/22consume-onceFDcloses.
+Recipe81956/Timecc01 and NativeBinding focusedsourcechecks reused. No account/
+control/capability OUTPUT file was prefilled; authoritativeinput/sourceState unchanged.
+NativeCurrent actual fresh-output correction717a/dd610/requestb3ff/helperd557 keeps
+allbody/guard/lookup/account/Docker/issuer logic; only latestzero451d refs changed.
+NativeBinding finalfocusedwhole-routeGO is PENDING; no correctedentry/nonce yet.
+Root performs approved outer7 ONCE only after finalGO and all genuinefreshgates.
+
+Original normal4a7171/terminal1/noSession/3480B failed helper66 ref(owner) because
+Root had missed requiredinput materialization. Dockerquery passed; accountread/
+admission/issuer/nonce/install neverreached. Actualfailedfamily Qd601e117 and
+Rootf609333c retire ONLY its2GiB/job1, originalrawfailure/3ee8 kept. Duringrepair
+Rootexecuted ONLY declared F06hook12 controls6c9c82/Root0 at05:33:52, exact7PASS+
+5REFUSED493B/emptyerr/alloriginalclosure. Q3317d5ff/Root9af50c7a retire ONLY256.
+LATEST currentHOSTzero451d1771 has BOTH genuine scopedreceipts; CURRENT payload/
+jobs0/0 before freshALLcontroller/workermeasurement. No SourceGo/native/currentfree/
+lease/account/globalUNKNOWN clearance is inferred. UTI2GiB queued behind shared
+publicationpriority; no greenoperation/materializer rehearsal or A/B/C replay.
 
 CURRENT FAILED-HOST RECOVERY IS COMPLETE AT ITS EXACT SCOPE. CorrectedA5181b5/
 Q0cdb/Root8adc plus genuineB467fa0/Qcb827 and actualC604b4f/Root0 now form
@@ -106,13 +176,13 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT HOST payload reservation: 0B / ZERO current payload jobs after positive
-C/A+B conjunctionQe834 and Root64e9 plus newC Qcaad/Root60511. Latestzero/current
-census e2b is current-HOST ONLY, not native12/source/globalUNKNOWN/account/lease
-clearance or a future grant. All controller/worker overhead remains measured and
-charged; every next batch needs fresh26GiB/floors/4GiB total/3jobs. UTIobject remains
-queued behind ready shared publication priority; no blanket source or successful
-signal prerequisite is introduced. Old raw failure evidence stays immutable.
+CURRENT HOST payload reservation: 2147483648B / ONE UTIobjectcodegen family
+b9d59c/session90635->936d6d nowterminal0, pendingM15actualQ+Rootreceipt. It is NOT
+the closed d3failedHOSTscope (Qa0b8/Root05141retired). Sourcezero f411 predates
+thisactualUTI2GiB batch; no stalezero is a newgrant. Allcontroller/workerRSS stays
+measured; native12/source/globalUNKNOWN/normallease/account/history stayseparate.
+No duplicateUTIcompile/ABI/meta/passive checks; Rootexclusivepublishernext only
+aftergenuineUTIclosure/Rootreceipt/freshadmission. Original105/156 unchanged.
 
 Publication Qb50a1da2 and Root84cb70bc retired ONLY its separate actual2GiB/job1;
 physical Qc9ba7a86/Root91ff4b21 and TLSnineQb1a5/Root7f5e1055 also retired only
