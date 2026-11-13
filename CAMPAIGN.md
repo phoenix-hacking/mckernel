@@ -1,9 +1,23 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T13:53:23.753745+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T14:08:22.662348+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
-## Current invocation: actual guarded resume RUNNING
+## Current invocation: saved Root retained; foreground goal BLOCKED
+
+Actual goal-tool status returned BLOCKED at2026-11-13T14:06Z after the same genuine
+owning-custody blocker persisted across three goal turns. Latest direct tool
+observations afedd3/618a36 confirm original18067 and40491 remain live/pending with
+no exit/new output. All six bounded source/review handoffs are complete; ready UTI/
+F05/F08 operations remain incompatible with actual retained ownership/exclusivity.
+This is no completion, acceptance, user pause, resource release or campaign reset.
+Root changed no launcher-owned state, controller, keeper, monitor, credit identity
+or ledger. Existing original owning routes and every source/native/lease/account/
+UNKNOWN hold remain retained. Required supplying owner is Root's original-Popen
+runtime: genuine terminal/latewait/actionstate/capture closure evidence or separately
+supported authority must establish the next boundary. No replacement route,
+repeated signal, new publisher or speculative software/authentication fix.
+
 
 Original IDs newly closed: NONE. Counts105/156, M14=70.00%, M15=74.59% unchanged.
 Same saved Root/finite7c6 and every actual account/source/lease/native/resource/
