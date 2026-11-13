@@ -1,0 +1,114 @@
+{
+  "actual_protected_RAW_reference_metadata_only_not_opened": {
+    "Root_uid0_mode0600_directory0700": true,
+    "bytes": 49137,
+    "identity": {
+      "bytes": 49137,
+      "ctime_ns": 1794535017705783122,
+      "device": 66306,
+      "gid": 0,
+      "inode": 2256848,
+      "mode": 384,
+      "mtime_ns": 1794535017705783122,
+      "nlink": 1,
+      "uid": 0
+    },
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/reporting-generation-first-repeat-binding-1/actual-a7-generation-binding-1/current64017-custody-read-1/ROOT-PRIVATE-DATA-1/CURRENT64017.DATA.PRIVATE.json",
+    "sha256": "8776402f45cc01954b828ec331dcba4b96b59bbe27418b389e6805f18063b185"
+  },
+  "actual_reader_stdout_sha256": "d97d3b88aaa9def245cebb817d89aaedfac15a3795e05781b6562b0c2d88234d",
+  "actual_safe_projection_RESULT": {
+    "bytes": 88496,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/reporting-generation-first-repeat-binding-1/actual-a7-generation-binding-1/current64017-custody-read-1/saved-data-projection-1/retained-errors-binding-correction-1/execution-1/RESULT.json",
+    "sha256": "6c3ea44b838fa75ec380628208cbbd6eb279899836f7197555d75805cb21ebcc"
+  },
+  "current_mountinfo_original_saved_sha256": "a3a56f5b1f5189c2721dd35b6a453d437856afeed579b55de139fbbc15736ab4",
+  "current_mountinfo_row_count": 92,
+  "exact_actual_CURRENT_row": {
+    "fstype": "nsfs",
+    "mountpoint_decoded": "/run/docker/netns/default",
+    "mountpoint_field": "/run/docker/netns/default",
+    "root_decoded": "net:[4026531840]",
+    "root_field": "net:[4026531840]",
+    "row_1based": 92,
+    "row_sha256": "f49aba1ec5895c23094e75b683873e4d9805a3f6557f3ee3e349c530bdb389fd"
+  },
+  "historical_failedinstant_row": "UNAVAILABLE_NO_RECONSTRUCTION_OR_ORIGINAL_CAUSE_CLAIM",
+  "minimum_change": "One regex literal mnt: -> (?:mnt|net): and comment. Both tags have length3; existing root[5:-1], positive decimal/no leadingzero/max10digits/uint32 checks remain byte-exact. No other tags admitted.",
+  "no_author_parser_import_or_control_protected_RAW_target_proc_namespace_runtime_native_flags_signal_execution": true,
+  "old_5073_guard_operands_source_derived_without_parser_execution": {
+    "combined_current_guard_would_refuse": "mount path fields",
+    "fstype_exact_nsfs": true,
+    "mnt_only_tag_matches": false,
+    "mountpoint_absolute": true,
+    "root_absolute": false,
+    "root_inum_positive_uint32": true
+  },
+  "platform_contract": "Linux nsfs_show_path prints ns_ops->name and inode->i_ino; the nsfs inode is assigned ns_common.inum. netns_operations.name is net. proc show_mountinfo invokes this filesystem show_path hook for the root field, followed by the absolute covering mountpoint. The genuine current nsfs net:[4026531840] root therefore uses the supported namespace root grammar.",
+  "primary_line_locations": [
+    {
+      "line_numbers": [
+        85,
+        269,
+        274,
+        281
+      ],
+      "source_name": "nsfs.c"
+    },
+    {
+      "line_numbers": [
+        135,
+        145,
+        146,
+        316
+      ],
+      "source_name": "proc_namespace.c"
+    },
+    {
+      "line_numbers": [
+        1415,
+        1416
+      ],
+      "source_name": "net_namespace.c"
+    }
+  ],
+  "primary_sources": [
+    {
+      "bytes": 6753,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-binding-1/nsfs-root-correction-1/primary-source/nsfs.c",
+      "reuse_qualified_primary_grammar": true,
+      "sha256": "c89911f6e419c11144492d62ad9a42b7c39f1a4ccf2ff4ebd36d3dfb8963fa76",
+      "source_url": "https://github.com/gregkh/linux/blob/v5.15.178/fs/nsfs.c",
+      "tag": "v5.15.178"
+    },
+    {
+      "bytes": 8324,
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-binding-1/nsfs-root-correction-1/primary-source/proc_namespace.c",
+      "reuse_qualified_primary_grammar": true,
+      "sha256": "ccbef3f75d2cb87c6f9fa6b58483200616f2525d4de0528d94ea0ae520e018c5",
+      "source_url": "https://github.com/gregkh/linux/blob/v5.15.178/fs/proc_namespace.c",
+      "tag": "v5.15.178"
+    },
+    {
+      "bytes": 34200,
+      "github_blob_sha": "1e9e76c4ff5be7bee7e85acd12ee90b031b54870",
+      "path": "/home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/reporting-generation-first-repeat-binding-1/actual-a7-generation-binding-1/current64017-custody-read-1/saved-data-projection-1/retained-errors-binding-correction-1/current-parser-contract-correction-1/primary-source/net_namespace.c",
+      "sha256": "91e380a58d96a1847ee0874533edf8f5010279565b1b8153355d73bb6ea2aa7a",
+      "source_url": "https://raw.githubusercontent.com/gregkh/linux/v5.15.178/net/core/net_namespace.c",
+      "tag": "v5.15.178"
+    }
+  ],
+  "provider_birth_same_and_mount_namespace_device_inode_same_before_after": {
+    "mount_namespace_device_inode": [
+      4,
+      4026531841
+    ],
+    "provider_birth": "61786646",
+    "provider_pid": 2113438
+  },
+  "pure_control_fixture_provenance": "Only safe observed operands are public. Complete fixture mount IDs/parent/device/options fields are explicitly synthetic, never alleged actual raw row bytes or original failure. Real current row#92/rawrowSHA/fullcurrentmountSHA bind exact root/mountpoint/fstype.",
+  "schema": "mckernel.current64017-current-net-nsfs-row-source-contract-evidence.v1",
+  "scope": "Original M14-06-02/shared I03/I04; functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "source_control_preconditions": "Future actual adoption/execution remains separate; source preparation changes no full sourcecut, source/mount/device/heldFD joins or current selected immutable generation.",
+  "unproved_booted_source_identity": "No live kernel/version or installed source read; immutable Linux5.15-family primary grammar is a supported-source contract, not a claim of an exact booted build hash."
+}

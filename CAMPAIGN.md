@@ -1,9 +1,37 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T03:04:24.283925+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T04:26:31.440138+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+CURRENT RECOVERY04:22: actual correctedA5181b5/Root0 is Q0cdb6b9f/Root8adc3341,
+retiring ONLY its new256MiB/job1. GENUINE original B467fa0/exit1/noSession/
+31927B is independently Qcb827e1e: late original Popen.wait line81 SUDO2113435/
+b61786640 exit-15/LATE receipt3b47, stable3096Bstdout+7610Bstderr. Old firstprimary/
+TimeoutExpired/secondary1/direct_waitfalse/exitUNKNOWN fields stay intact; no secondwait.
+Runtime C is UNEXECUTED: Proc authors exact private journal/inode/hash/FLOCK
+CAS524304->524288, NativeBinding next reviews using actual A+B and conditionsfe090.
+OriginalHOST1.5GiB/job1 remains held until C+failedHOST Q/Rootscopedreceipt.
+Native12/source/runtime/globalUNKNOWN and all actual guards remain separate.
+
+F06 SEVEN HOST STAGES ACTUALLY PASSED4a4540/session95562->44db1f/Root0 at
+04:20:21-04:22:15, under GO7cdaa678/fresh32grantb1597627. RESULT957b5294/226155B,
+seven wait0/directwait+closedstreams,21archive/rawmanifest/nativeDATA products,
+strict namedmanifest validation/input/providerbookends and rootcapture8879f34e.
+M15Leaf qualifies savedactuals; ONLY this new1GiB/job1 is pending retirement.
+Current HOST payloads2.5GiB/TWOjobs plus fresh ALL overhead; no TLS/wrapper/native
+runtime or originalacceptance from stages. FunctionalDelta prepares only necessary
+fixed7 named-provider binding from existing normal interfaces, no new generalharness.
+
+Normalfixed30 graph-net SOURCE successor8aa/c71 is NOT GO: TimeSource caught
+reader0152 CLOSURE_BYTES4893 while actual catalogue249342/producercontract5060.
+NO_GOa41fd16f/finding9260362a preserved; NativeCurrent corrects only stale scalar
+and dependent references in fresh private successor, all24reader bodies/package/
+account/29ed/ownership rules unchanged. No actual publication/readback failure,
+retry/adoption or installed hotpatch. Source13Q3cef/Root15d, original a7publication/
+NEW30 and all unchanged build/provider/ABI/staging proofs stay reused.
+Original105/156 andM14=70.00/M15=74.59 unchanged; no original check closed.
 
 Latest completed engineering operations (original105/156; M14=70.00%, M15=74.59%):
 - Current64017 readonly capture eed876/Root0 PASSED01:56:57, fullcurrentmountinfo,
@@ -19,14 +47,25 @@ Latest completed engineering operations (original105/156; M14=70.00%, M15=74.59%
   their bounded actual-data corrections; they did not launch duplicate payloads.
 Shared next: saved-only projection7382de/Root0 PASSED02:52:26 underGO3bebac02/
 actual32grant7c54b2f3; RESULT6c3ea44b/full54490B source-owned safeoutputd97d3b88,
-no targetproc/namespace/runtime/parser reread. Independent actualQ and its256MiB
-retirement are PENDING; API13623token output was truncated and is not reconstructed.
-NativeBinding owns actualQ and separately reviewed finite providerA/original64017B/
-exclusive-runtimeC conditions. NativeCurrent owns only source-backed currentparser
+no targetproc/namespace/runtime/parser reread. ActualQf800cbe8/Rootd2478f0e now
+retire ONLY that256MiB/job1; all19ownFDgenerations/Sourcecaptured54490B/original
+waits+streams/Root0 qualified. API13623token output remains truncated, not reconstructed.
+Qualified custodydeb44c93 and finite conditions2e755927 bind actualruntimeFD24/
+FLOCK2113438/journalFD22, journal586B/inode53525185/hash25c/prior524288/current524304.
+These are savedBASELINE facts, never fresh actionpermission or firstfailure replay.
+Proc now authors ONLY exact providerA target2113438/b61786646 with nativeBinding
+review; currentmask/childless/pidfd/freshness/BEFORE and all32fieldactualunion still
+precede anysoleTERM. Separate original64017B and exclusive-runtimeC remain future.
+NativeBinding supplied NOT-GO conditions only, no actual signal/flags/release grant. NativeCurrent owns only source-backed currentparser
 correction: current savedrow92 is nsfs net:[4026531840] at absolute
 /run/docker/netns/default; graph5073 only allows mnt tags. Originalfailedinstantrow
-remains UNAVAILABLE. Minimal net-branch/sourcecontrols are private/unselected;
-TimeSource is the designated independentreviewer after frozenhandoff. No waiver/
+remains UNAVAILABLE. Minimal net-branch/sourcecontrols remain private/unselected; TimeSource sourceGO
+bdef9d7a qualifies only regex/comment+13newpurecontrol proposals, not execution.
+NativeCurrent prepares the exact protected13control packet for M15Leaf operation
+review using actualSourceGO/plaininvocation; no old21replay. TimeSource completes
+only fixed7 capture-count delta1/3/10/3->7/1/17/1 while FunctionDelta preserves the
+oldunissued candidate/NO_GOe087 and fresh59859c58 correction. No helper body or
+payload rebuild/sourceadoption from this bookkeeping repair. No waiver/
 installedhotpatch/currentcase retry or signal/flagclear from this evidence.
 FunctionalDelta owns fixed7 initrunner literalcase binding; preserve one-case120s
 ownedchild/wait/framing bodies in seven compile-time variants and ONE new serial
@@ -60,35 +99,15 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT HOST payload reservation: 1879048192B / TWO scopes: original failed-native
-control1.5GiB/job1 plus actual savedprojection256MiB/job1 pending independentQ.
-Only the original failed-native-control family is eligible for later A/B/C recovery. Original guarded invocationfd9ba1/session64017 remains pending with
-sudo2113435/b61786640 unjoined and provider2113438/b61786646 retaining runtimeI+
-FLOCK. Durable FIRST primary is builtins.ValueError("mount path fields") at actual
-a7 graph_observations.py parse_mountinfo154/read200 via prepare_source_manifest126/
-native.run203. Both structured reports preserve it; ROOT_NATIVE_CALLER_OWN_CLOSES_COMPLETE
-means 33 own handles closed, not native/app/family success or release. The rejected
-raw row/decoded root/mountpoint/fstype and false operand were not saved: UNAVAILABLE.
-No native application, claim success or native12/source/globalUNKNOWN retirement
-is inferred. Source diagnosis f59ba883, exact current-path binding81c45aa8 and
-NativeBinding first-failureQ85e536d2 are complete; no recovery operation is GO.
-Proc owns the minimum current-provider readonly mountinfo/journal/FD/FLOCK packet;
-M15Leaf now reviews its actual draft source while Proc finishes the SAME frozen
-request/actor/parent/outer/profile/fieldunion/capture. Final operationGO still
-requires the complete frozen chain, then Root fresh admission/execution. This is
-an internal author/reviewer dependency, not absent user authorization. NativeBinding
-awaits those actual facts for separate providerA/original-sessionB/runtimeC reviews.
-NativeCurrent's F06 reviewer-identity findingef09d15c is complete: both consumers
-require TimeSource, which will review the frozen seven-case artifact packetb6269
-following its healthy protectedTIME12 packet handoff. No prefix substitution or
-consumer weakening. FunctionalDelta's F06 source/packet author work is complete;
-sourceGO2f157610 is reused. Other native authors await actual custody/Q, not repeated
-source diagnosis. Verified checkpoint2e64a6f3 publishes a7/new30/TLSnine proofs;
-PR3 results6841000726 and finite diagnostic6841146846 are exact-readback verified.
-No original check closed;105/156 and70.00/74.59 unchanged. Root retains ORIGINAL
-64017 handles and all uncertainty; no secondwait, signal, flagclear, parser waiver,
-installed hotpatch, replay or guessed nsfs/net cause. New current snapshot will be
-current DATA, never reconstruction of the unavailable failed instant.
+CURRENT HOST payload reservation: 2684354560B / TWO scopes: original failednative
+control1.5GiB/job1 plus actualfixed7 staging1GiB/job1 pendingM15LeafQ/Rootreceipt.
+CorrectedA256 is Q0cdb/Root8adc retired; original B is Qcb827 with genuine late
+originalwait/captures, never a normal native/app result. RuntimeC/source/native12/
+globalUNKNOWN remain held separately. Root preserves originalfailed sourceguard
+mount path fields/Q85e536d2 and unavailablefailedinstant row. Currentnet contract/
+private13controls prove only current parser gap, not reconstruction or replay authority.
+Older paragraphs below retain their historical scope; current scoped Q/receipts above
+control charge accounting. No duplicate signal/wait/read/parser/greenproof execution.
 
 Publication Qb50a1da2 and Root84cb70bc retired ONLY its separate actual2GiB/job1;
 physical Qc9ba7a86/Root91ff4b21 and TLSnineQb1a5/Root7f5e1055 also retired only
