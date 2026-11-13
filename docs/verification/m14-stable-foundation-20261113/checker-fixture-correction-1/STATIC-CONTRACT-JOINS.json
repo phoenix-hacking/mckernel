@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "at": "2026-11-13T19:57:50.891346+00:00",
+  "status": "PREPARED_STATIC_SOURCE_JOINS_ONLY_NOT_TESTED_NOT_ADMITTED",
+  "candidate_PR_head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+  "IHK_gitlink_and_existing_checkout": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+  "source_paths": [
+    {
+      "path": "scripts/ihk_smp_native_lifecycle_check.py",
+      "before_bytes": 111339,
+      "before_sha256": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+      "after_bytes": 111602,
+      "after_sha256": "9862065696df43be49b0c3633c16a20c16741f1dd9102208c85c6ca7cf32b698",
+      "modified_functions": [
+        "_validate_rust_source"
+      ],
+      "added_functions": [],
+      "canonical_unchanged": true
+    },
+    {
+      "path": "scripts/mcctrl_native_lifecycle_check.py",
+      "before_bytes": 56322,
+      "before_sha256": "26c1f4dfff1918e5d2e97825b9aeb624247678f5edd9634098f2d3caaed48504",
+      "after_bytes": 56600,
+      "after_sha256": "984d007e9d13ae0a0490615d6a50efa9ffc1736d1f2cf474e64a878b8b5d7876",
+      "modified_functions": [
+        "_validate_kbuild"
+      ],
+      "added_functions": [],
+      "canonical_unchanged": true
+    },
+    {
+      "path": "scripts/tests/test_ihk_smp_native_lifecycle_check.py",
+      "before_bytes": 66505,
+      "before_sha256": "ef34d0e3cab39392ba12e9dad4d5e00ab4685e657e7d62737bdfbbc036064f46",
+      "after_bytes": 68210,
+      "after_sha256": "fc88a929fddfd398add2c785ad910d5ae6f4cbbc35b31d980587c280a275bf7f",
+      "modified_functions": [],
+      "added_functions": [
+        "IhkSmpNativeLifecycleCheckTests.test_unbooted_v6_dispatcher_requires_abi2_owner_and_ordered_callbacks"
+      ],
+      "canonical_unchanged": true
+    },
+    {
+      "path": "scripts/tests/test_mcctrl_native_lifecycle_check.py",
+      "before_bytes": 37468,
+      "before_sha256": "d50db59346f1eef28fb8bea90680b33bbab9093c8102583c8b72e141578af21c",
+      "after_bytes": 38690,
+      "after_sha256": "52025eff9bfee845d1edff73f7565c8313c566562d5f242079ccf99a26241c54",
+      "modified_functions": [],
+      "added_functions": [
+        "McctrlNativeLifecycleCheckTests.test_kbuild_requires_only_the_exact_ordered_rust_assembly_composite"
+      ],
+      "canonical_unchanged": true
+    }
+  ],
+  "dispatcher_literal_exact_match_count": 1,
+  "dispatcher_callback_ABI": 2,
+  "dispatcher_active_top_level_and_native_compat_guards": "UNCHANGED_NOT_EXECUTED",
+  "mcctrl_exact_ordered_composite": [
+    "mcctrl-y := mcctrl_rust.o m15_mmap_trace_gates.o m15_mm_write_warning.o"
+  ],
+  "qualified_stage_source_joins": [
+    {
+      "role": "ihk",
+      "path": "host-kernel/native-rust/ihk.rs",
+      "destination": "ihk.rs",
+      "bytes": 18754,
+      "sha256": "8ae67d7208229c22c503508d16d2c9718a7f19123542270cf5589569d21a51ec"
+    },
+    {
+      "role": "ihk_smp_x86_64",
+      "path": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "destination": "ihk_smp_x86_64.rs",
+      "bytes": 36940,
+      "sha256": "aa5752bfcf737c013a3721dcb3c454232acf72dcd477cdb210c1cfeb6efc1ac0"
+    },
+    {
+      "role": "mcctrl",
+      "path": "host-kernel/native-rust/mcctrl.rs",
+      "destination": "mcctrl_rust.rs",
+      "bytes": 9095,
+      "sha256": "de4793814c7ab3834d0d284c7e28ab2fbfdbfb63f50aac286c5082909d392dee"
+    },
+    {
+      "role": "kbuild_template",
+      "path": "host-kernel/kbuild/Kbuild.in",
+      "destination": "Kbuild",
+      "bytes": 1472,
+      "sha256": "192c744b53fe2158f8f81ab6165107753b2fb66a9642db02c3a85c3c3843a4e3"
+    },
+    {
+      "role": "kconfig",
+      "path": "host-kernel/kbuild/Kconfig",
+      "destination": "Kconfig",
+      "bytes": 848,
+      "sha256": "48c6ba25186281a3a4fe4690c7520b02d8bbe43965e78d3301d2613477c3874f"
+    },
+    {
+      "role": "embedded_assembly_source",
+      "path": "host-kernel/native-rust/m15_mmap_trace_gates.S",
+      "destination": "m15_mmap_trace_gates.S",
+      "bytes": 2272,
+      "sha256": "365305ba7f9d7a22615d5fdf0a600715f63a9fc56c4f4ac9f0e126d19a812161"
+    },
+    {
+      "role": "embedded_assembly_source",
+      "path": "host-kernel/native-rust/m15_mm_write_warning.S",
+      "destination": "m15_mm_write_warning.S",
+      "bytes": 1872,
+      "sha256": "24bd1ebcd59ac1de5761282cac404540a2324fd819576f5d39dd51c1c7f18550"
+    }
+  ],
+  "patch": {
+    "bytes": 5876,
+    "sha256": "ddfd5df11f5762638900762625ba280db25330c5586b3f97277902e861a67286"
+  },
+  "all_existing_fixture_methods_unchanged": true,
+  "module_config_Kbuild_producer_bytes_unchanged": true,
+  "tests_or_compiler_or_module_operations_run": 0,
+  "no_source_or_runtime_admission": true
+}

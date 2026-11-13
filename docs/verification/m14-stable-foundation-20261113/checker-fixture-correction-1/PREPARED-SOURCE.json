@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "prepared_at": "2026-11-13T20:01:20.365797+00:00",
+  "status": "PRIVATE_SOURCE_CORRECTION_ONLY_NOT_REVIEWED_NOT_TESTED_NOT_ADMITTED",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+  "owner": "Root, explicit same-Root bounded source correction; no worker dispatched.",
+  "model_route": "gpt-6.1-sol/MAX; existing six canonical depth1 slots retained.",
+  "original_requirements": [
+    "M15-I02 source/Kbuild/provider qualification",
+    "M14 source-feedback path"
+  ],
+  "failure_family": {
+    "candidate_head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+    "run": 43491154712,
+    "job": 132112383864,
+    "outcome": "Cancelled inventory gate with observed SMP dispatcher and mcctrl composite refusals; no PASS inferred."
+  },
+  "base": {
+    "scope": "Functional McKernel OS/apps and Rust/assembly migration only; no security testing.",
+    "candidate_head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+    "canonical_head": "7a6f2a4046c3a4ff945822abd544064d1d722630",
+    "source_files": [
+      {
+        "path": "scripts/ihk_smp_native_lifecycle_check.py",
+        "bytes": 111339,
+        "sha256": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+        "git_blob": "350ca6964a099bb339babe08d5fe8d6b4059625a"
+      },
+      {
+        "path": "scripts/mcctrl_native_lifecycle_check.py",
+        "bytes": 56322,
+        "sha256": "26c1f4dfff1918e5d2e97825b9aeb624247678f5edd9634098f2d3caaed48504",
+        "git_blob": "a63fc17f4143a0530cfec170ab4a17cbeab13987"
+      },
+      {
+        "path": "scripts/tests/test_ihk_smp_native_lifecycle_check.py",
+        "bytes": 66505,
+        "sha256": "ef34d0e3cab39392ba12e9dad4d5e00ab4685e657e7d62737bdfbbc036064f46",
+        "git_blob": "d223d94cbcd76e4ae74722d31e47e6c14cae979d"
+      },
+      {
+        "path": "scripts/tests/test_mcctrl_native_lifecycle_check.py",
+        "bytes": 37468,
+        "sha256": "d50db59346f1eef28fb8bea90680b33bbab9093c8102583c8b72e141578af21c",
+        "git_blob": "09d677ad5c9c2859eae6160cc5f5eca0332939de"
+      }
+    ],
+    "not_deployed_not_executed": true
+  },
+  "source_delta": {
+    "bytes": 5876,
+    "sha256": "ddfd5df11f5762638900762625ba280db25330c5586b3f97277902e861a67286"
+  },
+  "private_candidate_root": "/home/holden/mckernel-work/qualified-functional-checkpoint-97/inventory-checker-fixture-correction-1/candidate",
+  "source_paths": [
+    {
+      "path": "scripts/ihk_smp_native_lifecycle_check.py",
+      "before_bytes": 111339,
+      "before_sha256": "9133a587e9a11fec6c2dbab48268ed6dd245fe69d3b4f37c66119a890e74d084",
+      "after_bytes": 111602,
+      "after_sha256": "9862065696df43be49b0c3633c16a20c16741f1dd9102208c85c6ca7cf32b698",
+      "modified_functions": [
+        "_validate_rust_source"
+      ],
+      "added_functions": [],
+      "canonical_unchanged": true
+    },
+    {
+      "path": "scripts/mcctrl_native_lifecycle_check.py",
+      "before_bytes": 56322,
+      "before_sha256": "26c1f4dfff1918e5d2e97825b9aeb624247678f5edd9634098f2d3caaed48504",
+      "after_bytes": 56600,
+      "after_sha256": "984d007e9d13ae0a0490615d6a50efa9ffc1736d1f2cf474e64a878b8b5d7876",
+      "modified_functions": [
+        "_validate_kbuild"
+      ],
+      "added_functions": [],
+      "canonical_unchanged": true
+    },
+    {
+      "path": "scripts/tests/test_ihk_smp_native_lifecycle_check.py",
+      "before_bytes": 66505,
+      "before_sha256": "ef34d0e3cab39392ba12e9dad4d5e00ab4685e657e7d62737bdfbbc036064f46",
+      "after_bytes": 68210,
+      "after_sha256": "fc88a929fddfd398add2c785ad910d5ae6f4cbbc35b31d980587c280a275bf7f",
+      "modified_functions": [],
+      "added_functions": [
+        "IhkSmpNativeLifecycleCheckTests.test_unbooted_v6_dispatcher_requires_abi2_owner_and_ordered_callbacks"
+      ],
+      "canonical_unchanged": true
+    },
+    {
+      "path": "scripts/tests/test_mcctrl_native_lifecycle_check.py",
+      "before_bytes": 37468,
+      "before_sha256": "d50db59346f1eef28fb8bea90680b33bbab9093c8102583c8b72e141578af21c",
+      "after_bytes": 38690,
+      "after_sha256": "52025eff9bfee845d1edff73f7565c8313c566562d5f242079ccf99a26241c54",
+      "modified_functions": [],
+      "added_functions": [
+        "McctrlNativeLifecycleCheckTests.test_kbuild_requires_only_the_exact_ordered_rust_assembly_composite"
+      ],
+      "canonical_unchanged": true
+    }
+  ],
+  "changed_contracts": [
+    {
+      "checker": "scripts/ihk_smp_native_lifecycle_check.py",
+      "difference": "Exact v6 dispatcher construction retained callback ABI1 instead of the qualified ABI2/comment bytes. Add only that literal transformation; require one exact active top-level full body, same callback order and module owner.",
+      "qualified_source": "host-kernel/native-rust/ihk_smp_x86_64.rs",
+      "source_sha256": "aa5752bfcf737c013a3721dcb3c454232acf72dcd477cdb210c1cfeb6efc1ac0",
+      "new_negative_cases": [
+        "ABI1",
+        "null module owner",
+        "missing release",
+        "swapped prepare/start",
+        "swapped application open/invoke",
+        "missing shutdown"
+      ]
+    },
+    {
+      "checker": "scripts/mcctrl_native_lifecycle_check.py",
+      "difference": "Replace unconditional rejection of any composite with the exact ordered mapping returned by the unchanged complete shared Kbuild policy. No arbitrary .o, alternative spelling, duplicate or C input is admitted.",
+      "exact_mapping": "mcctrl-y := mcctrl_rust.o m15_mmap_trace_gates.o m15_mm_write_warning.o",
+      "new_negative_cases": [
+        "missing Rust object",
+        "reordered assembly objects",
+        "duplicate Rust owner",
+        "extra unqualified object",
+        "project C input",
+        "alternate -objs assignment",
+        "duplicate mapping"
+      ]
+    }
+  ],
+  "unchanged_protections": [
+    "active fragment masking and unique top-level dispatcher guard",
+    "native and compat dispatch and pointer conversion checks",
+    "hidden raw parameter metadata/layout checks",
+    "provider-anchor relocation and modpost/dependency/ABI checks",
+    "all existing test methods and original positive/negative artifact oracles",
+    "shared full Kconfig/Kbuild policy",
+    "canonical and frozen source/module/config/cache/PR11 bytes",
+    "all qualified M14/F06 green receipts and original M15-I02 technical children"
+  ],
+  "static_preparation_only": {
+    "Python_AST_parsed": 4,
+    "modified_existing_functions": 2,
+    "new_test_methods": 2,
+    "new_refusal_operands": 13,
+    "qualified_source_joins": 7,
+    "literal_dispatch_match_count": 1,
+    "patch_checks": [
+      "correction_only",
+      "unapplied_PR11_plus_correction"
+    ],
+    "executed_checker_fixture_compiler_module_or_test_operations": 0,
+    "not_execution_or_adoption_GO": true
+  },
+  "next_focused_check": {
+    "status": "UNISSUED_REQUIRES_INDEPENDENT_REVIEW_AND_GENUINE_TEST_ELIGIBILITY",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "scripts.tests.test_ihk_smp_native_lifecycle_check",
+      "scripts.tests.test_mcctrl_native_lifecycle_check"
+    ],
+    "candidate_context": "Complete isolated candidate at9876b029 with this patch and its same qualified source/config/manifest; four-file source overlay is not independently runnable and must not be imported against mismatched ROOT. PR11 patch57a3e419 remains unapplied to canonical worktree.",
+    "IHK_gitlink": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "required_positive_and_existing_negative_cases": [
+      "IhkSmpNativeLifecycleCheckTests.test_repository_contract_is_verified_without_runtime_overclaim",
+      "IhkSmpNativeLifecycleCheckTests.test_built_artifact_rejects_hidden_raw_parameter_record_drift",
+      "McctrlNativeLifecycleCheckTests.test_repository_source_contract_passes_without_gate_credit",
+      "McctrlNativeLifecycleCheckTests.test_built_artifact_requires_provider_anchor_relocation"
+    ],
+    "success_requirements": [
+      "both full existing test modules complete",
+      "real source baselines validate before artifact negatives",
+      "intended raw-parameter and missing-anchor mutations still reject",
+      "new ABI/owner/order and composite mutations reject",
+      "zero failures/errors/skips/expected-failures/unexpected-successes",
+      "exact head/source/config/profile/tool identities and complete raw failures/results retained"
+    ],
+    "normal_guard_requirements": "Actual account/source/permission/owner eligibility, independently reviewed exact test profile, fresh aggregate resources including2415919104B/jobs2 and all overhead, and actual compatible exclusive ownership. No grant inferred from source preparation. HOST0,6,7/max3/4GiB total/fresh26GiB/disk floors; no native CPUs or operations.",
+    "not_run": true
+  },
+  "later_required_gate": "After meaningful reviewed source change and actual admission, finish affected inventory plus previously skipped tracker implementation/idempotence/invalid-input stages. Cancellation remains non-PASS. Reuse hosted14+40/F0640/ownership/debug-ABI; no unchanged green or module rebuild.",
+  "current_custody": {
+    "original_sessions": [
+      18067,
+      40491
+    ],
+    "payload_reserved_bytes": 2415919104,
+    "jobs": 2,
+    "overhead_additional": true,
+    "source_account_PENDING_lease_privateIPC_native_global_UNKNOWN": "UNCHANGED",
+    "new_actor_signal_publisher_original_wait_retirement_relaunch": false
+  },
+  "budget": "Same Root/finite7c6/cumulative history; ONE additional tranche only through genuine accounting; no reset or inferred current availability.",
+  "original_acceptance": {
+    "new_checks_closed": [],
+    "verified": 105,
+    "total": 156,
+    "M14_percent": 70,
+    "M15_percent": 74.59,
+    "M14_before_M15": true
+  },
+  "excluded_task": {
+    "worker": "01a1c48d-4d96-7cc3-b733-73a97973152f",
+    "turn": "01a1ce01-20cf-7e03-9442-f6d521fb8b02",
+    "no_replay_rephrasing_or_reassignment": true
+  }
+}

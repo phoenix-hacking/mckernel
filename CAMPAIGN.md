@@ -1,9 +1,31 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T19:40:32Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T20:03:34Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: saved Root retained; foreground goal BLOCKED
+
+Root prepared the one private checker/fixture correction requested at19:45Z:
+[source patch](docs/verification/m14-stable-foundation-20261113/checker-fixture-correction-1/SOURCE-DELTA.patch),
+5876B/ddfd5df1, with [prepared source](docs/verification/m14-stable-foundation-20261113/checker-fixture-correction-1/PREPARED-SOURCE.json)
+535db88e. SMP's exact v6 expectation now specifies the qualified ABI2 bytes while
+retaining one ACTIVE top-level dispatcher, module owner and callback order. mcctrl
+uses the unchanged full shared Kbuild policy and accepts ONLY the ordered Rust/
+two-assembly composite. Two added fixture methods provide six ABI/owner/callback
+and seven composite refusal operands; every existing fixture/artifact method is
+unchanged, including hidden raw-parameter and missing provider-anchor negatives.
+Canonical checker/module/config/cache/frozen bytes and PR11 remain UNAPPLIED.
+
+Static preparation only: four Python ASTs parsed, exact literal dispatcher joined
+to qualified source, seven stage source/config joins, source patch and disjoint
+PR11-plus-correction patch checks. NO checker, fixture, compiler, module operation
+or test ran; no source/review/admission/acceptance GO is claimed. Next when genuine
+eligibility exists: independent focused review, then both existing lifecycle test
+modules against the complete coherent private candidate, requiring actual positive
+baselines and the original artifact negatives to complete with no skips/errors.
+After that finish the affected inventory and skipped tracker implementation/
+idempotence/invalid-input stages. Reuse all green14+40/F0640/ownership/ABI receipts.
+The exact next conditions and raw/static identities are in the prepared source.
 
 PR11 changed-source review is complete; canonical adoption is HELD on the actual
 nonpassing tracker, not native success or an invented source-wide ban. Candidate
@@ -26,10 +48,8 @@ input stages were skipped; no final unittest error tracebacks/counts are availab
 This is NOT an all-green result and is not waived. Exact source/CI joins and the
 bounded next repair are in [Root review](docs/verification/m14-stable-foundation-20261113/ROOT-REVIEW.AND-CI-BLOCKER.json).
 
-Next source action when genuine dispatch/test eligibility exists: reconcile the
-existing IHK SMP/mcctrl inventory checkers/fixtures with pinned restored source and
-qualified ownership contracts, preserving strict ABI/provider/C-ownership checks;
-capture the necessary focused failure and review a bounded correction. Do not alter
+The private correction above supplies the bounded checker/fixture source delta;
+independent review and genuine test eligibility remain required. Do not alter
 qualified module code to fit stale text or rerun unchanged green suites. No source
 worker was newly dispatched through account PENDING. Local selected tests0; no
 incremental production build or speedup measurement was admitted. The guide at
