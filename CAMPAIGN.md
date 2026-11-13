@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-12T23:29:29.692513+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T01:16:59.132819+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -28,8 +28,61 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT HOST payload reservations/jobs: ZERO/ZERO after matching actual current
-qualifications and scoped Root retirements; fresh overhead is still required.
+CURRENT HOST payload reservation: 1610612736B / ONE retained failed-native-control
+family. Original guarded invocationfd9ba1/session64017 remains pending with
+sudo2113435/b61786640 unjoined and provider2113438/b61786646 retaining runtimeI+
+FLOCK. Durable FIRST primary is builtins.ValueError("mount path fields") at actual
+a7 graph_observations.py parse_mountinfo154/read200 via prepare_source_manifest126/
+native.run203. Both structured reports preserve it; ROOT_NATIVE_CALLER_OWN_CLOSES_COMPLETE
+means 33 own handles closed, not native/app/family success or release. The rejected
+raw row/decoded root/mountpoint/fstype and false operand were not saved: UNAVAILABLE.
+No native application, claim success or native12/source/globalUNKNOWN retirement
+is inferred. Source diagnosis f59ba883 is complete; NativeCurrent owns source
+analysis, Proc owns the minimum current-provider readonly mountinfo/journal/FD/
+FLOCK capture, M15Leaf reviews that exact packet, NativeBinding reviews actual
+failure/custody and separately guarded finite disposition. Root retains ORIGINAL
+64017 handles and all uncertainty; no secondwait, signal, flagclear, parser waiver,
+installed hotpatch, replay or guessed nsfs/net cause. New current snapshot will be
+current DATA, never reconstruction of the unavailable failed instant.
+
+Publication Qb50a1da2 and Root84cb70bc retired ONLY its separate actual2GiB/job1;
+physical Qc9ba7a86/Root91ff4b21 and TLSnineQb1a5/Root7f5e1055 also retired only
+their own128MiB and256MiB scopes. All overhead needs fresh measurement, every
+native/source/account/globalUNKNOWN hold persists, UTI2GiB cannot fit alongside
+the retained1.5GiB plus actualcontroller/worker overhead inside4GiB.
+Distinct normal publication ACTUALLY returned originalb5326b/session23749->66ca97/
+exit0 under final latest-receipt GO2d65f170/helperfd7b5390. The complete raw2673B/
+8dabad06 preserves the standard THREE records; last record reports resource_unknown
+false/data_error null and verified_data.lease_disposition VERIFIED_CLOSED, with
+genuine fullRoot join now0. Raw initial/account/caps stay private. NativeBinding
+Qb50a1da2 qualifies original installer/keeper/parent/SUDO/ACK/lease/captures/fullRoot.
+Root's exact existing completion capsule26e28c4f/9028B preserves original2toolcalls/
+all3records/thirdpendingjoin status and actualRoot0; no outcome/ACK substitution.
+Strict physical NEW30 ACTUALLY PASSED original52f362/exit0/noSession under
+GO0cbba7fc/fresh externalRoot admission: RESULT2d63b709/20534B, exactly30files/
+420488B, catalogue/content/modes/Iflags/dev-inodes/directory66306:53525147/
+pre-post source bookends and ownclose[] positive. Qc9ba7a86/Root91ff4b21 retire
+ONLY its128MiB/job1. Both actual publication and physicalreadback chains now pass;
+no native/source/account/historicalUNKNOWN release or original credit follows.
+CURRENT WORKING CODE PUBLICATION BASELINE is a7bdb1a6c906622ef5b38ebcba904bad104004a29e4c59d6078a3a1b54f818db,
+30files/420488B, scope ROOT_CODE_INSTALL_ONLY, Qb50a1da2+Qc9ba7a86. The previous
+1f5f baseline and preserved c964/a2f/f133 image/module inputs remain retained.
+Both CORE/provider namespaces are bound to actuala7, SourceGO141e32e6/SDK3f378e16.
+Root's two pre-input writer shape failures created no admission/nativeprocess or
+charge: wrong conditionalCORE filename, then missingflat runtime metadata. Exact
+reviewed writer0736/DC778 derives providerRUNTIME and actualCORE path/hash and
+successfully supplied fresh11projection/12outer/fourcaps/28argv/short18 before the
+genuine guarded invocation above. Source/package/ABI/pub/readback GOs remain valid;
+actual native/source admission hit the now-recorded parser predicate before useful
+work. The original signal.alternate-repeat/f133 and c964/a2f remain unchanged.
+Private TLS ninecontrols ACTUALLY PASSED625ea1/0/golden300B; Qb1a5/Root7f5 only256MiB.
+TypedTIME guard SourceGO316f53c9/12 proposedcontrols, F08 active-worker bounded
+same-owner sourceGOaea9, ordinaryclone/ownedMAP_FIXED/privateSHM sourceGO2f157610
+and privateUTI OBJ operationGO31aa3e1b are ready at their separate source scopes.
+No new TIME/F08/wrapper/object runtime or original criterion credit is claimed.
+
+At the preceding functional boundary HOST payloads/jobs were ZERO/ZERO after
+matching actual qualifications and Root retirements; fresh overhead was required.
 F08 minimumcontext
 ACTUALLY PASSED syntax0 and original99e9f9/session33764->f3e79b/exit0 under
 GO9dedc9ad/fresh32field f3e49de0/seed a86da07b. Parent RESULTc24aeb5a and outer
@@ -43,13 +96,14 @@ GO02ebd5f3 and fresh32field cf14094c: exact qualified4fa/9eb/214d, no compiler/
 oracle replay. Derived26152301B/cfd67ebc, DATAmanifest5162B/e6a7783e and sourceRows
 72715651 are saved. FunctionalDelta Qd76ad5ad qualifies actual de6a9e9e/16881B
 result and original client/Root closure; Root3cc66d4a retires ONLY its1.25GiB/job1
-and joins the preceding separate F08 retirement. No retained HOST payload remains.
+and joins the preceding separate F08 retirement. That cleared only those two
+HOST scopes before the later publisher operation above.
 The admission counted retained F08 plus measured1056354304B overhead inside4GiB/
 max3; no extra capture reserve. No time/runtime/native/original acceptance follows.
-NativeCurrent now rebinds ONLY ccef4787/ce2ae8c4's obsolete Root97 receipt to actual
-latest Qd76ad5ad/Root3cc66d4a after NativeBinding conditional review fc15d20d.
-Focused changed-literal operationGO/fullargv and fresh actual current census plus all
-unchanged currentowner/newestaccount/lease/source/permission guards remain required.
+NativeCurrent rebound ONLY ccef4787/ce2ae8c4's obsolete Root97 receipt to actual
+latest Qd76ad5ad/Root3cc66d4a in2398d7db/fd7b5390. NativeBinding final GO2d65f170
+and approved fulld3701508 enabled the distinct actual operation above. All unchanged
+currentowner/newestaccount/lease/source/permission guards remain mandatory.
 Proc owns only later named TLS source/admission binding from passed stage9103;
 TimeSource prepares only the next real F08 event observation. No green repeats.
 Original105/156, M14=70.00%, M15=74.59% and all genuine holds stay unchanged.

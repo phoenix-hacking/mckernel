@@ -1,0 +1,19 @@
+--- /home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-diagnostic-successor-1/normal-fixed30-reporting-proposal-1/current-c309-result-verify-diagnosis-1/result-verify-substage-reporting-1/normal-fixed30-successor-1/future-fresh-account-operation-source-1/failed29ed-exclusion-applied-1/new-preflight-binding-1/ROOT-ADMIT-AND-EXECUTE-REVIEWED-PUBLISHER.PROPOSED.py
++++ /home/holden/mckernel-work/resume-20261112T094452Z-native-first-repeat-1f5f-binding-1/current81012-diagnostic-successor-1/normal-fixed30-reporting-proposal-1/current-c309-result-verify-diagnosis-1/result-verify-substage-reporting-1/normal-fixed30-successor-1/future-fresh-account-operation-source-1/failed29ed-exclusion-applied-1/new-preflight-binding-1/latest-time-receipt-binding-1/ROOT-ADMIT-AND-EXECUTE-REVIEWED-PUBLISHER.PROPOSED.py
+@@ -1,6 +1,6 @@
+ import ast,datetime,hashlib,json,os,pathlib,shutil,signal,stat,subprocess,sys,time,traceback
+ import resource as _resource
+-ROOT=pathlib.Path('/home/holden/mckernel');PATCH_ROOT=pathlib.Path(__file__).parent;HERE=PATCH_ROOT.parent;OUT=PATCH_ROOT/'ROOT-ACTUAL-PUBLISHER-ADMISSION-1'
++ROOT=pathlib.Path('/home/holden/mckernel');PATCH_ROOT=pathlib.Path(__file__).parent;HERE=PATCH_ROOT.parent.parent;OUT=PATCH_ROOT/'ROOT-ACTUAL-PUBLISHER-ADMISSION-1'
+ def ref(p):
+  b=pathlib.Path(p).read_bytes();return {'path':str(p),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+ def now():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+@@ -24,7 +24,7 @@
+  go=json.loads(review.read_bytes());assert set(go)=={'status','scope','proposal_sha256','driver_sha256','parent_manifest_sha256','child_manifest_sha256','native_release','native_currentfree','retire_operation_only'} and go['status']=='PASS_ACTUAL_INSTALL_ONLY' and go['scope']=='ROOT_CODE_INSTALL_ONLY' and go['native_release'] is False and go['native_currentfree'] is None and go['retire_operation_only'] is True
+  argv_path=HERE/'final-operation-review/FULL-ARGV.APPROVED.json';assert ref(argv_path)['sha256']=='3e60a661211c8378e5781638a2e7c53d3fce200e817850ece92e0647cecab92d';argv=json.loads(argv_path.read_bytes())['producer_argv'];assert len(argv)==8 and argv[:3]==['/usr/bin/python3','-I','-B'] and argv[4:]==['--operation-review',str(review),'--operation-review-sha256',ref(review)['sha256']]
+  assert go['driver_sha256']==r['normal_caller']['sha256'] and go['parent_manifest_sha256']==r['parent_manifest']['sha256'] and go['child_manifest_sha256']==r['child_manifest']['sha256']
+- ret=pathlib.Path('/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/finite-six-copy-operation-1/full-input-reference-correction-1/prerequisite-scope-correction-1/ROOT-CURRENT-RETIREMENT.SIX-ASSETS-ONLY.json');assert ref(ret)['sha256']=='97dddca1fd63472b2c989058672561a94f5a82f0daef4575592c7471f7f0f236';prior=json.loads(ret.read_bytes());assert prior['current_HOST_payload_bytes_after']==0 and prior['current_HOST_jobs_after']==0 and prior['no_original_acceptance'] is True and prior['no_native12_source_service_account_normallease_globalUNKNOWN_or_other_scope_release'] is True
++ ret=pathlib.Path('/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/next-time-functional-inputs-1/ROOT-CURRENT-RETIREMENT.TIME4FA-STAGING-ONLY.json');assert ref(ret)['sha256']=='3cc66d4af0a469642ea4213f7ed7daa19602cccd99af70169678859e41516e6f';prior=json.loads(ret.read_bytes());assert prior['current_HOST_payload_bytes_after']==0 and prior['current_HOST_jobs_after']==0 and prior['no_time_mapping_timepage_TSC_runtime_restoration_or_original_acceptance'] is True and prior['no_native12_source_runtime_service_account_normallease_globalUNKNOWN_or_other_scope_release'] is True
+  assert not (HERE/'normal-operation-1/ROOT-EXEC-COMPLETION.ACTUAL.json').exists();OUT.mkdir(mode=0o700,exist_ok=False)
+  rows={}
+  for p in pathlib.Path('/proc').iterdir():
