@@ -1,9 +1,38 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T08:14:59.318474+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T09:15:11.855280+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+LATEST ACTUAL a2d READONLY CAPTURE176006/terminal0 completed under GO f7df5cef/
+Rootfresh32grant76e9539b. K birth-gate-correction-1 executionRESULTa6a7a7c1,
+rootcapture9eed9029, fulltoolf500bbc2 (14656B/3664tokens/untruncated); own66FD
+consume/close+EBADF and source-newactor2260609/SUDO2260606/parent2260604 waits0/
+streams/fullRoot positive. M15Leaf new256MiB/job1 savedQ FREEZING; new256 stays
+chargedUNTIL Q/Rootreceipt. This is OWN_CLOSURE_ONLY, not original30017 disposition.
+ProtectedRaw42012B/4d3be5e9/inode2258620/UID0-0600 inside0700 saved; SAFEsummary
+exposes7observationerrorsCOUNT only. NativeCurrent authors ONLY minimumsavedbytes
+projection of exactRaw/errorlabels+currentrole/FD/socket/lock/lease/capture/path
+facts withNativeBinding independentGO/freshadmission; NO live recollection/rawdump.
+Original30017/a2d old2GiB/lease/native12/sourceUNKNOWN stayHELD,3rolesbirthmatch/
+keeperABSENT_UNPROVEN_RETIREMENT is DATA. Separateactualdisposition/Rootowningwait/
+SUDO/captures/FD/lease/fullRootQ required beforeold2GiB release. Rootpreinputsyntax
+failure/nocharge andpostcapturefinal-saver typo retainedseparately; no actorreplay.
+
+REVIEWED REAL SOURCE DELTAS: pairedUTI C e879+Rust9b8c/patch5cbc/SourceGOfa6208
+implements12orderedrawfieldwrites,84Bonly,72hostslots+4padding/Ctail+logicalorigins
+preserved. New30fieldC/Rust emission-use packet722ce READY/source-only; new2GiB
+compileUNFIT besideold2GiB+ALLoverhead, noexecution. Complete114provider/finalcfg/
+link/selection/ownership/ACK/lifetime/C4/default/native acceptance unproved. Baseline
+source4612/lib2d alreadypublished63555843 withoutdefaultpromotion. THREEscalar
+15713->15724 correctione057/SourceGO0b7e isDONEatsourcescope, no runtimeTB/whichguard
+assertion or in-flightapply. F08 samplingsourcefixresolved2ad6; parentoracleNO_GO98ed
+corrected749a nowreadyFdelta review, noactualcase/source33grant/hostworkeracceptance.
+NoeventHOSTslice waitsactualcurrentexclusivefailedscopeclosure/fit only; active
+AEA9/034b realADD/BOOT/REMOVE stillneedsRootgenuineIHKdevice/nativeownertuple.
+Original105/156 andM14=70.00/M15=74.59 unchanged; allfinite7c6/holds/rejectednonces/
+collector constraints remain, signal.alternate-repeat/c964-a2f-f133 firstnativecase.
 
 CURRENT a2d/30017 IS FAILED AND RETAINS CUSTODY: Rootownedstderr823B/5ce37966
 fixedV1 first child_entry/keeper ValueError exactmessage "source closure membership",
