@@ -1,0 +1,384 @@
+{
+  "CPU": [
+    7
+  ],
+  "actual_old_terminal_profile": {
+    "bytes": 12373,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/execution-1/compile-terminal-profile.json",
+    "sha256": "3af4e6ca8af6b43249a07def53febdbf8f5ada17e0fb987be5b111fc671b78df"
+  },
+  "capture_headroom_bytes": 268435456,
+  "complete_expected_Config": {
+    "AttachStderr": true,
+    "AttachStdin": false,
+    "AttachStdout": true,
+    "Cmd": [
+      "--noprofile",
+      "--norc",
+      "-e",
+      "-c",
+      "ulimit -v 524288; exec \"$@\"",
+      "f06-seven-wrapper-compiler",
+      "/usr/bin/python3",
+      "-B",
+      "/input/compile_batch.py",
+      "bb4aea5f760449a1c2aabf01e09e1afebee6c1a1596df4e411847ef25e51193b"
+    ],
+    "Domainname": "",
+    "Entrypoint": [
+      "/usr/bin/bash"
+    ],
+    "Env": [
+      "LANG=C",
+      "LC_ALL=C",
+      "PYTHONDONTWRITEBYTECODE=1",
+      "CARGO_MAKEFLAGS=",
+      "OMP_NUM_THREADS=1",
+      "PATH=/usr/bin:/bin",
+      "TZ=UTC",
+      "MAKEFLAGS=",
+      "CMAKE_BUILD_PARALLEL_LEVEL=1",
+      "container=oci",
+      "CARGO_BUILD_JOBS=1"
+    ],
+    "Hostname": "CID_FIRST_12_FROM_CREATE",
+    "Image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+    "Labels": {
+      "io.buildah.version": "1.43.1",
+      "license": "BSD-3-Clause",
+      "mckernel.preparation-owner": "f06-wrapper-artifacts-20261112-094452-1",
+      "name": "rockylinux",
+      "org.mckernel.scope": "local development; no production evidence credit",
+      "org.opencontainers.image.authors": "Lukas Magauer, Neil Hanlon, Louis Abel",
+      "org.opencontainers.image.licenses": "BSD-3-Clause",
+      "org.opencontainers.image.source": "https://git.resf.org/sig_core/rocky-kiwi-descriptions/src/branch/r10",
+      "org.opencontainers.image.title": "rockylinux",
+      "org.opencontainers.image.vendor": "Rocky Enterprise Software Foundation",
+      "org.opencontainers.image.version": "10",
+      "summary": "Rocky Linux Base image",
+      "vendor": "Rocky Enterprise Software Foundation",
+      "version": "10"
+    },
+    "OnBuild": null,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Tty": false,
+    "User": "1000:1000",
+    "Volumes": null,
+    "WorkingDir": "/output"
+  },
+  "complete_expected_HostConfig": {
+    "AutoRemove": false,
+    "Binds": null,
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceWriteIOps": [],
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "CapAdd": null,
+    "CapDrop": [
+      "ALL"
+    ],
+    "Cgroup": "",
+    "CgroupParent": "",
+    "CgroupnsMode": "host",
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "ContainerIDFile": "",
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpuShares": 0,
+    "CpusetCpus": "7",
+    "CpusetMems": "",
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "Devices": [],
+    "Dns": [],
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": null,
+    "IOMaximumBandwidth": 0,
+    "IOMaximumIOps": 0,
+    "Init": true,
+    "IpcMode": "private",
+    "Isolation": "",
+    "Links": null,
+    "LogConfig": {
+      "Config": {},
+      "Type": "json-file"
+    },
+    "MaskedPaths": [
+      "/proc/asound",
+      "/proc/acpi",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/sys/firmware",
+      "/sys/devices/virtual/powercap"
+    ],
+    "Memory": 536870912,
+    "MemoryReservation": 0,
+    "MemorySwap": 536870912,
+    "MemorySwappiness": null,
+    "Mounts": [
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/scripts/application-tests/cases/memory/memory.anonymous-zero.c",
+        "Target": "/payload/memory.anonymous-zero.c",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/scripts/application-tests/cases/memory/memory.mmap-zero-length.c",
+        "Target": "/payload/memory.mmap-zero-length.c",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/scripts/application-tests/cases/memory/memory.munmap-unaligned.c",
+        "Target": "/payload/memory.munmap-unaligned.c",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel/scripts/application-tests/cases/process/process.clone3-size-small.c",
+        "Target": "/payload/process.clone3-size-small.c",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.clone-basic-own.c",
+        "Target": "/payload/f06.clone-basic-own.c",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.mmap-fixed-own.c",
+        "Target": "/payload/f06.mmap-fixed-own.c",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.shm-private-own.c",
+        "Target": "/payload/f06.shm-private-own.c",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/matching-artifact-operation-1/compile_batch.py",
+        "Target": "/input/compile_batch.py",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/matching-artifact-operation-1/COMMAND-PLAN.json",
+        "Target": "/input/COMMAND-PLAN.json",
+        "Type": "bind"
+      },
+      {
+        "ReadOnly": true,
+        "Source": "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+        "Target": "/input/owned_process.py",
+        "Type": "bind"
+      },
+      {
+        "Source": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/matching-artifact-operation-1/execution-1/compiler-output",
+        "Target": "/output",
+        "Type": "bind"
+      }
+    ],
+    "NanoCpus": 1000000000,
+    "NetworkMode": "none",
+    "OomKillDisable": false,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "PidsLimit": 64,
+    "PortBindings": {},
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ],
+    "ReadonlyRootfs": true,
+    "RestartPolicy": {
+      "MaximumRetryCount": 0,
+      "Name": "no"
+    },
+    "Runtime": "runc",
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "ShmSize": 67108864,
+    "Tmpfs": {
+      "/tmp": "rw,nodev,nosuid,noexec,size=64m,mode=1777"
+    },
+    "UTSMode": "",
+    "Ulimits": [
+      {
+        "Hard": 0,
+        "Name": "core",
+        "Soft": 0
+      },
+      {
+        "Hard": 90,
+        "Name": "cpu",
+        "Soft": 90
+      },
+      {
+        "Hard": 67108864,
+        "Name": "fsize",
+        "Soft": 67108864
+      },
+      {
+        "Hard": 128,
+        "Name": "nofile",
+        "Soft": 128
+      }
+    ],
+    "UsernsMode": "",
+    "VolumeDriver": "",
+    "VolumesFrom": null
+  },
+  "expected_mounts_five_fields": [
+    [
+      "bind",
+      "/home/holden/mckernel/scripts/application-tests/cases/memory/memory.anonymous-zero.c",
+      "/payload/memory.anonymous-zero.c",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel/scripts/application-tests/cases/memory/memory.mmap-zero-length.c",
+      "/payload/memory.mmap-zero-length.c",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel/scripts/application-tests/cases/memory/memory.munmap-unaligned.c",
+      "/payload/memory.munmap-unaligned.c",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel/scripts/application-tests/cases/process/process.clone3-size-small.c",
+      "/payload/process.clone3-size-small.c",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.clone-basic-own.c",
+      "/payload/f06.clone-basic-own.c",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.mmap-fixed-own.c",
+      "/payload/f06.mmap-fixed-own.c",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/cases/f06.shm-private-own.c",
+      "/payload/f06.shm-private-own.c",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/matching-artifact-operation-1/compile_batch.py",
+      "/input/compile_batch.py",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/matching-artifact-operation-1/COMMAND-PLAN.json",
+      "/input/COMMAND-PLAN.json",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel-work/m15-original-integration-20261110T0708Z/program-behavior-1/owned_process.py",
+      "/input/owned_process.py",
+      true,
+      "rprivate"
+    ],
+    [
+      "bind",
+      "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/matching-artifact-operation-1/execution-1/compiler-output",
+      "/output",
+      false,
+      "rprivate"
+    ]
+  ],
+  "expected_profile_fields_by_lifecycle": {
+    "created": {
+      "AppArmorProfile": "",
+      "Driver": "overlay2",
+      "Platform": "linux"
+    },
+    "terminal": {
+      "AppArmorProfile": "docker-default",
+      "Driver": "overlay2",
+      "Platform": "linux"
+    }
+  },
+  "full_mode_identity": "stat.S_IMODE preserves all07777 bits; original root sudo04755 is required, never chmod/chown/mask to0755.",
+  "image": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "jobs": 1,
+  "mount_derivation": {
+    "exact7_sources_readonly": true,
+    "no_SDK_globaldir_namespace_capability_expansion": true,
+    "old_TLS_assembly_and_collector_mounts_removed": true,
+    "only_writable_bind": "/home/holden/mckernel-work/resume-20261112T094452Z-F06-wrapper-functional-1/matching-artifact-operation-1/execution-1/compiler-output",
+    "source_oracle_modifications": false,
+    "total_binds": 11
+  },
+  "native_CPUs_2_5_and_CPU1_not_used": true,
+  "old_whole_TLS_batch": "FAILED_PRESERVED, later collector check; genuine successful compile/link subpart is carried at exact scope only.",
+  "qualified_route_reference": {
+    "bytes": 10093,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-TLS-arch-prctl-source-1/protected-host-packet-1/owner-custody-boundary-correction-1/PREPARED-SOURCE.json",
+    "sha256": "fd3ee5152f5ef67fbe75b7471d45582666776e43baea701e818a59de26427800"
+  },
+  "qualified_whole_profile_reference": {
+    "bytes": 14913,
+    "path": "/home/holden/mckernel-work/resume-20261112T094452Z-functional-review-1/m15-f05-destroy-slice/mount-row-successor-1/execution-1/compile-terminal-profile.json",
+    "sha256": "29e2036f336b492c2a6fe910f5c46ddf435ce89d4d7e9a7ecefcf40c5ed6d3b3"
+  },
+  "schema": "mckernel.M14-06-01.wrapper-artifact-complete-profile.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration ONLY; NO security testing.",
+  "status": "PROPOSED_PROFILE_ONLY_UNADMITTED_UNEXECUTED",
+  "whole_family_resource": {
+    "additional_outside_family_parent_reserve_bytes": 0,
+    "container_address_space_KiB": 524288,
+    "container_hard_memory_and_swap_bytes": 536870912,
+    "fitness": "Reuse exact prior512MiB compiler container bounds. Original TLS C/assembly/link commands completed before a later collector-check failure, terminal nonOOM. This is profile/input evidence, not a measured fit or PASS for these7 new artifacts. Independent review and actual relevant compile/nonOOM/closure Q remain mandatory; refuse admission if current capacity/exclusive/source/permission guards do not pass.",
+    "other_current_owner_controller_worker_and_UNKNOWN_charges": "External complete fresh Root accounting in addition to this1GiB family; no memory/job multiplication.",
+    "outer_parent_capture_reserve_inside_family_bytes": 536870912,
+    "whole_family_reserved_bytes": 1073741824
+  }
+}

@@ -1,9 +1,41 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T01:16:59.132819+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T03:04:24.283925+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+Latest completed engineering operations (original105/156; M14=70.00%, M15=74.59%):
+- Current64017 readonly capture eed876/Root0 PASSED01:56:57, fullcurrentmountinfo,
+  zero observationerrors/60consumedFDs/ownclosure, Qc55615ae/Root0ac8529d retire
+  ONLY its256MiB/job1. OriginalAPI truncation and full9008B sourcecaptures retained.
+- Twelve inert TIME guards2b8144/Root0 PASSED02:10:51, exact455B73133a18/emptyerr,
+  Q85e2f8bd/Root7f00d2f6 retire ONLY its256MiB/job1. No runtime/TSC/source selection.
+- F06 seven-payload compiler/passive batch0eedd3/session86876->99e835/Root0 PASSED
+  02:23:24-26:15orderedcommands/28artifacts/174inputbookends, strict fullprofile/
+  CID48a1fd91 terminal0/nonOOM/removal+absence/alloriginalfamiliesclosed.
+  Q87e8ddb7/Root1019c3c9 retire ONLY its1GiB/job1. No payload/oracle/stage/native.
+  Root data-selector/null-preparation and receipt-label mistakes are retained with
+  their bounded actual-data corrections; they did not launch duplicate payloads.
+Shared next: saved-only projection7382de/Root0 PASSED02:52:26 underGO3bebac02/
+actual32grant7c54b2f3; RESULT6c3ea44b/full54490B source-owned safeoutputd97d3b88,
+no targetproc/namespace/runtime/parser reread. Independent actualQ and its256MiB
+retirement are PENDING; API13623token output was truncated and is not reconstructed.
+NativeBinding owns actualQ and separately reviewed finite providerA/original64017B/
+exclusive-runtimeC conditions. NativeCurrent owns only source-backed currentparser
+correction: current savedrow92 is nsfs net:[4026531840] at absolute
+/run/docker/netns/default; graph5073 only allows mnt tags. Originalfailedinstantrow
+remains UNAVAILABLE. Minimal net-branch/sourcecontrols are private/unselected;
+TimeSource is the designated independentreviewer after frozenhandoff. No waiver/
+installedhotpatch/currentcase retry or signal/flagclear from this evidence.
+FunctionalDelta owns fixed7 initrunner literalcase binding; preserve one-case120s
+ownedchild/wait/framing bodies in seven compile-time variants and ONE new serial
+HOST compiler/passive operation. Sevenqualifiedpayloads are never rebuilt. Proc
+awaits qualified actualprojection facts for exact finite recovery authoring; M15Leaf
+is available for saved-result review. UTIobject2GiB cannotfit alongside retained1.5
+plus actualoverhead; no C4/body/ACK/lifetime/image credit. Each originalwhole leaf
+and all original criteria remain open/unchanged; coherent verified proofs are being
+published without waiting for wholemilestone acceptance.
 
 Current qualified results since checkpoint15788ef82:
 - c309 failed HOST scope CLOSED: actual one-parent9/127c75, ORIGINAL81691
@@ -28,8 +60,9 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT HOST payload reservation: 1610612736B / ONE retained failed-native-control
-family. Original guarded invocationfd9ba1/session64017 remains pending with
+CURRENT HOST payload reservation: 1879048192B / TWO scopes: original failed-native
+control1.5GiB/job1 plus actual savedprojection256MiB/job1 pending independentQ.
+Only the original failed-native-control family is eligible for later A/B/C recovery. Original guarded invocationfd9ba1/session64017 remains pending with
 sudo2113435/b61786640 unjoined and provider2113438/b61786646 retaining runtimeI+
 FLOCK. Durable FIRST primary is builtins.ValueError("mount path fields") at actual
 a7 graph_observations.py parse_mountinfo154/read200 via prepare_source_manifest126/
@@ -37,10 +70,22 @@ native.run203. Both structured reports preserve it; ROOT_NATIVE_CALLER_OWN_CLOSE
 means 33 own handles closed, not native/app/family success or release. The rejected
 raw row/decoded root/mountpoint/fstype and false operand were not saved: UNAVAILABLE.
 No native application, claim success or native12/source/globalUNKNOWN retirement
-is inferred. Source diagnosis f59ba883 is complete; NativeCurrent owns source
-analysis, Proc owns the minimum current-provider readonly mountinfo/journal/FD/
-FLOCK capture, M15Leaf reviews that exact packet, NativeBinding reviews actual
-failure/custody and separately guarded finite disposition. Root retains ORIGINAL
+is inferred. Source diagnosis f59ba883, exact current-path binding81c45aa8 and
+NativeBinding first-failureQ85e536d2 are complete; no recovery operation is GO.
+Proc owns the minimum current-provider readonly mountinfo/journal/FD/FLOCK packet;
+M15Leaf now reviews its actual draft source while Proc finishes the SAME frozen
+request/actor/parent/outer/profile/fieldunion/capture. Final operationGO still
+requires the complete frozen chain, then Root fresh admission/execution. This is
+an internal author/reviewer dependency, not absent user authorization. NativeBinding
+awaits those actual facts for separate providerA/original-sessionB/runtimeC reviews.
+NativeCurrent's F06 reviewer-identity findingef09d15c is complete: both consumers
+require TimeSource, which will review the frozen seven-case artifact packetb6269
+following its healthy protectedTIME12 packet handoff. No prefix substitution or
+consumer weakening. FunctionalDelta's F06 source/packet author work is complete;
+sourceGO2f157610 is reused. Other native authors await actual custody/Q, not repeated
+source diagnosis. Verified checkpoint2e64a6f3 publishes a7/new30/TLSnine proofs;
+PR3 results6841000726 and finite diagnostic6841146846 are exact-readback verified.
+No original check closed;105/156 and70.00/74.59 unchanged. Root retains ORIGINAL
 64017 handles and all uncertainty; no secondwait, signal, flagclear, parser waiver,
 installed hotpatch, replay or guessed nsfs/net cause. New current snapshot will be
 current DATA, never reconstruction of the unavailable failed instant.
