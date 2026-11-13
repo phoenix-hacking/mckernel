@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T12:04:55.368216+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T12:28:40.574150+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -32,17 +32,36 @@ future admission. No full-link/default selection/C4/ACK/lifetime/native acceptan
 Proc's dac3e3f7 link-use handoff reuses this pair and11 normal input roles; no new
 selector/inclusion or recompile is needed. Exact candidate-link operation is next.
 
-Primary M14-I03-E2/E3/M15-I04 shared prerequisite: corrected three-scalar normal
-publication, matching NEW30 physical qualification, BOTH namespaces, then original
-signal.alternate-repeat on coherent c964/a2f/f133 under separate native admission.
-Sparse SourceGO3f07d59a/500B ninefieldbe4c05ef/producer_argv2c8a450d are complete;
-NativeCurrent final helperca300f19/HANDOFF978e72c5 binds real UTI Q/Root/census and
-actual field names. NativeBinding reviews ONLY final helper literals/field/argv
-joins. No corrected producer/admission/nonce has started at this checkpoint.
-Fresh unchanged account/newest-ACCEPTED/paired25s/owner/source/permission/logical-
-lease/allowner/exclusive2GiB gates remain real; HOST0/0 is not their clearance.
-Package30/420499B, graphf07715724B/catalogue2493425060B and24 reader bodies are
-reused. Preserve all failed originals/nonreplayable nonces; no installed hotpatch.
+Primary M14-I03-E2/E3/M15-I04 shared prerequisite is now the current failed normal
+publisher owning disposition. Final whole operationGOd176bdc3/argv321a4eec was
+invoked ONCE: originale54644/session40491, issuednonce42961e64...7271361. SourceGO3f07/
+ninebe4c/producerargv2c8a and helperca300f19 used actual UTI Q/Root/census. Root's
+external preinput first confused guardian ID with credit-run ID; no reservation or
+process occurred. Corrected comparison matches all8 pinned owner fields; unmodified
+current-account validation and fresh resource gate passed. Measured pool3351912448B
+includes new2GiB/job1 and all controller/worker overhead; MemAvailable29993095168B.
+Current HOST payload2GiB/job1 remains HELD, overriding the earlier historicalzero.
+
+Original tool is still pending. Exact source-owned stderr snapshot484B/ba832a
+reports PHASE0_UNKNOWN_RETAINED/IssuerUnknown/keeper custody unknown, and separately
+root_parent/go_handoff/InterruptedError/configured stop received/UNKNOWN. The first
+message is a generic keeper wrapper; the parent emits its row after disabling its
+timer and attempting child stops. Emitted row order does NOT establish primary
+cause, exact failed handoff call, completed GO_AUTH or installation. Underlying
+keeper failure and actual original waits/ACK/lease/finalcaptures remain unproved.
+NativeCurrent freezes source-backed diagnosis and the smallest required already-
+durable record/current custody input; NativeBinding qualifies only that boundary
+and any exact recovery operation. Root retains only original40491 and its real
+wait/capture/deadline route. No duplicate issuer, speculative source correction,
+blind signal, second supervisor wait, inferred release or unchanged retry.
+
+After genuine current-family closure/Q/Root receipt, consume only a justified
+changed normal operation and exact matching NEW30 physicalQ before BOTH CORE/
+provider generation binding, then original signal.alternate-repeat on coherent
+c964/a2f/f133 with separate actual native admission/restoration. Source/account/
+permission/logicallease/ownership/native12/globalUNKNOWN gates are never cleared
+by HOST retirement. Package30/420499B, graphf07715724B/catalogue2493425060B and24
+reader bodies remain reused; all failed originals/issued nonces stay nonreplayable.
 
 Independent ready HOST work: F05 three zero-divisor guards preserve positive
 formulas, rollback, provider/FD and compound/alignment retention semantics;
