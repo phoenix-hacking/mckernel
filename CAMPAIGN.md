@@ -1,22 +1,57 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T14:08:22.662348+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T19:20:00Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: saved Root retained; foreground goal BLOCKED
 
-Actual goal-tool status returned BLOCKED at2026-11-13T14:06Z after the same genuine
-owning-custody blocker persisted across three goal turns. Latest direct tool
-observations afedd3/618a36 confirm original18067 and40491 remain live/pending with
-no exit/new output. All six bounded source/review handoffs are complete; ready UTI/
-F05/F08 operations remain incompatible with actual retained ownership/exclusivity.
-This is no completion, acceptance, user pause, resource release or campaign reset.
-Root changed no launcher-owned state, controller, keeper, monitor, credit identity
-or ledger. Existing original owning routes and every source/native/lease/account/
-UNKNOWN hold remain retained. Required supplying owner is Root's original-Popen
-runtime: genuine terminal/latewait/actionstate/capture closure evidence or separately
-supported authority must establish the next boundary. No replacement route,
-repeated signal, new publisher or speculative software/authentication fix.
+Finite incident outcome at19:20Z: C, missing original-owner runtime capability.
+Latest saved original18067/40491 replies at18:48Z, chunks9dfdf2/bcc547, remain
+pending with no exit/output. No new poll or workload was issued for this decision.
+The actual pinned keeper1f668620 waits on the same original Popen objects and
+retains exceptions; actoracff8133 persists UNKNOWN then waits. No supported external
+nested-owner status/resolution endpoint is established. Actor entry, signal state,
+both original direct waits, final captures/FDs/channels and lease remain unproved.
+This establishes neither the underlying cause nor any release.
+
+Prepared [exact operator request](docs/verification/m14-m15-original-owner-incident-20261113/OPERATOR-REQUEST.NOT-ACTION-GO.json)
+names original18067/SUDO2342218-b66271010/capture-parent2342216-b66270999 and original
+publisher40491, the original-handle supplying runtime, missing observations,
+read-only interface request, evidence and stop conditions. Runtime/service operator
+must supply a supported same-owner capability or an exact administrative recovery
+contract for separate authorization/review. User13:25 source-e385e7b1 explicitly
+said "Never invoke another action or publisher"; its UNKNOWN/replacement-route
+restriction remains during this unresolved incident. New keep-going/allowance
+instructions do not authorize another signal, actor, publisher, hotpatch, second
+waiter, controller restart or hold reset while these UNKNOWNs remain.
+
+Goal remains BLOCKED. Retained HOST payload2415919104B (2.25GiB)/jobs2 plus ALL
+controller/worker overhead; native12/source/logicallease/privateIPC/globalUNKNOWN
+remain separate. Actual read-only normal-control snapshot at19:07Z selects newest
+account PENDING; old ACCEPTED cannot substitute. No normal start, account refresh,
+state/ledger change, worker dispatch or resource retirement was performed.
+
+Received one additional100% weekly-allowance authorization across comments6862110242
+and6862177303, with19:05 technical follow-up; it is ONE tranche, not a double grant
+or service clearance. Actual available additional allowance is UNKNOWN pending the
+genuine current account guard. Same finite7c6/cumulative ceiling52079.8011050000 and
+history remain unchanged. Preferred completion is November14 19:00UTC/noon Boise;
+no credible completion forecast exists until original-owner and account capability
+are restored. At November13 23:00UTC report target AT RISK if first matching native/
+restoration has not actually passed. Recovery planning max10%, M14 implementation
+35%, M14 functional/integration25%, M15 runtime25%, final acceptance5%; no artificial
+spending and unused recovery transfers to implementation.
+
+All six canonical owners retain completed handoffs. No new Sol/MAX turn was
+dispatched through blocked/account-PENDING controls. After genuine scoped closure/
+Q/Root receipts, run separate frozen HOST operations serially BEFORE another
+publisher: UTI13-input link7a071344/77f693f8; F08 both-worker no-event5458522c/b8a6b0a4;
+F05 archive/DSOdb332ff6/92418a1a then caller compile/passive623e0ba3/e89f4887 in actual
+dependency order. Fresh individual grants, measured aggregate overhead/floors and
+qualification/retirement precede the next incompatible scope. Then only a justified
+corrected publication/NEW30/BOTH namespace binding and the designated first signal
+case/c964-a2f-f133 under separate real native admission/restoration. Reuse all green
+objects, provider/ABI, build, stage and control proofs; no unchanged retries.
 
 
 Original IDs newly closed: NONE. Counts105/156, M14=70.00%, M15=74.59% unchanged.
@@ -86,18 +121,20 @@ primary software defect or cause; exact actor result/actionstate and both origin
 terminal/directwait/capture/FD/lease obligations remain UNPROVED. ReaderQa85/Root4ca
 remain complete at ONLY their closed256MiB scope; the NEW actor256 is NOT retired.
 
-Root's ONLY supported continuation is the two retained original owning routes,
+The previously permitted runtime continuation is the two retained original routes,
 18067 and40491, while their existing keepers preserve the same original Popen
 handles/latewait evidence. NativeBinding independently qualifies this saved boundary
 without new probe/action. No replacement reader/action, repeated signal, TERM,
 fallback, second supervisor wait, source mutation, policy bypass or publisher retry.
-Supplying owner: Root/normal original-Popen runtime. Next required trigger: actual
-late terminal/directwait and complete source-owned outcome/capture evidence from
-those original routes, or a separately supported supplying authority identified
-from real evidence. Do not infer authentication, pre-action state, absence or release.
+That wait has no supported finite resolution endpoint established. The current
+finite decision and exact operator capability request are recorded at the top;
+do not repeat identical polling while awaiting that supplying authority. Genuine
+late terminal/directwait/capture evidence remains admissible if it arrives through
+the original owner. Do not infer authentication, pre-action state, absence or release.
 
-After genuine current-family closure/Q/Root receipt, consume only a justified
-changed normal operation and exact matching NEW30 physicalQ before BOTH CORE/
+After genuine current-family closure/Q/Root receipt and the serial frozen HOST
+tranche above, consume only a justified changed normal operation and matching
+NEW30 physicalQ before BOTH CORE/
 provider generation binding, then original signal.alternate-repeat on coherent
 c964/a2f/f133 with separate actual native admission/restoration. Source/account/
 permission/logicallease/ownership/native12/globalUNKNOWN gates are never cleared
@@ -116,8 +153,8 @@ GO5458522c/argvb8a6b0a4 now covers four nonimport syntax checks and ONE CPU7/768
 both-worker no-event case, UNISSUED. Genuine source/account/permission/provider-
 lifetime/exclusive grant and17/13GiB floors still bind. Actual workers waiting/
 normal joins do not prove event/kmsg/hung-up/wholeF08; no unrelated native success
-gate. Root runs the next genuinely eligible fitting operation after publication
-priority, then actualQ/scoped retirement before another exclusive publisher grant.
+gate. After genuine failed-family closure Root uses the serial HOST tranche above,
+with actualQ/scoped retirement before another exclusive publisher grant.
 
 F05 four-real-operand caller/source9bc0ba73 now has independent SourceGO548f2b55:
 real-libc ioctl/close/calloc/free delegation, exact full R/1024 partial vectors,
@@ -140,7 +177,8 @@ applicable matching module/lifecycle/resource-restoration proof remains required
 Root obtains it from the planned first native run; no standalone module probe.
 
 Adopted dated [reuse/closure strategy](docs/development/M14-M15-CLOSURE-STRATEGY-20261113.md)
-49393dace6/50426ba8 is a reference; CAMPAIGN is the sole active plan. Reuse qualified
+f190afcae0/1759c468 (26420B, fetched exact PR10 revision) supersedes49393dace6;
+it is a dated reference, and CAMPAIGN is the sole active plan. Reuse qualified
 c964/a2f/f133, ABI35/providers/KOs, TLS/time/seven-case stages, parser13/TLS9/TIME12,
 F05 create/destroy and all unchanged green evidence. Only actual changed inputs
 justify necessary checks. After firstrepeat choose shortest complete time row or
