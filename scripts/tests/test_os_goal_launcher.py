@@ -362,7 +362,7 @@ class CampaignTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 launcher.queue_instruction(self.directory, "   ")
             with self.assertRaises(ValueError):
-                launcher.queue_instruction(self.directory, "x" * 8193)
+                launcher.queue_instruction(self.directory, "x" * (launcher.MAX_INSTRUCTION_BYTES + 1))
             ident = launcher.queue_instruction(self.directory, "Continue after checkpoint")
             campaign.checkpoint_requested = True
             campaign.rpc = FakeRPC(self.args, goal())
@@ -2006,3 +2006,4 @@ sys.stdin.read()
 
 if __name__ == "__main__":
     unittest.main()
+

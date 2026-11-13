@@ -16,10 +16,12 @@ import re
 import stat
 from uuid import uuid4
 
+from os_goal_instruction_limits import MAX_INSTRUCTION_RECORD_BYTES
+
 
 _ID = re.compile(r"[0-9]{8}T[0-9]{12}Z-[0-9a-f]{32}\Z")
 _SHA = re.compile(r"[0-9a-f]{64}\Z")
-_MAX_BYTES = 32768
+_MAX_BYTES = MAX_INSTRUCTION_RECORD_BYTES
 _MAX_ENTRIES = 256
 _MAX_BINDINGS = 32
 _DIR_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
@@ -250,3 +252,4 @@ def reconcile_instructions(directory: Path, bindings: list[dict], startup_instru
                                 "status": "already_delivered" if delivered is not None else "not_present",
                                 "timestamp": None})
         return results
+
