@@ -1,9 +1,35 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T06:43:58.435762+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T07:21:13.392349+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
+
+LATEST ACTUAL NORMAL OPERATION: finalwholeGO68c2/helpera1b38/outerfc9524 ranONCE
+originalbbf56f/terminal1/noSession/full4681B1171tokens. Source/account/Docker guarded
+route reached issuer main231 -> preliminary379/273/accepted_usage_receipt186/
+read_bound41; missing local CURRENT-ACTUAL-OWNER.json is actualfirstfailure.
+Proc isolates only missedthird-owner literal183-184 vs authentic retainedoldZ706/a51;
+NativeCurrent owns smallestprivate lookup+dependentpin/freshoutput correction,
+TimeSource independentchangedsourceGO9ee09c9b is complete. No ownerrecopy/alias/default,
+accountguard change, namespace-wide rewrite without provenneed, oldargv16 replay.
+FinalBOOT/profile equality stays exact; any changedBOOT requires finalbytes-first.
+Actual savedcap proves NEW issuednonce752d3cfd3005b2a51c063e79bf0cd324e2b05fc001437131c7d5015c250b931a;
+ROOTcap/controls/capacity agree, lateractualvalues/dynamic/reservations/completion
+observedABSENT. Savedmissing-fields projectionb44e9f4a is narrow/no rawaccount/caps;
+serviceledgerconsumption status UNREAD/UNINFERRED. 752+97a6+29ed nonces permanently
+excluded. JointactualQb470bb3a nowjoins phasec6aad+positiveownclosuref773/9bc9798f.
+Rootf45c9493 retires ONLY this2GiB/job1; currentHOSTzero caa777c1 is payload/jobs0/0
+BEFORE freshcontroller/workerRSS/admission. NativeCurrent is composing ONLY necessary
+ownerlookup/dependent source/output refs from SourceGO9ee09c9b; no correctedentryyet.
+No installer/ACK/lease/publication/native success inferred.
+Rootvalidator Python-as-JSON error1eeac2a4 was separatePREINPUT/nocharge; preserved
+and corrected ONLY bytepin-vs-JSON selection before actualroute started.
+UTI objectQ29bc/Rootc5c, F06controlsQ3317/Root9af5, all priorABC/a7/ABI/build/provider/
+staging/readback proofs remain REUSED; no greenreruns or optionalscaffolding.
+Original105/156/M14=70.00/M15=74.59 unchanged. Firstfunctionalnativecase remains
+signal.alternate-repeat/c964-a2f-f133 after newpublication+NEW30Q/BOTH namespaces/
+actualsingleowner native12/currentfree/source/account/claim/restoration gates.
 
 LATEST COMPLETED HOST SLICE: UTI private production object-only GO31aa/fresh28
 31a6cded ACTUALLY PASSED originalb9d59c/session90635->936d6d/Root0 at06:27:44-
@@ -15,7 +41,7 @@ C4retirement/fullproviderlink/native/originalacceptance. LatestallHOSTzero0d4fc3
 payload/jobs0/0 BEFORE freshcontroller/workerRSS,account/source/resource admission.
 Native12/source/runtime/account/lease/globalUNKNOWN and all historical holds persist.
 
-NEXT SHARED M14-I03-E2/E3/M15-I04: NativeCurrent freshnormalnamespace canonical-
+HISTORICAL PREISSUE HANDOFF (ACTUAL bbf FAILURE ABOVE): NativeCurrent freshnormalnamespace canonical-
 argv-route-successor-1 is FROZEN HANDOFF9da2b1bb/PREPAREDf045cf77. FinalBOOT03020217
 was rebound FIRST, profileb3717c8f.argv16 derived from EXACT finalbytes, callerc046
 andissuerd4c7 dependentpins;4strictconjuncts/account/ownership bodies unchanged.
