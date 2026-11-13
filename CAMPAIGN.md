@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T13:17:00.651558+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T13:53:23.753745+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -40,7 +40,9 @@ external preinput first confused guardian ID with credit-run ID; no reservation 
 process occurred. Corrected comparison matches all8 pinned owner fields; unmodified
 current-account validation and fresh resource gate passed. Measured pool3351912448B
 includes new2GiB/job1 and all controller/worker overhead; MemAvailable29993095168B.
-Current HOST payload2GiB/job1 remains HELD, overriding the earlier historicalzero.
+Current publisher2GiB/job1 remains HELD. Its issued disposition actor adds256MiB/
+job1 UNKNOWN: current HOST payload2.25GiB/jobs2, before fresh overhead. No zero
+census, timeout or local stream-close flag releases either scope.
 
 Original tool is still pending. Exact source-owned stderr snapshot484B/ba832a
 reports PHASE0_UNKNOWN_RETAINED/IssuerUnknown/keeper custody unknown, and separately
@@ -57,13 +59,28 @@ actor/SUDO/parent waits0/streams/fullRoot closure passed. Journal712B/6d198712 h
 START_CONSUMED, two CAPTURE_CREATED, BEFORE_INSTALLER_FORK and UNKNOWN_RETAINED
 with EOFError/UNLOCKED DATA. Keeper absence remains UNPROVEN; class/data does not
 supply the unsaved message/frame/signum/cause or lease authority. No reader rerun.
-NativeCurrent prepares one separately conditional exact-parent disposition against
-sourceconditions8c39a58d; NativeBinding caught two stale case labels and a strict
-old-parent success tuple before any action. The original candidate is NO_GO and
-unexecuted; one bounded label+tuple-only successor preserves all guards. No current
-action/admission or original2GiB retirement has occurred. Root retains only original40491 and its real
-wait/capture/deadline route. No duplicate issuer, speculative source correction,
-blind signal, second supervisor wait, inferred release or unchanged retry.
+The bounded current-case correction fixed only two case labels and the strict
+post-action tuple. Actual finalGO3caf6955/argv0d3e1bad then ran ONCE under fresh
+Root exact-action permission/source/account/32grant e5620b2d, pool3675525120B:
+original57f77f/session18067. Its original SUDO2342218/b66271010 Popen returned,
+but120s and6s owning waits timed out. Empty stdout/stderr and local caller stream
+closure establish neither actor entry nor any attempted/returned/terminal signal
+state. The outer900s wait also timed out: rootcapture d8659c29 is FAILED_PRESERVED_
+NO_UNCHANGED_RETRY, with no automatic kill/remove/release. Tool18067 remains pending;
+original publisher40491 remains pending too. Source diagnosis a78330c0 identifies no
+primary software defect or cause; exact actor result/actionstate and both original
+terminal/directwait/capture/FD/lease obligations remain UNPROVED. ReaderQa85/Root4ca
+remain complete at ONLY their closed256MiB scope; the NEW actor256 is NOT retired.
+
+Root's ONLY supported continuation is the two retained original owning routes,
+18067 and40491, while their existing keepers preserve the same original Popen
+handles/latewait evidence. NativeBinding independently qualifies this saved boundary
+without new probe/action. No replacement reader/action, repeated signal, TERM,
+fallback, second supervisor wait, source mutation, policy bypass or publisher retry.
+Supplying owner: Root/normal original-Popen runtime. Next required trigger: actual
+late terminal/directwait and complete source-owned outcome/capture evidence from
+those original routes, or a separately supported supplying authority identified
+from real evidence. Do not infer authentication, pre-action state, absence or release.
 
 After genuine current-family closure/Q/Root receipt, consume only a justified
 changed normal operation and exact matching NEW30 physicalQ before BOTH CORE/
@@ -92,9 +109,12 @@ F05 four-real-operand caller/source9bc0ba73 now has independent SourceGO548f2b55
 real-libc ioctl/close/calloc/free delegation, exact full R/1024 partial vectors,
 actual allocator N0 boundary, positive/zero compensation and owned logical cleanup.
 Source is published; no fake return or physical compound/alignment restoration
-proof. TimeSource prepares only one new caller compile/passive packet, reusing
-existing toolchain/libc/loader/headers and prior proofs. Artifact execution/native
-operands remain Root-owned after genuine current-family release and admission.
+proof. One new caller compile/passive operation is independently GO623e0ba3/argv e89f4887
+after a bounded provider-first GLOBAL/WEAK import-oracle correction. Existing3
+unmatched unversioned optional startup exceptions and unresolved-versioned refusal
+remain strict. It reuses existing toolchain/libc/loader/headers and prior proofs. Only caller compile/link and passive readelf are authorized by that operationGO;
+no operation ran. Artifact execution/native operands remain Root-owned after
+genuine current-family release and admission.
 UTI normal13-input link-use packeted9cd67b has independent operationGO7a071344 /
 argv77f693f8; two qualified object replacements and three fresh outputs only, then
 passive ownership. Its2GiB cannot fit with retained2GiB+overhead or cross exclusivity.

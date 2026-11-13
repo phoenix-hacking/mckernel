@@ -1,0 +1,21 @@
+--- a/run_root_once.py
++++ b/run_root_once.py
+@@ -22 +22 @@
+-BASE_REQUEST_SHA = '174812f0566435a6437d02b38adc293f6ee7a9751337f8c66264a8f567081ab6'
++BASE_REQUEST_SHA = '4dfbaafe829b0211d642eba08bef38d39cf0835b91c1241923abc261a2fdf921'
+@@ -377,3 +377 @@
+-        if binding=='WEAK':
+-            assert name.split('@',1)[0] in q['optional_weak_undefined'];unresolved_weak.append(name);continue
+-        assert binding=='GLOBAL'
++        assert binding in ('GLOBAL','WEAK')
+@@ -381,2 +379,5 @@
+-        assert matches, 'actual new caller import has no matching exact-version provider '+name
+-        joins.append({'import':name,'kind':kind,'providers':sorted({filename for filename,x in matches})})
++        if matches:
++            joins.append({'import':name,'kind':kind,'binding':binding,'providers':sorted({filename for filename,x in matches})})
++            continue
++        assert binding=='WEAK' and '@' not in name and name in q['optional_weak_undefined'], 'actual new caller import has no matching exact-version provider '+name
++        unresolved_weak.append(name)
+@@ -388 +389 @@
+-    report={'schema':'mckernel.F05.actual-new-caller-passive-symbol-provider-version-use.v1','source_GO':q['source_GO'],'caller':q['caller'],'observer_version_map':q['observer_version_map'],'actual_artifacts':artifacts,'actual_compiler_inputs':compiler,'actual_passive_inputs':passive,'actual_DT_NEEDED':needed,'logical_interpreter':q['logical_interpreter'],'actual_observer_export_definitions':wrappers,'actual_strong_import_provider_version_joins':joins,'optional_weak_UND':unresolved_weak,'no_new_ihk_DSO_invoked_or_required_by_compilation':True,'actual_runtime_bootstrap_RTLD_NEXT_delegation_device_operands_and_physical_restoration':'UNPROVED_SEPARATE_GENUINE_NATIVE_OPERATION'}
++    report={'schema':'mckernel.F05.actual-new-caller-passive-symbol-provider-version-use.v1','source_GO':q['source_GO'],'caller':q['caller'],'observer_version_map':q['observer_version_map'],'actual_artifacts':artifacts,'actual_compiler_inputs':compiler,'actual_passive_inputs':passive,'actual_DT_NEEDED':needed,'logical_interpreter':q['logical_interpreter'],'actual_observer_export_definitions':wrappers,'actual_resolved_import_provider_version_joins':joins,'optional_weak_UND':unresolved_weak,'no_new_ihk_DSO_invoked_or_required_by_compilation':True,'actual_runtime_bootstrap_RTLD_NEXT_delegation_device_operands_and_physical_restoration':'UNPROVED_SEPARATE_GENUINE_NATIVE_OPERATION'}
