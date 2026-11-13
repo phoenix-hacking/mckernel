@@ -2,7 +2,7 @@ name: M14 F06 qualification
 
 on:
   push:
-    branches: [codex/m15-focused-checks-20261030]
+    branches: [codex/m15-focused-checks-20261030, codex/local-native-staging-repair]
     paths:
       - 'kernel/**'
       - 'arch/x86_64/kernel/**'
@@ -10,6 +10,10 @@ on:
       - 'cmake/**'
       - 'scripts/**'
       - 'config.h.in'
+      - 'CMakeLists.txt'
+      - 'ihk'
+      - 'executer/user/mcexec.c'
+      - 'executer/user/rust/mcexec_helpers.rs'
       - '.github/workflows/m14-f06-qualification.yml'
   pull_request:
     paths:
@@ -19,11 +23,19 @@ on:
       - 'cmake/**'
       - 'scripts/**'
       - 'config.h.in'
+      - 'CMakeLists.txt'
+      - 'ihk'
+      - 'executer/user/mcexec.c'
+      - 'executer/user/rust/mcexec_helpers.rs'
       - '.github/workflows/m14-f06-qualification.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   f06:
