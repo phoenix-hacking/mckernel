@@ -1,0 +1,38 @@
+--- /home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/next-original-event-observation-1/active-worker-observer-source-1/active_kmsg_observer.component.py
++++ /home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/next-original-event-observation-1/active-worker-observer-source-1/owner-binding-correction-1/active_kmsg_observer.component.py
+@@ -50,6 +50,7 @@
+         self.baseline = None
+         self.previous_idle = None
+         self.seen_receipts = {}
++        self.native_owner_identity = None
+         self.backend = self.closed(operation['backend_binding'],
+             'schema Root_thread_id invocation operation_nonce issued_utc_ns issued_mono_ns expires_after_seconds '
+             'profile_ref expected_context_ref source_contract_sha256 root_validation kernel controller '
+@@ -367,6 +368,16 @@
+             self.need(value['device_result']['os_absent'] is False and _ak_stat.S_ISCHR(st.st_mode) and
+                       value['device_result']['os_physical'] == self.physical(st) and
+                       os.access('/dev/mcos0', os.R_OK), 'actual dynamically visible readable OS0 character device')
++        native_owner_identity = (owner['pid'], owner['birth'],
++                                 tuple(owner['lifetime_ref'][key] for key in ('path', 'bytes', 'sha256')))
++        if phase == 'create':
++            if self.native_owner_identity is None:
++                self.native_owner_identity = native_owner_identity
++        else:
++            self.need(self.native_owner_identity is not None,
++                      'CREATE must bind the original native owner before BOOT or REMOVE')
++        self.need(native_owner_identity == self.native_owner_identity,
++                  'same original CREATE native owner pid/birth/lifetime across all phases')
+         result = {'path': str(path), 'bytes': len(data), 'sha256': _ak_hashlib.sha256(data).hexdigest(),
+                   'physical': self.physical(before), 'value': value}
+         if phase in self.seen_receipts:
+--- /home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/next-original-event-observation-1/active-worker-observer-source-1/f08_owned_active_kmsg.py
++++ /home/holden/mckernel-work/resume-20261112T094452Z-M15-F08-host-capture-1/actual-readiness-diagnosis-1/provider-context-source-1/actual-downstream-monitor-context-1/current-service-context-read-1/actual-context-binding-1/actual-provenance-context-binding-1/minimum-context-integration-1/next-original-event-observation-1/active-worker-observer-source-1/owner-binding-correction-1/f08_owned_active_kmsg.py
+@@ -19,7 +19,7 @@
+ from pathlib import Path
+ 
+ OUT = Path('/output')
+-OWNER_SHA = 'fe5f57ae5007eb2967f039531e909de16f195f407890d0089dae7b04c44b9734'
++OWNER_SHA = '3515d8907dabe319568945f224a553134a33373d5652bf7ded8656a9fd707994'
+ PIDFD_SHA = '068e8316ef03a03d1977d05ce755dfa8133c13bd4dfa56254c27b0066be2575c'
+ PAYLOAD_SHA = 'b9cf237dbd3d6156f050418945d6fd60fd9738d6604f399013761865f6830447'
+ IHK_SHA = 'b7bcafd0923de851cd04b3934207e7217065e28434e95e505d4ed5fd4bfc96c2'

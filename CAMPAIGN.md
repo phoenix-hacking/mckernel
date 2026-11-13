@@ -1,11 +1,55 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T07:21:13.392349+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T08:14:59.318474+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
 
-LATEST ACTUAL NORMAL OPERATION: finalwholeGO68c2/helpera1b38/outerfc9524 ranONCE
+CURRENT a2d/30017 IS FAILED AND RETAINS CUSTODY: Rootownedstderr823B/5ce37966
+fixedV1 first child_entry/keeper ValueError exactmessage "source closure membership",
+then lease_handoff/root_parent Unknown "custody channel lost". Deadlineexpired;
+original1a3bf9/session30017 pending, SUDO2234915/b64208889 directwait/streams UNKNOWN.
+Driver2234903/b64208839 and reportedRootparent2234918/b64208897,keeper2234920/
+b64208909; onlyPOINTrootparent observation, othermissingfiles neverabsence/release.
+Capturedstdout0/inode2258320,stderr823/inode2258321 are INFLIGHT named/heldcurrent
+readDATA, NOT finalcaptures/originalheldFD proof. Original2GiB/job1/lease/source
+UNKNOWN stayHELD; no newnative/app/publication/ACK/install proof or currentfree.
+NativeBinding savedfirstfailure9d0/supplement160cc, NativeCurrent b9fa diagnosis+
+minimumRO9688 keep preciseunknowns. Source-static catalogue249342 hasgraph15724/
+f077 while3selectedFIXED_FILES have15713/SAMEhash; unsavedruntimeobject/TB still
+UNAVAILABLE, noactualwhichguardassertion. NativeCurrent authors ONLY finite4role
+readpacket; NativeBinding reviews, RootfreshCPU0/256MiB/completeadmission thenONE
+readonlycapture. That ownQ retiresONLYnewcapture; separateactualdisposition/GO and
+original30017/SUDO/keeper/lease/FD/captures/fullRootQ precede old2GiB retirement.
+Fdelta owns ONLY private3scalar15713->15724/postimagepins, M15Leaf independentreview
+whenfrozen; no in-flight edit, SourceGuardwaiver, blindkill/secondwait/RPC/retry.
+Paralleluser0743/0750/0751 work: Proc privatePAIRED UTI12fieldC/Rust initializer
+(candidatee879/9b8c, no4272staticitems foldedin), newchangedcompile/use/link still
+UNPROVED; ABI35/metadata/objectQ29bc reused. Rootexports EXACTbaselineUTI4612/2d02
+SOURCE under existingverification/source, notdefaultpromotion. TimeSource existing
+F08activeworker Sourceaea9/diffs/034b contract/3a919 handoff exported atoriginalscope;
+realCREATE/BOOT/REMOVE stillneedsRootsamekernelIHK/mcos0/event/nativeownertuple.
+Newenabled-both-worker/noeventHOSTslice sourcepreparation usesdelivered988945 +
+qualifiedOwner/provider/context; actualtasks+normaljoins required, noflags/event/
+kmsg/hungup/wholeF08 credit. ThiscasewaitsonlyactualHOSTfit/exclusivefailedscope
+retirement/freshadmission, not unrelatedsuccessfulpublication/nativeapplication.
+Original105/156/M14=70.00/M15=74.59 unchanged; allnonce/source/native12/UNKNOWN/
+finite7c6/rejectedtask controls persist, originalfirstrepeatf133/c964-a2f staysfirst.
+
+HISTORICAL STARTUP STATUS: CURRENT ACTUAL SPARSE NORMAL OPERATION IS INFLIGHT: finalwholeGO3da30a13/helperf180/
+outerbaf85400 passed Rootfreshsource/argv/scope/RSS/headroom gate and was invokedONCE
+original1a3bf9/session30017. NewHOST2GiB/job1 HELD; pool3342409728B includes all
+measuredcontroller/worker overhead, MemAvailable30102511616B. Normalhelper performs
+actualfreshaccount/owner/Docker/source/lease/admission; originaltool response/captures
+preserved private/untrimmed. Root follows ONLY original30017, no duplicateentry or
+success/ACK/lease/release inference from startup. Actual fullRoot+allrolewait/capture/
+closure, independentQ/Rootscopedreceipt and NEW30physicalQ still required. BothCORE/
+provider generation binding/nativecurrentfree/native12/app/restoration remain separate.
+SourceGO33499daf/Time sparse62613+minimal9ee/compact9=45bd/producereaf8 reused;
+finalPRELIM8637/relativehelperfe2/owner706-a51/BOOTf12a-profile45d6 bindings checked.
+Issued752+97+29 permanentlyexcluded; originalfirstrepeatf133/c964-a2f stays first.
+
+HISTORICAL CLOSED LATEST ACTUAL NORMAL OPERATION: finalwholeGO68c2/helpera1b38/outerfc9524 ranONCE
 originalbbf56f/terminal1/noSession/full4681B1171tokens. Source/account/Docker guarded
 route reached issuer main231 -> preliminary379/273/accepted_usage_receipt186/
 read_bound41; missing local CURRENT-ACTUAL-OWNER.json is actualfirstfailure.
@@ -20,8 +64,11 @@ observedABSENT. Savedmissing-fields projectionb44e9f4a is narrow/no rawaccount/c
 serviceledgerconsumption status UNREAD/UNINFERRED. 752+97a6+29ed nonces permanently
 excluded. JointactualQb470bb3a nowjoins phasec6aad+positiveownclosuref773/9bc9798f.
 Rootf45c9493 retires ONLY this2GiB/job1; currentHOSTzero caa777c1 is payload/jobs0/0
-BEFORE freshcontroller/workerRSS/admission. NativeCurrent is composing ONLY necessary
-ownerlookup/dependent source/output refs from SourceGO9ee09c9b; no correctedentryyet.
+BEFORE freshcontroller/workerRSS/admission. NativeCurrent sparseH sourceae1d7388 is
+FROZEN from SourceGO9ee09c9b;6unchanged leaves retain oldN paths/bytes. NativeBinding
+active on changedsource/ref/9 approvals; TimeSource handles only disjoint changed
+sparse module/global origins, no duplicated body review. NativeCurrent next binds
+ONLY actual approval/current-scope literals; no correctedentry/admission/nonce yet.
 No installer/ACK/lease/publication/native success inferred.
 Rootvalidator Python-as-JSON error1eeac2a4 was separatePREINPUT/nocharge; preserved
 and corrected ONLY bytepin-vs-JSON selection before actualroute started.
