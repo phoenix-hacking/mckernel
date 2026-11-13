@@ -1,9 +1,40 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T19:20:00Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T19:40:32Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: saved Root retained; foreground goal BLOCKED
+
+PR11 changed-source review is complete; canonical adoption is HELD on the actual
+nonpassing tracker, not native success or an invented source-wide ban. Candidate
+9876b029/base70c187 has12 clean nonconflicting paths. Generator final-byte reuse,
+18-module default/explicit subset/fail-closed runner, current fixture selectors and
+source-versus-development-Markdown workflow gates were reviewed. Six exact frozen
+requests declare no direct references to these changed paths; that comparison is
+not a transitive or execution-admission proof. No candidate source, guide, frozen
+input, production cache or generated output was changed. A compatible55,669B patch
+57a3e419 is retained privately and unapplied.
+
+Verified hosted evidence is reused, not rerun locally: M14 run43491154706 has14
+runner/metadata tests in0.525s then all40 original checks in6.214s; F06run43491154764
+has40 checks in7.964s plus C-ownership/debug-data-ABI PASS. Both have zero failures/
+errors/skips at9876b029. The separate tracker run43491154712/job132112383864 was
+cancelled during frozen host inventory at19:30Z. Its logs already contain IHK SMP
+lifecycle fixture ERROR/active-boundary occurrence rejection and mcctrl provider-
+anchor ERROR/composite-object rejection. Tracker implementation/idempotence/invalid-
+input stages were skipped; no final unittest error tracebacks/counts are available.
+This is NOT an all-green result and is not waived. Exact source/CI joins and the
+bounded next repair are in [Root review](docs/verification/m14-stable-foundation-20261113/ROOT-REVIEW.AND-CI-BLOCKER.json).
+
+Next source action when genuine dispatch/test eligibility exists: reconcile the
+existing IHK SMP/mcctrl inventory checkers/fixtures with pinned restored source and
+qualified ownership contracts, preserving strict ABI/provider/C-ownership checks;
+capture the necessary focused failure and review a bounded correction. Do not alter
+qualified module code to fit stale text or rerun unchanged green suites. No source
+worker was newly dispatched through account PENDING. Local selected tests0; no
+incremental production build or speedup measurement was admitted. The guide at
+docs/development/M14-STABLE-BASELINE.md remains at baseline until coherent adoption.
+Tooling source/CI evidence closes no original requirement.
 
 Finite incident outcome at19:20Z: C, missing original-owner runtime capability.
 Latest saved original18067/40491 replies at18:48Z, chunks9dfdf2/bcc547, remain
