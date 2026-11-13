@@ -2,7 +2,8 @@
 
 **Revised:** November 13, 2026, America/Boise.  
 **Evidence baseline:** canonical commit 70c187c7ebab83d78c509ece63fb01294b4ceec3.  
-**User objective:** complete the original M14 and M15 acceptance conditions using up to one additional 100% weekly allowance, while reusing existing work.
+**User objective:** complete the original M14 and M15 acceptance conditions using up to one additional 100% weekly allowance, preferably within 24 hours, while reusing existing work.  
+**Time target:** approximately noon November 14, 2026, America/Boise (19:00 UTC), following the user's one-day preference.
 
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
@@ -38,7 +39,7 @@ Do not repeat the old30017 RAM/job retirement, UTI initializer compilation, I02 
 
 ## 3. Budget: a bounded completion campaign
 
-Treat the user's new authorization as one additional weekly allowance for this tranche, not a new calendar deadline or a promise that the allowance is sufficient. Use the existing normal usage/account controls to establish the actual available allowance. Preserve the same signed-in account, cumulative usage history and finite credit-run identity. Record the new authorization without resetting historical spend or assuming a service hold cleared. It authorizes no purchase or top-up.
+Treat the user's new authorization as one additional weekly allowance for this tranche. The later user instruction adds a preferred 24-hour completion target, approximately noon November 14 Boise. Neither the allowance nor the target is a guarantee that required runtime capabilities and original acceptance can be completed. Use the existing normal usage/account controls to establish the actual available allowance. Preserve the same signed-in account, cumulative usage history and finite credit-run identity. Record the new authorization without resetting historical spend or assuming a service hold cleared. It authorizes no purchase or top-up.
 
 The following shares are planning envelopes, not claims of measured per-lane usage:
 
@@ -55,6 +56,23 @@ Transfer unused recovery budget to implementation or qualification. Finish early
 The recovery allowance is a ceiling, not permission to repeat unchanged waiting until 10% is spent. The900-second timeout and multiple unchanged checkpoints have already happened. The next useful response must identify a capable resolution or the exact external intervention needed.
 
 At existing checkpoints, include remaining additional allowance when the normal service exposes it, original IDs closed, the next required result, and any blocker that makes the remaining budget insufficient. Do not invent per-agent accounting if only aggregate usage is available. If the runtime remains unavailable, say that completion is not currently forecastable and preserve the remaining execution/review budget.
+
+### Preferred 24-hour execution schedule
+
+Use roughly noon November 13 Boise as the planning origin. These are target windows, not measured task-duration estimates; start ready work immediately and overlap genuinely independent lanes.
+
+| Boise target window | Required focus and checkpoint |
+| --- | --- |
+| Now–1 p.m. November 13 | Obtain a finite original-owner incident decision: actual terminal/closure evidence, an available supported resolution, or the exact unavailable capability/operator intervention. Start only genuinely eligible independent source work |
+| 1–4 p.m. November 13 | After real recovery, consume the ready HOST tranche and restore the first native result/restoration. Review I02 from sufficient actual module receipts |
+| 4 p.m.–midnight | Drive complete C4/default ownership and the first whole M14 functional rows; execute matching M15 diagnostic/device obligations in parallel where admitted |
+| Midnight–6 a.m. November 14 | Aim to finish the coherent final M14 ownership, functional and integration requirements and record M14 acceptance; continue eligible M15 qualification |
+| 6–10 a.m. November 14 | Finish remaining original M15 runtime/application/module-MM/restoration obligations on the required matching cohort |
+| 10 a.m.–noon November 14 | Preserve the final acceptance reserve for exact unmatched evidence, explicit original gate decisions and publication of both milestone outcomes |
+
+The incident has already exceeded its 900-second wait; the first window is for a resolution decision, not another hour of identical polling. If no first native result/restoration exists by the 4-hour checkpoint, report the one-day target as at risk with the exact dependency and actual remaining work. Do not silently continue calling the schedule on track.
+
+Reforecast from real throughput after execution returns. A deadline never releases a charge, permits a prohibited action or satisfies an original requirement. If completion needs an operator decision, prepare the exact reviewable action and surface it immediately.
 
 ## 4. Immediate incident: require a finite original-owner outcome
 
