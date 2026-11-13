@@ -1,0 +1,7 @@
+/* Only the four necessary transparent real-libc observer seams are exported.
+ * Their actual new ELF versions/provider resolution must be qualified later.
+ */
+GLIBC_2.2.5 {
+  global: calloc; free; close; ioctl;
+  local: *;
+};

@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T12:28:40.574150+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T13:17:00.651558+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
@@ -49,9 +49,19 @@ message is a generic keeper wrapper; the parent emits its row after disabling it
 timer and attempting child stops. Emitted row order does NOT establish primary
 cause, exact failed handoff call, completed GO_AUTH or installation. Underlying
 keeper failure and actual original waits/ACK/lease/finalcaptures remain unproved.
-NativeCurrent freezes source-backed diagnosis and the smallest required already-
-durable record/current custody input; NativeBinding qualifies only that boundary
-and any exact recovery operation. Root retains only original40491 and its real
+Current read-only journal/custody reader ACTUALLY passed originalfb1dbf/terminal0:
+RESULT15b3add0/rootcapture9557aa4f. Exact API4b81a57f remains truncated14583/10000;
+complete source58331B/86fce351 is separate. Independent Qa85ea113/qualifiedSAFEad97893e
+and Root4ca6e582 retire ONLY new256MiB/job1. All80 new FD generations, original new
+actor/SUDO/parent waits0/streams/fullRoot closure passed. Journal712B/6d198712 has
+START_CONSUMED, two CAPTURE_CREATED, BEFORE_INSTALLER_FORK and UNKNOWN_RETAINED
+with EOFError/UNLOCKED DATA. Keeper absence remains UNPROVEN; class/data does not
+supply the unsaved message/frame/signum/cause or lease authority. No reader rerun.
+NativeCurrent prepares one separately conditional exact-parent disposition against
+sourceconditions8c39a58d; NativeBinding caught two stale case labels and a strict
+old-parent success tuple before any action. The original candidate is NO_GO and
+unexecuted; one bounded label+tuple-only successor preserves all guards. No current
+action/admission or original2GiB retirement has occurred. Root retains only original40491 and its real
 wait/capture/deadline route. No duplicate issuer, speculative source correction,
 blind signal, second supervisor wait, inferred release or unchanged retry.
 
@@ -77,6 +87,18 @@ lifetime/exclusive grant and17/13GiB floors still bind. Actual workers waiting/
 normal joins do not prove event/kmsg/hung-up/wholeF08; no unrelated native success
 gate. Root runs the next genuinely eligible fitting operation after publication
 priority, then actualQ/scoped retirement before another exclusive publisher grant.
+
+F05 four-real-operand caller/source9bc0ba73 now has independent SourceGO548f2b55:
+real-libc ioctl/close/calloc/free delegation, exact full R/1024 partial vectors,
+actual allocator N0 boundary, positive/zero compensation and owned logical cleanup.
+Source is published; no fake return or physical compound/alignment restoration
+proof. TimeSource prepares only one new caller compile/passive packet, reusing
+existing toolchain/libc/loader/headers and prior proofs. Artifact execution/native
+operands remain Root-owned after genuine current-family release and admission.
+UTI normal13-input link-use packeted9cd67b has independent operationGO7a071344 /
+argv77f693f8; two qualified object replacements and three fresh outputs only, then
+passive ownership. Its2GiB cannot fit with retained2GiB+overhead or cross exclusivity.
+No recompile/default/C4/native acceptance from that pending candidate link.
 
 M15-I02-ACCEPT adjudication8bf2bb4d binds the exact retained criterion snapshot
 3e2d9c4e/blob70b0679e, not a restored worktree. Four technical children are verified;
