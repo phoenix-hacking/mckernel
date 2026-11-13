@@ -1,37 +1,44 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T04:26:31.440138+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T05:02:57.592469+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
 
-CURRENT RECOVERY04:22: actual correctedA5181b5/Root0 is Q0cdb6b9f/Root8adc3341,
-retiring ONLY its new256MiB/job1. GENUINE original B467fa0/exit1/noSession/
-31927B is independently Qcb827e1e: late original Popen.wait line81 SUDO2113435/
-b61786640 exit-15/LATE receipt3b47, stable3096Bstdout+7610Bstderr. Old firstprimary/
-TimeoutExpired/secondary1/direct_waitfalse/exitUNKNOWN fields stay intact; no secondwait.
-Runtime C is UNEXECUTED: Proc authors exact private journal/inode/hash/FLOCK
-CAS524304->524288, NativeBinding next reviews using actual A+B and conditionsfe090.
-OriginalHOST1.5GiB/job1 remains held until C+failedHOST Q/Rootscopedreceipt.
-Native12/source/runtime/globalUNKNOWN and all actual guards remain separate.
+CURRENT FAILED-HOST RECOVERY IS COMPLETE AT ITS EXACT SCOPE. CorrectedA5181b5/
+Q0cdb/Root8adc plus genuineB467fa0/Qcb827 and actualC604b4f/Root0 now form
+wholefailedHOST Qe834aba6. C04:45:34 made one journal-proved524304->524288 CAS,
+same runtimeinode1048651/hash298a, journal25c preserved,82newFDgenerations closed/
+runtimeLAST/noerrors; persistentinitialI+a7 unchanged. NewC Qcaad/Root60511 retires
+ONLY new256; Root64e9cdff retires ONLY original64017 HOST1.5GiB/job1. Rootfresh
+all-current-HOST census/zero receipt e2b2558d supports CURRENT HOSTPAYLOAD/JOBS0/0;
+controller/workerRSS1143316480B is NOT retired and needs new measurement beforegrant.
+Native12/source/globalUNKNOWN/account/lease/historical/excludedtask holds remain.
+Originalmountfailure/Timeout/secondary1/UNKNOWN records and unavailablefailedrow
+stay verbatim. No native/app/normalNativeRetirement/originalacceptance from cleanup.
+Preinput89fc15 failed only Root's oldadmission-path assertion before account/grant/
+process/nonce/charge; exactonepathb436/Time18da corrected it, C issued only once.
 
-F06 SEVEN HOST STAGES ACTUALLY PASSED4a4540/session95562->44db1f/Root0 at
-04:20:21-04:22:15, under GO7cdaa678/fresh32grantb1597627. RESULT957b5294/226155B,
-seven wait0/directwait+closedstreams,21archive/rawmanifest/nativeDATA products,
-strict namedmanifest validation/input/providerbookends and rootcapture8879f34e.
-M15Leaf qualifies savedactuals; ONLY this new1GiB/job1 is pending retirement.
-Current HOST payloads2.5GiB/TWOjobs plus fresh ALL overhead; no TLS/wrapper/native
-runtime or originalacceptance from stages. FunctionalDelta prepares only necessary
-fixed7 named-provider binding from existing normal interfaces, no new generalharness.
+NEXT SHARED I03/I04: distinct normal graph-net publication from SourceGO0f030451,
+package30/420499B graphf077/catalogue2493425060B/reader d927 (all24bodies unchanged).
+The stale4893 catalogue length/NO_GOa41/finding926 is preserved and corrected only
+by actual5060 scalar+refs. NativeBinding supplies existing compact500B/f880 ninefield
+INSTALL_ONLY approval/fullargv from correctedwholehandoff58ef/inputs66ad, now real
+C/fullfailedHOSTQ/Root64e9+zeroe2b references exist. NativeCurrent binds ONLY actual
+schema/literals/dependentrefs; M15Leaf checks only wholehelper changedbinding.
+All account/newestaccepted/paired25s/source/permission/lease/allowner/exclusiveHOST/
+2GiB/grant guards still precede Root's sole producer. No issue/nonce/adoption yet,
+no olda7/readback/publisher/compiler/ABI/provider or controls replay.
 
-Normalfixed30 graph-net SOURCE successor8aa/c71 is NOT GO: TimeSource caught
-reader0152 CLOSURE_BYTES4893 while actual catalogue249342/producercontract5060.
-NO_GOa41fd16f/finding9260362a preserved; NativeCurrent corrects only stale scalar
-and dependent references in fresh private successor, all24reader bodies/package/
-account/29ed/ownership rules unchanged. No actual publication/readback failure,
-retry/adoption or installed hotpatch. Source13Q3cef/Root15d, original a7publication/
-NEW30 and all unchanged build/provider/ABI/staging proofs stay reused.
-Original105/156 andM14=70.00/M15=74.59 unchanged; no original check closed.
+F06 actual7stages957b/Root0 are Qd15d071b/DATA77afd27c/Root8bee06b5 retired ONLY
+new1GiB/job1:21products/7originalwait0+streams/strictmetadata/inputbookends. They
+reuse all7payload/runner pairs406f/Q9f976. Private closed7 provider source13d now
+TimeSourceGO6b79033c, exact17app+2typedcanonical rows remain necessary subset,
+neverfull53/effectiveview/selection/admission. FunctionalDelta's changed12control
+packet64ec45b1 (7positive+5refusal/493Bgolden) is FROZEN for M15Leaf operationreview;
+no fixture execution yet, no newgeneric harness. Currentrepeat stays f133; ordinary
+TLS/time/app/provider/canonical composition and native lifecycle remain actualgates.
+Original105/156 andM14=70.00/M15=74.59 unchanged: NO originalcheck closed.
 
 Latest completed engineering operations (original105/156; M14=70.00%, M15=74.59%):
 - Current64017 readonly capture eed876/Root0 PASSED01:56:57, fullcurrentmountinfo,
@@ -99,15 +106,13 @@ Current qualified results since checkpoint15788ef82:
   derives genuine processedudev/controlsocket/eventnamespace requirement; groups>0
   and realinstalled event/lifecycle stay open, no daemon retry or servicecredit.
 
-CURRENT HOST payload reservation: 2684354560B / TWO scopes: original failednative
-control1.5GiB/job1 plus actualfixed7 staging1GiB/job1 pendingM15LeafQ/Rootreceipt.
-CorrectedA256 is Q0cdb/Root8adc retired; original B is Qcb827 with genuine late
-originalwait/captures, never a normal native/app result. RuntimeC/source/native12/
-globalUNKNOWN remain held separately. Root preserves originalfailed sourceguard
-mount path fields/Q85e536d2 and unavailablefailedinstant row. Currentnet contract/
-private13controls prove only current parser gap, not reconstruction or replay authority.
-Older paragraphs below retain their historical scope; current scoped Q/receipts above
-control charge accounting. No duplicate signal/wait/read/parser/greenproof execution.
+CURRENT HOST payload reservation: 0B / ZERO current payload jobs after positive
+C/A+B conjunctionQe834 and Root64e9 plus newC Qcaad/Root60511. Latestzero/current
+census e2b is current-HOST ONLY, not native12/source/globalUNKNOWN/account/lease
+clearance or a future grant. All controller/worker overhead remains measured and
+charged; every next batch needs fresh26GiB/floors/4GiB total/3jobs. UTIobject remains
+queued behind ready shared publication priority; no blanket source or successful
+signal prerequisite is introduced. Old raw failure evidence stays immutable.
 
 Publication Qb50a1da2 and Root84cb70bc retired ONLY its separate actual2GiB/job1;
 physical Qc9ba7a86/Root91ff4b21 and TLSnineQb1a5/Root7f5e1055 also retired only
