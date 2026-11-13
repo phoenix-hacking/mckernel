@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 env:
   EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
   PYTHONDONTWRITEBYTECODE: "1"
@@ -32,7 +36,43 @@ jobs:
           [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
 
+      - name: Select frozen host checks for changed inputs
+        id: host-scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          set -euo pipefail
+          required=true
+          if [[ "$EVENT_NAME" == pull_request || "$EVENT_NAME" == push ]] && \
+             [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]] && \
+             [[ "$BASE_SHA" != 0000000000000000000000000000000000000000 ]]; then
+            comparison="$BASE_SHA"
+            if [[ "$EVENT_NAME" == pull_request ]]; then
+              comparison="$(git merge-base "$BASE_SHA" "$EXPECTED_HEAD_SHA")"
+            fi
+            git diff --no-renames --name-only -z "$comparison" "$EXPECTED_HEAD_SHA" \
+              > "$RUNNER_TEMP/final-push-changed-paths"
+            required=false
+            changed=false
+            while IFS= read -r -d '' path; do
+              changed=true
+              if [[ "$path" != docs/development/*.md ]]; then
+                required=true
+                break
+              fi
+            done < "$RUNNER_TEMP/final-push-changed-paths"
+            if [[ "$changed" == false ]]; then
+              required=true
+            fi
+          fi
+          echo "required=$required" >> "$GITHUB_OUTPUT"
+          if [[ "$required" == false ]]; then
+            echo 'Only development Markdown changed; frozen host checks are omitted and completion tracker validation still runs.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Restore frozen IHK source
+        if: steps.host-scope.outputs.required == 'true'
         run: |
           set -euo pipefail
           python3 -B scripts/restore_ihk_source.py \
@@ -40,6 +80,7 @@ jobs:
             --destination "$GITHUB_WORKSPACE/ihk"
 
       - name: Validate frozen host-module inventory
+        if: steps.host-scope.outputs.required == 'true'
         run: |
           set -euo pipefail
           python3 -m unittest discover -s scripts/tests -v
@@ -57,6 +98,7 @@ jobs:
           python3 scripts/mcctrl_native_lifecycle_check.py
 
       - name: Validate locked scope, policy, and behavior contract
+        if: steps.host-scope.outputs.required == 'true'
         run: |
           set -euo pipefail
           git -C ihk apply --check \
@@ -249,4 +291,3 @@ jobs:
           path: evidence/final-push-summary.json
           if-no-files-found: error
           retention-days: 90
-

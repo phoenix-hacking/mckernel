@@ -1,6 +1,6 @@
 # M14/M15 Stable Baselines and System Recovery
 
-**Stabilization reference updated:** November 12, 2026.
+**Stabilization reference updated:** November 13, 2026.
 
 **Historical evidence snapshot:** November 10, 2026, from published checkpoint
 `e34b958d35d508d29fbfc9ee9b7efd868a331b80`.
@@ -14,6 +14,127 @@ promptly.
 handoff. [AGENTS.md](../../AGENTS.md) supplies the current execution rules. This
 document is a technical reference and a dated snapshot; current assignments,
 resource availability, and milestone decisions belong in those existing records.
+
+## Fast development workflow — November 13, 2026
+
+This workflow uses the existing source checks, configured production cache and
+retained c964/a2f/f133 cohort. It separates quick developer feedback, production
+build/link evidence and native acceptance so a failed native operation does not
+automatically become a ban on independent source work. On the workstation, real
+shared ownership, account and resource restrictions still apply. The hosted CI
+checks use their own isolated runner and perform no native-host action.
+
+### Three levels of verification
+
+| Level | Use it for | What the result establishes |
+| --- | --- | --- |
+| Focused source feedback | An edited behavior, ABI boundary, source selector or build rule | Only the named fixture/code-generation checks actually run; no full image, C retirement or native acceptance |
+| Incremental production build | A changed compilation unit, selected provider, configuration or link input | Actual affected objects, selected definitions and link on the matching configured profile |
+| Native integration | Changed deployed behavior and original M14/M15 runtime requirements | Only the actual matching application/device/lifecycle/restoration conditions observed |
+
+Keep one compositor of each shared configured build tree. Prepare source in
+isolated branches/worktrees, preserve unrelated edits, and avoid concurrent
+writers to the same output directory. Promote passing artifacts only at the
+level they actually proved; retain the last passing cohort during candidate work.
+
+### Quick edit feedback with the existing runner
+
+List the supported M14 modules without importing tests or probing compilers:
+
+```sh
+python3 -B scripts/run_m14_focused_checks.py --list
+```
+
+Run the relevant existing modules for a wait-result change:
+
+```sh
+python3 -B scripts/run_m14_focused_checks.py \
+  --module scripts.tests.test_m14_f03_wait_results \
+  --module scripts.tests.test_m14_f03_wait_c \
+  --json-output /tmp/m14-wait-feedback.json
+```
+
+The selection is explicit and restricted to the existing allowlist. Duplicate
+names are removed in its stable order. With no module option, the same complete
+18-module suite runs. Results identify full versus subset selection and every
+unselected module. A skip, missing input, expected failure, test/import error or
+zero-test run is not a passing result. Result-write failure returns nonzero.
+
+Use the matching test compiler/provider environment. The hosted workflows already
+pin their tools; those focused HOST tools are distinct from the production
+compute and Linux-module toolchains. Do not substitute a convenient installed
+compiler for an operation's required production profile.
+
+For M15, use the existing explicit component test modules appropriate to the
+changed code, such as the create/cleanup, CLI, diagnostic or daemon fixtures.
+They retain their own source/tool/provider requirements. The M14 allowlist is
+not a universal M15 runner. An ordinary unittest exit of zero with skipped
+checks is incomplete feedback and receives no qualification credit.
+
+There is no automatic changed-path dependency selector or cached-pass inference.
+Tests import helper modules and consume headers beyond their names. A selected
+run is fast feedback; the unchanged full integration suite and original
+qualification conditions remain available and required where applicable.
+The source hashes in the runner are explicit result metadata, not a complete
+transitive cache key or proof that every source stayed unchanged during a run.
+
+### Preserve incremental outputs when configuration is unchanged
+
+The two existing F06 metadata producers now compare each final generated output
+with its current bytes before writing. Identical generation preserves the file
+and its modification time. Changed output still updates normally, and all
+existing source/profile validation remains in place.
+
+This fixes a specific invalidation chain: CMake invokes origin generation during
+reconfiguration; the generated origin header, CMake metadata and Rust metadata
+are actual compile dependencies. Unconditionally rewriting identical bytes can
+force a new whole-crate Rust object, an architecture C object and their image
+link. Keeping unchanged generated files unchanged removes that avoidable
+invalidation. It does not suppress a real source/header/compiler/provider change.
+
+Retain the configured cache and let its genuine dependency graph choose work.
+A changed Rust crate input can legitimately require the whole Rust object.
+Do not clean the tree, copy old objects into a new input configuration, or rebuild
+unchanged Linux modules merely because another Git commit was created.
+Reconfigure only when the actual configuration or build-system inputs require it.
+
+### Keep the CI foundation useful
+
+The focused M14 workflow continues to run the full original allowlist and adds
+small runner/metadata regression checks. The F06 workflow keeps its actual
+C-ownership/debug-data qualification. Current-source fixture extraction follows
+the source's real guards while preserving its semantic assertions.
+
+Canonical-branch pushes and relevant source changes should reach the applicable
+checks. Superseded isolated HOST runs may be cancelled without cancelling a
+native or shared-workstation operation. Pure development Markdown changes should
+not launch the unrelated frozen-host inventory suite; affected source, workflow,
+tracker and verification-data changes retain their applicable validation.
+
+The ordinary CI jobs already have 10- and 15-minute overall bounds and individual
+compiler/test subprocess timeouts. The local test runner does not claim a hard
+whole-suite/descendant deadline. A fast feedback failure should produce its
+actual error and scope; it does not erase the passing production baseline.
+
+### Rollout and measurement
+
+Adopt these source/tooling changes through the normal compositor workflow without
+modifying any in-flight frozen operation or restarting the saved campaign.
+Keep current native custody recovery separate. A code review or hosted test pass
+does not release its process, lease or resource ownership.
+
+Check the actual pinned CI result before calling the integrated foundation
+green. Measure subsequent selected-test elapsed time and a genuinely admitted
+unchanged reconfigure/build before claiming a workstation speedup. The local
+metadata regressions prove output reuse semantics; they are not a production
+image-build timing receipt.
+
+Implementation references: [focused runner](../../scripts/run_m14_focused_checks.py),
+[runner regressions](../../scripts/tests/test_run_m14_focused_checks.py),
+[metadata regressions](../../scripts/tests/test_m14_metadata_reuse.py),
+[origin producer](../../scripts/derive_f06_origin.py),
+[signal metadata producer](../../scripts/derive_f06_signal_metadata.py), and
+[compute dependency rules](../../kernel/CMakeLists.txt).
 
 ## Current reusable baseline — November 12, 2026
 
@@ -628,3 +749,4 @@ TLS0891 staging is also qualified at Q2b5b25e6/Root622b9e7c: derived CPIO 26,166
 The last successful normal publication remains1f5f. Failedc309 and issued/nonreplayable29ed were not promoted. The29ed newest-account refusal and unavailable failed tuple/reason remain intact; any future publication needs independently reviewed fresh current-owner input through every unchanged account/credit/ownership/source/lease/resource guard. Native12/source/global UNKNOWNs and the excluded collector remain binding. Original progress stays105/156, M14=70.00%, M15=74.59%; no acceptance credit comes from preservation.
 
 Canonical host guide: `/home/holden/mckernel/docs/development/M14-STABLE-BASELINE.md`. An identical read-only reference is saved beside the retained manifest at `/home/holden/mckernel-work/resume-20261112T094452Z-c964-a2f-staging-retention-gap-1/preserved-stage-missing-f133-1/M14-STABLE-BASELINE.md`. The existing guardian, watcher, mailbox interval, saved Root/goal and finite credit run were preserved.
+
