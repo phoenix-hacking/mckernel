@@ -1,9 +1,40 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T20:23:25Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T23:10:17Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: saved Root retained; foreground goal BLOCKED
+
+Four-hour checkpoint, November13 23:00UTC (recorded 2026-11-13T23:10:17Z): preferred
+November14 19:00UTC completion is AT RISK. The first matching native/application/
+restoration result had NOT passed by the checkpoint. Neither original milestone is
+accepted; verified105/156, M14=70.00%, M15=74.59%, newly closed NONE.
+
+Blocker: supported SAME-owner goal/context resolution and original-runtime nested-
+owner outcome/closure capability. Suppliers: original controller/normal goal-session
+service or supported user/client control, plus original-Popen runtime for genuine
+directwait/actionstate/complete captures/FD/channel/lease evidence. The foreground
+procedure question remains UNANSWERED; no approval or method is assumed. The
+existing operator request remains NOT-ACTION-GO. Last saved original18067/40491
+replies remain the18:48 pending boundary; no new execution evidence is supplied by
+this checkpoint. Retain2415919104B/jobs2 PLUS all overhead and every account/source/
+resource/logicallease/privateIPC/native/UNKNOWN hold. Goal stays BLOCKED.
+
+Next after genuine eligibility: canonical M15Leaf Sol/MAX independent review of
+535db88e/ddfd5df1, then Root's two full SMP/mcctrl lifecycle modules on coherent
+9876b029+patch/IHK8d288b8. Require positive baselines, intended existing raw-parameter/
+provider-anchor negatives and all new refusals, zero failures/errors/skips and
+complete exact evidence; then affected inventory and skipped tracker stages.
+Reuse completed preparation and hosted M14/F06 proofs. After actual scoped closure/
+grants: unchanged serial UTI/F08/F05 ready tranche, justified normal publication/
+NEW30/BOTH bindings, matching native/application/lifecycle/restoration and remaining
+full original ownership/runtime criteria, then explicit M14 acceptance before M15.
+
+No credible revised completion forecast exists until those gates and actual
+throughput are known. The ONE additional allowance authorization is not available
+capacity or another tranche; same finite cumulative history remains. This is a
+forecast/report only: no new poll, source review, test, worker, actor, signal,
+publisher, server, owning wait, retirement, relaunch or acceptance credit.
 
 20:20Z normal-account eligibility finding: the SAME original controller IS producing
 new observations; newest recorded read272498 remains PENDING with no response-error
