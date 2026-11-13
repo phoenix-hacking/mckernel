@@ -1,69 +1,54 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T09:15:11.855280+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T09:34:21.963648+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
 
-LATEST ACTUAL a2d READONLY CAPTURE176006/terminal0 completed under GO f7df5cef/
-Rootfresh32grant76e9539b. K birth-gate-correction-1 executionRESULTa6a7a7c1,
-rootcapture9eed9029, fulltoolf500bbc2 (14656B/3664tokens/untruncated); own66FD
-consume/close+EBADF and source-newactor2260609/SUDO2260606/parent2260604 waits0/
-streams/fullRoot positive. M15Leaf new256MiB/job1 savedQ FREEZING; new256 stays
-chargedUNTIL Q/Rootreceipt. This is OWN_CLOSURE_ONLY, not original30017 disposition.
-ProtectedRaw42012B/4d3be5e9/inode2258620/UID0-0600 inside0700 saved; SAFEsummary
-exposes7observationerrorsCOUNT only. NativeCurrent authors ONLY minimumsavedbytes
-projection of exactRaw/errorlabels+currentrole/FD/socket/lock/lease/capture/path
-facts withNativeBinding independentGO/freshadmission; NO live recollection/rawdump.
-Original30017/a2d old2GiB/lease/native12/sourceUNKNOWN stayHELD,3rolesbirthmatch/
-keeperABSENT_UNPROVEN_RETIREMENT is DATA. Separateactualdisposition/Rootowningwait/
-SUDO/captures/FD/lease/fullRootQ required beforeold2GiB release. Rootpreinputsyntax
-failure/nocharge andpostcapturefinal-saver typo retainedseparately; no actorreplay.
+Current failed publisher is original1a3bf9/session30017/a2d. Its fixed first report
+is child_entry/keeper/ValueError/source closure membership, followed by
+lease_handoff/root_parent/Unknown/custody channel lost. Actual rejected operand
+and traceback were not saved. Original2GiB/job1, lease, native12/source/global
+UNKNOWNs remain held; no publication, application, ACK, release or current-free
+claim. Only Root retains its original tool/Popen/wait/captures. No duplicate
+issuer, nonce replay, second wait, RPC, blind signal or in-flight source mutation.
 
-REVIEWED REAL SOURCE DELTAS: pairedUTI C e879+Rust9b8c/patch5cbc/SourceGOfa6208
-implements12orderedrawfieldwrites,84Bonly,72hostslots+4padding/Ctail+logicalorigins
-preserved. New30fieldC/Rust emission-use packet722ce READY/source-only; new2GiB
-compileUNFIT besideold2GiB+ALLoverhead, noexecution. Complete114provider/finalcfg/
-link/selection/ownership/ACK/lifetime/C4/default/native acceptance unproved. Baseline
-source4612/lib2d alreadypublished63555843 withoutdefaultpromotion. THREEscalar
-15713->15724 correctione057/SourceGO0b7e isDONEatsourcescope, no runtimeTB/whichguard
-assertion or in-flightapply. F08 samplingsourcefixresolved2ad6; parentoracleNO_GO98ed
-corrected749a nowreadyFdelta review, noactualcase/source33grant/hostworkeracceptance.
-NoeventHOSTslice waitsactualcurrentexclusivefailedscopeclosure/fit only; active
-AEA9/034b realADD/BOOT/REMOVE stillneedsRootgenuineIHKdevice/nativeownertuple.
-Original105/156 andM14=70.00/M15=74.59 unchanged; allfinite7c6/holds/rejectednonces/
-collector constraints remain, signal.alternate-repeat/c964-a2f-f133 firstnativecase.
+Completed custody reader176006/exit0 is independently Q8dee9f1a and Root e31b3807:
+ONLY its new256MiB/job1 is retired. Full14656B tool/capture joins, actor/SUDO/parent
+waits0, 66 ownFD close+EBADF generations and fullRoot closure passed. Protected
+saved record42012B/4d3be5e9/inode2258620 is UID0-0600 inside0700, without an
+I-flag assumption. Summary exposes seven observation errors as COUNT only; three
+roles birth-match and keeperABSENT_UNPROVEN_RETIREMENT is DATA. NativeCurrent's
+saved-only projection b627162a/request4d580da7/HANDOFF1e2eb163 is frozen; NativeBinding
+reviews exact32field/17-10-27argv/capture chain. Root executes once only after
+actual GO plus fresh account/source/permission/owner/all-family admission. No live
+recollection or raw disclosure. Subsequent original30017 disposition and lease/
+SUDO/wait/stream/fullRoot restoration need separate actual review/admission/Q.
 
-CURRENT a2d/30017 IS FAILED AND RETAINS CUSTODY: Rootownedstderr823B/5ce37966
-fixedV1 first child_entry/keeper ValueError exactmessage "source closure membership",
-then lease_handoff/root_parent Unknown "custody channel lost". Deadlineexpired;
-original1a3bf9/session30017 pending, SUDO2234915/b64208889 directwait/streams UNKNOWN.
-Driver2234903/b64208839 and reportedRootparent2234918/b64208897,keeper2234920/
-b64208909; onlyPOINTrootparent observation, othermissingfiles neverabsence/release.
-Capturedstdout0/inode2258320,stderr823/inode2258321 are INFLIGHT named/heldcurrent
-readDATA, NOT finalcaptures/originalheldFD proof. Original2GiB/job1/lease/source
-UNKNOWN stayHELD; no newnative/app/publication/ACK/install proof or currentfree.
-NativeBinding savedfirstfailure9d0/supplement160cc, NativeCurrent b9fa diagnosis+
-minimumRO9688 keep preciseunknowns. Source-static catalogue249342 hasgraph15724/
-f077 while3selectedFIXED_FILES have15713/SAMEhash; unsavedruntimeobject/TB still
-UNAVAILABLE, noactualwhichguardassertion. NativeCurrent authors ONLY finite4role
-readpacket; NativeBinding reviews, RootfreshCPU0/256MiB/completeadmission thenONE
-readonlycapture. That ownQ retiresONLYnewcapture; separateactualdisposition/GO and
-original30017/SUDO/keeper/lease/FD/captures/fullRootQ precede old2GiB retirement.
-Fdelta owns ONLY private3scalar15713->15724/postimagepins, M15Leaf independentreview
-whenfrozen; no in-flight edit, SourceGuardwaiver, blindkill/secondwait/RPC/retry.
-Paralleluser0743/0750/0751 work: Proc privatePAIRED UTI12fieldC/Rust initializer
-(candidatee879/9b8c, no4272staticitems foldedin), newchangedcompile/use/link still
-UNPROVED; ABI35/metadata/objectQ29bc reused. Rootexports EXACTbaselineUTI4612/2d02
-SOURCE under existingverification/source, notdefaultpromotion. TimeSource existing
-F08activeworker Sourceaea9/diffs/034b contract/3a919 handoff exported atoriginalscope;
-realCREATE/BOOT/REMOVE stillneedsRootsamekernelIHK/mcos0/event/nativeownertuple.
-Newenabled-both-worker/noeventHOSTslice sourcepreparation usesdelivered988945 +
-qualifiedOwner/provider/context; actualtasks+normaljoins required, noflags/event/
-kmsg/hungup/wholeF08 credit. ThiscasewaitsonlyactualHOSTfit/exclusivefailedscope
-retirement/freshadmission, not unrelatedsuccessfulpublication/nativeapplication.
-Original105/156/M14=70.00/M15=74.59 unchanged; allnonce/source/native12/UNKNOWN/
-finite7c6/rejectedtask controls persist, originalfirstrepeatf133/c964-a2f staysfirst.
+Published and fetched-verified 52b587e6 contains pairedUTI C e8797e0a + Rust9b8c1127,
+patch5cbc04ae/SourceGOfa6208cb and proof of12 ordered raw field writes,84B only,
+72host slots+4padding and request/ACK/refill/free tail/source origins preserved.
+Proc's changed C/Rust object emission-use packet722ce103 is with M15Leaf for exact
+operation review. New2GiB compile cannot fit beside old2GiB plus all overhead;
+no changed compilation/link/default/provider-selection/C4/native credit. Baseline
+UTI4612/2d02 and existing F08 active-worker source were published at63555843.
+Three15713->15724 scalar postimages/GO0b7e are published source-only; unsaved
+historical runtime operands remain unavailable and in-flight bytes unchanged.
+
+F08 no-event both-worker sampling and three-task parent-result fixes are reused.
+FunctionalDelta NO_GO325e42d5 proves25 consumed null-size arcs/15 unique refs hit
+strict size equality before create. TimeSource supplies genuine integer sizes
+and only necessary fresh request/pin/path literals, preserving frozen failures,
+Owner/providers and all guard/sampling/custody/oracle bodies. FunctionalDelta then
+reviews that changed DATA/finalargv only. No-event HOST execution needs its actual
+exclusive/resource/account/operation admission, not unrelated native success.
+Actual active ADD/BOOT/REMOVE still needs Root's real IHK/device/event/native tuple.
+
+Original IDs newly closed: NONE. Counts105/156, M14=70.00%, M15=74.59% unchanged.
+Same Root/finite7c6, all holds and rejected-task/issued-nonce exclusions remain.
+First native functional case stays signal.alternate-repeat/c964-a2f-f133 after
+its required successful generation/readback/BOTH namespaces and separate native
+gates; M14 final acceptance before M15, checkpoint/pause after both acceptances.
 
 HISTORICAL STARTUP STATUS: CURRENT ACTUAL SPARSE NORMAL OPERATION IS INFLIGHT: finalwholeGO3da30a13/helperf180/
 outerbaf85400 passed Rootfreshsource/argv/scope/RSS/headroom gate and was invokedONCE
