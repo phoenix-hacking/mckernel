@@ -1,81 +1,77 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T09:59:40.173089+00:00. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T12:04:55.368216+00:00. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: actual guarded resume RUNNING
 
-Adopted the exact dated [reuse/closure strategy](docs/development/M14-M15-CLOSURE-STRATEGY-20261113.md)
-from49393dace6ae4039fc457d00f7df5f1a4b0d6e45,37201B/SHA50426ba8. It is a reference;
-CAMPAIGN remains the sole active plan/status/handoff. Reader/projection retirement
-steps already completed below are skipped. Reuse unchanged c964/a2f/f133, ABI35,
-providers, KOs and TLS/time/seven-case stages; only changed targets/boundaries get
-new checks. After actual failed-family disposition: minimum three-scalar normal
-publication/NEW30/BOTH namespaces, first signal.alternate-repeat, then shortest
-fully coverable M14 time row, or ready seven-wrapper batch if time needs a material
-generation change. Each case still needs separate actual admission/restoration.
-
-Current failed publisher is original1a3bf9/session30017/a2d. Its fixed first report
-is child_entry/keeper/ValueError/source closure membership, followed by
-lease_handoff/root_parent/Unknown/custody channel lost. Actual rejected operand
-and traceback were not saved. Original2GiB/job1, lease, native12/source/global
-UNKNOWNs remain held; no publication, application, ACK, release or current-free
-claim. Only Root retains its original tool/Popen/wait/captures. No duplicate
-issuer, nonce replay, second wait, RPC, blind signal or in-flight source mutation.
-
-Completed custody reader176006/exit0 is independently Q8dee9f1a and Root e31b3807:
-ONLY its new256MiB/job1 is retired. Full14656B tool/capture joins, actor/SUDO/parent
-waits0, 66 ownFD close+EBADF generations and fullRoot closure passed. Protected
-saved record42012B/4d3be5e9/inode2258620 is UID0-0600 inside0700, without an
-I-flag assumption. Summary exposes seven observation errors as COUNT only; three
-roles birth-match and keeperABSENT_UNPROVEN_RETIREMENT is DATA. Saved-only projection
-b627162a/request4d580da7 passed actual GO39def32b/argv53001b19, Rootfresh32grant1de0:
-originaldeca2d/exit0 at09:40:17, RESULT5c36766e/rootcapture1948972e,53 ownFDgenerations
-closed/no owncloseerrors. Fullsource stdout41530B/4202f262/emptyerr is retained;
-API10383tokens exceeds10000 cap, so its truncated originalreply25eb1fd0 stays exact.
-M15Leaf actualQ762d6e0e/qualifiedSAFE1fc53c26 and Root7964bf71 now retire ONLY this
-new256MiB/job1. Remaining HOST payload2GiB/job1 is originala2d, before fresh overhead.
-Seven savederrors are keeperFileNotFound(errno2) and six role-pidfd AttributeErrors;
-their exact failed operation was UNSAVED. NativeCurrent authors only a separately
-supported finite current disposition from savedfacts/source, with NativeBinding
-review and fresh admission. Pinned parent catches TERM once through private handler
-state, and its failure loop can swallow that exception; state/delivery point is
-unsaved. No uncertain/repeated TERM is proposed. Original30017/SUDO/lease/waits/
-captures closure remains Root-only and unproved. No live recollection, raw disclosure
-or original release; any alternative terminal action needs its own exact review.
-
-Published and fetched-verified 52b587e6 contains pairedUTI C e8797e0a + Rust9b8c1127,
-patch5cbc04ae/SourceGOfa6208cb and proof of12 ordered raw field writes,84B only,
-72host slots+4padding and request/ACK/refill/free tail/source origins preserved.
-Proc's changed C/Rust object emission-use packet722ce103 is conditional operation
-GO161d2560/argvbb4d1533. New2GiB compile cannot fit beside old2GiB plus all overhead;
-no changed compilation/link/default/provider-selection/C4/native credit. Baseline
-UTI4612/2d02 and existing F08 active-worker source were published at63555843.
-Three15713->15724 scalar postimages/GO0b7e are published source-only; unsaved
-historical runtime operands remain unavailable and in-flight bytes unchanged.
-
-F08 no-event both-worker sampling and three-task parent-result fixes are reused.
-FunctionalDelta NO_GO325e42d5 proved25 consumed null-size arcs/15 unique refs hit
-strict size equality before create. TimeSource corrected only genuine integer sizes
-and necessary fresh request/pin/path literals, preserving frozen failures and all
-Owner/provider/guard/sampling/custody/oracle bodies. Exact operationGO4a2d9320 and
-argv3e0c72ce now cover the four nonimport syntax checks and one no-event HOST case.
-It is UNISSUED and needs actual faileda2d exclusive retirement, source/account/
-permission/provider-lifetime/CPU7-768MiB-total admission and its17/13GiB disk floors;
-unrelated native success is not a prerequisite. No event/wholeF08 credit is inferred.
-Actual active ADD/BOOT/REMOVE still needs Root's real IHK/device/event/native tuple.
-
-TimeSource's distinct bounded M15-I02-ACCEPT review reuses four technical children;
-the retained original row marks native_validation unassessed without the clause.
-Root's exact original-snapshot source binding remains unsupplied; do not invent a
-new native requirement or accept from four children alone. Reuse applicable planned
-first-native module/lifecycle receipts if the actual original clause requires them.
-
 Original IDs newly closed: NONE. Counts105/156, M14=70.00%, M15=74.59% unchanged.
-Same Root/finite7c6, all holds and rejected-task/issued-nonce exclusions remain.
-First native functional case stays signal.alternate-repeat/c964-a2f-f133 after
-its required successful generation/readback/BOTH namespaces and separate native
-gates; M14 final acceptance before M15, checkpoint/pause after both acceptances.
+Same saved Root/finite7c6 and every actual account/source/lease/native/resource/
+globalUNKNOWN hold and rejected-task/issued-nonce exclusion remain. M14 final
+acceptance precedes M15; checkpoint/pause the larger goal after both acceptances.
+
+Actual failed a2d publisher HOST closure is complete at its RAM/job scope only.
+The reviewed one-parent action7c5445/exit0 targeted only2234918/b64208897 via its
+owned pidfd: attempted/returned/terminal states and own FD-last/wait/stream closure
+are independently Qa33773e3. Rootc1d172bb retired ONLY new256MiB/job1. Root then
+retrieved ORIGINAL30017 once: terminal tool0, SUDO original directwait raw9 and
+stable complete captures0/823B verified closed. Raw timed_out/resource_unknown/
+UNKNOWN and release=false remain verbatim. Failed-HOST Q7a08d57f finds no HOST-RAM/
+job blockers; Root5bf6785c retires ONLY old2GiB/job1. Logical lease/privateIPC,
+held-Root-FD provenance, historical keeperwait, source/native12/globalUNKNOWNs are
+separate and preserved. No A/B/C, parent signal, original wait or capture replay.
+
+Latest completed engineering operation: UTI changed C/Rust emission-use ec53b8/
+session31340 ->3650b3/exit0, 11:04:40-11:05:08Z. One changed C object182400B/1b672039
+and Rust object21613616B/a9cf4c1e emitted; passive9dab100f proves one C code relocation
+to one strong Rust helper definition. All23 directwait/stream/inputFD joins and
+three exact non-OOM container removals passed; no separately collected post-rm
+inspect is claimed. ActualQ6b5b1ef2/Rootb19d44bb retire ONLY new2GiB/job1. Census
+93567f6d records0 payload bytes/0 jobs BEFORE fresh controller/worker overhead and
+future admission. No full-link/default selection/C4/ACK/lifetime/native acceptance.
+Proc's dac3e3f7 link-use handoff reuses this pair and11 normal input roles; no new
+selector/inclusion or recompile is needed. Exact candidate-link operation is next.
+
+Primary M14-I03-E2/E3/M15-I04 shared prerequisite: corrected three-scalar normal
+publication, matching NEW30 physical qualification, BOTH namespaces, then original
+signal.alternate-repeat on coherent c964/a2f/f133 under separate native admission.
+Sparse SourceGO3f07d59a/500B ninefieldbe4c05ef/producer_argv2c8a450d are complete;
+NativeCurrent final helperca300f19/HANDOFF978e72c5 binds real UTI Q/Root/census and
+actual field names. NativeBinding reviews ONLY final helper literals/field/argv
+joins. No corrected producer/admission/nonce has started at this checkpoint.
+Fresh unchanged account/newest-ACCEPTED/paired25s/owner/source/permission/logical-
+lease/allowner/exclusive2GiB gates remain real; HOST0/0 is not their clearance.
+Package30/420499B, graphf07715724B/catalogue2493425060B and24 reader bodies are
+reused. Preserve all failed originals/nonreplayable nonces; no installed hotpatch.
+
+Independent ready HOST work: F05 three zero-divisor guards preserve positive
+formulas, rollback, provider/FD and compound/alignment retention semantics;
+SourceGO8587ae5b. Artifact-only operationGOdb332ff6/argv92418a1a is UNISSUED: three
+phases archive emission, strict diagnostics/DSO production link, passive ownership.
+CPU7/container1GiB caps and2GiB whole-family planning stay distinct. Focused operand/
+physical backend/restoration and wholeF05 remain open. F08 no-event packet's null-
+scalar refusal was PREINPUT: no grant/nonce/seed/process/HOST charge or retirement.
+TimeSource corrected14 consumed numbers to actual baseline values; Fdelta exact
+GO5458522c/argvb8a6b0a4 now covers four nonimport syntax checks and ONE CPU7/768MiB
+both-worker no-event case, UNISSUED. Genuine source/account/permission/provider-
+lifetime/exclusive grant and17/13GiB floors still bind. Actual workers waiting/
+normal joins do not prove event/kmsg/hung-up/wholeF08; no unrelated native success
+gate. Root runs the next genuinely eligible fitting operation after publication
+priority, then actualQ/scoped retirement before another exclusive publisher grant.
+
+M15-I02-ACCEPT adjudication8bf2bb4d binds the exact retained criterion snapshot
+3e2d9c4e/blob70b0679e, not a restored worktree. Four technical children are verified;
+applicable matching module/lifecycle/resource-restoration proof remains required.
+Root obtains it from the planned first native run; no standalone module probe.
+
+Adopted dated [reuse/closure strategy](docs/development/M14-M15-CLOSURE-STRATEGY-20261113.md)
+49393dace6/50426ba8 is a reference; CAMPAIGN is the sole active plan. Reuse qualified
+c964/a2f/f133, ABI35/providers/KOs, TLS/time/seven-case stages, parser13/TLS9/TIME12,
+F05 create/destroy and all unchanged green evidence. Only actual changed inputs
+justify necessary checks. After firstrepeat choose shortest complete time row or
+ready wrapper batch if time needs a material generation change. TLS alone cannot
+close06-01. All required wrappers, time mappings/publication/TSC, and real F08
+processed-event/lifetime obligations retain unchanged original criteria/weights.
 
 HISTORICAL STARTUP STATUS: CURRENT ACTUAL SPARSE NORMAL OPERATION IS INFLIGHT: finalwholeGO3da30a13/helperf180/
 outerbaf85400 passed Rootfreshsource/argv/scope/RSS/headroom gate and was invokedONCE
