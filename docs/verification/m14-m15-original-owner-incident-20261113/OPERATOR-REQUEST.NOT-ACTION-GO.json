@@ -251,5 +251,144 @@
     "path": "docs/development/M14-M15-CLOSURE-STRATEGY-20261113.md",
     "bytes": 26420,
     "sha256": "1759c468ffefd5a0db83c656e6d696adeef64142014f068fd487ce7bbfb9e877"
+  },
+  "normal_account_admission_boundary": {
+    "recorded_at": "2026-11-13T20:23:25.631728+00:00",
+    "instruction": "source-9bcc8488651c7939d5ea8b4780876498087999e90b8952d2ce3ce6479a945b49",
+    "result": "NORMAL_SAME_OWNER_PRODUCER_EXISTS_BUT_CURRENT_CONTEXT_CANNOT_PUBLISH_ACCEPTED",
+    "producer_exists": true,
+    "observed_normal_context": {
+      "schema_version": 1,
+      "observed_at": "2026-11-13T20:20:53.018164+00:00",
+      "scope": "Read-only normal controller metadata; no refresh/client/state mutation performed.",
+      "phase": "waiting_for_input",
+      "goal_status": "blocked",
+      "thread_id": "01a18bc3-e072-7810-9426-75101b0856c0",
+      "same_saved_Root": true,
+      "recorded_controller": {
+        "pid": 1824291,
+        "birth": "56295805"
+      },
+      "recorded_server": {
+        "pid": 1824293,
+        "birth": "56295812"
+      },
+      "newest": {
+        "slot": "last_account_observation",
+        "status": "PENDING",
+        "received_mono_ns": 471321343631912,
+        "sequence": 272498,
+        "source": "read",
+        "method": "account/rateLimits/read",
+        "response_error_present": false
+      },
+      "slots": [
+        {
+          "slot": "last_account_observation",
+          "status": "PENDING",
+          "received_mono_ns": 471321343631912,
+          "sequence": 272498,
+          "source": "read",
+          "method": "account/rateLimits/read",
+          "response_error_present": false
+        },
+        {
+          "slot": "last_account_notification",
+          "status": "PENDING",
+          "received_mono_ns": 471182692845313,
+          "sequence": 272340,
+          "source": "notification",
+          "method": "account/rateLimits/updated",
+          "response_error_present": false
+        },
+        {
+          "slot": "successful_account_read",
+          "status": "ACCEPTED",
+          "received_mono_ns": 448930816957433,
+          "sequence": 260750,
+          "source": "read",
+          "method": "account/rateLimits/read",
+          "response_error_present": false
+        }
+      ],
+      "stop_reason_present": false,
+      "credit_error_present": false,
+      "weekly_usage_error_present": false,
+      "saved_control_record_present": true,
+      "saved_control_source_equals_current_file": true,
+      "source_identities": [
+        {
+          "path": "scripts/run_os_goal.py",
+          "bytes": 157719,
+          "sha256": "7f8b14f23c0d87ed2614d90a7cf4dcd5edf106419f7e0e48715aebd418da191d"
+        },
+        {
+          "path": "scripts/native_current_owner.py",
+          "bytes": 16267,
+          "sha256": "7207a8b68feaf4dc00bcb10cf25f32ef13073e1eeae060e86038c6f855080622"
+        }
+      ],
+      "not_live_process_or_socket_lifetime_proof": true,
+      "account_values_credentials_capabilities_or_socket_nonce_exported": false
+    },
+    "source_backed_boundaries": [
+      {
+        "source": "scripts/run_os_goal.py",
+        "lines": "1476-1504,2166-2245",
+        "finding": "Campaign.refresh_credit_budget uses its existing self.rpc account/rateLimits/read and cumulative guard. Existing run loop refreshes periodically while monitored blocked waiting continues."
+      },
+      {
+        "source": "scripts/run_os_goal.py",
+        "lines": "1335-1434",
+        "finding": "record_rate_limits persists PENDING and conservative accounting first. It publishes ACCEPTED only if phase is running and saved goal status is active, plus the unchanged owner/durable/freshness/credit validation. Recorded phase waiting_for_input and goal blocked do not satisfy this boundary."
+      },
+      {
+        "source": "scripts/native_current_owner.py",
+        "lines": "133-182,259-305",
+        "finding": "Existing CurrentOwnerServer._snapshot uses the SAME owning Campaign/RPC for account/read and refresh_credit_budget; it is an authenticated UID0 operation and also checks an eligible controller phase. It does not activate the goal, grant native RAM or bypass ACCEPTED publication. No client was invoked against the known incompatible recorded context."
+      },
+      {
+        "source": "scripts/run_os_goal.py",
+        "lines": "997-1026,1220-1227,1989-2013",
+        "finding": "Blocked repair waiting never sets a goal active. remember_goal restores running only after a genuine active-goal observation with no stops/checkpoint. Normal begin has a thread/goal/set active path, but rerunning begin/start would create or replace runtime context and is not authorized here."
+      }
+    ],
+    "missing_eligible_capability": "A supported, authorized SAME-original-owner goal/context resolution delivering a genuine active-goal state to the existing controller, followed by its unchanged producer publishing a fresh ACCEPTED durable owner observation. A new account read or consumer reread cannot satisfy the current phase/goal boundary.",
+    "supplying_authority": {
+      "saved_Root": "01a18bc3-e072-7810-9426-75101b0856c0",
+      "recorded_controller": {
+        "pid": 1824291,
+        "birth": "56295805"
+      },
+      "recorded_server": {
+        "pid": 1824293,
+        "birth": "56295812"
+      },
+      "supplier": "Original controller and its normal goal/session service or supported user/client control; not the fe2c38a7 consumer, a new app server, replacement owner or foreground state edit.",
+      "identity_limit": "Recorded identities only; no new live process/socket probe or lifetime admission is claimed."
+    },
+    "smallest_operator_request": "Supply the exact supported no-relaunch same-owner goal/context resolution interface and controlling authorization for independent source review, preserving original18067/40491 and every runtime/source/lease/native/UNKNOWN hold. If that normal resolution is not available or authorized, return that exact capability/authority gap. This request does not activate a goal or issue an account client/action.",
+    "required_evidence_before_M15Leaf_dispatch": [
+      "genuine normal goal/context resolution under its controlling authority, not edited state",
+      "original producer fresh ACCEPTED newest observation with exact current owner and persisted same credit ledger through unchanged validation",
+      "actual source/dispatch permission and fresh compatible aggregate resources including all retained families and overhead"
+    ],
+    "not_diagnosed": "No authentication failure, unavailable account network service or missing rate-limit producer is inferred. Stop/credit/weekly-error flags were absent in the recorded metadata; account values were not exported.",
+    "actions_not_taken": [
+      "no account consumer reread",
+      "no new RPC/app server/controller or root-side account client",
+      "no goal/phase/freshness/ACCEPTED predicate or state change",
+      "no ledger/credit-run/ceiling/allowance reset",
+      "no M15Leaf turn or test execution",
+      "no original session poll/signal/wait/retirement"
+    ],
+    "unchanged_ready_inputs": {
+      "PR11_head": "9876b029a60423cff1d0001e0222eeabff8f0637",
+      "prepared_source": "535db88e",
+      "source_patch": "ddfd5df1",
+      "IHK_gitlink": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+      "preparation_checks_not_repeated": true
+    },
+    "status": "BLOCKED_NOT_ACTION_GO_NOT_ADMISSION_NOT_RETIREMENT"
   }
 }

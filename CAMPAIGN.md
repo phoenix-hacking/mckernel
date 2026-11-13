@@ -1,9 +1,30 @@
 # McKernel: M14 → M15 → complete supported system
 
-Updated: 2026-11-13T20:03:34Z. This is the sole active human-readable campaign log.
+Updated: 2026-11-13T20:23:25Z. This is the sole active human-readable campaign log.
 Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
 
 ## Current invocation: saved Root retained; foreground goal BLOCKED
+
+20:20Z normal-account eligibility finding: the SAME original controller IS producing
+new observations; newest recorded read272498 remains PENDING with no response-error
+flag. This is not a missing read producer or diagnosed authentication failure.
+Recorded controller1824291/b56295805, server1824293/b56295812, phase waiting_for_input,
+goal blocked. Producer record_rate_limits intentionally publishes ACCEPTED only in
+running/active context plus its unchanged owner/durable/freshness/credit checks.
+Existing authenticated CurrentOwnerServer._snapshot uses that same RPC and also
+checks phase; another read cannot authorize this context. No client, new connection,
+state/goal mutation, consumer reread, source-preparation rerun, worker or test ran.
+
+The [existing operator request](docs/verification/m14-m15-original-owner-incident-20261113/OPERATOR-REQUEST.NOT-ACTION-GO.json)
+now includes this separate account-admission boundary. Required supplier is the
+original controller/normal goal-session service or supported user/client control:
+provide the exact supported, authorized no-relaunch same-owner goal/context
+resolution, preserving original runtime holds, then a genuine fresh ACCEPTED
+receipt. This request grants no activation or hold release. Foreground goal tools
+cannot set active; starting another app server, replaying begin/start or editing
+phase/goal/receipt fields is not a substitute. M15Leaf review remains UNISSUED until
+genuine account/source/dispatch eligibility and fresh aggregate resources exist.
+The four-file535db88e/ddfd5df1 candidate and its green preparation checks are reused.
 
 Root prepared the one private checker/fixture correction requested at19:45Z:
 [source patch](docs/verification/m14-stable-foundation-20261113/checker-fixture-correction-1/SOURCE-DELTA.patch),
