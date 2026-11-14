@@ -4,14 +4,14 @@ on:
   pull_request:
     paths:
       - 'scripts/*os_goal*'
-      - 'scripts/tests/test_os_goal*'
+      - 'scripts/tests/*os_goal*'
       - '.github/workflows/mckernel-mailbox-notify.yml'
       - '.github/workflows/os-goal-mailbox-checks.yml'
   push:
     branches: [codex/local-native-staging-repair]
     paths:
       - 'scripts/*os_goal*'
-      - 'scripts/tests/test_os_goal*'
+      - 'scripts/tests/*os_goal*'
       - '.github/workflows/mckernel-mailbox-notify.yml'
       - '.github/workflows/os-goal-mailbox-checks.yml'
 
