@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T17:03:10+00:00
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T17:42:20+00:00
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -33,8 +33,12 @@ Q5e830846/Root9edfed67 scoped RETIRED. Passive genuine SDK loader export
 402653184B/job1 is Q23d72216/Rootf3716461 scoped RETIRED; that new384MiB is
 DISTINCT from old retained384MiB/jobs2. Stock RPM signature/header1342177280B/
 job1 is Qa30a69f6/Root9919f1a8 scoped RETIRED. Current known HOST reservations
-are ONLY old402653184B/jobs2 plus ALL overhead. Every next payload requires fresh
-actual full admission and exact source/permission/owner/account/resource gates.
+are ONLY old402653184B/jobs2 plus ALL overhead. Runtime-refused corrected caller
+new1207959552B/job1 is Qdb1c06af/Root scoped RETIRED; case failure remains. Vendor file-table1342177280B/job1
+is Q41ca1111/Root650484d4 scoped RETIRED. First success-caller1207959552B/job1
+is Q650c09b7/Rootb2a248c3 scoped RETIRED with its compile failure preserved.
+Every next HOST payload still needs its own fresh full source/permission/owner/
+account/resource admission; no other hold is cleared.
 Actual6171 production family Q89a2730e/Root94a09169 retire ONLY its new1207959552B/
 job1. Every next family still requires its own fresh operation admission.
 Original tool14790 and C3tool32916 retain their original owning contexts. Actual
@@ -245,7 +249,9 @@ exact original ---/+++ one-file format then applied successfully, no build/test
 rerun. Coherent code/evidence checkpoint403b8c0be is pushed/fetched/blobverified; later bounded interpreter/
 authenticated-primary checkpoint91021d9bb is also pushed/fetched with all7 changed
 blobs byteverified;
-unrelated dirty source is preserved. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
+qualified monitor source/build, signed RPM/header and genuine loader-data checkpoint
+a0edaa05c is pushed/fetched with all8 intended blobs verified. Unrelated dirty
+source is preserved. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
 20261114/. No wholeF02/backend/main-success/phase1/native claim.
 Literal successor adjudication9101f3e3 is NOT_GO: next unmatched HOST branch is
 load_interp PT_INTERP-on-interpreter rejection/realloc/free ownership. CredSource
@@ -293,6 +299,60 @@ aca, with algorithms/profile/account/custody preserved. Distinct operationGO and
 fresh Root admission must precede ONLY new C compile/testlink/one case. Required
 actual nonNULL CURRENT allocation-generation, sealed PT_LOAD fields, borrowed
 FILE lifetime and exactly-once documented caller cleanup are still unproved.
+NativeBinding changed operationGO48c7fafd passed; Root actual fresh grant014b8564
+issued ONE case family. Original tool31395/fullRoot72ba9667 returned0 for its
+lifecycle, but attach1/artifactfalse: actual C compile failed under -Werror at
+caller0d2 line205 because unsigned load_count comparison to the SIZE_MAX-based
+section-allocation bound is provably always false. Raw COMPILE.stderr386B,
+EXECUTION and ACTUAL-FAILURE.AND-REUSE-HANDOFF are preserved at current-qualified-
+operation-binding-1/ROOT-ACTUAL-CALLER-EXECUTION-1. NO caller link or case ran.
+CredSource froze only one bounded checked-size arithmetic repaire29ca983:
+new Caller ed68d174 uses checked size_t mul/add, stagee205 changes only two pins.
+Proc changed-sourceGO76f23321 proves exact inverses outside this arithmetic/pins;
+-Werror/count/INTMAX guards and776+4*56=1000 remain. DispatchSource prepares only
+necessary fresh literal operation/data bindings, preserving the failed output.
+Dispatch froze corrected operation9b8b5c73/prefix38d7/bodyb7f5 with genuine76
+GO, failedQ650/Rootb2 and fresh namespace. SAME NativeBinding reviews only new
+7+1 literal joins. Root prepared only concrete issuer18bf30ba, still UNEXECUTED;
+actual changed operationGO4a0f3ca4 then passed. Root genuine fresh grant4329640b
+ran the corrected small caller ONCE, originaltool7886/fullRootb11f8b95 terminal0
+for lifecycle. Arithmetic fix compiled under original -Werror and testlink
+passed; stderr both0, newcallerELF428104B retained. The ONE actual case returned96,
+CASE.stderr52B: REFUSED unexpected/interior/double descriptor free, stdout0.
+This is a NEW concrete runtime boundary, not the old compile failure; no success
+or descriptor/FILE correctness is inferred. EXECUTIONa9732f4d and exact source/
+captures/fullRoot remain at checked-size-arithmetic-correction-1/current-qualified-
+operation-binding-1/ROOT-ACTUAL-CALLER-EXECUTION-1. CredSource diagnoses only
+actual production-versus-oracle allocation/free roles from selected source and
+saved facts. Its bounded diagnosis9507728a/9c9ebf2b finds no auxiliary heap role
+in selected load_interp/read_one/typed provider source; the existing52B guard
+conflates pointer-generation and phase bookkeeping, so actual cause remains
+UNPROVED. No speculative free allowance/source fix is made. The smallest next
+input is ONLY passive __wrap_main and __wrap_free disassembly from the already-
+linked failed-case caller, no compile/link or case repeat. Root source-only seal
+2b7f92f7 records actual428104B testELF9a8e8abc from one opened stable-FD hash/
+fstat/close, not ELF parsing or behavior. DispatchSource prepares only that
+bounded operation/data/lifecycle binding from CredSource requestf21ec90e/shell5790
+and qualified small passive route; independent review/actual Root admission remain
+UNISSUED. A compiled-bookkeeping optimization is a candidate, not proved cause.
+M15Leaf Qdb1c06af now passes only this failed family:9 original waits/18 closed-
+fsynced captures/450 prefix generations/input/terminal96 nonOOM Pid0/removal/
+absence/lock/directory/fullRoot. Root scoped receipt retires ONLY new1.125GiB/
+job1, with runtime refusal/sourcecause uncertainty and absent postcase checks
+preserved. Root PREINPUT KeyError assumed earlier Q payload_pass; exact actual
+payload_success/outcome keys were then joined, unchanged Q and no action replay.
+No descriptor/FILE correctness or original acceptance follows. Keep passing
+arithmetic/Ccompile/link and originald511/2282/loader/earliercases; no unchanged
+runtime repeat, Rust/production/ABI/header/provider/green rebuild or warning relaxation. M15Leaf independently
+qualifies ONLY actual failed-family waits/FD/captures/container/fullRoot. Actual
+Q650c09b7 now passes9 waits/18captures/443 prefix generations/terminalnonOOM
+Pid0/nonforce removal/absence/lock+directory/fullRoot; Root scoped receipt retires
+ONLY new1.125GiB/job1, not the failed C or any behavior/wholeF02 acceptance. Productiond511/ELF2282/loader0853 and prior cases stay
+reused; no Rust/relink/ABI/provider/header/oldgreen rerun or warning suppression.
+Root stage preparation also preserved one wrong prefix filename PREINPUT refusal;
+HANDOFF gives exact BOUND.py. Lossless fullRoot capture matched the actual shell-
+wrapped original command after an initial unwrapped equality found0; original
+raw record is saved unchanged, no operation was reissued.
 No Rust/production relink, earlier-case/ABI/provider/SDK rerun or count credit.
 Old402653184B/jobs2 and ALL overhead/other holds stay charged.
 
@@ -443,10 +503,19 @@ Qa30a69f6 plus Root9919f1a8 retire ONLY new1.25GiB/job1 after12 original waits/
 No listing/extraction/ELF/runtime/compiler/SMP/device/original credit is inferred.
 TimeSource finished one narrow PRIVATE file-table checkpoint proposalef3bc1ca/
 request5731471d, exactly ONE stock rpm -qp --dump on this acquired authenticated
-RPM with existing2MiB cap. FunctionalDelta reviews only new operation/data/profile/
-capture bindings, reusing every passed signature/header/tool/provider/custody join.
-Actual file/member facts are needed before safely naming compiler/hashed-driver
-extraction inputs; no guessed filenames/hash/limits or new parser/framework.
+RPM with existing2MiB cap. FunctionalDelta operationGOf1f09746 passed new
+operation/data/profile/capture bindings, reusing every passed signature/header/
+tool/provider/custody join. Root genuine fresh33-field grant47a38e4b then ran
+ONE stock --dump once: actual result09c93836/fullRoot8d90d25b returned PASS,
+9HOST+1stock clients, raw bounded table checkpoint only. M15Leaf actualQ41ca1111
+passes one stock0/5342B table68d9fce4 plus11 original waits/22 closed-fsynced
+streams/heldRPMFD/receipts/exact4mount/container/absence/fullRoot0. Root650484d4
+retires ONLY new1.25GiB/job1; raw table not decoded/member-inferred by Q. TimeSource
+now owns only next private source-derived compiler/driver member facts and minimal
+UNISSUED extraction proposal from the genuine saved stock rows. No actual
+rpm/extraction/readelf/compiler/GET/tool action by author, no new inventory,
+guessed filename/hash/limits/provider or parser/framework. This is new source
+preparation; the old table payload grant is not widened.
 No GET/install/keydb/network/extraction/compiler effect is included. Cached46d/
 e015 supplier and both old reservations remain untouched; future grant UNISSUED.
 
