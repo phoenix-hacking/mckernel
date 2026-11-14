@@ -20,16 +20,6 @@ jobs:
             executer/include
             ci/c4-c-object
           persist-credentials: false
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          repository: ihkmckernel/ihk
-          ref: 8d288b8bd81b50cc3a3f814d949b89bf416a6ec7
-          path: ihk
-          sparse-checkout: |
-            cokernel/smp/x86_64
-            ikc/include
-            linux/include
-          persist-credentials: false
       - name: Reuse the passed whole Rust object without recompiling
         uses: actions/download-artifact@v4
         with:
