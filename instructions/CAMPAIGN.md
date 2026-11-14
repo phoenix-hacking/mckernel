@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T08:40:30.782985+00:00
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T09:29Z
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -19,7 +19,14 @@ docs/verification/m14-i01-original-acceptance-20261114/ and
 docs/verification/m15-f02-production-continuation-20261114/.
 
 CURRENT owned HOST reservation is268435456B/job1 for the FAILED, never-started
-cached supplier scope. Do not use older HOST0 snapshots as current clearance.
+cached supplier scope. Independent failed-entryQ96e6905c and Root377db7e0 retire
+ONLY the separate134217728B/job1 cleanup entry family. Do not use older HOST0
+snapshots as current clearance. The cleanup parent2708491/b73405725 joined exit1,
+closed/fsynced captures and inputFD; fullRoot3ccfec25 is preserved privately.
+It refused newest-account acceptance BEFORE execution-1/action creation; no
+container removal or signal occurred. Refused candidate status/sequence/reason
+were UNSAVED, and a later ACCEPTED snapshot does not reconstruct them. That Q/Root
+receipt proves no old supplier cancellation or CID closure; old256 remains.
 Original18067/40491 HOST2.25GiB/jobs2 writer/privatelease scope is genuinely Q39/
 Root49 retired, original outcomesUNKNOWN. Failed production compound Q917/Root4dae,
 passiveB Q8329/Rootf54a and first F05 Q456/Root8a25 are separately scoped retired.
@@ -47,8 +54,10 @@ malformed/duplicate/missing/extra/changed variables and preserves every other
 Config/HostConfig/mount guard. This corrected batch has NOT launched: Root's reuse
 wrapper hit shellmode then current-contract KeyError PREINPUT, before grant/cap/
 Popen/job. Those failed wrappers are retained; NativeBinding fixes the exact contract
-and same-Popen timeout/report/FD custody boundary after ProcNO_GO902fd2cd. No
-unchanged retry or extra source/oracle/ABI review. Next execution is only caller
+and same-Popen timeout/report/FD custody boundary after ProcNO_GO902fd2cd. Final
+bounded correctioncc710407/deltab87cb1f5 has independent Proc SOURCE GO5d60975c,
+reusing the passing Env/contract/argv joins. No execution, unchanged retry or
+extra source/oracle/ABI review. Next execution is only caller
 compile/link then passive readelf, after wrapperGO and fresh actual805MiB grant
 including the retained supplier256MiB/job1; protected preflight requires Docker[].
 
@@ -63,12 +72,23 @@ has no supported terminal-consume route. No original wait/FD-close success is
 invented. TimeSource froze separate THREE-role cancellation/reconciliation packet
 under actual-failure-disposition-1/three-role-cancellation-1; Proc independently
 reviews exact createdCID nonforce cleanup and guarded ownpidfd parent→outer→
-Rootwrapper scope. NEVER signal tool14790 runtime, its2685744 owner, live controls,
+Rootwrapper scope. Exact changed-predicate operationGO991b65e4 is complete; one
+actual parent-entry attempt failed newest-account validation before effects, as
+recorded above. NEVER signal tool14790 runtime, its2685744 owner, live controls,
 healthy peers/native/shared services. Parent-only packet75a8 is unexecuted and
-inapplicable. NEW cleanup128MiB/CPU0/job1 is UNISSUED until exactGO/fresh admission.
+inapplicable. A new successor remains UNISSUED pending the account-consumer
+correction, independent changed-boundary review and fresh actual128MiB admission.
 Actual originaltool terminal/currentFD/channel/container/source proof plus independent
 canceled-physical-scopeQ/Root receipt are required for any256MiB retirement;
 nested Popen outcomes may stayUNSAVED/UNKNOWN. No process-death-only release.
+FunctionalDelta is preparing a helper-only bounded PENDING-completion correction
+against d072, preserving canonical validator6c926984/newest ordering/all holds.
+The real producer publishes PENDING before accounting then ACCEPTED; this source
+fact identifies a possible race, not the proven cause of the UNSAVED refusals.
+Only newest PENDING may wait at most2s under fresh owner/state/ledger bookends;
+every actual rejection/hold/stop remains refusal, never older-ACCEPTED fallback.
+Future refusals must preserve their actual candidate status/sequence/reason. No
+unchanged cleanup retry, account request, producer/state edit or live hotpatch.
 Future Ulimits fix must compare unique exact Name/Soft/Hard rows keyed byName,
 retain all other guards and make a known CREATED-only failure finite via reviewed
 ownCID cleanup; UNKNOWN running/FD outcomes still retain original custody.
