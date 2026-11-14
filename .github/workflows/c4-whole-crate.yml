@@ -1,0 +1,29 @@
+name: C4 complete production Rust crate
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/c4-whole-crate-20261114]
+permissions:
+  contents: read
+jobs:
+  whole-crate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the exact already-qualified compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 2 https://static.rust-lang.org/dist/2026-02-19/rustc-nightly-x86_64-unknown-linux-gnu.tar.xz -o /tmp/rustc.tar.xz
+          echo '4f25b98121bb842e1a2cd25590155f0682329d6442a93c9e4816670b8845d15f  /tmp/rustc.tar.xz' | sha256sum --check
+          mkdir -p /tmp/c4-rustc
+          tar -xf /tmp/rustc.tar.xz -C /tmp/c4-rustc --strip-components=1
+      - name: Compile the changed complete production crate once
+        run: python3 ci/c4-whole-crate/compile_whole_crate.py /tmp/c4-rustc/rustc/bin/rustc
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: c4-whole-production-rust-object
+          path: c4-whole-crate-output/
+          retention-days: 7

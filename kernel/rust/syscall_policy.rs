@@ -317,7 +317,6 @@ unsafe extern "C" {
     fn do_pageout(filename: *const c_void, workarea: *mut c_void, size: SizeT, flag: CInt) -> CInt;
     fn do_pagein(flag: CInt) -> CInt;
     fn syscall_swapout_log_bridge(fname: *const c_void, buf: *mut c_void, size: SizeT, flag: CInt);
-    fn syscall_util_indicate_clone_disabled_bridge();
     fn syscall_forward_rt_sigprocmask_bridge(sigmask: CULong) -> CLong;
     fn syscall_do_kill_thread_bridge(
         thread: *mut c_void,
@@ -13205,6 +13204,20 @@ pub unsafe extern "C" fn sys_util_migrate_inter_kernel(
         Some(syscall_copy_from_user_bridge),
         Some(syscall_util_thread_bridge),
     )
+}
+
+/// Preserve the original clone-disabled diagnostic and its formatter ABI.
+///
+/// # Safety
+/// The existing kernel formatter and its current-thread logging context are live.
+#[no_mangle]
+pub unsafe extern "C" fn syscall_util_indicate_clone_disabled_bridge() {
+    unsafe {
+        kprintf(
+            b"%s: error: --enable-uti mcexec option not specified\n\0".as_ptr().cast::<i8>(),
+            b"sys_util_indicate_clone\0".as_ptr().cast::<i8>(),
+        );
+    }
 }
 
 #[no_mangle]
@@ -30673,20 +30686,21 @@ pub unsafe extern "C" fn syscall_xpmem_openat_bridge(
 
 unsafe extern "C" {
     #[link_name = "util_thread"]
-    fn f03_existing_util_thread_v2(arg: *mut UtiAttr) -> CInt;
+    fn f03_util_thread_entry(arg: *mut UtiAttr) -> CInt;
 }
 
-/// Hand the original UTI attribute to the existing complete C endpoint.
+/// Hand the original UTI attribute to the uniquely selected complete endpoint.
 ///
 /// # Safety
 /// The raw argument and current-thread/offload state satisfy the ORIGINAL
 /// util_thread contract. This adapter does not dereference/copy/free the argument
-/// or repair that endpoint's partial request. C util_thread is explicit debt;
-/// native/ownership qualification of its backend is not conferred by this entry.
+/// or change ownership of the argument. The paired supported profile selects the
+/// complete Rust util_thread body; other profiles retain the genuine C fallback.
+/// Source selection does not confer native/backend qualification.
 #[no_mangle]
 pub unsafe extern "C" fn syscall_util_thread_bridge(arg: *mut c_void) -> CLong {
     // SAFETY: Exact C-int return is sign-extended to the original C-long wrapper.
-    unsafe { f03_existing_util_thread_v2(arg.cast()) as CLong }
+    unsafe { f03_util_thread_entry(arg.cast()) as CLong }
 }
 
 /// Consume only this current thread's already-published remote-spawn mode.
@@ -30709,7 +30723,7 @@ pub unsafe extern "C" fn utilthr_migrate() {
         let argument = unsafe { addr_of!((*thread).mod_clone_arg).read() };
         // SAFETY: Existing endpoint sees the same argument after the mode store.
         // Its result is ignored by the original void entry, including errors.
-        let _ = unsafe { f03_existing_util_thread_v2(argument.cast()) };
+        let _ = unsafe { f03_util_thread_entry(argument.cast()) };
     }
 }
 
@@ -34271,6 +34285,10 @@ pub unsafe extern "C" fn f03_execveat_finish_switch_v1(
 }
 
 // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(all(f03_util_thread_candidate, f03_do_exit_supported_candidate,
+          target_arch = "x86_64", not(dcfa_kmod)))]
+pub(crate) use f03_do_exit_selected_v2::f03_do_exit_supported_v2;
+
 // Pair only with the exact selected C guard; DCFA remains its original C body.
 #[cfg(all(f03_do_exit_supported_candidate,target_arch="x86_64",not(dcfa_kmod)))]
 mod f03_do_exit_selected_v2 {
@@ -35222,6 +35240,9 @@ mod f03_do_munmap_entry_v1 {
 }
 
 // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+#[cfg(f03_util_thread_candidate)]
+pub(crate) use f03_util_profile_v1::util_show_syscall_profile;
+
 mod f03_util_profile_v1 {
     use core::ptr;
     use crate::abi::{CInt as c_int, CLong as c_long, CULong as c_ulong};
