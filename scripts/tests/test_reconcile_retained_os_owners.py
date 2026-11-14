@@ -47,10 +47,16 @@ class CancellationTests(unittest.TestCase):
 
     def run_cancel(self, scope, review, poller, *, table=None, actor_error=None, now_ns=2):
         journal = MemoryJournal()
+        rows = copy.deepcopy(table or {101: {"parent": 1}})
+        for pid, row in rows.items():
+            row.setdefault("start", "10" if pid == 101 else "11")
         with patch.object(cleanup, "read", return_value=b"boot\n"), \
+             patch.object(cleanup, "ACTORS", ((101, "10"),)), \
+             patch.object(cleanup.os, "getpid", return_value=9000), \
+             patch.object(cleanup.os, "getppid", return_value=9001), \
              patch.object(cleanup.time, "monotonic_ns", return_value=now_ns), \
              patch.object(cleanup, "same_actor", side_effect=actor_error), \
-             patch.object(cleanup, "process_table", return_value=table or {101: {"parent": 1}}), \
+             patch.object(cleanup, "process_table", return_value=rows), \
              patch.object(cleanup.pidfd_compat, "open_pidfd", return_value=51), \
              patch.object(cleanup.pidfd_compat, "send_signal") as send, \
              patch.object(cleanup.select, "poll", return_value=poller), \
@@ -89,9 +95,12 @@ class CancellationTests(unittest.TestCase):
         # not fabricate a waitpid or release. Give the bounded loop one pass.
         journal = MemoryJournal()
         with patch.object(cleanup, "read", return_value=b"boot\n"), \
+             patch.object(cleanup, "ACTORS", ((101, "10"),)), \
+             patch.object(cleanup.os, "getpid", return_value=9000), \
+             patch.object(cleanup.os, "getppid", return_value=9001), \
              patch.object(cleanup.time, "monotonic_ns", return_value=2), \
              patch.object(cleanup, "same_actor"), \
-             patch.object(cleanup, "process_table", return_value={101: {"parent": 1}}), \
+             patch.object(cleanup, "process_table", return_value={101: {"parent": 1, "start": "10"}}), \
              patch.object(cleanup.pidfd_compat, "open_pidfd", return_value=51), \
              patch.object(cleanup.pidfd_compat, "send_signal") as send, \
              patch.object(cleanup.select, "poll", return_value=poller), \
@@ -113,6 +122,24 @@ class CancellationTests(unittest.TestCase):
             journal, send = self.run_cancel(scope, review, poller)
             send.assert_not_called()
             self.assertEqual(journal.rows[-1]["state"], "CANCELLATION_UNKNOWN_RETAINED")
+
+    def test_extra_unrelated_actor_never_receives_a_signal(self):
+        scope, review, poller = self.fixture(False)
+        scope["actors"].append({"pid": 999, "start": "99"})
+        review["plan_sha256"] = cleanup.sha(cleanup.canonical(scope))
+        journal, send = self.run_cancel(scope, review, poller,
+            table={101: {"parent": 1, "start": "10"}, 999: {"parent": 1, "start": "99"}})
+        send.assert_not_called()
+        self.assertEqual(journal.rows[-1]["state"], "CANCELLATION_UNKNOWN_RETAINED")
+
+    def test_cleanup_runtime_cannot_be_a_cancellation_target(self):
+        scope, review, poller = self.fixture(False)
+        scope["actors"].append({"pid": 9000, "start": "11"})
+        review["plan_sha256"] = cleanup.sha(cleanup.canonical(scope))
+        journal, send = self.run_cancel(scope, review, poller,
+            table={101: {"parent": 1, "start": "10"}, 9000: {"parent": 101, "start": "11"}})
+        send.assert_not_called()
+        self.assertEqual(journal.rows[-1]["state"], "CANCELLATION_UNKNOWN_RETAINED")
 
     def test_old_identity_plan_still_requires_fresh_exact_actor_revalidation(self):
         scope, review, poller = self.fixture(False)

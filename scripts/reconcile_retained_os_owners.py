@@ -27,6 +27,7 @@ ORIGIN = "20261112T094452Z-12a4bea0"
 CREDIT_RUN = "7c6ef3604bfb4008a917bba8cfb6cfaa"
 # Source-owned original identities, not a grant to signal a reused numeric PID.
 ACTORS = ((2342216, "66270999"), (2342218, "66271010"),
+          (2342221, "66271016"),
           (2318455, "65818096"), (2318467, "65818149"),
           (2318474, "65818157"), (2318476, "65818170"), (2318477, "65818186"))
 MAX_READ = 16 * 1024 * 1024
@@ -82,6 +83,18 @@ def process_table():
         except (FileNotFoundError, ProcessLookupError):
             continue  # A vanished process cannot retain an FD; final sweep repeats.
     return rows
+
+
+def allowed_family(rows):
+    """Clamp this incident to exact historical actors and their current children."""
+    require(not any(pid in rows and rows[pid]["start"] != birth for pid, birth in ACTORS),
+            "Original PID reused; cancellation scope needs independent correction")
+    family = {pid for pid, birth in ACTORS if pid in rows and rows[pid]["start"] == birth}
+    while True:
+        added = {pid for pid, row in rows.items() if row["parent"] in family} - family
+        if not added:
+            return family
+        family.update(added)
 
 
 def fd_snapshot(task):
@@ -213,15 +226,8 @@ def scoped_unix_graph(actors, graph):
 
 
 def plan():
-    rows, expected = process_table(), dict(ACTORS)
-    mismatched = [pid for pid, birth in ACTORS if pid in rows and rows[pid]["start"] != birth]
-    require(not mismatched, "Original PID reused; cannot build cancellation scope: " + str(mismatched))
-    family = {pid for pid, birth in ACTORS if pid in rows and rows[pid]["start"] == birth}
-    while True:
-        added = {pid for pid, row in rows.items() if row["parent"] in family} - family
-        if not added:
-            break
-        family.update(added)
+    rows = process_table()
+    family = allowed_family(rows)
     require(os.getpid() not in family and os.getppid() not in family,
             "Cleanup runtime is inside the cancellation scope")
     actors = [pin_process(rows[pid]) for pid in sorted(family)]
@@ -316,6 +322,18 @@ def cancel(scope, review, journal, *, kill_after_term=False):
             and scope["observed_monotonic_ns"] <= time.monotonic_ns(), "Cancellation identity plan is from the future")
     handles = []
     try:
+        rows = process_table()
+        allowed = allowed_family(rows)
+        actors = scope["actors"]
+        require(type(actors) is list and 1 <= len(actors) <= 128
+                and all(type(row) is dict and type(row.get("pid")) is int
+                        and type(row.get("start")) is str for row in actors),
+                "Exact nonempty bounded original incident actor list required")
+        supplied = {(row["pid"], row["start"]) for row in actors}
+        require(len(supplied) == len(actors)
+                and supplied == {(pid, rows[pid]["start"]) for pid in allowed}
+                and not {os.getpid(), os.getppid()}.intersection(pid for pid, birth in supplied),
+                "Cancellation target set is not the exact old owning family or includes this runtime")
         for row in scope["actors"]:
             same_actor(row)
             fd = pidfd_compat.open_pidfd(row["pid"])
