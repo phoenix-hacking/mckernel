@@ -1,0 +1,343 @@
+name: RK-001 external reviewer response verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit containing the response verifier
+        required: true
+        type: string
+      packet_id:
+        description: Exact four-digit campaign packet ID from 0001 through 0219
+        required: true
+        type: string
+      packet_run_id:
+        description: Run ID containing the exact unreviewed campaign packet
+        required: true
+        type: string
+      packet_artifact_name:
+        description: Exact campaign packet artifact name
+        required: true
+        type: string
+      packet_zip_sha256:
+        description: Lowercase SHA-256 of the downloaded packet artifact ZIP
+        required: true
+        type: string
+      packet_zip_size:
+        description: Exact packet artifact ZIP size, at most 70 MiB
+        required: true
+        type: string
+      response_run_id:
+        description: Run ID containing the externally signed reviewer response
+        required: true
+        type: string
+      response_artifact_name:
+        description: Exact reviewer response artifact name
+        required: true
+        type: string
+      response_zip_sha256:
+        description: Lowercase SHA-256 of the downloaded response artifact ZIP
+        required: true
+        type: string
+      response_zip_size:
+        description: Exact response artifact ZIP size, at most 384 MiB
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+env:
+  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+  INVENTORY_ARTIFACT_NAME: rk001-license-inventory-32192199002-1
+  INVENTORY_RUN_ID: '32192199002'
+  INVENTORY_ZIP_SHA256: 09333e984e27a45b6af1b2f7d613570f6bf09d3a82f0fa7c6fbf4c9fd7707b18
+  PACKET_ARTIFACT_NAME: ${{ inputs.packet_artifact_name }}
+  PACKET_ID: ${{ inputs.packet_id }}
+  PACKET_RUN_ID: ${{ inputs.packet_run_id }}
+  PACKET_ZIP_SHA256: ${{ inputs.packet_zip_sha256 }}
+  PACKET_ZIP_SIZE: ${{ inputs.packet_zip_size }}
+  RESPONSE_ARTIFACT_NAME: ${{ inputs.response_artifact_name }}
+  RESPONSE_RUN_ID: ${{ inputs.response_run_id }}
+  RESPONSE_ZIP_SHA256: ${{ inputs.response_zip_sha256 }}
+  RESPONSE_ZIP_SIZE: ${{ inputs.response_zip_size }}
+  RK001_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+
+jobs:
+  verify-external-response:
+    name: Verify signed response without RK-001 credit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Reject mutable dispatch identity and malformed inputs
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$PACKET_ID" =~ ^[0-9]{4}$ ]]
+          packet_number="$((10#$PACKET_ID))"
+          test "$packet_number" -ge 1
+          test "$packet_number" -le 219
+          for value in "$PACKET_RUN_ID" "$RESPONSE_RUN_ID"; do
+            [[ "$value" =~ ^[1-9][0-9]{0,18}$ ]]
+          done
+          for value in "$PACKET_ZIP_SHA256" "$RESPONSE_ZIP_SHA256"; do
+            [[ "$value" =~ ^[0-9a-f]{64}$ ]]
+          done
+          for value in "$PACKET_ZIP_SIZE" "$RESPONSE_ZIP_SIZE"; do
+            [[ "$value" =~ ^[1-9][0-9]{0,9}$ ]]
+          done
+          test "$PACKET_ZIP_SIZE" -le 73400320
+          test "$RESPONSE_ZIP_SIZE" -le 402653184
+          test "$GITHUB_SHA" = "$EXPECTED_HEAD_SHA"
+          test "$GITHUB_WORKFLOW_SHA" = "$EXPECTED_HEAD_SHA"
+          case "$GITHUB_WORKFLOW_REF" in
+            "$GITHUB_REPOSITORY/.github/workflows/rk001-license-review-response-v1.yml@refs/heads/"*|\
+            "$GITHUB_REPOSITORY/.github/workflows/rk001-license-review-response-v1.yml@refs/tags/"*) ;;
+            *) echo "unexpected response workflow ref" >&2; exit 1 ;;
+          esac
+
+      - name: Install exact verification tools
+        run: |
+          set -euo pipefail
+          test "$(uname -m)" = x86_64
+          . /etc/os-release
+          test "$ID" = rocky
+          test "$VERSION_ID" = 10.2
+          /usr/bin/dnf -y --setopt=install_weak_deps=False install \
+            curl git-core openssh-clients python3
+          /usr/bin/dnf clean all
+          for tool in /usr/bin/curl /usr/bin/git /usr/bin/python3 \
+            /usr/bin/sha256sum /usr/bin/ssh-keygen; do
+            test -x "$tool"
+          done
+
+      - name: Check out the exact response verifier
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 1
+          persist-credentials: false
+          set-safe-directory: true
+
+      - name: Verify frozen single-packet non-crediting authority and adversarial tests
+        run: |
+          set -euo pipefail
+          canonical_workspace="$(/usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          test "$(/usr/bin/git -c "safe.directory=$canonical_workspace" \
+            -C "$canonical_workspace" rev-parse --verify 'HEAD^{commit}')" = \
+            "$EXPECTED_HEAD_SHA"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              scripts/rocky_kernel_license_review_response.py \
+                --repo "$GITHUB_WORKSPACE" --check
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              scripts/tests/test_rocky_kernel_license_review_response.py -v -f
+
+      - name: Download exact historical inventory and submitted artifacts
+        env:
+          DOWNLOAD_ROOT: ${{ runner.temp }}/rk001-response-downloads
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test ! -e "$DOWNLOAD_ROOT"
+          mkdir -m 700 "$DOWNLOAD_ROOT"
+
+          download_artifact() {
+            local run_id="$1"
+            local artifact_name="$2"
+            local expected_size="$3"
+            local expected_sha="$4"
+            local output="$5"
+            local stem="$6"
+            local api_json="$DOWNLOAD_ROOT/$stem-artifacts.json"
+            local id_file="$DOWNLOAD_ROOT/$stem-id"
+            /usr/bin/curl --fail --silent --show-error \
+              --proto '=https' --proto-redir '=https' --max-redirs 0 \
+              --max-filesize 1048576 \
+              -H 'Accept: application/vnd.github+json' \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/runs/$run_id/artifacts?per_page=100" \
+              --output "$api_json"
+            /usr/bin/env -i \
+              PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+              ARTIFACT_NAME="$artifact_name" RUN_ID="$run_id" \
+              /usr/bin/python3 -I -S -B - "$api_json" "$id_file" <<'PY'
+          import json
+          import os
+          import sys
+
+          def reject_duplicates(pairs):
+              value = {}
+              for key, item in pairs:
+                  if key in value:
+                      raise ValueError("duplicate JSON key")
+                  value[key] = item
+              return value
+
+          if os.stat(sys.argv[1]).st_size > 1048576:
+              raise SystemExit("artifact API response exceeds its cap")
+          with open(sys.argv[1], "r", encoding="utf-8") as source:
+              value = json.load(source, object_pairs_hook=reject_duplicates)
+          if type(value) is not dict or type(value.get("artifacts")) is not list:
+              raise SystemExit("artifact API response schema differs")
+          matches = [
+              item for item in value["artifacts"]
+              if item.get("name") == os.environ["ARTIFACT_NAME"]
+              and item.get("expired") is False
+              and str(item.get("workflow_run", {}).get("id")) == os.environ["RUN_ID"]
+          ]
+          if len(matches) != 1 or type(matches[0].get("id")) is not int:
+              raise SystemExit("exact artifact is absent or ambiguous")
+          with open(sys.argv[2], "x", encoding="ascii") as output:
+              output.write(str(matches[0]["id"]) + "\n")
+          PY
+            local artifact_id
+            artifact_id="$(tr -d '\n' < "$id_file")"
+            [[ "$artifact_id" =~ ^[1-9][0-9]{0,18}$ ]]
+            /usr/bin/curl --fail --silent --show-error --location \
+              --proto '=https' --proto-redir '=https' --max-redirs 2 \
+              --max-filesize "$expected_size" \
+              -H 'Accept: application/vnd.github+json' \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact_id/zip" \
+              --output "$output"
+            test "$(stat -c '%s' -- "$output")" = "$expected_size"
+            local actual
+            actual="$(/usr/bin/sha256sum --binary "$output")"
+            test "${actual%% *}" = "$expected_sha"
+          }
+
+          download_artifact \
+            "$INVENTORY_RUN_ID" "$INVENTORY_ARTIFACT_NAME" 6734527 \
+            "$INVENTORY_ZIP_SHA256" "$DOWNLOAD_ROOT/inventory.zip" inventory
+          download_artifact \
+            "$PACKET_RUN_ID" "$PACKET_ARTIFACT_NAME" "$PACKET_ZIP_SIZE" \
+            "$PACKET_ZIP_SHA256" "$DOWNLOAD_ROOT/packet.zip" packet
+          download_artifact \
+            "$RESPONSE_RUN_ID" "$RESPONSE_ARTIFACT_NAME" "$RESPONSE_ZIP_SIZE" \
+            "$RESPONSE_ZIP_SHA256" "$DOWNLOAD_ROOT/response.zip" response
+
+      - name: Safely materialize exact packet and signed response
+        env:
+          DOWNLOAD_ROOT: ${{ runner.temp }}/rk001-response-downloads
+          MATERIALIZED_ROOT: ${{ runner.temp }}/rk001-response-materialized
+        run: |
+          set -euo pipefail
+          test ! -e "$MATERIALIZED_ROOT"
+          mkdir -m 700 "$MATERIALIZED_ROOT"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B - \
+              "$DOWNLOAD_ROOT/packet.zip" "$MATERIALIZED_ROOT/packet" 73400320 \
+              "$DOWNLOAD_ROOT/response.zip" "$MATERIALIZED_ROOT/response" 402653184 <<'PY'
+          import os
+          import pathlib
+          import stat
+          import sys
+          import zipfile
+
+          def extract(archive_path, output_path, cap):
+              output = pathlib.Path(output_path)
+              output.mkdir(mode=0o700)
+              total = 0
+              seen = set()
+              with zipfile.ZipFile(archive_path, "r") as archive:
+                  infos = archive.infolist()
+                  if not infos or len(infos) > 210000:
+                      raise SystemExit("artifact ZIP entry count is invalid")
+                  for info in infos:
+                      name = info.filename.rstrip("/")
+                      if not name:
+                          continue
+                      path = pathlib.PurePosixPath(name)
+                      if (path.is_absolute() or path.as_posix() != name
+                              or any(part in ("", ".", "..") for part in path.parts)
+                              or name in seen):
+                          raise SystemExit("artifact ZIP member is unsafe or duplicated")
+                      seen.add(name)
+                      mode = info.external_attr >> 16
+                      if info.is_dir():
+                          target = output.joinpath(*path.parts)
+                          target.mkdir(mode=0o700, parents=True, exist_ok=True)
+                          continue
+                      if mode and not stat.S_ISREG(mode):
+                          raise SystemExit("artifact ZIP member is not regular")
+                      if info.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
+                          raise SystemExit("artifact ZIP compression method is forbidden")
+                      total += info.file_size
+                      if total > cap:
+                          raise SystemExit("artifact ZIP expansion exceeds its cap")
+                      target = output.joinpath(*path.parts)
+                      target.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+                      with archive.open(info, "r") as source, open(str(target), "xb") as sink:
+                          retained = 0
+                          while True:
+                              block = source.read(1024 * 1024)
+                              if not block:
+                                  break
+                              retained += len(block)
+                              if retained > info.file_size:
+                                  raise SystemExit("artifact ZIP member exceeds its size")
+                              sink.write(block)
+                      if retained != info.file_size:
+                          raise SystemExit("artifact ZIP member is truncated")
+                      os.chmod(str(target), 0o444)
+              for root, directories, files in os.walk(str(output), topdown=False):
+                  for directory in directories:
+                      os.chmod(os.path.join(root, directory), 0o555)
+              os.chmod(str(output), 0o555)
+
+          extract(sys.argv[1], sys.argv[2], int(sys.argv[3]))
+          extract(sys.argv[4], sys.argv[5], int(sys.argv[6]))
+          PY
+
+      - name: Verify external signature and exact single-packet response
+        env:
+          DOWNLOAD_ROOT: ${{ runner.temp }}/rk001-response-downloads
+          MATERIALIZED_ROOT: ${{ runner.temp }}/rk001-response-materialized
+          REPORT_ROOT: ${{ runner.temp }}/rk001-response-report
+        run: |
+          set -euo pipefail
+          test ! -e "$REPORT_ROOT"
+          mkdir -m 700 "$REPORT_ROOT"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              scripts/rocky_kernel_license_review_response.py \
+                --repo "$GITHUB_WORKSPACE" --verify-response \
+                --artifact "$DOWNLOAD_ROOT/inventory.zip" \
+                --packet-id "$PACKET_ID" \
+                --packet-dir "$MATERIALIZED_ROOT/packet" \
+                --response-dir "$MATERIALIZED_ROOT/response" \
+              | tee "$REPORT_ROOT/verification.txt"
+          test -s "$REPORT_ROOT/verification.txt"
+          test "$(grep -c 'durable=false gate=TODO points=0 credit=false' \
+            "$REPORT_ROOT/verification.txt")" = 1
+
+      - name: Upload temporary non-crediting verification report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: rk001-license-review-response-verification-${{ env.PACKET_ID }}-${{ env.EXPECTED_HEAD_SHA }}
+          path: ${{ runner.temp }}/rk001-response-report/verification.txt
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0

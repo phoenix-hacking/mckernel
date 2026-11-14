@@ -1,0 +1,103 @@
+{
+  "binfmt": {
+    "legacy_imports": [
+      "__register_binfmt",
+      "unregister_binfmt"
+    ],
+    "native_registration_status": "blocked",
+    "owner_gate_id": "MCC-013",
+    "reason": "The selected Linux 6.12 Rust kernel crate has no safe linux_binfmt registration API; this foundation must not claim registration or unregister ownership."
+  },
+  "dependencies": [
+    "ihk"
+  ],
+  "foundation_status": "source-bound-dependency",
+  "foundation_version": 1,
+  "gate_credit_eligible": false,
+  "gate_id": "MCC-001",
+  "ihk_dependency": {
+    "legacy_inter_module_import_count": 32,
+    "native_symbol_import": {
+      "built_symbol_reference_validated": false,
+      "provider_symbol": "ihk_provider_lifecycle_v1",
+      "runtime_symbol_reference_proven": false,
+      "scope": "source-bound namespaced lifecycle anchor; built relocation and runtime unload ordering require exact Rocky 10.2 evidence",
+      "source_reference_required": true,
+      "status": "source-bound"
+    },
+    "required_import_namespace": "MCKERNEL_IHK_V1",
+    "reviewed_provider_lease_boundary": {
+        "attach_symbol": "ihk_smp_provider_attach_v2",
+        "callback_abi": 1,
+        "callback_payload_reachable": false,
+        "close_symbol": "ihk_smp_provider_close_v1",
+        "compatibility_exports": [
+        "ihk_smp_provider_attach_v1",
+        "ihk_smp_provider_detach_v1"
+        ],
+        "consumer": "ihk-smp-x86_64",
+        "control_device_open_close_only": true,
+        "credit_eligible": false,
+        "detach_symbol": "ihk_smp_provider_detach_v2",
+        "device_node_runtime_proven": false,
+        "device_node_source_reachable": true,
+        "duplicate_close_detectable_while_other_references_exist": false,
+        "lifecycle_callbacks_only": false,
+        "mcctrl_reachable": false,
+        "namespace": "MCKERNEL_IHK_V1",
+        "open_symbol": "ihk_smp_provider_open_v1",
+        "operation_callbacks_reachable": false,
+        "rocky_runtime_validated": false,
+        "scope": "scalar minor-zero module-lifetime provider lease, scalar-only init/exit callbacks, and shared per-file scalar open receipts for the uniformly rejecting mcd0 shell; no provider operation payload",
+        "shared_open_receipts": true,
+        "trusted_noncopy_owner_balance_required": true,
+        "token_version": 1
+    }
+  },
+  "kbuild": {
+    "config_symbol": "CONFIG_MCKERNEL_MCCTRL_RUST",
+    "module_object": "mcctrl.o",
+    "path": "host-kernel/kbuild/Kbuild.in"
+  },
+  "kconfig": {
+    "depends_on": "MCKERNEL_IHK_RUST",
+    "path": "host-kernel/kbuild/Kconfig",
+    "symbol": "MCKERNEL_MCCTRL_RUST",
+    "type": "tristate"
+  },
+  "legacy_lifecycle": {
+    "load_success_log": "mcctrl: initialized successfully.",
+    "unload_success_log": "mcctrl: unregistered."
+  },
+  "lifecycle_logs": {
+    "load": "lifecycle=load foundation={} parameters={} declared_dependencies={} ihk_import={} binfmt={}",
+    "unload": "lifecycle=unload foundation={} parameters={} declared_dependencies={} ihk_import={} binfmt={}"
+  },
+  "module": {
+    "author": null,
+    "description": null,
+    "license": "GPL v2",
+    "name": "mcctrl",
+    "output": "mcctrl.ko",
+    "version": null
+  },
+  "parameter_count": 0,
+  "production_source": "host-kernel/native-rust/mcctrl.rs",
+  "provider_source": "host-kernel/native-rust/ihk.rs",
+  "reference_inventory": "host-kernel/reference/legacy-host-modules-f2eb7352.json",
+  "schema_version": 1,
+  "selected_kernel": {
+    "archive_sha256": "4a174d47b8874a2139efcd1ac1ab2d6b80ae7a0ca62f0ae4596fd20cf62a3533",
+    "release": "6.12.0-211.44.1.el10_2",
+    "reviewed_rust_paths": [
+      "include/linux/export.h",
+      "rust/bindings/bindings_helper.h",
+      "rust/exports.c",
+      "rust/kernel/lib.rs",
+      "rust/macros/module.rs",
+      "scripts/mod/modpost.c"
+    ],
+    "source_lock": "host-kernel/rocky/source-lock.json"
+  },
+  "stage_manifest": "host-kernel/kbuild/stage-manifest.json"
+}

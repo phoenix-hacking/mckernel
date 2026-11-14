@@ -1,0 +1,249 @@
+name: Final push completion tracker
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  tracker:
+    name: Recalculate evidence-weighted completion
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify exact candidate identity
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
+
+      - name: Initialize frozen IHK source
+        run: |
+          set -euo pipefail
+          git submodule update --init --depth 1 ihk
+
+      - name: Validate frozen host-module inventory
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s scripts/tests -v
+          python3 scripts/host_module_inventory.py --check
+          python3 scripts/rocky_kernel_source_lock.py --check
+          python3 scripts/rocky_kernel_source_review.py --check
+          python3 scripts/rocky_kernel_platform_lock.py --check
+          python3 scripts/linux_api_needs.py --check
+          python3 scripts/rocky_rust_staging.py --check
+          python3 scripts/native_rust_build_surface_audit.py
+          python3 scripts/native_rust_host_audit.py
+          python3 scripts/ihk_native_queue_check.py
+          python3 scripts/native_rust_unsafe_ffi_ledger.py check
+          python3 scripts/ihk_os_registry_check.py --repo "$GITHUB_WORKSPACE"
+          python3 scripts/mcctrl_native_lifecycle_check.py
+
+      - name: Validate locked scope, policy, and behavior contract
+        run: |
+          set -euo pipefail
+          git -C ihk apply --check \
+            "$GITHUB_WORKSPACE/scripts/patches/ihk-linux-compat.patch"
+          git -C ihk apply \
+            "$GITHUB_WORKSPACE/scripts/patches/ihk-linux-compat.patch"
+          fp_authority() {
+            /usr/bin/env -i \
+              HOME=/nonexistent \
+              PATH=/usr/bin:/bin \
+              LC_ALL=C \
+              FP_AUTHORITY_EXPECTED_HEAD="$EXPECTED_HEAD_SHA" \
+              /usr/bin/python3 -I -S -B -c "if True:
+            import os,subprocess,sys,types
+            trusted_type=type
+            trusted_int_type=int
+            trusted_realpath=os.path.realpath
+            trusted_run=subprocess.run
+            trusted_pipe=os.pipe
+            trusted_fork=os.fork
+            trusted_read=os.read
+            trusted_write=os.write
+            trusted_close=os.close
+            trusted_waitpid=os.waitpid
+            trusted_child_exit=os._exit
+            trusted_wifexited=os.WIFEXITED
+            trusted_wexitstatus=os.WEXITSTATUS
+            trusted_wifsignaled=os.WIFSIGNALED
+            trusted_wtermsig=os.WTERMSIG
+            trusted_stdout_flush=sys.stdout.flush
+            trusted_stderr_flush=sys.stderr.flush
+            trusted_stderr_write=sys.stderr.write
+            repo=trusted_realpath(sys.argv[1])
+            git_config=((\"core.fsmonitor\",\"false\"),(\"core.hooksPath\",os.devnull),(\"core.attributesFile\",os.devnull),(\"core.pager\",\"cat\"),(\"pager.status\",\"false\"),(\"protocol.ext.allow\",\"never\"),(\"core.sshCommand\",\"/bin/false\"))
+            environment={\"GIT_ATTR_NOSYSTEM\":\"1\",\"GIT_CONFIG_GLOBAL\":os.devnull,\"GIT_CONFIG_NOSYSTEM\":\"1\",\"GIT_CONFIG_COUNT\":str(len(git_config)),\"GIT_GRAFT_FILE\":os.devnull,\"GIT_NO_REPLACE_OBJECTS\":\"1\",\"GIT_OPTIONAL_LOCKS\":\"0\",\"GIT_PAGER\":\"cat\",\"GIT_TERMINAL_PROMPT\":\"0\",\"HOME\":os.devnull,\"LANG\":\"C\",\"LC_ALL\":\"C\",\"PATH\":\"/usr/bin:/bin\"}
+            for index,pair in enumerate(git_config):
+              environment[\"GIT_CONFIG_KEY_{0}\".format(index)]=pair[0]
+              environment[\"GIT_CONFIG_VALUE_{0}\".format(index)]=pair[1]
+            def trusted_git(arguments):
+              completed=trusted_run([\"/usr/bin/git\",\"-C\",repo]+arguments,check=False,env=environment,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+              if completed.returncode != 0:
+                trusted_stderr_write(completed.stderr.decode(\"utf-8\",errors=\"replace\"))
+                raise SystemExit(2)
+              return completed.stdout
+            def trusted_head():
+              value=trusted_git([\"rev-parse\",\"--verify\",\"HEAD^{commit}\"]).decode(\"ascii\",errors=\"replace\").strip()
+              if len(value) != 40 or any(character not in \"0123456789abcdef\" for character in value):
+                trusted_stderr_write(\"host-module authority bootstrap could not resolve an exact HEAD\\n\")
+                raise SystemExit(2)
+              return value
+            expected_head=os.environ.get(\"FP_AUTHORITY_EXPECTED_HEAD\",\"\")
+            if len(expected_head) != 40 or any(character not in \"0123456789abcdef\" for character in expected_head):
+              trusted_stderr_write(\"host-module authority bootstrap expected commit is not exact\\n\")
+              raise SystemExit(2)
+            if trusted_head() != expected_head:
+              trusted_stderr_write(\"host-module authority bootstrap checkout differs from expected commit\\n\")
+              raise SystemExit(2)
+            launcher=trusted_git([\"cat-file\",\"blob\",expected_head+\":scripts/host_module_failure_sites.py\"])
+            ready_read,ready_write=trusted_pipe()
+            go_read,go_write=trusted_pipe()
+            child=trusted_fork()
+            if child == 0:
+              trusted_close(ready_read)
+              trusted_close(go_write)
+              module=types.ModuleType(\"host_module_failure_sites\")
+              module.__file__=os.path.join(repo,\"scripts\",\"host_module_failure_sites.py\")
+              module.__package__=\"\"
+              sys.modules[module.__name__]=module
+              exec(compile(launcher,module.__file__,\"exec\",dont_inherit=True),module.__dict__)
+              trusted_write(ready_write,b\"1\")
+              trusted_close(ready_write)
+              if trusted_read(go_read,1) != b\"1\":
+                trusted_child_exit(125)
+              trusted_close(go_read)
+              result=module.isolated_authority_main(sys.argv[2:],expected_head=expected_head)
+              trusted_stdout_flush()
+              trusted_stderr_flush()
+              if trusted_type(result) is not trusted_int_type or result < 0 or result > 255:
+                trusted_child_exit(125)
+              trusted_child_exit(result)
+            trusted_close(ready_write)
+            trusted_close(go_read)
+            ready=trusted_read(ready_read,1)
+            trusted_close(ready_read)
+            before_head=trusted_head()
+            before_ok=ready == b\"1\" and before_head == expected_head
+            if before_ok:
+              trusted_write(go_write,b\"1\")
+            else:
+              trusted_stderr_write(\"host-module authority bootstrap HEAD changed before checker entry\\n\")
+            trusted_close(go_write)
+            unused,status=trusted_waitpid(child,0)
+            final_head=trusted_head()
+            if not before_ok or final_head != expected_head:
+              if final_head != expected_head:
+                trusted_stderr_write(\"host-module authority bootstrap HEAD changed during checker execution\\n\")
+              raise SystemExit(2)
+            if trusted_wifexited(status):
+              exit_code=trusted_wexitstatus(status)
+            elif trusted_wifsignaled(status):
+              exit_code=128+trusted_wtermsig(status)
+            else:
+              exit_code=126
+            raise SystemExit(exit_code)" "$@"
+          }
+          fp_authority "$GITHUB_WORKSPACE" \
+            --repo "$GITHUB_WORKSPACE" \
+            --authority-target contracts -- \
+            --check
+
+      - name: Validate tracker implementation
+        run: |
+          set -euo pipefail
+          python3 scripts/final_push_tracker.py \
+            --check \
+            --json evidence/final-push-summary.json
+
+      - name: Prove recalculation is idempotent
+        run: |
+          set -euo pipefail
+          cp final-push.txt /tmp/final-push.recalculated.txt
+          python3 scripts/final_push_tracker.py \
+            --file /tmp/final-push.recalculated.txt \
+            --update
+          cmp final-push.txt /tmp/final-push.recalculated.txt
+
+      - name: Prove stale and invalid trackers fail closed
+        run: |
+          set -euo pipefail
+
+          cp final-push.txt /tmp/final-push.stale.txt
+          sed -i 's/^OVERALL COMPLETION:.*/OVERALL COMPLETION: STALE/' \
+            /tmp/final-push.stale.txt
+          if python3 scripts/final_push_tracker.py \
+              --file /tmp/final-push.stale.txt --check; then
+            echo 'stale generated summary was incorrectly accepted' >&2
+            exit 1
+          fi
+
+          cp final-push.txt /tmp/final-push.missing-evidence.txt
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("/tmp/final-push.missing-evidence.txt")
+          lines = path.read_text(encoding="utf-8").splitlines()
+          for index, line in enumerate(lines):
+              if not line.startswith("GATE|"):
+                  continue
+              fields = line.split("|")
+              fields[4] = "PASS"
+              fields[5] = "-"
+              lines[index] = "|".join(fields)
+              break
+          else:
+              raise SystemExit("no gate record found for missing-evidence fixture")
+          path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+          PY
+          if python3 scripts/final_push_tracker.py \
+              --file /tmp/final-push.missing-evidence.txt --check; then
+            echo 'PASS without evidence was incorrectly accepted' >&2
+            exit 1
+          fi
+
+          cp final-push.txt /tmp/final-push.bad-weight.txt
+          sed -i \
+            's/^WORKSTREAM|WS00|Scope, baseline, and evidence system|400$/WORKSTREAM|WS00|Scope, baseline, and evidence system|401/' \
+            /tmp/final-push.bad-weight.txt
+          if python3 scripts/final_push_tracker.py \
+              --file /tmp/final-push.bad-weight.txt --check; then
+            echo 'invalid 10000-point denominator was incorrectly accepted' >&2
+            exit 1
+          fi
+
+      - name: Publish current completion in job summary
+        run: |
+          set -euo pipefail
+          {
+            echo '## Native Rust host-module completion'
+            echo
+            sed -n \
+              '/^BEGIN AUTO-GENERATED TRACKER$/,/^END AUTO-GENERATED TRACKER$/p' \
+              final-push.txt
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload machine-readable tracker state
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: final-push-tracker-${{ env.EXPECTED_HEAD_SHA }}
+          path: evidence/final-push-summary.json
+          if-no-files-found: error
+          retention-days: 90

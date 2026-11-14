@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: McKernel Rust Migration <mckernel@localhost>
+Date: Wed, 12 Aug 2026 17:01:56 -0500
+Subject: [PATCH] objtool: recognize Rust 1.92 panic_const symbols
+
+Observed-Repository-Commit: 9438ad175b4c1ac7855f6afc119f154639fe18c2
+Observed-Workflow: Native Rust host modules exact Rocky build
+Observed-Run-ID: 31644047766
+Observed-Job-ID: 94273299611
+Observed-Artifact-ID: 9160078637
+Observed-Artifact-Zip-Bytes: 62669
+Observed-Artifact-Zip-SHA256: e4c3786f8fed3255fcd4f4c9e9baba340527050bf5be1b044b9c81cdd5a4cfbc
+Observed-Rustc: 1.92.0
+Rocky-Base: linux-6.12.0-211.44.1.el10_2
+License: GPL-2.0-only
+
+Rust 1.92 emits legacy-v0 `core::panicking::panic_const` symbols whose
+function-name length component may be 23. The existing Objtool heuristic
+recognizes only the length-24 form, so it treats calls to the new symbol as
+returning and reports the caller as falling through into the next function.
+
+Recognize the exact length-23 panic_const prefix observed while compiling the
+native IHK module. Keep the existing length-24 match for other compiler output.
+This is a project-observed compatibility patch; no upstream or stable commit is
+claimed.
+
+Signed-off-by: McKernel Rust Migration <mckernel@localhost>
+---
+ tools/objtool/check.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index dc24ceed3c7d..79ecc543a414 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -218,6 +218,7 @@ static bool is_rust_noreturn(const struct symbol *func)
+ 	       str_ends_with(func->name, "_4core9panicking36panic_misaligned_pointer_dereference")	||
+ 	       str_ends_with(func->name, "_7___rustc17rust_begin_unwind")				||
+ 	       strstr(func->name, "_4core9panicking13assert_failed")					||
++	       strstr(func->name, "_4core9panicking11panic_const23panic_const_")			||
+ 	       strstr(func->name, "_4core9panicking11panic_const24panic_const_")			||
+ 	       (strstr(func->name, "_4core5slice5index") &&
+ 		strstr(func->name, "slice_") &&
+-- 
+2.47.3
+

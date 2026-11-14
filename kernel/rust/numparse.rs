@@ -1184,21 +1184,21 @@ unsafe fn printf_read_number_from_va(args: &mut VaList<'_>, spec: *const PrintfS
     match type_ {
         FORMAT_TYPE_LONG_LONG => {
             if (flags & SIGN) != 0 {
-                args.next_arg::<i64>() as CULong
+                args.arg::<i64>() as CULong
             } else {
-                args.next_arg::<u64>() as CULong
+                args.arg::<u64>() as CULong
             }
         }
-        FORMAT_TYPE_ULONG => args.next_arg::<CULong>(),
-        FORMAT_TYPE_LONG => args.next_arg::<CLong>() as CULong,
-        FORMAT_TYPE_SIZE_T => args.next_arg::<SizeT>() as CULong,
-        FORMAT_TYPE_PTRDIFF => args.next_arg::<isize>() as CULong,
-        FORMAT_TYPE_UBYTE => (args.next_arg::<CInt>() as u8) as CULong,
-        FORMAT_TYPE_BYTE => (args.next_arg::<CInt>() as i8) as CULong,
-        FORMAT_TYPE_USHORT => (args.next_arg::<CInt>() as u16) as CULong,
-        FORMAT_TYPE_SHORT => (args.next_arg::<CInt>() as i16) as CULong,
-        FORMAT_TYPE_INT => args.next_arg::<CInt>() as CULong,
-        _ => args.next_arg::<u32>() as CULong,
+        FORMAT_TYPE_ULONG => args.arg::<CULong>(),
+        FORMAT_TYPE_LONG => args.arg::<CLong>() as CULong,
+        FORMAT_TYPE_SIZE_T => args.arg::<SizeT>() as CULong,
+        FORMAT_TYPE_PTRDIFF => args.arg::<isize>() as CULong,
+        FORMAT_TYPE_UBYTE => (args.arg::<CInt>() as u8) as CULong,
+        FORMAT_TYPE_BYTE => (args.arg::<CInt>() as i8) as CULong,
+        FORMAT_TYPE_USHORT => (args.arg::<CInt>() as u16) as CULong,
+        FORMAT_TYPE_SHORT => (args.arg::<CInt>() as i16) as CULong,
+        FORMAT_TYPE_INT => args.arg::<CInt>() as CULong,
+        _ => args.arg::<u32>() as CULong,
     }
 }
 
@@ -1208,17 +1208,17 @@ unsafe fn printf_read_pointer_from_va(
     qualifier: CInt,
 ) -> *mut c_void {
     match type_ {
-        FORMAT_TYPE_STR => args.next_arg::<*mut i8>().cast::<c_void>(),
+        FORMAT_TYPE_STR => args.arg::<*mut i8>().cast::<c_void>(),
         FORMAT_TYPE_NRCHARS => {
             if qualifier == b'l' as CInt {
-                args.next_arg::<*mut CLong>().cast::<c_void>()
+                args.arg::<*mut CLong>().cast::<c_void>()
             } else if qualifier == b'Z' as CInt || qualifier == b'z' as CInt {
-                args.next_arg::<*mut SizeT>().cast::<c_void>()
+                args.arg::<*mut SizeT>().cast::<c_void>()
             } else {
-                args.next_arg::<*mut CInt>().cast::<c_void>()
+                args.arg::<*mut CInt>().cast::<c_void>()
             }
         }
-        _ => args.next_arg::<*mut c_void>(),
+        _ => args.arg::<*mut c_void>(),
     }
 }
 
@@ -1256,13 +1256,13 @@ pub(crate) unsafe fn vsnprintf_va_list_result(
                 str_ = printf_copy_literal_result(str_, end, old_fmt, read);
             }
             FORMAT_TYPE_WIDTH => {
-                write_volatile(&mut (*spec).field_width, args.next_arg::<CInt>());
+                write_volatile(&mut (*spec).field_width, args.arg::<CInt>());
             }
             FORMAT_TYPE_PRECISION => {
-                write_volatile(&mut (*spec).precision, args.next_arg::<CInt>());
+                write_volatile(&mut (*spec).precision, args.arg::<CInt>());
             }
             FORMAT_TYPE_CHAR => {
-                str_ = printf_char_ref_result(str_, end, args.next_arg::<CInt>() & 0xff, spec);
+                str_ = printf_char_ref_result(str_, end, args.arg::<CInt>() & 0xff, spec);
             }
             FORMAT_TYPE_STR => {
                 let s = printf_read_pointer_from_va(
@@ -1384,53 +1384,53 @@ unsafe extern "C" fn rust_scanf_read_output(
     let args = &mut *state.args;
 
     match conversion {
-        c if c == b'c' as CInt || c == b's' as CInt => args.next_arg::<*mut i8>().cast::<c_void>(),
+        c if c == b'c' as CInt || c == b's' as CInt => args.arg::<*mut i8>().cast::<c_void>(),
         c if c == b'n' as CInt => {
             if qualifier == b'l' as CInt {
-                args.next_arg::<*mut CLong>().cast::<c_void>()
+                args.arg::<*mut CLong>().cast::<c_void>()
             } else if qualifier == b'Z' as CInt || qualifier == b'z' as CInt {
-                args.next_arg::<*mut SizeT>().cast::<c_void>()
+                args.arg::<*mut SizeT>().cast::<c_void>()
             } else {
-                args.next_arg::<*mut CInt>().cast::<c_void>()
+                args.arg::<*mut CInt>().cast::<c_void>()
             }
         }
         _ => match qualifier {
             q if q == b'H' as CInt => {
                 if is_sign != 0 {
-                    args.next_arg::<*mut i8>().cast::<c_void>()
+                    args.arg::<*mut i8>().cast::<c_void>()
                 } else {
-                    args.next_arg::<*mut u8>().cast::<c_void>()
+                    args.arg::<*mut u8>().cast::<c_void>()
                 }
             }
             q if q == b'h' as CInt => {
                 if is_sign != 0 {
-                    args.next_arg::<*mut i16>().cast::<c_void>()
+                    args.arg::<*mut i16>().cast::<c_void>()
                 } else {
-                    args.next_arg::<*mut u16>().cast::<c_void>()
+                    args.arg::<*mut u16>().cast::<c_void>()
                 }
             }
             q if q == b'l' as CInt => {
                 if is_sign != 0 {
-                    args.next_arg::<*mut CLong>().cast::<c_void>()
+                    args.arg::<*mut CLong>().cast::<c_void>()
                 } else {
-                    args.next_arg::<*mut CULong>().cast::<c_void>()
+                    args.arg::<*mut CULong>().cast::<c_void>()
                 }
             }
             q if q == b'L' as CInt => {
                 if is_sign != 0 {
-                    args.next_arg::<*mut i64>().cast::<c_void>()
+                    args.arg::<*mut i64>().cast::<c_void>()
                 } else {
-                    args.next_arg::<*mut u64>().cast::<c_void>()
+                    args.arg::<*mut u64>().cast::<c_void>()
                 }
             }
             q if q == b'Z' as CInt || q == b'z' as CInt => {
-                args.next_arg::<*mut SizeT>().cast::<c_void>()
+                args.arg::<*mut SizeT>().cast::<c_void>()
             }
             _ => {
                 if is_sign != 0 {
-                    args.next_arg::<*mut CInt>().cast::<c_void>()
+                    args.arg::<*mut CInt>().cast::<c_void>()
                 } else {
-                    args.next_arg::<*mut u32>().cast::<c_void>()
+                    args.arg::<*mut u32>().cast::<c_void>()
                 }
             }
         },

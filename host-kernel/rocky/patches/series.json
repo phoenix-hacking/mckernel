@@ -1,0 +1,48 @@
+{
+  "dist_git": {
+    "commit": "e4cad646580f7f3dfec5e3b6b4ea9e89b7572f6c",
+    "tag": "patched/r10/kernel-6.12.0-211.44.1.el10_2"
+  },
+  "kernel_source_nevra": "kernel-0:6.12.0-211.44.1.el10_2.src",
+  "patch_application": {
+    "function": "ApplyOptionalPatch",
+    "minimum_line_count_to_apply": 10,
+    "program": "git --work-tree=. apply",
+    "spec_path": "SPECS/kernel.spec"
+  },
+  "patches": [
+    {
+      "applied": false,
+      "empty": true,
+      "line_count": 0,
+      "order": 1,
+      "path": "SOURCES/patch-6.12-redhat.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "spec_reference": "Patch1"
+    },
+    {
+      "applied": false,
+      "empty": true,
+      "line_count": 0,
+      "order": 2,
+      "path": "SOURCES/linux-kernel-test.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "spec_reference": "Patch999999"
+    },
+    {
+      "applied": true,
+      "empty": false,
+      "line_count": 27,
+      "order": 3,
+      "path": "SOURCES/1000-debrand-some-messages.patch",
+      "sha256": "080bbc72a543eed6b71daee1b3236b59f3a0f8b3ad20815d962444d3b106b144",
+      "size": 928,
+      "spec_reference": "Patch1000000"
+    }
+  ],
+  "schema_version": 1,
+  "series_id": "rocky-10.2-kernel-6.12.0-211.44.1.el10_2-patch-series-v1",
+  "source_lock_id": "rocky-10.2-x86_64-kernel-6.12.0-211.44.1.el10_2-source-v1"
+}

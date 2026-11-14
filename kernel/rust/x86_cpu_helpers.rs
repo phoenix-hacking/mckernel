@@ -1905,10 +1905,15 @@ pub unsafe extern "C" fn x86_setup_phase1_body_result(
         return -EINVAL;
     };
 
+    crate::x86_setup::early_phase(b'1');
     disable_interrupt();
+    crate::x86_setup::early_phase(b'2');
     init_idt();
+    crate::x86_setup::early_phase(b'3');
     init_gdt();
+    crate::x86_setup::early_phase(b'4');
     init_page_table();
+    crate::x86_setup::early_phase(b'5');
     0
 }
 

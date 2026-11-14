@@ -1,6 +1,6 @@
 use core::ffi::{c_char, c_void};
 use core::mem::size_of;
-use core::ptr::{null_mut, write_bytes};
+use core::ptr::{null_mut, write_volatile};
 
 use crate::abi::{
     CInt, CLong, CULong, IhkOsMonitor, RusagePercpu, SysfsBitmapParam, SysfsOps, IHK_MAX_NUM_CPUS,
@@ -92,6 +92,7 @@ unsafe extern "C" {
     fn kernel_panic(s: *const c_char) -> !;
     fn mem_init();
     fn numa_sysfs_setup();
+    fn phys_to_virt(phys: CULong) -> *mut c_void;
     fn proc_init();
     fn sched_init();
     fn schedule();
@@ -175,6 +176,7 @@ unsafe fn parse_kargs() {
 
     unsafe {
         kprintf(cstr(b"KCommand Line: %s\n\0"), ihk_get_kargs());
+        crate::x86_setup::early_phase(b'j');
     }
 
     let ptr = unsafe { find_command_line(key_dump_level.as_ptr().cast::<c_char>()) };
@@ -183,6 +185,7 @@ unsafe fn parse_kargs() {
     }
     unsafe {
         ihk_mc_set_dump_level(dump_level);
+        crate::x86_setup::early_phase(b'k');
     }
 
     if !unsafe { find_command_line(cstr(b"idle_halt\0")) }.is_null() {
@@ -190,17 +193,26 @@ unsafe fn parse_kargs() {
             idle_halt = 1;
         }
     }
+    unsafe {
+        crate::x86_setup::early_phase(b'l');
+    }
 
     if !unsafe { find_command_line(cstr(b"allow_oversubscribe\0")) }.is_null() {
         unsafe {
             allow_oversubscribe = 1;
         }
     }
+    unsafe {
+        crate::x86_setup::early_phase(b'm');
+    }
 
     if !unsafe { find_command_line(cstr(b"time_sharing\0")) }.is_null() {
         unsafe {
             time_sharing = 1;
         }
+    }
+    unsafe {
+        crate::x86_setup::early_phase(b'n');
     }
 }
 
@@ -254,17 +266,26 @@ unsafe fn time_init() {
 
 #[no_mangle]
 pub unsafe extern "C" fn monitor_init() {
+    unsafe {
+        crate::x86_setup::early_phase(b'6');
+    }
     let cpu_info = unsafe { ihk_mc_get_cpu_info() };
     if cpu_info.is_null() {
         unsafe {
+            crate::x86_setup::early_panic();
             kernel_panic(cstr(b"PANIC: in monitor_init() ihk_mc_cpu_info is NULL.\0"));
         }
     }
 
+    let ncpus = unsafe { core::ptr::read_volatile(core::ptr::addr_of!((*cpu_info).ncpus)) };
+
     let bytes = size_of::<IhkOsMonitor>().wrapping_add(
-        size_of::<crate::abi::IhkOsCpuMonitor>() * unsafe { (*cpu_info).ncpus as usize },
+        size_of::<crate::abi::IhkOsCpuMonitor>() * ncpus as usize,
     );
     let pages = ((bytes + PAGE_SIZE - 1) >> PAGE_SHIFT) as CInt;
+    unsafe {
+        crate::x86_setup::early_phase(b'7');
+    }
     let monitor_ptr = unsafe {
         _ihk_mc_alloc_aligned_pages_node(
             pages,
@@ -279,11 +300,59 @@ pub unsafe extern "C" fn monitor_init() {
     }
     .cast::<IhkOsMonitor>();
     unsafe {
-        write_bytes(monitor_ptr.cast::<u8>(), 0, pages as usize * PAGE_SIZE);
-        (*monitor_ptr).num_processors = (*cpu_info).ncpus as CULong;
+        crate::x86_setup::early_phase(b'8');
+        if monitor_ptr.is_null() {
+            crate::x86_setup::early_panic();
+            kernel_panic(cstr(b"PANIC: monitor_init() allocation failed.\0"));
+        }
+        if pages <= 0 {
+            crate::x86_setup::early_panic();
+            kernel_panic(cstr(b"PANIC: monitor_init() invalid page count.\0"));
+        }
+        let Some(span) = (pages as usize).checked_mul(PAGE_SIZE) else {
+            crate::x86_setup::early_panic();
+            kernel_panic(cstr(b"PANIC: monitor_init() page span overflow.\0"));
+        };
+        let probe_phys = virt_to_phys(monitor_ptr.cast::<c_void>());
+        let canonical_ptr = phys_to_virt(probe_phys).cast::<u8>();
+        kprintf(
+            cstr(
+                b"monitor_init: ptr=%lx phys=%lx canonical=%lx pages=%d bytes=%lu ncpus=%d\n\0",
+            ),
+            monitor_ptr as CULong,
+            probe_phys,
+            canonical_ptr as CULong,
+            pages,
+            bytes as CULong,
+            ncpus,
+        );
+        crate::x86_setup::early_phase(b'.');
+        write_volatile(canonical_ptr, 0);
+        crate::x86_setup::early_phase(b':');
+        write_volatile(canonical_ptr.add(span - 1), 0);
+        crate::x86_setup::early_phase(b';');
+        write_volatile(monitor_ptr.cast::<u8>(), 0);
+        crate::x86_setup::early_phase(b'<');
+        write_volatile(monitor_ptr.cast::<u8>().add(span - 1), 0);
+        crate::x86_setup::early_phase(b'=');
+        let raw_ptr = monitor_ptr.cast::<u8>();
+        let mut offset = 0usize;
+        while offset < span {
+            write_volatile(raw_ptr.add(offset), 0);
+            offset += 1;
+        }
+        crate::x86_setup::early_phase(b'>');
+        write_volatile(
+            core::ptr::addr_of_mut!((*monitor_ptr).num_processors),
+            ncpus as CULong,
+        );
+        crate::x86_setup::early_phase(b'/');
         monitor = monitor_ptr;
+        crate::x86_setup::early_phase(b'9');
         let phys = virt_to_phys(monitor_ptr.cast::<c_void>());
+        crate::x86_setup::early_phase(b'0');
         ihk_set_monitor(phys, bytes as CULong);
+        crate::x86_setup::early_phase(b'+');
     }
 }
 
@@ -306,16 +375,27 @@ unsafe fn uti_init() {}
 unsafe fn rest_init() {
     unsafe {
         handler_init();
+        crate::x86_setup::early_phase(b'M');
         ap_init();
+        crate::x86_setup::early_phase(b'N');
         cpu_local_var_init();
+        crate::x86_setup::early_phase(b'O');
         multi_intr_init();
+        crate::x86_setup::early_phase(b'P');
         nmi_init();
+        crate::x86_setup::early_phase(b'Q');
         uti_init();
+        crate::x86_setup::early_phase(b'R');
         time_init();
+        crate::x86_setup::early_phase(b'S');
         kmalloc_init();
+        crate::x86_setup::early_phase(b'T');
         ihk_ikc_master_init();
+        crate::x86_setup::early_phase(b'U');
         proc_init();
+        crate::x86_setup::early_phase(b'V');
         sched_init();
+        crate::x86_setup::early_phase(b'W');
     }
 }
 
@@ -454,14 +534,19 @@ unsafe fn populate_sysfs() {
 
 unsafe fn post_init() {
     unsafe {
+        crate::x86_setup::early_phase(b'[');
         cpu_enable_interrupt();
+        crate::x86_setup::early_phase(b']');
     }
 
-    while unsafe { host_ikc_inited } == 0 {
+    while unsafe { core::ptr::read_volatile(&raw const host_ikc_inited) } == 0 {
         core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::SeqCst);
         unsafe {
             cpu_pause();
         }
+    }
+    unsafe {
+        crate::x86_setup::early_phase(b'{');
     }
 
     if !unsafe { find_command_line(cstr(b"hidos\0")) }.is_null() {
@@ -479,13 +564,18 @@ unsafe fn post_init() {
             init_host_ikc2linux(ikc_cpu);
         }
     }
-
     unsafe {
+        crate::x86_setup::early_phase(b'}');
         arch_setup_vdso();
+        crate::x86_setup::early_phase(b'^');
         arch_start_pvclock();
+        crate::x86_setup::early_phase(b'&');
         ap_start();
+        crate::x86_setup::early_phase(b'*');
         sysfs_init();
+        crate::x86_setup::early_phase(b'(');
         populate_sysfs();
+        crate::x86_setup::early_phase(b')');
     }
     #[cfg(enable_tofu)]
     unsafe {
@@ -497,11 +587,17 @@ unsafe fn post_init() {
 pub unsafe extern "C" fn main() -> CInt {
     unsafe {
         arch_init();
+        crate::x86_setup::early_phase(b'H');
         parse_kargs();
+        crate::x86_setup::early_phase(b'I');
         mem_init();
+        crate::x86_setup::early_phase(b'J');
         rest_init();
+        crate::x86_setup::early_phase(b'X');
         arch_ready();
+        crate::x86_setup::early_phase(b'Y');
         post_init();
+        crate::x86_setup::early_phase(b'Z');
         futex_init();
         done_init();
         kputs(cstr(b"IHK/McKernel booted.\n\0"));

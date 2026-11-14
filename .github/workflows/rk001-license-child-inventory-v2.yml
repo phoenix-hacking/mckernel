@@ -1,0 +1,261 @@
+name: RK-001 successor child inventory v2 capture
+
+on:
+  workflow_dispatch:
+    inputs:
+      validation_sha:
+        description: Exact 40-hex candidate commit containing the additive v2 contract
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  EXPECTED_HEAD_SHA: ${{ inputs.validation_sha }}
+  RK001_CONTAINER_IMAGE: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+
+jobs:
+  child-inventory-v2:
+    name: Capture missing child members (unreviewed, no credit)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    container:
+      image: rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Reject mutable dispatch and runtime identity
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_HEAD_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$GITHUB_SHA" == "$EXPECTED_HEAD_SHA" ]]
+          [[ "$GITHUB_WORKFLOW_SHA" == "$EXPECTED_HEAD_SHA" ]]
+          case "$GITHUB_WORKFLOW_REF" in
+            "$GITHUB_REPOSITORY/.github/workflows/rk001-license-child-inventory-v2.yml@refs/heads/"*|\
+            "$GITHUB_REPOSITORY/.github/workflows/rk001-license-child-inventory-v2.yml@refs/tags/"*) ;;
+            *) echo 'unexpected child-inventory workflow ref' >&2; exit 1 ;;
+          esac
+          [[ "$(uname -m)" == x86_64 ]]
+          . /etc/os-release
+          [[ "$ID" == rocky ]]
+          [[ "$VERSION_ID" == 10.2 ]]
+
+      - name: Install bounded source and archive tools
+        run: |
+          set -euo pipefail
+          /usr/bin/dnf -y --setopt=install_weak_deps=False install \
+            cpio diffutils git-core gzip python3 rpm tar xz
+          /usr/bin/dnf clean all
+          for tool in /usr/bin/cpio /usr/bin/diff /usr/bin/git /usr/bin/python3 \
+            /usr/bin/rpm2cpio /usr/bin/sha256sum /usr/bin/tar /usr/bin/xz; do
+            test -x "$tool"
+          done
+
+      - name: Check out the exact candidate without persisted credentials
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ env.EXPECTED_HEAD_SHA }}
+          fetch-depth: 0
+          persist-credentials: false
+          set-safe-directory: true
+
+      - name: Freeze and verify the additive authority privately
+        env:
+          AUTHORITY_ROOT: ${{ runner.temp }}/rk001-child-inventory-v2-authority
+        run: |
+          set -euo pipefail
+          canonical_workspace="$(/usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B -c \
+            'import os, sys; print(os.path.realpath(sys.argv[1]))' \
+            "$GITHUB_WORKSPACE")"
+          git_repo=(
+            /usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C
+            GIT_ATTR_NOSYSTEM=1 GIT_CONFIG_GLOBAL=/dev/null
+            GIT_CONFIG_NOSYSTEM=1 GIT_NO_REPLACE_OBJECTS=1
+            GIT_OPTIONAL_LOCKS=0 /usr/bin/git
+            -c "safe.directory=$canonical_workspace" -c core.filemode=true
+            -c core.fsmonitor=false -c core.hooksPath=/dev/null
+            -c core.untrackedCache=false
+          )
+          test "$("${git_repo[@]}" -C "$canonical_workspace" \
+            rev-parse --verify 'HEAD^{commit}')" = "$EXPECTED_HEAD_SHA"
+          "${git_repo[@]}" -C "$canonical_workspace" diff-files \
+            --quiet --no-ext-diff --
+          "${git_repo[@]}" -C "$canonical_workspace" diff-index \
+            --cached --quiet --no-ext-diff "$EXPECTED_HEAD_SHA" --
+          test -z "$("${git_repo[@]}" -C "$canonical_workspace" \
+            ls-files --others --)"
+          test ! -e "$AUTHORITY_ROOT"
+          mkdir -m 700 "$AUTHORITY_ROOT"
+          "${git_repo[@]}" -C "$canonical_workspace" archive \
+            --format=tar "$EXPECTED_HEAD_SHA" | \
+            /usr/bin/tar --extract --directory "$AUTHORITY_ROOT" \
+              --no-same-owner --no-same-permissions
+          authority_paths=(
+            .github/workflows/rk001-license-child-inventory-v2.yml
+            host-kernel/rocky/evidence/rk001-license-child-inventory-contract-ef58-v2.json
+            host-kernel/rocky/evidence/rk001-license-review-campaign-ef58-v1.json
+            host-kernel/rocky/source-lock.json
+            scripts/rocky_kernel_license_child_inventory_v2.py
+            scripts/rocky_kernel_license_inventory.py
+            scripts/rocky_kernel_source_lock.py
+            scripts/tests/test_rocky_kernel_license_child_inventory_v2.py
+          )
+          for relative in "${authority_paths[@]}"; do
+            candidate="$canonical_workspace/$relative"
+            private="$AUTHORITY_ROOT/$relative"
+            test -f "$candidate"
+            test ! -L "$candidate"
+            test -f "$private"
+            test ! -L "$private"
+            expected_blob="$("${git_repo[@]}" -C "$canonical_workspace" \
+              rev-parse "$EXPECTED_HEAD_SHA:$relative")"
+            test "$(/usr/bin/git hash-object --no-filters -- "$candidate")" = \
+              "$expected_blob"
+            test "$(/usr/bin/git hash-object --no-filters -- "$private")" = \
+              "$expected_blob"
+          done
+          find "$AUTHORITY_ROOT" -type f -exec chmod a-w -- {} +
+          find "$AUTHORITY_ROOT" -type d -exec chmod a-w -- {} +
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/rocky_kernel_license_child_inventory_v2.py" \
+              --repo "$AUTHORITY_ROOT" --check
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/tests/test_rocky_kernel_license_child_inventory_v2.py" -v
+
+      - name: Acquire and extract the exact locked source RPM
+        env:
+          AUTHORITY_ROOT: ${{ runner.temp }}/rk001-child-inventory-v2-authority
+          SOURCE_ROOT: ${{ runner.temp }}/rk001-child-inventory-v2-source
+        run: |
+          set -euo pipefail
+          test ! -e "$SOURCE_ROOT"
+          mkdir -m 700 -p "$SOURCE_ROOT/cache" "$SOURCE_ROOT/extracted"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/rocky_kernel_source_lock.py" \
+              --repo "$AUTHORITY_ROOT" --acquire \
+              --cache-root "$SOURCE_ROOT/cache"
+          srpm="$(find "$SOURCE_ROOT/cache" -type f \
+            -name 'kernel-6.12.0-211.44.1.el10_2.src.rpm' -print -quit)"
+          test -n "$srpm"
+          test "$(stat -c '%s' -- "$srpm")" = 159328372
+          actual="$(/usr/bin/sha256sum --binary "$srpm")"
+          test "${actual%% *}" = \
+            2bfeda65bd9bdd4b86650074c81e061c37822b80317ac0d4f5aacc89c85589cb
+          listing="$SOURCE_ROOT/srpm-members.txt"
+          /usr/bin/rpm2cpio "$srpm" | /usr/bin/cpio --quiet -it > "$listing"
+          /usr/bin/env -i PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            /usr/bin/python3 -I -S -B - "$listing" <<'PY'
+          import pathlib
+          import sys
+          names = []
+          with open(sys.argv[1], "r", encoding="utf-8") as source:
+              for raw in source:
+                  value = raw.rstrip("\n")
+                  if value.startswith("./"):
+                      value = value[2:]
+                  path = pathlib.PurePosixPath(value)
+                  if (not value or "\\" in value or path.is_absolute()
+                          or path.as_posix() != value
+                          or any(part in ("", ".", "..") for part in path.parts)):
+                      raise SystemExit("unsafe SRPM member")
+                  names.append(value)
+                  if len(names) > 10000:
+                      raise SystemExit("SRPM member count exceeds its cap")
+          if not names or len(names) != len(set(names)):
+              raise SystemExit("SRPM member list is empty or duplicated")
+          PY
+          (
+            cd "$SOURCE_ROOT/extracted"
+            /usr/bin/rpm2cpio "$srpm" | \
+              /usr/bin/cpio --quiet -idm --no-absolute-filenames --no-preserve-owner
+          )
+          test -z "$(find "$SOURCE_ROOT/extracted" -type l -print -quit)"
+          test -z "$(find "$SOURCE_ROOT/extracted" ! -type d ! -type f -print -quit)"
+          stablelists="$(find "$SOURCE_ROOT/extracted" -type f \
+            -name 'kernel-abi-stablelists-6.12.0-211.44.1.el10_2.tar.xz' -print)"
+          kabi_dw="$(find "$SOURCE_ROOT/extracted" -type f \
+            -name 'kernel-kabi-dw-6.12.0-211.44.1.el10_2.tar.xz' -print)"
+          test "$(printf '%s\n' "$stablelists" | sed '/^$/d' | wc -l)" = 1
+          test "$(printf '%s\n' "$kabi_dw" | sed '/^$/d' | wc -l)" = 1
+          test "$(stat -c '%s' -- "$stablelists")" = 18168
+          test "$(stat -c '%s' -- "$kabi_dw")" = 1096
+          actual="$(/usr/bin/sha256sum --binary "$stablelists")"
+          test "${actual%% *}" = \
+            9c753338d255502a040c82be6a39a47b80df15e30fb1d3bc2f13687522c27032
+          actual="$(/usr/bin/sha256sum --binary "$kabi_dw")"
+          test "${actual%% *}" = \
+            7547d50e4f0daeb28eba949801d3d09d0c3c6a8946859759a44d00f786791d4e
+          printf '%s\n' "$stablelists" > "$SOURCE_ROOT/stablelists-path"
+          printf '%s\n' "$kabi_dw" > "$SOURCE_ROOT/kabi-dw-path"
+
+      - name: Capture twice, compare, and verify without review claims
+        env:
+          AUTHORITY_ROOT: ${{ runner.temp }}/rk001-child-inventory-v2-authority
+          OUTPUT_ROOT: ${{ runner.temp }}/rk001-child-inventory-v2-output
+          SOURCE_ROOT: ${{ runner.temp }}/rk001-child-inventory-v2-source
+        run: |
+          set -euo pipefail
+          test ! -e "$OUTPUT_ROOT"
+          mkdir -m 700 "$OUTPUT_ROOT"
+          stablelists="$(tr -d '\n' < "$SOURCE_ROOT/stablelists-path")"
+          kabi_dw="$(tr -d '\n' < "$SOURCE_ROOT/kabi-dw-path")"
+          common=(
+            --repo "$AUTHORITY_ROOT"
+            --capture
+            --stablelists-archive "$stablelists"
+            --kabi-dw-archive "$kabi_dw"
+            --github-head-sha "$EXPECTED_HEAD_SHA"
+            --github-run-id "$GITHUB_RUN_ID"
+            --github-run-attempt "$GITHUB_RUN_ATTEMPT"
+            --github-repository "$GITHUB_REPOSITORY"
+            --container-image "$RK001_CONTAINER_IMAGE"
+          )
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/rocky_kernel_license_child_inventory_v2.py" \
+              "${common[@]}" --output-dir "$OUTPUT_ROOT/capture-a"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/rocky_kernel_license_child_inventory_v2.py" \
+              "${common[@]}" --output-dir "$OUTPUT_ROOT/capture-b"
+          /usr/bin/diff --no-dereference --recursive \
+            "$OUTPUT_ROOT/capture-a" "$OUTPUT_ROOT/capture-b"
+          /usr/bin/env -i \
+            PATH=/usr/bin:/bin HOME=/nonexistent LANG=C LC_ALL=C \
+            PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 -I -S -B \
+              "$AUTHORITY_ROOT/scripts/rocky_kernel_license_child_inventory_v2.py" \
+              --repo "$AUTHORITY_ROOT" \
+              --verify-capture "$OUTPUT_ROOT/capture-a"
+          (
+            cd "$OUTPUT_ROOT/capture-a"
+            /usr/bin/sha256sum --check --strict SHA256SUMS
+          )
+
+      - name: Upload temporary machine capture without tracker credit
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: rk001-license-child-inventory-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/rk001-child-inventory-v2-output/capture-a/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+          include-hidden-files: true
