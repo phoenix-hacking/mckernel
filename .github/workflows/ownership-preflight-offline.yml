@@ -1,0 +1,18 @@
+name: Retained ownership preflight fixtures
+on:
+  push:
+    branches: [codex/ownership-preflight-ci-20261114]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  affected-fixtures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          sparse-checkout: scripts
+          persist-credentials: false
+      - name: Check cancellation identity and incomplete ownership refusal offline
+        run: python3 -B -m unittest -v scripts.tests.test_reconcile_retained_os_owners
