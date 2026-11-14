@@ -14,6 +14,7 @@ jobs:
         with:
           sparse-checkout: |
             kernel/rust
+            host-kernel/native-rust
             ci/c4-whole-crate
           persist-credentials: false
       - name: Install the exact already-qualified compiler

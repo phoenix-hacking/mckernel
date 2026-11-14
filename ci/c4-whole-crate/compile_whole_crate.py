@@ -65,7 +65,7 @@ obj = work / "mckernel_rust.o"
 subprocess.run(["readelf", "-h", str(obj)], check=True)
 symbols = subprocess.check_output(["nm", "--defined-only", "--format=posix", str(obj)], text=True)
 (work / "defined-symbols.txt").write_text(symbols)
-for name in ["util_thread", "syscall_execveat_bridge", "mckernel_util_clone_disabled_log_void", "f03_execveat_complete_rust_abi_words"]:
+for name in ["util_thread", "syscall_execveat_bridge", "syscall_util_indicate_clone_disabled_bridge", "f03_execveat_complete_rust_abi_words"]:
     matches = [line for line in symbols.splitlines() if line.split()[0] == name]
     assert len(matches) == 1, (name, matches)
     assert matches[0].split()[1] in {"T", "R", "D"}, matches[0]
