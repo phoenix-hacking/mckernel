@@ -1,5 +1,42 @@
 # McKernel: M14 → M15 → complete supported system
 
+## Two original DEFAULT checks complete — 2026-11-14T04:55:42.197920+00:00
+
+Root recorded M14-03-02-DEFAULT, then M14-03-01-DEFAULT at their complete original
+supported-default source/selection/ABI/provider/coherent-image scope. Independent
+clause-by-clause GO28d02b25 plus actual whole Rustcab24c89/Cc23dce74/35-word ABI/
+13-input final imagec818df7c and unchanged real provider mappings support these two
+rows. All literal clauses/dependencies/held-execution restrictions were addressed;
+no new normal-CMake/native quota was added and neither route is claimed proven.
+Original count107/156 (49open), M14 checklist70.74%,M15 unchanged74.59%; neither
+milestone accepted. Original criteria, weights and156 denominator are unchanged.
+FUNCTIONAL/native, wholeF03 and all actual holds remain open. Public exact record:
+[ROOT-DEFAULT-COMPLETIONS.json](../docs/verification/m14-default-ownership-20261114/ROOT-DEFAULT-COMPLETIONS.json).
+Derived requirement/milestone rollups and CSV were updated from the original graph.
+
+Next source/artifact adjudication uses the SAME FunctionalDelta context for literal
+M14-F03-DEFAULT, then M14-I01-E2/E3 only where every actual original clause is met;
+otherwise report one concrete missing proof/operation. No green rerun or extra quota.
+The exact3PID metadata actorc53 was NOT executed: Proc NO_GO606d2fcb found vacuous
+empty-task coverage and repeated namespace errors gaining stable_exact_metadata.
+Same NativeCurrent author fixes only these predicates/dependent pins in one fresh
+correction; Proc reviews changed lines, then Root executes once after exactGO/fresh
+admission. Cancellation128/verify160 own families are Q/Root retired, but old
+2415919104B/jobs2 and old outcomeUNKNOWN/native12/source/lease/IPC/global holds
+remain. No resource-adapter6a adoption/hotpatch. Vendor Rust verifier/key source
+bridge affa940d has independent sourceGOfdb420ba; acquisition still needs an actual
+Root capture/request/fullargv/admission composition and has not run.
+
+Active source564d95198707e329c619181a44b64234061d31ca is pushed/fetched-verified,
+including F02 descriptor fix and IHK16 qualified delta; no native/originalF02 credit.
+Foreground Docker ps succeeded and observedZERO local running containers at04:42;
+the two prior jobs were hostedCI. Current capacity remains at most3 HOSTjobs in
+one4GiB TOTAL pool including every retained family and ALL overhead, plus the
+separate actually admitted native2-5/12GiB single owner; no4 independent budgets.
+Source work and only meaningful admitted operations continue in parallel. Same
+Root/finite history/rejected task+nonces remain; no reset/replay/relaunch. M14 final
+before M15; checkpoint/pause after BOTH original acceptances or any later real stop.
+
 ## Qualified F02/IHK increment and exact native-admission gap — 2026-11-14T04:35:47.959088+00:00
 
 Root integrated only qualified F02 descriptor-lifetime3-path patch e8b2fc8e and
@@ -18,7 +55,7 @@ Kbuild authority triple/masked selfdigest and owned per-command Git maintenance
 controls qualify at their stated scope. Trace776 events had0 maintenance/gc starts;
 prior ENOTEMPTY cause remains inference. Broader image-owner/offline/native routes
 are not accepted. No25/9/183/C4 green rerun, compiler/module/cache rebuild or stripped
-mirror merge. Root is committing/pushing this bounded qualified source increment.
+mirror merge. Root pushed/fetched-verified this bounded qualified increment as564d95198707e329c619181a44b64234061d31ca; ten exact changed source blobs match the hosted postimages.
 An outer patch-parser assumption rejected IHK's standard unified-diff header after
 F02 had already applied. Exact postimages were preserved/skipped; only that parser
 assumption was corrected, then unchanged IHK bytes passed apply/whitespace checks.

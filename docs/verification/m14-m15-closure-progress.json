@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-12T13:23:40.980339+00:00",
+  "updated_at": "2026-11-14T04:55:42.197920+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,7 +32,7 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 70.0,
+      "checklist_percent_complete": 70.74,
       "file_acceptance_percent": 66.67,
       "integration_acceptance_percent": 33.33,
       "milestone_accepted": false,
@@ -96,7 +96,7 @@
         "M14-03-01-DEFAULT",
         "M14-03-01-FUNCTIONAL"
       ],
-      "percent_complete": 33.33,
+      "percent_complete": 66.67,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -132,7 +132,7 @@
         "M14-03-02-DEFAULT",
         "M14-03-02-FUNCTIONAL"
       ],
-      "percent_complete": 33.33,
+      "percent_complete": 66.67,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -244,7 +244,7 @@
           "limits": "Not a whole-area or file acceptance."
         },
         {
-          "scope": "C perf host request args1\u20135 zeroed to match existing Rust;12 wire/identity/error/counter cases pass.",
+          "scope": "C perf host request args1–5 zeroed to match existing Rust;12 wire/identity/error/counter cases pass.",
           "level": "bounded_campaign_summary",
           "limits": "Not a whole-area or file acceptance."
         }
@@ -565,7 +565,7 @@
         "M14-F03-FUNCTIONAL",
         "M14-F03-ACCEPT"
       ],
-      "percent_complete": 48.33,
+      "percent_complete": 55.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -1068,7 +1068,7 @@
         "focused_ABI_behavior": "Device selector/query prerequisite-error paths and CPU formatting. Actual main invalid-selector/usage preflights pass before device dispatch.",
         "current_delta": "No currently assigned source delta in this snapshot.",
         "limits": "Focused CLI/provider HOST results do not establish installed/default real-device/native behavior.",
-        "unknown_action": "PairedC/Rustsource+4actualmainFUNCTIONcases/tool+actualchangedRustbuildPASS; raw0\u21921, exactstdio/zeroioctl/onceclose. No deployed/nativeacceptance."
+        "unknown_action": "PairedC/Rustsource+4actualmainFUNCTIONcases/tool+actualchangedRustbuildPASS; raw0→1, exactstdio/zeroioctl/onceclose. No deployed/nativeacceptance."
       },
       "remaining_actions": [
         "Complete supported/default command behavior with actual device/backend providers.",
@@ -1118,7 +1118,7 @@
         "focused_ABI_behavior": "OS selector/query and release-mem-all prerequisites; dump subcommand getopt; IKC failure propagation. Actual main invalid-selector/usage preflights pass before device dispatch.",
         "current_delta": "Intr pairedsource/24definedC-RustHOSTcases/changedactualtoolPASS; firstcodegenPIDmetadataUNKNOWNpreserved. Unknown-action source proposal is separately reviewed/private, no result credit yet.",
         "limits": "Focused CLI/provider HOST results do not establish installed/default real-device/native behavior.",
-        "unknown_action": "PairedC/Rustsource+4actualmainFUNCTIONcases/tool+actualchangedRustbuildPASS; raw0\u21921, exactstdio/zeroioctl/onceclose. No deployed/nativeacceptance."
+        "unknown_action": "PairedC/Rustsource+4actualmainFUNCTIONcases/tool+actualchangedRustbuildPASS; raw0→1, exactstdio/zeroioctl/onceclose. No deployed/nativeacceptance."
       },
       "remaining_actions": [
         "Complete supported/default command behavior with actual device/backend providers.",
@@ -1420,9 +1420,9 @@
       "id": "M14-03-01-DEFAULT",
       "parent": "M14-03-01",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "demonstrated_at_stated_scope",
       "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -1441,7 +1441,9 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-default-ownership-20261114/ADJUDICATION.json",
+        "docs/verification/m14-default-ownership-20261114/ROOT-DEFAULT-COMPLETIONS.json"
       ],
       "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
       "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
@@ -1512,9 +1514,9 @@
       "id": "M14-03-02-DEFAULT",
       "parent": "M14-03-02",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "demonstrated_at_stated_scope",
       "owner": "Root integration/compositor; applicable original hold and native/source authorities retain release ownership",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -1533,7 +1535,9 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-default-ownership-20261114/ADJUDICATION.json",
+        "docs/verification/m14-default-ownership-20261114/ROOT-DEFAULT-COMPLETIONS.json"
       ],
       "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
       "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
@@ -7059,7 +7063,7 @@
     {
       "id": "MODULE:ihk.ko:inputs",
       "parent": "MODULE_REGISTER",
-      "title": "ihk.ko \u2014 inputs",
+      "title": "ihk.ko — inputs",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7088,7 +7092,7 @@
     {
       "id": "MODULE:ihk.ko:ownership",
       "parent": "MODULE_REGISTER",
-      "title": "ihk.ko \u2014 ownership",
+      "title": "ihk.ko — ownership",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7117,7 +7121,7 @@
     {
       "id": "MODULE:ihk.ko:build-ABI",
       "parent": "MODULE_REGISTER",
-      "title": "ihk.ko \u2014 build-ABI",
+      "title": "ihk.ko — build-ABI",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7146,7 +7150,7 @@
     {
       "id": "MODULE:ihk.ko:delivered",
       "parent": "MODULE_REGISTER",
-      "title": "ihk.ko \u2014 delivered",
+      "title": "ihk.ko — delivered",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7175,7 +7179,7 @@
     {
       "id": "MODULE:ihk-smp-x86_64.ko:inputs",
       "parent": "MODULE_REGISTER",
-      "title": "ihk-smp-x86_64.ko \u2014 inputs",
+      "title": "ihk-smp-x86_64.ko — inputs",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7204,7 +7208,7 @@
     {
       "id": "MODULE:ihk-smp-x86_64.ko:ownership",
       "parent": "MODULE_REGISTER",
-      "title": "ihk-smp-x86_64.ko \u2014 ownership",
+      "title": "ihk-smp-x86_64.ko — ownership",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7233,7 +7237,7 @@
     {
       "id": "MODULE:ihk-smp-x86_64.ko:build-ABI",
       "parent": "MODULE_REGISTER",
-      "title": "ihk-smp-x86_64.ko \u2014 build-ABI",
+      "title": "ihk-smp-x86_64.ko — build-ABI",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7262,7 +7266,7 @@
     {
       "id": "MODULE:ihk-smp-x86_64.ko:delivered",
       "parent": "MODULE_REGISTER",
-      "title": "ihk-smp-x86_64.ko \u2014 delivered",
+      "title": "ihk-smp-x86_64.ko — delivered",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7291,7 +7295,7 @@
     {
       "id": "MODULE:mcctrl.ko:inputs",
       "parent": "MODULE_REGISTER",
-      "title": "mcctrl.ko \u2014 inputs",
+      "title": "mcctrl.ko — inputs",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7320,7 +7324,7 @@
     {
       "id": "MODULE:mcctrl.ko:ownership",
       "parent": "MODULE_REGISTER",
-      "title": "mcctrl.ko \u2014 ownership",
+      "title": "mcctrl.ko — ownership",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7349,7 +7353,7 @@
     {
       "id": "MODULE:mcctrl.ko:build-ABI",
       "parent": "MODULE_REGISTER",
-      "title": "mcctrl.ko \u2014 build-ABI",
+      "title": "mcctrl.ko — build-ABI",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7378,7 +7382,7 @@
     {
       "id": "MODULE:mcctrl.ko:delivered",
       "parent": "MODULE_REGISTER",
-      "title": "mcctrl.ko \u2014 delivered",
+      "title": "mcctrl.ko — delivered",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified",
@@ -7407,7 +7411,7 @@
     {
       "id": "LIBIHK:__argc",
       "parent": "LIBIHK_REGISTER",
-      "title": "__argc \u2014 complete delivered data qualification",
+      "title": "__argc — complete delivered data qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7444,7 +7448,7 @@
     {
       "id": "LIBIHK:__argv",
       "parent": "LIBIHK_REGISTER",
-      "title": "__argv \u2014 complete delivered data qualification",
+      "title": "__argv — complete delivered data qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7481,7 +7485,7 @@
     {
       "id": "LIBIHK:_ihk_os_assign_cpu_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "_ihk_os_assign_cpu_str \u2014 complete delivered function qualification",
+      "title": "_ihk_os_assign_cpu_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7518,7 +7522,7 @@
     {
       "id": "LIBIHK:_ihk_os_set_ikc_map_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "_ihk_os_set_ikc_map_str \u2014 complete delivered function qualification",
+      "title": "_ihk_os_set_ikc_map_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7555,7 +7559,7 @@
     {
       "id": "LIBIHK:_ihk_reserve_cpu_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "_ihk_reserve_cpu_str \u2014 complete delivered function qualification",
+      "title": "_ihk_reserve_cpu_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7592,7 +7596,7 @@
     {
       "id": "LIBIHK:_ihk_reserve_mem_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "_ihk_reserve_mem_str \u2014 complete delivered function qualification",
+      "title": "_ihk_reserve_mem_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7629,7 +7633,7 @@
     {
       "id": "LIBIHK:cpu_req2str",
       "parent": "LIBIHK_REGISTER",
-      "title": "cpu_req2str \u2014 complete delivered function qualification",
+      "title": "cpu_req2str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7666,7 +7670,7 @@
     {
       "id": "LIBIHK:cpu_str2count",
       "parent": "LIBIHK_REGISTER",
-      "title": "cpu_str2count \u2014 complete delivered function qualification",
+      "title": "cpu_str2count — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7703,7 +7707,7 @@
     {
       "id": "LIBIHK:cpu_str2req",
       "parent": "LIBIHK_REGISTER",
-      "title": "cpu_str2req \u2014 complete delivered function qualification",
+      "title": "cpu_str2req — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7740,7 +7744,7 @@
     {
       "id": "LIBIHK:dump_reserve_mem_conf",
       "parent": "LIBIHK_REGISTER",
-      "title": "dump_reserve_mem_conf \u2014 complete delivered function qualification",
+      "title": "dump_reserve_mem_conf — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7777,7 +7781,7 @@
     {
       "id": "LIBIHK:ihk_create_os",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_create_os \u2014 complete delivered function qualification",
+      "title": "ihk_create_os — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7814,7 +7818,7 @@
     {
       "id": "LIBIHK:ihk_create_os_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_create_os_str \u2014 complete delivered function qualification",
+      "title": "ihk_create_os_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7851,7 +7855,7 @@
     {
       "id": "LIBIHK:ihk_destroy_os",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_destroy_os \u2014 complete delivered function qualification",
+      "title": "ihk_destroy_os — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7888,7 +7892,7 @@
     {
       "id": "LIBIHK:ihk_get_num_os_instances",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_get_num_os_instances \u2014 complete delivered function qualification",
+      "title": "ihk_get_num_os_instances — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7925,7 +7929,7 @@
     {
       "id": "LIBIHK:ihk_get_num_reserved_cpus",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_get_num_reserved_cpus \u2014 complete delivered function qualification",
+      "title": "ihk_get_num_reserved_cpus — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7962,7 +7966,7 @@
     {
       "id": "LIBIHK:ihk_get_num_reserved_mem_chunks",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_get_num_reserved_mem_chunks \u2014 complete delivered function qualification",
+      "title": "ihk_get_num_reserved_mem_chunks — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -7999,7 +8003,7 @@
     {
       "id": "LIBIHK:ihk_get_os_instances",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_get_os_instances \u2014 complete delivered function qualification",
+      "title": "ihk_get_os_instances — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8036,7 +8040,7 @@
     {
       "id": "LIBIHK:ihk_os_assign_cpu",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_assign_cpu \u2014 complete delivered function qualification",
+      "title": "ihk_os_assign_cpu — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8073,7 +8077,7 @@
     {
       "id": "LIBIHK:ihk_os_assign_cpu_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_assign_cpu_str \u2014 complete delivered function qualification",
+      "title": "ihk_os_assign_cpu_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8110,7 +8114,7 @@
     {
       "id": "LIBIHK:ihk_os_assign_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_assign_mem \u2014 complete delivered function qualification",
+      "title": "ihk_os_assign_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8147,7 +8151,7 @@
     {
       "id": "LIBIHK:ihk_os_boot",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_boot \u2014 complete delivered function qualification",
+      "title": "ihk_os_boot — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8184,7 +8188,7 @@
     {
       "id": "LIBIHK:ihk_os_clear_kmsg",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_clear_kmsg \u2014 complete delivered function qualification",
+      "title": "ihk_os_clear_kmsg — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8221,7 +8225,7 @@
     {
       "id": "LIBIHK:ihk_os_freeze",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_freeze \u2014 complete delivered function qualification",
+      "title": "ihk_os_freeze — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8258,7 +8262,7 @@
     {
       "id": "LIBIHK:ihk_os_get_eventfd",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_eventfd \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_eventfd — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8295,7 +8299,7 @@
     {
       "id": "LIBIHK:ihk_os_get_ikc_map",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_ikc_map \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_ikc_map — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8332,7 +8336,7 @@
     {
       "id": "LIBIHK:ihk_os_get_kmsg_size",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_kmsg_size \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_kmsg_size — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8369,7 +8373,7 @@
     {
       "id": "LIBIHK:ihk_os_get_num_assigned_cpus",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_num_assigned_cpus \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_num_assigned_cpus — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8406,7 +8410,7 @@
     {
       "id": "LIBIHK:ihk_os_get_num_assigned_mem_chunks",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_num_assigned_mem_chunks \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_num_assigned_mem_chunks — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8443,7 +8447,7 @@
     {
       "id": "LIBIHK:ihk_os_get_num_numa_nodes",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_num_numa_nodes \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_num_numa_nodes — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8480,7 +8484,7 @@
     {
       "id": "LIBIHK:ihk_os_get_num_pagesizes",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_num_pagesizes \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_num_pagesizes — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8517,7 +8521,7 @@
     {
       "id": "LIBIHK:ihk_os_get_pagesizes",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_pagesizes \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_pagesizes — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8554,7 +8558,7 @@
     {
       "id": "LIBIHK:ihk_os_get_status",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_get_status \u2014 complete delivered function qualification",
+      "title": "ihk_os_get_status — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8591,7 +8595,7 @@
     {
       "id": "LIBIHK:ihk_os_getperfevent",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_getperfevent \u2014 complete delivered function qualification",
+      "title": "ihk_os_getperfevent — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8628,7 +8632,7 @@
     {
       "id": "LIBIHK:ihk_os_getrusage",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_getrusage \u2014 complete delivered function qualification",
+      "title": "ihk_os_getrusage — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8665,7 +8669,7 @@
     {
       "id": "LIBIHK:ihk_os_kargs",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_kargs \u2014 complete delivered function qualification",
+      "title": "ihk_os_kargs — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8702,7 +8706,7 @@
     {
       "id": "LIBIHK:ihk_os_kargs_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_kargs_str \u2014 complete delivered function qualification",
+      "title": "ihk_os_kargs_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8739,7 +8743,7 @@
     {
       "id": "LIBIHK:ihk_os_kmsg",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_kmsg \u2014 complete delivered function qualification",
+      "title": "ihk_os_kmsg — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8776,7 +8780,7 @@
     {
       "id": "LIBIHK:ihk_os_load",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_load \u2014 complete delivered function qualification",
+      "title": "ihk_os_load — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8813,7 +8817,7 @@
     {
       "id": "LIBIHK:ihk_os_makedumpfile",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_makedumpfile \u2014 complete delivered function qualification",
+      "title": "ihk_os_makedumpfile — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8850,7 +8854,7 @@
     {
       "id": "LIBIHK:ihk_os_perfctl",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_perfctl \u2014 complete delivered function qualification",
+      "title": "ihk_os_perfctl — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8887,7 +8891,7 @@
     {
       "id": "LIBIHK:ihk_os_query_cpu",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_query_cpu \u2014 complete delivered function qualification",
+      "title": "ihk_os_query_cpu — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8924,7 +8928,7 @@
     {
       "id": "LIBIHK:ihk_os_query_free_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_query_free_mem \u2014 complete delivered function qualification",
+      "title": "ihk_os_query_free_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8961,7 +8965,7 @@
     {
       "id": "LIBIHK:ihk_os_query_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_query_mem \u2014 complete delivered function qualification",
+      "title": "ihk_os_query_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -8998,7 +9002,7 @@
     {
       "id": "LIBIHK:ihk_os_query_total_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_query_total_mem \u2014 complete delivered function qualification",
+      "title": "ihk_os_query_total_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9035,7 +9039,7 @@
     {
       "id": "LIBIHK:ihk_os_release_cpu",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_release_cpu \u2014 complete delivered function qualification",
+      "title": "ihk_os_release_cpu — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9072,7 +9076,7 @@
     {
       "id": "LIBIHK:ihk_os_release_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_release_mem \u2014 complete delivered function qualification",
+      "title": "ihk_os_release_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9109,7 +9113,7 @@
     {
       "id": "LIBIHK:ihk_os_set_ikc_map",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_set_ikc_map \u2014 complete delivered function qualification",
+      "title": "ihk_os_set_ikc_map — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9146,7 +9150,7 @@
     {
       "id": "LIBIHK:ihk_os_set_ikc_map_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_set_ikc_map_str \u2014 complete delivered function qualification",
+      "title": "ihk_os_set_ikc_map_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9183,7 +9187,7 @@
     {
       "id": "LIBIHK:ihk_os_setperfevent",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_setperfevent \u2014 complete delivered function qualification",
+      "title": "ihk_os_setperfevent — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9220,7 +9224,7 @@
     {
       "id": "LIBIHK:ihk_os_shutdown",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_shutdown \u2014 complete delivered function qualification",
+      "title": "ihk_os_shutdown — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9257,7 +9261,7 @@
     {
       "id": "LIBIHK:ihk_os_thaw",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_os_thaw \u2014 complete delivered function qualification",
+      "title": "ihk_os_thaw — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9294,7 +9298,7 @@
     {
       "id": "LIBIHK:ihk_query_cpu",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_query_cpu \u2014 complete delivered function qualification",
+      "title": "ihk_query_cpu — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9331,7 +9335,7 @@
     {
       "id": "LIBIHK:ihk_query_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_query_mem \u2014 complete delivered function qualification",
+      "title": "ihk_query_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9368,7 +9372,7 @@
     {
       "id": "LIBIHK:ihk_release_cpu",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_release_cpu \u2014 complete delivered function qualification",
+      "title": "ihk_release_cpu — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9405,7 +9409,7 @@
     {
       "id": "LIBIHK:ihk_release_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_release_mem \u2014 complete delivered function qualification",
+      "title": "ihk_release_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9442,7 +9446,7 @@
     {
       "id": "LIBIHK:ihk_reserve_cpu",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_reserve_cpu \u2014 complete delivered function qualification",
+      "title": "ihk_reserve_cpu — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9479,7 +9483,7 @@
     {
       "id": "LIBIHK:ihk_reserve_cpu_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_reserve_cpu_str \u2014 complete delivered function qualification",
+      "title": "ihk_reserve_cpu_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9516,7 +9520,7 @@
     {
       "id": "LIBIHK:ihk_reserve_mem",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_reserve_mem \u2014 complete delivered function qualification",
+      "title": "ihk_reserve_mem — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9553,7 +9557,7 @@
     {
       "id": "LIBIHK:ihk_reserve_mem_conf",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_reserve_mem_conf \u2014 complete delivered function qualification",
+      "title": "ihk_reserve_mem_conf — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9590,7 +9594,7 @@
     {
       "id": "LIBIHK:ihk_reserve_mem_conf_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_reserve_mem_conf_str \u2014 complete delivered function qualification",
+      "title": "ihk_reserve_mem_conf_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9627,7 +9631,7 @@
     {
       "id": "LIBIHK:ihk_reserve_mem_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_reserve_mem_str \u2014 complete delivered function qualification",
+      "title": "ihk_reserve_mem_str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9664,7 +9668,7 @@
     {
       "id": "LIBIHK:ihk_set_loglevel",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihk_set_loglevel \u2014 complete delivered function qualification",
+      "title": "ihk_set_loglevel — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9701,7 +9705,7 @@
     {
       "id": "LIBIHK:ihklib_device_open",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihklib_device_open \u2014 complete delivered function qualification",
+      "title": "ihklib_device_open — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9738,7 +9742,7 @@
     {
       "id": "LIBIHK:ihklib_os_open",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihklib_os_open \u2014 complete delivered function qualification",
+      "title": "ihklib_os_open — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9775,7 +9779,7 @@
     {
       "id": "LIBIHK:ihklib_os_query_mem_sysfs",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihklib_os_query_mem_sysfs \u2014 complete delivered function qualification",
+      "title": "ihklib_os_query_mem_sysfs — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9812,7 +9816,7 @@
     {
       "id": "LIBIHK:ihklib_os_query_mem_type_str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ihklib_os_query_mem_type_str \u2014 complete delivered data qualification",
+      "title": "ihklib_os_query_mem_type_str — complete delivered data qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9849,7 +9853,7 @@
     {
       "id": "LIBIHK:ikc_req2str",
       "parent": "LIBIHK_REGISTER",
-      "title": "ikc_req2str \u2014 complete delivered function qualification",
+      "title": "ikc_req2str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9886,7 +9890,7 @@
     {
       "id": "LIBIHK:ikc_str2count",
       "parent": "LIBIHK_REGISTER",
-      "title": "ikc_str2count \u2014 complete delivered function qualification",
+      "title": "ikc_str2count — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9923,7 +9927,7 @@
     {
       "id": "LIBIHK:ikc_str2req",
       "parent": "LIBIHK_REGISTER",
-      "title": "ikc_str2req \u2014 complete delivered function qualification",
+      "title": "ikc_str2req — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9960,7 +9964,7 @@
     {
       "id": "LIBIHK:loglevel",
       "parent": "LIBIHK_REGISTER",
-      "title": "loglevel \u2014 complete delivered data qualification",
+      "title": "loglevel — complete delivered data qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -9997,7 +10001,7 @@
     {
       "id": "LIBIHK:mem_req2str",
       "parent": "LIBIHK_REGISTER",
-      "title": "mem_req2str \u2014 complete delivered function qualification",
+      "title": "mem_req2str — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -10034,7 +10038,7 @@
     {
       "id": "LIBIHK:mem_str2count",
       "parent": "LIBIHK_REGISTER",
-      "title": "mem_str2count \u2014 complete delivered function qualification",
+      "title": "mem_str2count — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -10071,7 +10075,7 @@
     {
       "id": "LIBIHK:mem_str2req",
       "parent": "LIBIHK_REGISTER",
-      "title": "mem_str2req \u2014 complete delivered function qualification",
+      "title": "mem_str2req — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -10108,7 +10112,7 @@
     {
       "id": "LIBIHK:namespace_files",
       "parent": "LIBIHK_REGISTER",
-      "title": "namespace_files \u2014 complete delivered data qualification",
+      "title": "namespace_files — complete delivered data qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -10145,7 +10149,7 @@
     {
       "id": "LIBIHK:parse_env",
       "parent": "LIBIHK_REGISTER",
-      "title": "parse_env \u2014 complete delivered function qualification",
+      "title": "parse_env — complete delivered function qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -10182,7 +10186,7 @@
     {
       "id": "LIBIHK:reserve_mem_conf",
       "parent": "LIBIHK_REGISTER",
-      "title": "reserve_mem_conf \u2014 complete delivered data qualification",
+      "title": "reserve_mem_conf — complete delivered data qualification",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unverified_complete_delivered_scope",
@@ -10219,7 +10223,7 @@
     {
       "id": "PROVIDER:__start___verbose",
       "parent": "PROVIDER_REGISTER",
-      "title": "__start___verbose \u2014 final genuine provider binding",
+      "title": "__start___verbose — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10251,7 +10255,7 @@
     {
       "id": "PROVIDER:__stop___verbose",
       "parent": "PROVIDER_REGISTER",
-      "title": "__stop___verbose \u2014 final genuine provider binding",
+      "title": "__stop___verbose — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10283,7 +10287,7 @@
     {
       "id": "PROVIDER:_end",
       "parent": "PROVIDER_REGISTER",
-      "title": "_end \u2014 final genuine provider binding",
+      "title": "_end — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10315,7 +10319,7 @@
     {
       "id": "PROVIDER:_head",
       "parent": "PROVIDER_REGISTER",
-      "title": "_head \u2014 final genuine provider binding",
+      "title": "_head — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10347,7 +10351,7 @@
     {
       "id": "PROVIDER:do_fork",
       "parent": "PROVIDER_REGISTER",
-      "title": "do_fork \u2014 final genuine provider binding",
+      "title": "do_fork — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10379,7 +10383,7 @@
     {
       "id": "PROVIDER:do_mmap",
       "parent": "PROVIDER_REGISTER",
-      "title": "do_mmap \u2014 final genuine provider binding",
+      "title": "do_mmap — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10411,7 +10415,7 @@
     {
       "id": "PROVIDER:do_setresgid",
       "parent": "PROVIDER_REGISTER",
-      "title": "do_setresgid \u2014 final genuine provider binding",
+      "title": "do_setresgid — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10443,7 +10447,7 @@
     {
       "id": "PROVIDER:do_setresuid",
       "parent": "PROVIDER_REGISTER",
-      "title": "do_setresuid \u2014 final genuine provider binding",
+      "title": "do_setresuid — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10475,7 +10479,7 @@
     {
       "id": "PROVIDER:do_syscall",
       "parent": "PROVIDER_REGISTER",
-      "title": "do_syscall \u2014 final genuine provider binding",
+      "title": "do_syscall — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10507,7 +10511,7 @@
     {
       "id": "PROVIDER:exit_group_current_pid_bridge",
       "parent": "PROVIDER_REGISTER",
-      "title": "exit_group_current_pid_bridge \u2014 final genuine provider binding",
+      "title": "exit_group_current_pid_bridge — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10539,7 +10543,7 @@
     {
       "id": "PROVIDER:exit_group_log_bridge",
       "parent": "PROVIDER_REGISTER",
-      "title": "exit_group_log_bridge \u2014 final genuine provider binding",
+      "title": "exit_group_log_bridge — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10571,7 +10575,7 @@
     {
       "id": "PROVIDER:exit_group_terminate_bridge",
       "parent": "PROVIDER_REGISTER",
-      "title": "exit_group_terminate_bridge \u2014 final genuine provider binding",
+      "title": "exit_group_terminate_bridge — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10603,7 +10607,7 @@
     {
       "id": "PROVIDER:f03_brk_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_brk_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_brk_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10635,7 +10639,7 @@
     {
       "id": "PROVIDER:f03_check_signal_empty_debug",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_check_signal_empty_debug \u2014 final genuine provider binding",
+      "title": "f03_check_signal_empty_debug — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10667,7 +10671,7 @@
     {
       "id": "PROVIDER:f03_clear_host_pte_binding_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_clear_host_pte_binding_v1 \u2014 final genuine provider binding",
+      "title": "f03_clear_host_pte_binding_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10699,7 +10703,7 @@
     {
       "id": "PROVIDER:f03_do_exit_debug_v2",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_do_exit_debug_v2 \u2014 final genuine provider binding",
+      "title": "f03_do_exit_debug_v2 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10731,7 +10735,7 @@
     {
       "id": "PROVIDER:f03_do_munmap_binding_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_do_munmap_binding_v1 \u2014 final genuine provider binding",
+      "title": "f03_do_munmap_binding_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10763,7 +10767,7 @@
     {
       "id": "PROVIDER:f03_do_munmap_log_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_do_munmap_log_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_do_munmap_log_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10795,7 +10799,7 @@
     {
       "id": "PROVIDER:f03_exit_notify_debug",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_exit_notify_debug \u2014 final genuine provider binding",
+      "title": "f03_exit_notify_debug — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10827,7 +10831,7 @@
     {
       "id": "PROVIDER:f03_futex_log_debug_v2",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_futex_log_debug_v2 \u2014 final genuine provider binding",
+      "title": "f03_futex_log_debug_v2 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10859,7 +10863,7 @@
     {
       "id": "PROVIDER:f03_futex_retained_providers_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_futex_retained_providers_v1 \u2014 final genuine provider binding",
+      "title": "f03_futex_retained_providers_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10891,7 +10895,7 @@
     {
       "id": "PROVIDER:f03_kill_log_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_kill_log_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_kill_log_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10923,7 +10927,7 @@
     {
       "id": "PROVIDER:f03_mbind_alloc_source_file_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mbind_alloc_source_file_v1 \u2014 final genuine provider binding",
+      "title": "f03_mbind_alloc_source_file_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10955,7 +10959,7 @@
     {
       "id": "PROVIDER:f03_mbind_alloc_source_line_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mbind_alloc_source_line_v1 \u2014 final genuine provider binding",
+      "title": "f03_mbind_alloc_source_line_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -10987,7 +10991,7 @@
     {
       "id": "PROVIDER:f03_mckfd_alloc_origin_file_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mckfd_alloc_origin_file_v1 \u2014 final genuine provider binding",
+      "title": "f03_mckfd_alloc_origin_file_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11019,7 +11023,7 @@
     {
       "id": "PROVIDER:f03_mckfd_alloc_origin_line_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mckfd_alloc_origin_line_v1 \u2014 final genuine provider binding",
+      "title": "f03_mckfd_alloc_origin_line_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11051,7 +11055,7 @@
     {
       "id": "PROVIDER:f03_mckfd_free_origin_file_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mckfd_free_origin_file_v1 \u2014 final genuine provider binding",
+      "title": "f03_mckfd_free_origin_file_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11083,7 +11087,7 @@
     {
       "id": "PROVIDER:f03_mckfd_free_origin_line_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mckfd_free_origin_line_v1 \u2014 final genuine provider binding",
+      "title": "f03_mckfd_free_origin_line_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11115,7 +11119,7 @@
     {
       "id": "PROVIDER:f03_memlock_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_memlock_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_memlock_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11147,7 +11151,7 @@
     {
       "id": "PROVIDER:f03_mincore_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mincore_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_mincore_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11179,7 +11183,7 @@
     {
       "id": "PROVIDER:f03_mprotect_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mprotect_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_mprotect_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11211,7 +11215,7 @@
     {
       "id": "PROVIDER:f03_mprotect_providers_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mprotect_providers_v1 \u2014 final genuine provider binding",
+      "title": "f03_mprotect_providers_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11243,7 +11247,7 @@
     {
       "id": "PROVIDER:f03_mremap_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_mremap_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_mremap_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11275,7 +11279,7 @@
     {
       "id": "PROVIDER:f03_msync_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_msync_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_msync_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11307,7 +11311,7 @@
     {
       "id": "PROVIDER:f03_munmap_public_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_munmap_public_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_munmap_public_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11339,7 +11343,7 @@
     {
       "id": "PROVIDER:f03_perf_allocation_binding_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_allocation_binding_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_allocation_binding_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11371,7 +11375,7 @@
     {
       "id": "PROVIDER:f03_perf_counter_providers_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_counter_providers_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_counter_providers_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11403,7 +11407,7 @@
     {
       "id": "PROVIDER:f03_perf_descriptor_layout_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_descriptor_layout_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_descriptor_layout_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11435,7 +11439,7 @@
     {
       "id": "PROVIDER:f03_perf_event_layout_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_event_layout_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_event_layout_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11467,7 +11471,7 @@
     {
       "id": "PROVIDER:f03_perf_ioctl_data_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_ioctl_data_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_ioctl_data_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11499,7 +11503,7 @@
     {
       "id": "PROVIDER:f03_perf_mmap_binding_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_mmap_binding_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_mmap_binding_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11531,7 +11535,7 @@
     {
       "id": "PROVIDER:f03_perf_read_layout_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_read_layout_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_read_layout_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11563,7 +11567,7 @@
     {
       "id": "PROVIDER:f03_perf_read_providers_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_perf_read_providers_v1 \u2014 final genuine provider binding",
+      "title": "f03_perf_read_providers_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11595,7 +11599,7 @@
     {
       "id": "PROVIDER:f03_process_cleanup_missing_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_process_cleanup_missing_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_process_cleanup_missing_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11627,7 +11631,7 @@
     {
       "id": "PROVIDER:f03_ptrace_attach_parent_debug",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_ptrace_attach_parent_debug \u2014 final genuine provider binding",
+      "title": "f03_ptrace_attach_parent_debug — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11659,7 +11663,7 @@
     {
       "id": "PROVIDER:f03_ptrace_control_debug",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_ptrace_control_debug \u2014 final genuine provider binding",
+      "title": "f03_ptrace_control_debug — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11691,7 +11695,7 @@
     {
       "id": "PROVIDER:f03_ptrace_detach_source_file",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_ptrace_detach_source_file \u2014 final genuine provider binding",
+      "title": "f03_ptrace_detach_source_file — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11723,7 +11727,7 @@
     {
       "id": "PROVIDER:f03_ptrace_entry_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_ptrace_entry_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_ptrace_entry_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11755,7 +11759,7 @@
     {
       "id": "PROVIDER:f03_ptrace_entry_ops_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_ptrace_entry_ops_v1 \u2014 final genuine provider binding",
+      "title": "f03_ptrace_entry_ops_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11787,7 +11791,7 @@
     {
       "id": "PROVIDER:f03_ptrace_text_debug",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_ptrace_text_debug \u2014 final genuine provider binding",
+      "title": "f03_ptrace_text_debug — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11819,7 +11823,7 @@
     {
       "id": "PROVIDER:f03_remap_file_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_remap_file_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_remap_file_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11851,7 +11855,7 @@
     {
       "id": "PROVIDER:f03_rt_sigtimedwait_source_file",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_rt_sigtimedwait_source_file \u2014 final genuine provider binding",
+      "title": "f03_rt_sigtimedwait_source_file — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11883,7 +11887,7 @@
     {
       "id": "PROVIDER:f03_sched_setparam_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_sched_setparam_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_sched_setparam_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11915,7 +11919,7 @@
     {
       "id": "PROVIDER:f03_search_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_search_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_search_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11947,7 +11951,7 @@
     {
       "id": "PROVIDER:f03_settimeofday_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_settimeofday_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_settimeofday_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -11979,7 +11983,7 @@
     {
       "id": "PROVIDER:f03_shmat_data_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmat_data_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmat_data_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12011,7 +12015,7 @@
     {
       "id": "PROVIDER:f03_shmat_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmat_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmat_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12043,7 +12047,7 @@
     {
       "id": "PROVIDER:f03_shmctl_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmctl_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmctl_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12075,7 +12079,7 @@
     {
       "id": "PROVIDER:f03_shmctl_offsets_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmctl_offsets_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmctl_offsets_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12107,7 +12111,7 @@
     {
       "id": "PROVIDER:f03_shmctl_providers_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmctl_providers_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmctl_providers_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12139,7 +12143,7 @@
     {
       "id": "PROVIDER:f03_shmdt_data_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmdt_data_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmdt_data_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12171,7 +12175,7 @@
     {
       "id": "PROVIDER:f03_shmdt_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmdt_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmdt_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12203,7 +12207,7 @@
     {
       "id": "PROVIDER:f03_shmdt_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmdt_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmdt_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12235,7 +12239,7 @@
     {
       "id": "PROVIDER:f03_shmget_constants_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmget_constants_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmget_constants_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12267,7 +12271,7 @@
     {
       "id": "PROVIDER:f03_shmget_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmget_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmget_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12299,7 +12303,7 @@
     {
       "id": "PROVIDER:f03_shmobj_lookup_data_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_shmobj_lookup_data_v1 \u2014 final genuine provider binding",
+      "title": "f03_shmobj_lookup_data_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12331,7 +12335,7 @@
     {
       "id": "PROVIDER:f03_swapout_callback_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_swapout_callback_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_swapout_callback_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12363,7 +12367,7 @@
     {
       "id": "PROVIDER:f03_syscall_dispatch_binding_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_dispatch_binding_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_dispatch_binding_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12395,7 +12399,7 @@
     {
       "id": "PROVIDER:f03_syscall_entry_config_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_entry_config_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_entry_config_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12427,7 +12431,7 @@
     {
       "id": "PROVIDER:f03_syscall_entry_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_entry_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_entry_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12459,7 +12463,7 @@
     {
       "id": "PROVIDER:f03_syscall_get_mempolicy_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_get_mempolicy_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_get_mempolicy_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12491,7 +12495,7 @@
     {
       "id": "PROVIDER:f03_syscall_madvise_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_madvise_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_madvise_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12523,7 +12527,7 @@
     {
       "id": "PROVIDER:f03_syscall_mbind_entry_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_mbind_entry_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_mbind_entry_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12555,7 +12559,7 @@
     {
       "id": "PROVIDER:f03_syscall_mbind_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_mbind_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_mbind_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12587,7 +12591,7 @@
     {
       "id": "PROVIDER:f03_syscall_migrate_pages_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_migrate_pages_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_migrate_pages_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12619,7 +12623,7 @@
     {
       "id": "PROVIDER:f03_syscall_set_mempolicy_log_bridge_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_syscall_set_mempolicy_log_bridge_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_syscall_set_mempolicy_log_bridge_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12651,7 +12655,7 @@
     {
       "id": "PROVIDER:f03_vm_policy_clear_alloc_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_vm_policy_clear_alloc_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_vm_policy_clear_alloc_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12683,7 +12687,7 @@
     {
       "id": "PROVIDER:f03_vm_policy_clear_alloc_line_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_vm_policy_clear_alloc_line_v1 \u2014 final genuine provider binding",
+      "title": "f03_vm_policy_clear_alloc_line_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12715,7 +12719,7 @@
     {
       "id": "PROVIDER:f03_vm_policy_clear_free_line_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_vm_policy_clear_free_line_v1 \u2014 final genuine provider binding",
+      "title": "f03_vm_policy_clear_free_line_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12747,7 +12751,7 @@
     {
       "id": "PROVIDER:f03_vm_policy_clear_source_file_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_vm_policy_clear_source_file_v1 \u2014 final genuine provider binding",
+      "title": "f03_vm_policy_clear_source_file_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12779,7 +12783,7 @@
     {
       "id": "PROVIDER:f03_vm_policy_insert_log_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_vm_policy_insert_log_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_vm_policy_insert_log_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12811,7 +12815,7 @@
     {
       "id": "PROVIDER:f03_vm_policy_insert_log_provider_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_vm_policy_insert_log_provider_v1 \u2014 final genuine provider binding",
+      "title": "f03_vm_policy_insert_log_provider_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12843,7 +12847,7 @@
     {
       "id": "PROVIDER:f03_wait_c_dependencies",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_wait_c_dependencies \u2014 final genuine provider binding",
+      "title": "f03_wait_c_dependencies — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12875,7 +12879,7 @@
     {
       "id": "PROVIDER:f03_wait_log_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_wait_log_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_wait_log_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12907,7 +12911,7 @@
     {
       "id": "PROVIDER:f03_wait_state_debug",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_wait_state_debug \u2014 final genuine provider binding",
+      "title": "f03_wait_state_debug — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12939,7 +12943,7 @@
     {
       "id": "PROVIDER:f03_wait_zombie_log_debug_v1",
       "parent": "PROVIDER_REGISTER",
-      "title": "f03_wait_zombie_log_debug_v1 \u2014 final genuine provider binding",
+      "title": "f03_wait_zombie_log_debug_v1 — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -12971,7 +12975,7 @@
     {
       "id": "PROVIDER:interrupt_syscall",
       "parent": "PROVIDER_REGISTER",
-      "title": "interrupt_syscall \u2014 final genuine provider binding",
+      "title": "interrupt_syscall — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13003,7 +13007,7 @@
     {
       "id": "PROVIDER:kds_list",
       "parent": "PROVIDER_REGISTER",
-      "title": "kds_list \u2014 final genuine provider binding",
+      "title": "kds_list — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13035,7 +13039,7 @@
     {
       "id": "PROVIDER:linux_clock_gettime",
       "parent": "PROVIDER_REGISTER",
-      "title": "linux_clock_gettime \u2014 final genuine provider binding",
+      "title": "linux_clock_gettime — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13067,7 +13071,7 @@
     {
       "id": "PROVIDER:linux_printk",
       "parent": "PROVIDER_REGISTER",
-      "title": "linux_printk \u2014 final genuine provider binding",
+      "title": "linux_printk — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13099,7 +13103,7 @@
     {
       "id": "PROVIDER:linux_wait_event",
       "parent": "PROVIDER_REGISTER",
-      "title": "linux_wait_event \u2014 final genuine provider binding",
+      "title": "linux_wait_event — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13131,7 +13135,7 @@
     {
       "id": "PROVIDER:shmid_index",
       "parent": "PROVIDER_REGISTER",
-      "title": "shmid_index \u2014 final genuine provider binding",
+      "title": "shmid_index — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13163,7 +13167,7 @@
     {
       "id": "PROVIDER:sys_perf_event_open",
       "parent": "PROVIDER_REGISTER",
-      "title": "sys_perf_event_open \u2014 final genuine provider binding",
+      "title": "sys_perf_event_open — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13195,7 +13199,7 @@
     {
       "id": "PROVIDER:syscall_execveat_bridge",
       "parent": "PROVIDER_REGISTER",
-      "title": "syscall_execveat_bridge \u2014 final genuine provider binding",
+      "title": "syscall_execveat_bridge — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13227,7 +13231,7 @@
     {
       "id": "PROVIDER:syscall_name",
       "parent": "PROVIDER_REGISTER",
-      "title": "syscall_name \u2014 final genuine provider binding",
+      "title": "syscall_name — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13259,7 +13263,7 @@
     {
       "id": "PROVIDER:syscall_policy_forward_context_bridge",
       "parent": "PROVIDER_REGISTER",
-      "title": "syscall_policy_forward_context_bridge \u2014 final genuine provider binding",
+      "title": "syscall_policy_forward_context_bridge — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13291,7 +13295,7 @@
     {
       "id": "PROVIDER:syscall_util_indicate_clone_disabled_bridge",
       "parent": "PROVIDER_REGISTER",
-      "title": "syscall_util_indicate_clone_disabled_bridge \u2014 final genuine provider binding",
+      "title": "syscall_util_indicate_clone_disabled_bridge — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13323,7 +13327,7 @@
     {
       "id": "PROVIDER:terminate",
       "parent": "PROVIDER_REGISTER",
-      "title": "terminate \u2014 final genuine provider binding",
+      "title": "terminate — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13355,7 +13359,7 @@
     {
       "id": "PROVIDER:terminate_mcexec",
       "parent": "PROVIDER_REGISTER",
-      "title": "terminate_mcexec \u2014 final genuine provider binding",
+      "title": "terminate_mcexec — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13387,7 +13391,7 @@
     {
       "id": "PROVIDER:the_shm_info",
       "parent": "PROVIDER_REGISTER",
-      "title": "the_shm_info \u2014 final genuine provider binding",
+      "title": "the_shm_info — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13419,7 +13423,7 @@
     {
       "id": "PROVIDER:the_shminfo",
       "parent": "PROVIDER_REGISTER",
-      "title": "the_shminfo \u2014 final genuine provider binding",
+      "title": "the_shminfo — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13451,7 +13455,7 @@
     {
       "id": "PROVIDER:tod_data_lock",
       "parent": "PROVIDER_REGISTER",
-      "title": "tod_data_lock \u2014 final genuine provider binding",
+      "title": "tod_data_lock — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13483,7 +13487,7 @@
     {
       "id": "PROVIDER:uti_desc",
       "parent": "PROVIDER_REGISTER",
-      "title": "uti_desc \u2014 final genuine provider binding",
+      "title": "uti_desc — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13515,7 +13519,7 @@
     {
       "id": "PROVIDER:util_thread",
       "parent": "PROVIDER_REGISTER",
-      "title": "util_thread \u2014 final genuine provider binding",
+      "title": "util_thread — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -13547,7 +13551,7 @@
     {
       "id": "PROVIDER:vsyscall_page",
       "parent": "PROVIDER_REGISTER",
-      "title": "vsyscall_page \u2014 final genuine provider binding",
+      "title": "vsyscall_page — final genuine provider binding",
       "percent_complete": 0,
       "progress_metric": "binary verified completion at stated scope",
       "status": "unresolved_in_named_partial_link; final_binding_unverified",
@@ -14582,7 +14586,7 @@
       "progress_metric": "binary exact explicitly partial supporting evidence",
       "status": "verified_scoped_nonexecuted_partial_provider_only",
       "owner": "Saved Root compositor; A source/jobowner; F independent source/ABI/actualowner reviewer",
-      "done_when": "Calledprejoinbeforeld-r andpostjoin validateonlye9d1+346\u2192aaaf8a1a63global52T11data13U/alloldsourcebytes/relocs/aliases/locals/tables/private4Block;3newwaitsjoined.",
+      "done_when": "Calledprejoinbeforeld-r andpostjoin validateonlye9d1+346→aaaf8a1a63global52T11data13U/alloldsourcebytes/relocs/aliases/locals/tables/private4Block;3newwaitsjoined.",
       "verification_method": "Exactsource/contracts/independentreviews/rawcommands/calledobject+uniqueownerpredicates/directjoins retainedin canonicalproof; no hardwareorfunctionexecution.",
       "required_inputs": [
         "Actualcurrentfinite3source/type/attribute/profiledefinitions",
@@ -17048,5 +17052,19 @@
       "only_current1GiB_retirement": "1e54c5cdd80a5bb00f09113a65a19564a510dd50ae292f74dfc2c667a1380b64",
       "no_compiler_replay_native_or_wholeF05credit": true
     }
-  }
+  },
+  "verified_completion_updates": [
+    {
+      "at": "2026-11-14T04:55:42.197920+00:00",
+      "Root_record": "docs/verification/m14-default-ownership-20261114/ROOT-DEFAULT-COMPLETIONS.json",
+      "task_ids": [
+        "M14-03-02-DEFAULT",
+        "M14-03-01-DEFAULT"
+      ],
+      "counted_verified_before": 105,
+      "counted_verified_after": 107,
+      "counted_denominator": 156,
+      "criteria_weights_changed": false
+    }
+  ]
 }
