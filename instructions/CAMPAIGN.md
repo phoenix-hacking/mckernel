@@ -1,5 +1,49 @@
 # McKernel: M14 → M15 → complete supported system
 
+## Five original source/image checks closed; old HOST scope retired — 2026-11-14T05:41:53.069563+00:00
+
+Root accepted exact original M14-F03-DEFAULT, M14-I01-E2 and M14-I01-E3 after the
+two already-recorded03-02/03-01DEFAULT rows. Independent full-clause GOcd01149c
+joins all5 regionDEFAULTs, genuine retained E1 mapping, current complete4C4 Rust
+bodies/paired default selectors/actual35ABI/current13input image ownership. Old
+four-C historical limits are preserved, not relabeled. Independent foreground
+F03/E3 corroborations7c96/c38b add no duplicate quota or new tests. Original count
+110/156 (46open), M14 checklist77.41%, M15 unchanged74.59%; neither accepted.
+All original criteria/weights/156 denominator are unchanged. FUNCTIONAL/native,
+parent/file/final acceptances remain open; no actual loaded-native C retirement
+or c818 substitution into the frozen c964/a2f/f133 native packet is inferred.
+
+Actual independent old-HOST Q39feb767 supports scoped original18067/40491 planning
+and private writer/lease closure. Root recorded exact old2415919104B/jobs2
+retirement49ed2d98, separately from every new reader/cancellation own-family receipt.
+Fresh currentRoot HOSTpayload census2e86d0a7 has0 bytes/0 jobs plus1657913344B
+conservative measured controller/worker overhead; it is NOT a future grant. Exact
+3PID afterdata b0549e89/Q48055 closed the3 FD coverage holes with stable per-thread
+FD/birth/state primitives, while raw old errors/Z namespaceENOENT and false broad
+flags remain verbatim. Actual old operations stayUNKNOWN; no historical wait/ACK/
+publication success or2.25GiB physical RAM-delta is manufactured. Sharedjournald,
+hostnamespaces/hybridcgroups/partial evidence remain. Native12/currentfree, source
+publication/flags, account/service/policy/rejected task/nonce/global holds remain
+separate and unchanged. No runtime/financial ledger reset or live configuration
+edit. Full private Root receipts remain in ownership-reconciliation-20261114.
+
+NEXT actual work: NEW compound production mcexecA+B requestdfa7168e/source-prep
+GOdf9cdd33, exact46d image/no imagebuild/Rust19570eb/BUILDID8d. Root must freshly
+admit BOTH stages, actual output alias/checkpoint and supported Docker lifecycle;
+1GiB/job1 CPU7 plus128MiBcontrol/capture inside one measured4GiB HOST pool. Source
+A output is real produced ET_REL/hash; B uses only that identity; preserve A on B
+failure and retry only failedB after real qualification/admission. No compiler or
+Docker create/start issued by Root yet. Normal native permission is not borrowed.
+TimeSource now checks only the genuine retained46d oldSMPproducer/runtime path
+before using the already-reviewed official vendor192 acquisition fallback; no
+compiler/network action. Exact sourcecapacity11 patch has foregroundGO5f98632e,
+with only16 affected hosted tests requested; currentloadedserver remains6 and
+backend limits real. Do not duplicate reviews or restart/hot-edit healthy owners.
+Private runbooka2c30191 stays private until actual workflow stable; it is reference,
+not another plan. SameRoot/finite credit history; HOST0,6,7/max3/4GiB includingALL
+overhead, native2-5/12GiB separate singleowner. Continue meaningful eligible work;
+M14 final beforeM15, checkpoint/pause afterBOTH or a later actual stop.
+
 ## Two original DEFAULT checks complete — 2026-11-14T04:55:42.197920+00:00
 
 Root recorded M14-03-02-DEFAULT, then M14-03-01-DEFAULT at their complete original

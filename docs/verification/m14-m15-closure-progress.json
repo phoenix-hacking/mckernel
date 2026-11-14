@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-14T04:55:42.197920+00:00",
+  "updated_at": "2026-11-14T05:41:53.069563+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,7 +32,7 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 70.74,
+      "checklist_percent_complete": 77.41,
       "file_acceptance_percent": 66.67,
       "integration_acceptance_percent": 33.33,
       "milestone_accepted": false,
@@ -565,7 +565,7 @@
         "M14-F03-FUNCTIONAL",
         "M14-F03-ACCEPT"
       ],
-      "percent_complete": 55.0,
+      "percent_complete": 65.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -735,7 +735,7 @@
         "M14-I01-E3",
         "M14-I01-ACCEPT"
       ],
-      "percent_complete": 25.0,
+      "percent_complete": 75.0,
       "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
     },
     {
@@ -2420,9 +2420,9 @@
       "id": "M14-F03-DEFAULT",
       "parent": "M14-F03",
       "title": "Verify complete supported-default Rust/allowed-assembly selection, real ABI/provider and no duplicate live C ownership",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "demonstrated_at_stated_scope",
       "owner": "Root sole compositor; original service/hold authority alone may release held scope",
       "done_when": "Every required original region in this scope has a complete implementation/selection mapping to Rust or allowed assembly, compatible actual ABI/providers, and a unique supported-default definition in the coherent image; no required behavior is supplied by a held object, guessed provider, live project C or compiler-elided placeholder.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2444,7 +2444,9 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-default-ownership-20261114/NEXT-ADJUDICATION.json",
+        "docs/verification/m14-default-ownership-20261114/ROOT-NEXT-THREE-COMPLETIONS.json"
       ],
       "scope_limit": "Requires admissible final source/artifact cohort; source compilation or opt-in linking is insufficient.",
       "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
@@ -2703,9 +2705,9 @@
       "id": "M14-I01-E2",
       "parent": "M14-I01",
       "title": "Verify each live project compute implementation is Rust or permitted assembly and real ABI/provider ownership is unique in supported default final image.",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "demonstrated_at_stated_scope",
       "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
       "done_when": "Verify each live project compute implementation is Rust or permitted assembly and real ABI/provider ownership is unique in supported default final image; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. The ownership manifest covers original sources, emitted headers/macros/callbacks and every unknown owner, and distinguishes legitimate Linux/third-party/generated code from project runtime.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2727,7 +2729,9 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-default-ownership-20261114/NEXT-ADJUDICATION.json",
+        "docs/verification/m14-default-ownership-20261114/ROOT-NEXT-THREE-COMPLETIONS.json"
       ],
       "scope_limit": "Original integration criterion; no new quota or independent completion weight.",
       "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
@@ -2738,9 +2742,9 @@
       "id": "M14-I01-E3",
       "parent": "M14-I01",
       "title": "Retire live C only after complete replacement and actual final selection/link proof; retained references and compiler-elided source do not prove replacement.",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "open_or_unverified",
+      "status": "demonstrated_at_stated_scope",
       "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
       "done_when": "Retire live C only after complete replacement and actual final selection/link proof; retained references and compiler-elided source do not prove replacement; exact matching proof has no unresolved required owner, ABI/provider obligation, unexplained failure or unreviewed project-C implementation. The ownership manifest covers original sources, emitted headers/macros/callbacks and every unknown owner, and distinguishes legitimate Linux/third-party/generated code from project runtime.",
       "verification_method": "Join source/config/toolchain/provider identities to the admitted final cohort; inspect actual selected/emitted/link ownership and execute only the original applicable defined functional scenarios after Root admission. Record exact command, result, cleanup and matching artifact identity; skipped/UNKNOWN results do not satisfy this step.",
@@ -2762,7 +2766,9 @@
         "SOURCE-SDK-NATIVE"
       ],
       "evidence": [
-        "CAMPAIGN.md"
+        "CAMPAIGN.md",
+        "docs/verification/m14-default-ownership-20261114/NEXT-ADJUDICATION.json",
+        "docs/verification/m14-default-ownership-20261114/ROOT-NEXT-THREE-COMPLETIONS.json"
       ],
       "scope_limit": "Original integration criterion; no new quota or independent completion weight.",
       "definition_status": "completion_condition_defined; runnable packet waits for named original contract/admission inputs",
@@ -17063,6 +17069,19 @@
       ],
       "counted_verified_before": 105,
       "counted_verified_after": 107,
+      "counted_denominator": 156,
+      "criteria_weights_changed": false
+    },
+    {
+      "at": "2026-11-14T05:41:53.069563+00:00",
+      "Root_record": "docs/verification/m14-default-ownership-20261114/ROOT-NEXT-THREE-COMPLETIONS.json",
+      "task_ids": [
+        "M14-F03-DEFAULT",
+        "M14-I01-E2",
+        "M14-I01-E3"
+      ],
+      "counted_verified_before": 107,
+      "counted_verified_after": 110,
       "counted_denominator": 156,
       "criteria_weights_changed": false
     }
