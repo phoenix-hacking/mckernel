@@ -19,9 +19,6 @@ from uuid import uuid4
 
 _ID = re.compile(r"[0-9]{8}T[0-9]{12}Z-[0-9a-f]{32}\Z")
 _SHA = re.compile(r"[0-9a-f]{64}\Z")
-_MAX_BYTES = 32768
-_MAX_ENTRIES = 256
-_MAX_BINDINGS = 32
 _DIR_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
 _FILE_FLAGS = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK
 
@@ -63,8 +60,6 @@ def _names(fd):
     with os.scandir(fd) as entries:
         for entry in entries:
             names.append(entry.name)
-            if len(names) > _MAX_ENTRIES:
-                raise ValueError("Instruction directory exceeds bounded entry limit")
     return sorted(names)
 
 
@@ -84,26 +79,28 @@ def _read(fd, name):
     before = _stat(fd, name)
     if before is None:
         return None
-    if before.st_size > _MAX_BYTES:
-        raise ValueError("Instruction entry exceeds bounded byte limit: " + name)
     try:
         stream = os.open(name, _FILE_FLAGS, dir_fd=fd)
     except OSError as exc:
         raise ValueError("Unsafe instruction entry: " + name) from exc
     try:
         opened = os.fstat(stream)
-        if not stat.S_ISREG(opened.st_mode) or (opened.st_dev, opened.st_ino) != (before.st_dev, before.st_ino):
+        if (not stat.S_ISREG(opened.st_mode) or
+                (opened.st_dev, opened.st_ino, opened.st_size, opened.st_mtime_ns, opened.st_ctime_ns) !=
+                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns, before.st_ctime_ns)):
             raise ValueError("Instruction entry changed while opening: " + name)
         chunks, size = [], 0
-        while size <= _MAX_BYTES:
-            chunk = os.read(stream, min(4096, _MAX_BYTES + 1 - size))
+        while size <= opened.st_size:
+            chunk = os.read(stream, min(65536, opened.st_size + 1 - size))
             if not chunk:
                 break
             chunks.append(chunk)
             size += len(chunk)
         after = os.fstat(stream)
-        if size > _MAX_BYTES or (opened.st_size, opened.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
-            raise ValueError("Instruction entry changed or exceeds byte limit: " + name)
+        if (size != opened.st_size or
+                (opened.st_size, opened.st_mtime_ns, opened.st_ctime_ns) !=
+                (after.st_size, after.st_mtime_ns, after.st_ctime_ns)):
+            raise ValueError("Instruction entry changed during read: " + name)
         return b"".join(chunks)
     finally:
         os.close(stream)
@@ -163,8 +160,8 @@ def reconcile_instructions(directory: Path, bindings: list[dict], startup_instru
         raise ValueError("execute must be a boolean")
     if not isinstance(startup_instruction_sha256, str) or not _SHA.fullmatch(startup_instruction_sha256):
         raise ValueError("A startup instruction SHA-256 is required")
-    if not isinstance(bindings, list) or len(bindings) > _MAX_BINDINGS:
-        raise ValueError("Expected a bounded list of stale instruction bindings")
+    if not isinstance(bindings, list):
+        raise ValueError("Expected a list of stale instruction bindings")
     bound = {}
     for item in bindings:
         if (not isinstance(item, dict) or set(item) != {"id", "sha256"} or
@@ -250,3 +247,4 @@ def reconcile_instructions(directory: Path, bindings: list[dict], startup_instru
                                 "status": "already_delivered" if delivered is not None else "not_present",
                                 "timestamp": None})
         return results
+

@@ -14,6 +14,12 @@ WORKFLOW = ROOT / '.github/workflows/mckernel-mailbox-notify.yml'
 EVENT = 'a' * 64
 NUMBER = 3
 BOT = {'type': 'Bot', 'login': 'github-actions[bot]'}
+TRANSPORT_BYTES = 48000
+
+
+def comment_body(message, event_id=EVENT):
+    escaped = message.replace('@', '\uff20').replace('<', '&lt;').replace('>', '&gt;')
+    return '<!-- mckernel-mailbox:' + event_id + ' -->\n' + escaped
 
 NODE_RUNNER = r'''
 let text = '';
@@ -100,47 +106,90 @@ class MailboxWorkflowTests(unittest.TestCase):
 
     def test_workflow_is_fixed_scope_and_has_no_checkout_or_shell(self):
         triggers = self.workflow.get('on', self.workflow.get(True))
-        self.assertEqual(set(triggers), {'workflow_dispatch', 'push'})
+        self.assertEqual(set(triggers), {'workflow_dispatch'})
         self.assertEqual(set(triggers['workflow_dispatch']['inputs']), {'event_id', 'body'})
-        self.assertEqual(triggers['push'], {
-            'branches': ['development'], 'paths': ['.github/workflows/mckernel-mailbox-notify.yml']})
         self.assertEqual(self.workflow['permissions'], {'contents': 'read', 'pull-requests': 'write'})
         self.assertEqual(self.workflow['concurrency'], {
-            'group': "mckernel-mailbox-${{ github.event.inputs.event_id || 'setup' }}", 'cancel-in-progress': False})
+            'group': "mckernel-mailbox-${{ github.event.inputs.event_id }}", 'cancel-in-progress': False})
         self.assertEqual(len(self.workflow['jobs']['notify']['steps']), 1)
         self.assertEqual(self.step['uses'], 'actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd')
         self.assertEqual(self.step['with']['retries'], 0)
         self.assertNotIn('${{', self.script)
         self.assertNotIn('run', self.step)
         condition = self.workflow['jobs']['notify']['if']
-        for expected in ("github.repository == 'phoenix-hacking/mckernel'",
+        for expected in ("github.event_name == 'workflow_dispatch'",
+                         "github.repository == 'phoenix-hacking/mckernel'",
                          "github.actor == 'phoenix-hacking'",
-                         "github.triggering_actor == 'phoenix-hacking'",
-                         "github.ref == 'refs/heads/development'"):
+                         "github.triggering_actor == 'phoenix-hacking'"):
             self.assertIn(expected, condition)
+        self.assertEqual(set(re.findall(r"github.ref == '([^']+)'", condition)), {
+            'refs/heads/development', 'refs/heads/codex/local-native-staging-repair'})
 
-    def test_dispatch_posts_only_to_fixed_mailbox_with_reply_help(self):
+    def test_dispatch_posts_only_supplied_message_with_existing_safe_escaping(self):
         fixture = self.fixture()
-        fixture['context']['payload']['inputs']['body'] = (
-            'Missing input @someone / @org/team <script>.\n'
-            '`global.__mailboxSideEffect=true` $(touch /never-executed)')
+        message = (
+            '\n Missing input @someone / @org/team <script>.\r\n'
+            '`global.__mailboxSideEffect=true` $(touch /never-executed)\n'
+            '<!-- mckernel-mailbox:' + EVENT + ' -->\t \n')
+        fixture['context']['payload']['inputs']['body'] = message
         result = self.run_script(fixture)
         self.assertEqual(result['value']['status'], 'posted')
         self.assertFalse(result['sideEffect'])
         post, = self.posts(result)
         self.assertEqual((post['owner'], post['repo'], post['issue_number']),
                          ('phoenix-hacking', 'mckernel', NUMBER))
-        self.assertIn('<!-- mckernel-mailbox:' + EVENT + ' -->', post['body'])
-        self.assertEqual(post['body'].count('@'), 1)
-        self.assertIn('@phoenix-hacking', post['body'])
-        self.assertIn('&lt;script&gt;', post['body'])
-        self.assertIn('/mckernel-resume', post['body'])
-        self.assertIn('/mckernel-instruct', post['body'])
-        self.assertIn('📤 **SENT', post['body'])
-        self.assertIn('📥 **Your email/phone receipt is unconfirmed', post['body'])
-        self.assertIn('every 10 minutes', post['body'])
-        self.assertIn('does not confirm email delivery', post['body'])
+        self.assertEqual(post['body'], comment_body(message))
+        self.assertEqual(post['body'].count('<!-- mckernel-mailbox:' + EVENT + ' -->'), 1)
+        self.assertNotIn('@', post['body'])
         self.assertFalse(any('Missing input' in line for line in result['messages']))
+
+    def test_both_exact_branch_refs_accept_utf8_chunks_larger_than_six_kilobytes(self):
+        message = 'é🙂 plain text\n' * 500
+        self.assertGreater(len(message.encode('utf-8')), 6000)
+        for ref in ('refs/heads/development', 'refs/heads/codex/local-native-staging-repair'):
+            with self.subTest(ref=ref):
+                fixture = self.fixture()
+                fixture['context']['ref'] = ref
+                fixture['context']['payload']['inputs']['body'] = message
+                result = self.run_script(fixture)
+                self.assertEqual(result['value']['status'], 'posted')
+                self.assertEqual(self.posts(result)[0]['body'], comment_body(message))
+
+    def test_nonempty_whitespace_chunk_is_preserved(self):
+        fixture = self.fixture()
+        message = ' \t\r\n  \n'
+        fixture['context']['payload']['inputs']['body'] = message
+        result = self.run_script(fixture)
+        self.assertEqual(result['value']['status'], 'posted')
+        self.assertEqual(self.posts(result)[0]['body'], comment_body(message))
+
+    def test_full_escaped_comment_at_transport_boundary_is_accepted(self):
+        fixture = self.fixture()
+        message = 'x' * (TRANSPORT_BYTES - len(comment_body('').encode('utf-8')))
+        fixture['context']['payload']['inputs']['body'] = message
+        self.assertEqual(len(comment_body(message).encode('utf-8')), TRANSPORT_BYTES)
+        result = self.run_script(fixture)
+        self.assertEqual(result['value']['status'], 'posted')
+        self.assertEqual(self.posts(result)[0]['body'], comment_body(message))
+
+    def test_transport_bound_counts_json_escaping_and_comment_escaping_separately(self):
+        for message, exceeded in (('x\n' * 16000, 'json'), ('<' * 12000, 'comment'),
+                                  ('@' * 16000, 'comment')):
+            with self.subTest(exceeded=exceeded, character=message[0]):
+                fixture = self.fixture()
+                inputs = fixture['context']['payload']['inputs']
+                inputs['body'] = message
+                json_size = len(json.dumps(inputs, ensure_ascii=False, separators=(',', ':')).encode('utf-8'))
+                comment_size = len(comment_body(message).encode('utf-8'))
+                if exceeded == 'json':
+                    self.assertGreater(json_size, TRANSPORT_BYTES)
+                    self.assertLessEqual(comment_size, TRANSPORT_BYTES)
+                else:
+                    self.assertGreater(comment_size, TRANSPORT_BYTES)
+                    self.assertLessEqual(json_size, TRANSPORT_BYTES)
+                result = self.run_script(fixture)
+                self.assertIn('error', result)
+                self.assertEqual(result['calls'], [])
 
     def test_existing_bot_marker_on_later_page_prevents_duplicate(self):
         fixture = self.fixture()
@@ -150,6 +199,14 @@ class MailboxWorkflowTests(unittest.TestCase):
         self.assertEqual(result['value']['status'], 'already_posted')
         self.assertEqual(self.posts(result), [])
         self.assertEqual(sum(row['method'] == 'page' for row in result['calls']), 2)
+
+    def test_distinct_chunk_marker_does_not_suppress_the_next_message(self):
+        fixture = self.fixture()
+        fixture['pages'] = [[{'user': BOT, 'body': comment_body('Previous chunk')}]]
+        fixture['context']['payload']['inputs']['event_id'] = 'b' * 64
+        result = self.run_script(fixture)
+        self.assertEqual(result['value']['status'], 'posted')
+        self.assertIn('<!-- mckernel-mailbox:' + 'b' * 64 + ' -->', self.posts(result)[0]['body'])
 
     def test_human_cannot_spoof_bot_deduplication_receipt(self):
         fixture = self.fixture()
@@ -161,8 +218,8 @@ class MailboxWorkflowTests(unittest.TestCase):
         cases = [
             {'event_id': EVENT.upper(), 'body': 'reason'},
             {'event_id': EVENT, 'body': ''},
-            {'event_id': EVENT, 'body': 'é' * 3001},
             {'event_id': EVENT, 'body': 'bad\x00body'},
+            {'event_id': EVENT, 'body': 'bad\x7fbody'},
             {'event_id': EVENT, 'body': 'reason', 'mailbox_number': 999},
             {'event_id': EVENT, 'body': {'command': 'invalid'}},
             {'body': 'reason'},
@@ -177,15 +234,19 @@ class MailboxWorkflowTests(unittest.TestCase):
 
     def test_context_scope_and_immutable_sender_id_are_required(self):
         for field, value in (('actor', 'other-user'), ('ref', 'refs/heads/work'),
-                             ('eventName', 'pull_request')):
+                             ('ref', 'refs/heads/codex/local-native-staging-repair-extra'),
+                             ('eventName', 'pull_request'), ('eventName', 'push')):
             with self.subTest(field=field):
                 fixture = self.fixture()
                 fixture['context'][field] = value
                 result = self.run_script(fixture)
                 self.assertEqual(result['calls'], [])
                 self.assertIn('error', result)
-        for mutate in (lambda c: c['repo'].update(repo='other'),
-                       lambda c: c['payload']['sender'].update(id=1)):
+        for mutate in (lambda c: c['repo'].update(owner='other'),
+                       lambda c: c['repo'].update(repo='other'),
+                       lambda c: c['payload']['sender'].update(id=1),
+                       lambda c: c['payload']['sender'].update(id='175406809'),
+                       lambda c: c['payload'].pop('sender')):
             fixture = self.fixture()
             mutate(fixture['context'])
             result = self.run_script(fixture)
@@ -209,6 +270,13 @@ class MailboxWorkflowTests(unittest.TestCase):
         result = self.run_script(fixture)
         self.assertIn('error', result)
         self.assertEqual(len(self.posts(result)), 1)
+        # A lost POST response can still mean the comment exists. Reconcile its
+        # marker on replay before trying to create another comment.
+        fixture.pop('createError')
+        fixture['pages'] = [[{'user': BOT, 'body': self.posts(result)[0]['body']}]]
+        replay = self.run_script(fixture)
+        self.assertEqual(replay['value']['status'], 'already_posted')
+        self.assertEqual(self.posts(replay), [])
 
     def test_incomplete_comment_scan_never_creates_notice(self):
         fixture = self.fixture()
@@ -217,19 +285,13 @@ class MailboxWorkflowTests(unittest.TestCase):
         self.assertIn('error', result)
         self.assertEqual(self.posts(result), [])
 
-    def test_setup_push_is_stable_and_does_not_claim_a_real_blocker(self):
+    def test_setup_push_cannot_create_a_notification(self):
         fixture = self.fixture()
         fixture['context']['eventName'] = 'push'
         fixture['context']['payload'].pop('inputs')
-        first = self.run_script(fixture)
-        body = self.posts(first)[0]['body']
-        self.assertIn('does not report an engineering blocker', body)
-        self.assertRegex(first['value']['event_id'], r'^[0-9a-f]{64}$')
-        fixture['pages'] = [[{'user': BOT, 'body': body}]]
-        second = self.run_script(fixture)
-        self.assertEqual(second['value']['event_id'], first['value']['event_id'])
-        self.assertEqual(second['value']['status'], 'already_posted')
-        self.assertEqual(self.posts(second), [])
+        result = self.run_script(fixture)
+        self.assertIn('error', result)
+        self.assertEqual(result['calls'], [])
 
     def test_unconfigured_destination_fails_closed(self):
         fixture = self.fixture()
@@ -242,3 +304,4 @@ class MailboxWorkflowTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+

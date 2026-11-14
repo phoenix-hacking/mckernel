@@ -313,7 +313,8 @@ class CampaignTests(unittest.TestCase):
                 self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
     def test_fallback_with_mismatched_thread_readback_stops(self):
-        self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
+        with patch.object(launcher, "DEFAULT_DISPATCHER_EFFORT", "ultra"):
+            self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
         class WrongModelRPC(FakeRPC):
             def call(rpc, method, params, **kwargs):
                 result = super().call(method, params, **kwargs)
@@ -322,7 +323,6 @@ class CampaignTests(unittest.TestCase):
                 return result
         self.saved(goal("paused"))
         rpc = WrongModelRPC(self.args, goal("paused"))
-        rpc.models["gpt-6.1-sol"].remove("max")
         rpc.models["gpt-6-astra"] = ["max"]
         state = self.run_campaign(rpc, 1)
         self.assertIn("model/effort differs", state["last_error"])
@@ -364,8 +364,9 @@ class CampaignTests(unittest.TestCase):
             campaign.save()
             with self.assertRaises(ValueError):
                 launcher.queue_instruction(self.directory, "   ")
-            with self.assertRaises(ValueError):
-                launcher.queue_instruction(self.directory, "x" * 8193)
+            for invalid in (None, "\ud800"):
+                with self.subTest(invalid=repr(invalid)), self.assertRaises(ValueError):
+                    launcher.queue_instruction(self.directory, invalid)
             ident = launcher.queue_instruction(self.directory, "Continue after checkpoint")
             campaign.checkpoint_requested = True
             campaign.rpc = FakeRPC(self.args, goal())
@@ -455,17 +456,20 @@ class CampaignTests(unittest.TestCase):
         self.assertIsNone(state["stop_reason"])
         self.assertFalse(any(m == "turn/steer" for m, p in rpc.calls))
 
-    def test_blocked_resume_replaces_historical_window_instructions(self):
+    def test_blocked_recovery_replaces_instructions_without_activating_goal(self):
         self.saved(goal("blocked"))
         self.args.recovered = True
-        rpc = FakeRPC(self.args, goal("blocked"), [lambda r: (r.completed(), r.status("complete"))])
-        state = self.run_campaign(rpc, 0)
+        rpc = FakeRPC(self.args, goal("blocked"))
+        state = self.run_campaign(rpc, 20)
         params = next(p for m, p in rpc.calls if m == "thread/resume")
         self.assertIn("no time limit", params["developerInstructions"])
         self.assertIn("explicit user pause remains authoritative", params["developerInstructions"])
         self.assertIn("Reconcile source changes", params["developerInstructions"])
         self.assertEqual(state["goal"]["objective"], launcher.OBJECTIVE)
         self.assertEqual(state["goal"]["tokensUsed"], 1234)
+        self.assertEqual(state["goal"]["status"], "blocked")
+        self.assertFalse(any(m == "thread/goal/set" and p.get("status") == "active"
+                             for m, p in rpc.calls))
         self.assertFalse(any("objective" in p or "tokenBudget" in p for m, p in rpc.calls))
 
     def test_explicit_window_instructions_preserve_user_limit(self):
@@ -644,7 +648,7 @@ class CampaignTests(unittest.TestCase):
             initial = {"primary": {"usedPercent": 100},
                        "credits": {"hasCredits": True, "unlimited": False, "balance": "1000"}}
             campaign.record_rate_limits(initial)
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             current = dict(initial, credits=dict(initial["credits"], balance="900"))
             campaign.rpc.call.return_value = {"rateLimits": current}
             campaign.refresh_credit_budget()
@@ -658,7 +662,7 @@ class CampaignTests(unittest.TestCase):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = TimeoutError("account unavailable")
             campaign.refresh_credit_budget()
             self.assertEqual(campaign.stop_reason, "credit_budget_unknown")
@@ -692,7 +696,7 @@ class CampaignTests(unittest.TestCase):
             campaign.save(credit_budget_error="historical transport failure")
             current = dict(initial, primary={"usedPercent": 1},
                            credits=dict(initial["credits"], balance="950"))
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = [self.transport_usage_error(), {"rateLimits": current}]
             with patch.object(launcher.time, "sleep") as sleep:
                 campaign.refresh_credit_budget()
@@ -718,7 +722,7 @@ class CampaignTests(unittest.TestCase):
             campaign.record_rate_limits(initial)
             campaign.save(credit_budget_error="historical failure")
             current = dict(initial, credits=dict(initial["credits"], balance="950"))
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = [self.unavailable_usage_error(),
                                              self.unavailable_usage_error(), {"rateLimits": current}]
             with patch.object(launcher.time, "sleep") as sleep:
@@ -739,7 +743,7 @@ class CampaignTests(unittest.TestCase):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = [self.transport_usage_error(),
                                              self.unavailable_usage_error(),
                                              self.transport_usage_error()]
@@ -775,7 +779,7 @@ class CampaignTests(unittest.TestCase):
             with self.subTest(error=str(error)):
                 campaign = launcher.Campaign(self.args, self.directory, self.directory)
                 try:
-                    campaign.rpc = Mock()
+                    campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
                     campaign.rpc.call.side_effect = error
                     with patch.object(launcher.time, "sleep") as sleep:
                         campaign.refresh_credit_budget()
@@ -790,7 +794,7 @@ class CampaignTests(unittest.TestCase):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = self.unavailable_usage_error()
             with patch.object(launcher.time, "sleep", side_effect=lambda _: setattr(campaign, "stop_reason", "signal_2")):
                 campaign.refresh_credit_budget()

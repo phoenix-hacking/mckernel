@@ -125,6 +125,16 @@ class ContinuousEligibilityTests(unittest.TestCase):
         self.campaign.refresh_credit_budget()
         return copy.deepcopy(retention)
 
+    def technical_checkpoint(self):
+        retention = self.retained_paused_owner()
+        self.campaign.stop_reason = "watchdog_recovery"
+        self.campaign.stop_now = True
+        self.campaign.checkpoint_requested = True
+        self.campaign.save(stop_reason=self.campaign.stop_reason)
+        self.campaign.refresh_credit_budget(control_only=True)
+        return retention, {"stop_reason": "watchdog_recovery", "stop_now": True,
+                           "checkpoint_requested": True}
+
     def test_blocked_fresh_control_observation_is_not_execution_accepted(self):
         observed = self.observed()
         self.assertEqual(observed["status"], "OBSERVED")
@@ -205,6 +215,21 @@ class ContinuousEligibilityTests(unittest.TestCase):
             launcher.queue_instruction(self.directory, "Resume this same blocked owner; retain all holds.",
                                        source_id="explicit-user-source-1")
         self.assertEqual(len(self.mutations()), 1)
+
+    def test_large_typed_control_registry_uses_unlimited_instruction_reader_and_deduplicates(self):
+        text = 'Resume this SAME owner while preserving every hold.\n' + 'x' * (4 * 1024 * 1024 + 1)
+        ident = self.queue(source='large-explicit-control-source', text=text)
+        registry = self.control / 'sources' / (ident[len('source-'):] + '.json')
+        original = registry.read_bytes()
+        self.assertGreater(len(original), 4 * 1024 * 1024)
+        self.assertEqual(launcher._read_private_json(registry)['item']['text'], text)
+        self.campaign.deliver_instruction()
+        self.assertEqual(self.campaign.state['last_instruction']['status'], 'accepted_by_server')
+        self.assertEqual(self.mutations(), [('thread/goal/set', {'threadId': 'test-thread', 'status': 'active'})])
+        self.assertEqual(self.queue(source='large-explicit-control-source', text=text), ident)
+        self.assertEqual(registry.read_bytes(), original)
+        self.assertEqual(list((self.control / 'pending').glob('*.json')), [])
+        self.assert_holds_retained()
 
     def test_crash_after_source_intent_recovers_original_binding_without_repinning(self):
         write_json = launcher.atomic_json
@@ -470,7 +495,7 @@ class ContinuousEligibilityTests(unittest.TestCase):
 
         def refuse_compensating_pause(result):
             self.rpc.goal["status"] = "active"
-            result["status"] = "active"
+            result["goal"]["status"] = "active"
 
         def stop_inside_activation(result):
             self.campaign.on_signal(15, None)
@@ -573,6 +598,89 @@ class ContinuousEligibilityTests(unittest.TestCase):
         self.assertEqual(self.mutations(), [])
         self.assertEqual(self.campaign.goal["status"], "paused")
         self.assertEqual(self.campaign.state["owner_retention"], row)
+        self.assert_holds_retained()
+
+    def test_bound_technical_checkpoint_reads_fresh_account_before_exact_acknowledgement(self):
+        retention, flags = self.technical_checkpoint()
+        self.assertEqual(self.observed()["status"], "OBSERVED")
+        self.assertEqual(self.campaign.state["last_account_observation"]["status"], "REJECTED")
+        ident = self.queue(source="explicit-exact-technical-checkpoint-resume")
+        item = json.loads((self.control / "pending" / (ident + ".json")).read_text())
+        self.assertEqual(item["control"]["technical_checkpoint"], flags)
+        observed_flags = []
+
+        def read_with_original_flags():
+            observed_flags.append({"stop_reason": self.campaign.stop_reason,
+                "stop_now": self.campaign.stop_now,
+                "checkpoint_requested": self.campaign.checkpoint_requested})
+
+        self.rpc.before["account/rateLimits/read"] = read_with_original_flags
+        self.campaign.deliver_instruction(control_only=True)
+        self.assertEqual(observed_flags, [flags])
+        self.assertIsNone(self.campaign.stop_reason)
+        self.assertFalse(self.campaign.stop_now)
+        self.assertFalse(self.campaign.checkpoint_requested)
+        receipt = self.campaign.state["last_instruction"]
+        self.assertEqual(receipt["status"], "accepted_by_server")
+        self.assertEqual(receipt["acknowledged_checkpoint"], flags)
+        self.assertEqual(self.campaign.state["acknowledged_technical_checkpoint"]["checkpoint"], flags)
+        self.assertEqual(self.campaign.state["owner_retention"], retention)
+        self.assertEqual(self.mutations(), [("thread/goal/set", {"threadId": "test-thread", "status": "active"})])
+        self.assert_holds_retained()
+
+    def test_changed_bound_technical_flag_refuses_without_clearing_checkpoint(self):
+        retention, flags = self.technical_checkpoint()
+        self.queue(source="technical-resume-before-flag-change")
+        self.campaign.stop_now = False
+        self.campaign.save()
+        self.campaign.deliver_instruction(control_only=True)
+        self.assertEqual(self.mutations(), [])
+        self.assertEqual(self.campaign.stop_reason, flags["stop_reason"])
+        self.assertTrue(self.campaign.checkpoint_requested)
+        self.assertEqual(self.campaign.state["last_instruction"]["status"], "same_owner_resume_refused")
+        self.assertEqual(self.campaign.state["owner_retention"], retention)
+        self.assert_holds_retained()
+
+    def test_new_signal_beats_previously_bound_technical_checkpoint(self):
+        retention, flags = self.technical_checkpoint()
+        self.queue(source="technical-resume-before-current-user-stop")
+        self.rpc.before["thread/goal/get"] = lambda: self.campaign.on_signal(15, None)
+        self.campaign.deliver_instruction(control_only=True)
+        self.assertEqual(self.mutations(), [])
+        self.assertEqual(self.campaign.stop_reason, "signal_15")
+        self.assertTrue(self.campaign.checkpoint_requested)
+        self.assertNotIn("acknowledged_technical_checkpoint", self.campaign.state)
+        self.assertEqual(self.campaign.state["owner_retention"], retention)
+        self.assert_holds_retained()
+
+    def test_technical_control_cannot_extend_window_or_clear_user_account_unknown_holds(self):
+        self.retained_paused_owner()
+        for reason in ("signal_15", "user_requested", "work_window", "requested_milestones_complete",
+                       "credit_budget_unknown", "chatgpt_auth_changed", "owner_pause_unknown"):
+            with self.subTest(reason=reason):
+                self.assertFalse(launcher.control_context_eligible(dict(self.campaign.state,
+                    stop_reason=reason, stop_now=True, checkpoint_requested=True)))
+        for field in ("auth_unknown", "credit_budget_unknown", "included_usage_unknown",
+                      "accounting_unknown", "user_pause", "user_paused", "service_hold"):
+            for value in (True, None, {}, 0, "UNKNOWN"):
+                with self.subTest(field=field, value=value):
+                    self.assertFalse(launcher.control_context_eligible(dict(self.campaign.state,
+                        **{field: value})))
+        self.assertTrue(launcher.control_context_eligible(self.campaign.state))
+        self.assert_holds_retained()
+
+    def test_real_exhaustion_during_technical_account_read_never_acknowledges_checkpoint(self):
+        retention, flags = self.technical_checkpoint()
+        self.queue(source="technical-resume-before-genuine-credit-exhaustion")
+        self.rpc.limits["credits"]["balance"] = "850"
+        self.campaign.deliver_instruction(control_only=True)
+        self.assertEqual(self.mutations(), [])
+        self.assertEqual(self.campaign.stop_reason, "credit_budget_exhausted")
+        self.assertTrue(self.campaign.stop_now)
+        self.assertTrue(self.campaign.checkpoint_requested)
+        self.assertNotIn("acknowledged_technical_checkpoint", self.campaign.state)
+        self.assertEqual(self.ledger()["remaining"], "0")
+        self.assertEqual(self.campaign.state["owner_retention"], retention)
         self.assert_holds_retained()
 
     def test_cli_requires_an_explicit_source_and_does_not_enable_control_implicitly(self):

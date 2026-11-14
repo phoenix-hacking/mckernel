@@ -48,6 +48,8 @@ SUDO_CREDENTIAL = Path.home() / ".local/state/mckernel-os-goal/sudo-password"
 PLAN_REL = "docs/verification/os-milestones-20260914"
 CAPTURE_PROGRESS_CAPABILITY = 1
 SAME_OWNER_CONTROL_CAPABILITY = 1
+SOURCE_WORK_CAPABILITY = 1
+SOURCE_WORK_LEGACY_BARRIER = {"control_only": "source_work", "capability_version": 1}
 # Older launchers validate this existing envelope before steering. The reserved,
 # non-registration shape makes them refuse a control command before any turn RPC.
 SAME_OWNER_CONTROL_LEGACY_BARRIER = {"control_only": "resume_same_owner", "capability_version": 1}
@@ -163,25 +165,66 @@ def m14_m15_closed(repo):
         return False
 
 
-def read_startup_instruction(path):
-    """Load an explicit invocation note before thread/resume can start work."""
+def _read_instruction_bytes(path, description, *, private=False):
+    """Read a stable regular file in chunks, without imposing a payload quota."""
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         before = os.fstat(fd)
-        if not stat.S_ISREG(before.st_mode) or before.st_size > 8192:
-            raise ValueError("Startup instruction must be a regular file of at most 8192 bytes")
-        raw = os.read(fd, 8193)
+        if not stat.S_ISREG(before.st_mode):
+            raise ValueError(description + " must be a regular file")
+        if private and (before.st_uid != os.getuid() or before.st_nlink != 1):
+            raise ValueError(description + " must be an owner-controlled single-link file")
+        chunks, size = [], 0
+        # Read at most the observed file plus one byte: concurrent growth is a
+        # changed input, while a complete immutable instruction has no size cap.
+        while size <= before.st_size:
+            chunk = os.read(fd, min(65536, before.st_size + 1 - size))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            size += len(chunk)
         after = os.fstat(fd)
-        if (len(raw) != before.st_size or
-                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) !=
-                (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)):
-            raise ValueError("Startup instruction changed during read")
-        note = raw.decode("utf-8")
-        if not note.strip() or "\0" in note:
-            raise ValueError("Startup instruction must be nonempty UTF-8 text without NUL")
-        return note
+        if (size != before.st_size or
+                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns,
+                 before.st_ctime_ns, before.st_uid, before.st_nlink) !=
+                (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns,
+                 after.st_ctime_ns, after.st_uid, after.st_nlink)):
+            raise ValueError(description + " changed during read")
+        return b"".join(chunks)
     finally:
         os.close(fd)
+
+
+def _read_private_json(path):
+    raw = _read_instruction_bytes(path, "Instruction JSON", private=True)
+    value = json.loads(raw.decode("utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError("Instruction JSON must contain an object")
+    return value
+
+
+def _validate_instruction(instruction):
+    if not isinstance(instruction, str):
+        raise ValueError("Instruction must be UTF-8 text")
+    try:
+        instruction.encode("utf-8")
+    except UnicodeEncodeError as error:
+        raise ValueError("Instruction must be valid UTF-8 text") from error
+    if not instruction.strip():
+        raise ValueError("Instruction must be nonempty UTF-8 text")
+    return instruction
+
+
+def read_startup_instruction(path):
+    """Load an explicit invocation note before thread/resume can start work."""
+    raw = _read_instruction_bytes(path, "Startup instruction")
+    try:
+        note = raw.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise ValueError("Startup instruction must be valid UTF-8 text") from error
+    if not note.strip() or "\0" in note:
+        raise ValueError("Startup instruction must be nonempty UTF-8 text without NUL")
+    return note
 
 
 def say(message):
@@ -258,14 +301,24 @@ def validate_capture_progress_directory(value):
     return path
 
 
+def _source_work_binding(owner):
+    return {"thread_id": owner["thread_id"], "invocation": owner["log_dir"],
+            "worker_pid": owner["worker_pid"], "worker_start": owner["worker_start"],
+            "log_dir": owner["log_dir"], "credit_run_id": owner["credit_run_id"]}
+
+
 def queue_instruction(directory, instruction, capture_progress_directory=None, *, source_id=None,
-                      resume_same_owner=False):
+                      resume_same_owner=False, source_work=None):
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
-    if not instruction.strip() or len(instruction.encode("utf-8")) > 8192:
-        raise ValueError("Instruction must be nonempty and at most 8192 UTF-8 bytes.")
+    _validate_instruction(instruction)
     item = {"submitted_at": utc(), "text": instruction}
+    if source_work is not None:
+        if source_id is None or resume_same_owner or capture_progress_directory is not None:
+            raise ValueError("Source work needs one source ID and no other control/registration")
+        item["source_work_spec_sha256"] = _account_value_sha256(source_work)
+        item["capture_progress"] = dict(SOURCE_WORK_LEGACY_BARRIER)
     if resume_same_owner:
         if source_id is None or capture_progress_directory is not None:
             raise ValueError("Same-owner resume requires an explicit source ID and no capture registration")
@@ -301,11 +354,15 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
         try:
             fcntl.flock(lock, fcntl.LOCK_EX)
             registry = sources / (digest + ".json")
-            prior = json.loads(registry.read_text()) if registry.exists() else None
+            try:
+                prior = _read_private_json(registry)
+            except FileNotFoundError:
+                prior = None
             if prior:
                 prior_item = prior.get("item", {})
                 if (prior_item.get("text_sha256") != item["text_sha256"]
                         or prior_item.get("source_id") != source_id
+                        or prior_item.get("source_work_spec_sha256") != item.get("source_work_spec_sha256")
                         or bool(prior_item.get("control")) != resume_same_owner
                         or resume_same_owner and (prior_item.get("control") or {}).get("kind") != "resume_same_owner"):
                     raise ValueError("Source instruction content changed; refusing replay")
@@ -313,6 +370,15 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
                         for phase in ("pending", "sending", "delivered", "refused")):
                     return ident
                 item = prior_item  # Recover the original durable publication intent.
+            if source_work is not None and prior is None:
+                saved = _read_private_json(directory / "state.json")
+                if type(saved.get("source_work_capability")) is not int or saved["source_work_capability"] != SOURCE_WORK_CAPABILITY:
+                    raise ValueError("Resident controller does not advertise source-work capability")
+                repo = Path(saved["repo"])
+                owner = _account_control_owner(saved, directory, repo)
+                from os_goal_source_work import prepare_attachment
+                item["source_work"] = prepare_attachment(source_work, binding=_source_work_binding(owner),
+                    source_id=source_id, text=instruction, allowed_roots=[repo])
             if resume_same_owner and prior is None:
                 # Only the first publication binds a source. A repeated source
                 # returns its original command, even after the goal changes.
@@ -508,13 +574,27 @@ def accepted_account_observation(state, ledger, owner, now_utc_ns, now_mono_ns,
     return dict(newest)
 
 
-def _same_owner_control_blocker(state, current_receipt=None):
+TECHNICAL_CONTROL_STOPS = frozenset({"watchdog_recovery", "guardian_recovery",
+                                     "active_goal_did_not_continue"})
+_CONTROL_HOLD_FLAGS = ("service_hold", "policy_hold", "auth_hold", "billing_hold",
+                       "budget_hold", "permission_hold", "account_hold",
+                       "accounting_unknown", "budget_unknown", "auth_unknown",
+                       "credit_budget_unknown", "included_usage_unknown",
+                       "user_pause", "user_paused", "pause_requested")
+
+
+def _same_owner_control_blocker(state, current_receipt=None, *, allow_technical=False):
     """Account/service stops block control; scoped execution holds stay intact."""
-    for key in ("stop_reason", "credit_budget_error", "service_hold", "policy_hold",
-                "auth_hold", "billing_hold", "budget_hold", "permission_hold",
-                "transport_uncertain", "pending_request", "account_hold",
-                "accounting_unknown", "budget_unknown", "user_paused", "pause_requested"):
-        if state.get(key):
+    reason = state.get("stop_reason")
+    if reason is not None and not (allow_technical and reason in TECHNICAL_CONTROL_STOPS):
+        return "stop_reason"
+    if state.get("credit_budget_error") is not None:
+        return "credit_budget_error"
+    for key in _CONTROL_HOLD_FLAGS:
+        if key in state and state[key] is not False:
+            return key
+    for key in ("transport_uncertain", "pending_request"):
+        if key in state and state[key] is not None and state[key] is not False:
             return key
     if is_policy_stop(state):
         return "policy_stop"
@@ -526,7 +606,12 @@ def _same_owner_control_blocker(state, current_receipt=None):
         return failure
     for key in ("resume_instruction", "last_instruction"):
         receipt = state.get(key)
-        if (receipt and receipt is not current_receipt
+        own = (isinstance(current_receipt, dict) and isinstance(receipt, dict)
+               and current_receipt.get("control_kind") == "resume_same_owner"
+               and isinstance(current_receipt.get("id"), str)
+               and current_receipt["id"].startswith("source-")
+               and receipt == current_receipt)
+        if (receipt and not own
                 and (not isinstance(receipt, dict) or receipt.get("status") in
                      {"sending", "delivery_uncertain", "control_archive_failed_before_activation"})):
             return "instruction_delivery_unreconciled"
@@ -543,6 +628,31 @@ def _paused_retained_control(state):
             and all(row.get(key) == state.get(key) and state.get(key) is not None
                     for key in ("worker_pid", "worker_start", "server_pid", "server_start",
                                 "thread_id", "log_dir")))
+
+
+def control_context_eligible(state, *, current_receipt=None):
+    """Permit factual reads/typed control, never execution or hold release.
+
+    Runtime callers include their actual stop/checkpoint flags in ``state``.
+    Only the named technical retained checkpoint can be acknowledged by a new,
+    exactly bound user command. User, time-window and account stops stay closed.
+    """
+    if not isinstance(state, dict):
+        return False
+    reason = state.get("stop_reason")
+    technical = (isinstance(reason, str) and reason in TECHNICAL_CONTROL_STOPS)
+    if technical:
+        if (not _paused_retained_control(state)
+                or (state.get("goal") or {}).get("status") not in {"paused", "blocked"}
+                or type(state.get("stop_now")) is not bool
+                or type(state.get("checkpoint_requested")) is not bool):
+            return False
+    elif state.get("stop_now") or state.get("checkpoint_requested"):
+        return False
+    return (type(state.get("same_owner_control_capability")) is int
+            and state["same_owner_control_capability"] == SAME_OWNER_CONTROL_CAPABILITY
+            and not _same_owner_control_blocker(state, current_receipt,
+                                                allow_technical=technical))
 
 
 def _account_control_owner(state, directory, repo):
@@ -610,7 +720,11 @@ def observed_account_control(state, ledger, owner, now_utc_ns, now_mono_ns,
                 and type(received.get("sequence")) is int,
                 "account control receive ordering missing")
     newest = max(candidates, key=lambda item: (item["received_mono_ns"], item["sequence"]))
-    require(newest.get("status") in {"PENDING", "ACCEPTED"}
+    technical = (isinstance(state.get("stop_reason"), str)
+                 and state["stop_reason"] in TECHNICAL_CONTROL_STOPS
+                 and control_context_eligible(state, current_receipt=current_receipt))
+    require((newest.get("status") in {"PENDING", "ACCEPTED"}
+             or technical and newest.get("status") == "REJECTED")
             and not newest.get("response_error"), "newest account control receive rejected")
     for key in ("received_mono_ns", "received_utc_ns", "sequence", "source", "method",
                 "request_id", "server_pid", "rate_limits_sha256"):
@@ -628,7 +742,8 @@ def observed_account_control(state, ledger, owner, now_utc_ns, now_mono_ns,
                 "account control owner birth invalid")
     require((state.get("phase") in {"ready", "running", "waiting_for_input", "repair_review"}
              or _paused_retained_control(state))
-            and not _same_owner_control_blocker(state, current_receipt), "account control owner stopped or held")
+            and control_context_eligible(state, current_receipt=current_receipt),
+            "account control owner stopped or held")
     require(state.get("auth_mode") == "chatgpt", "account control authentication unknown")
     for key in ("log_dir", "thread_id", "worker_pid", "worker_start", "server_pid",
                 "server_start", "repo", "guardian_run_id"):
@@ -689,20 +804,27 @@ def same_owner_resume_binding(directory):
             or state["same_owner_control_capability"] != SAME_OWNER_CONTROL_CAPABILITY):
         raise ValueError("Resident controller does not advertise same-owner control capability v1; no resume command queued")
     current = state.get("goal") or {}
-    if (not (current.get("status") == "blocked" or
+    technical = (isinstance(state.get("stop_reason"), str)
+                 and state["stop_reason"] in TECHNICAL_CONTROL_STOPS)
+    if (not control_context_eligible(state)
+            or not (current.get("status") == "blocked" or
              current.get("status") == "paused" and _paused_retained_control(state))
             or current.get("objective") != OBJECTIVE
-            or state.get("active_turns") or state.get("checkpoint_requested")
+            or state.get("active_turns")
             or type(state.get("primary_stop_generation")) is not int
             or state["primary_stop_generation"] < 0):
         raise ValueError("Same-owner resume requires the exact idle blocked campaign")
     owner = _account_control_owner(state, directory, Path(state["repo"]))
     ledger = read_json(owner["credit_ledger_path"])
     observed_account_control(state, ledger, owner, time.time_ns(), time.monotonic_ns())
-    return {"kind": "resume_same_owner", "schema_version": 1,
-            "expected_owner": owner, "goal_sha256": _account_value_sha256(current),
-            "primary_stop_generation": state["primary_stop_generation"],
-            "execution_admission": False, "hold_release": False}
+    binding = {"kind": "resume_same_owner", "schema_version": 1,
+               "expected_owner": owner, "goal_sha256": _account_value_sha256(current),
+               "primary_stop_generation": state["primary_stop_generation"],
+               "execution_admission": False, "hold_release": False}
+    if technical:
+        binding["technical_checkpoint"] = {key: state[key] for key in
+            ("stop_reason", "stop_now", "checkpoint_requested")}
+    return binding
 
 
 class RPC:
@@ -724,12 +846,43 @@ class RPC:
         self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=self.stderr, bufsize=0, start_new_session=True,
                                      env=runtime_environment())
+        os.set_blocking(self.proc.stdin.fileno(), False)
         self.selector = selectors.DefaultSelector()
         self.selector.register(self.proc.stdout, selectors.EVENT_READ)
 
-    def send(self, value):
-        self.proc.stdin.write((json.dumps(value) + "\n").encode())
-        self.proc.stdin.flush()
+    def send(self, value, *, deadline=None):
+        # A raw pipe may accept only part of a large JSON line. Never replay the
+        # whole request after a partial send; call/delivery owns uncertainty.
+        if getattr(self, "_send_failure", None) is not None:
+            raise self._send_failure
+        if deadline is None:
+            deadline = getattr(self, "_call_deadline", None)
+        if deadline is None:
+            deadline = time.monotonic() + 45.0
+        view = memoryview((json.dumps(value) + "\n").encode("utf-8"))
+        fd = self.proc.stdin.fileno()
+        try:
+            with selectors.DefaultSelector() as writable:
+                writable.register(fd, selectors.EVENT_WRITE)
+                while view:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise RecoverableFailure("App-server request timed out while sending")
+                    if not writable.select(min(1.0, remaining)):
+                        continue
+                    try:
+                        written = os.write(fd, view)
+                    except (BlockingIOError, InterruptedError):
+                        continue
+                    if written <= 0:
+                        raise BrokenPipeError("App-server stdin stopped accepting request bytes")
+                    view = view[written:]
+        except (RecoverableFailure, BrokenPipeError, ConnectionResetError) as error:
+            # Appending another line could complete a malformed or uncertain
+            # request. Retain this failure and prohibit further channel writes.
+            error.rpc_send_incomplete = True
+            self._send_failure = error
+            raise
 
     def pump(self, timeout=1.0):
         self.pump_stderr()
@@ -740,8 +893,6 @@ class RPC:
             if not chunk:
                 raise RecoverableFailure("Codex app server disconnected; see retained stderr.")
             self.buffer += chunk
-        if len(self.buffer) > 32 * 1024 * 1024:
-            raise RuntimeError("Oversized app-server record; stopped without discarding logs.")
         while b"\n" in self.buffer:
             line, self.buffer = self.buffer.split(b"\n", 1)
             message = json.loads(line)
@@ -810,15 +961,19 @@ class RPC:
                 self.on_event({"method": "launcher/serverStderr", "params": {"delta": value}})
 
     def call(self, method, params, timeout=45.0):
+        deadline = time.monotonic() + timeout
+        previous_deadline = getattr(self, "_call_deadline", None)
+        if previous_deadline is not None:
+            deadline = min(deadline, previous_deadline)
         if method == "account/rateLimits/read":
             self.last_account_read_completion = None
         self.next_id += 1
         ident = self.next_id
         self.pending_methods[ident] = method
         self.events.write(json.dumps({"at": utc(), "request": method, "id": ident}) + "\n")
+        self._call_deadline = deadline
         try:
-            self.send({"id": ident, "method": method, "params": params})
-            deadline = time.monotonic() + timeout
+            self.send({"id": ident, "method": method, "params": params}, deadline=deadline)
             while ident not in self.responses:
                 if time.monotonic() >= deadline:
                     raise RecoverableFailure("App-server request timed out: " + method)
@@ -829,7 +984,12 @@ class RPC:
             if not hasattr(error, "rpc_method"):
                 error.rpc_method = method
                 error.rpc_mutating = method not in READ_ONLY_RPC_METHODS
+            if (isinstance(error, RecoverableFailure) and
+                    str(error) == "App-server request timed out while sending"):
+                error.args = ("App-server request timed out: " + error.rpc_method,)
             raise
+        finally:
+            self._call_deadline = previous_deadline
         response = self.responses.pop(ident)
         self.pending_methods.pop(ident, None)
         completion = self.response_contexts.pop(ident, None)
@@ -952,7 +1112,16 @@ def server_argv(args, repo):
     argv = [args.codex, "--strict-config", "-C", str(repo)]
     for key, value in settings.items():
         argv.extend(["-c", key + "=" + json.dumps(value)])
-    return argv + ["app-server", "--stdio"]
+    argv += ["app-server", "--stdio"]
+    if getattr(args, "continuous", False):
+        affinity = sorted(set(os.sched_getaffinity(0)) & {0, 6, 7})
+        taskset = shutil.which("taskset")
+        if not affinity or taskset is None:
+            raise RuntimeError("Continuous HOST controller needs taskset and CPUs 0,6,7 admission")
+        # Bind the NEW controller and descendants. Native execution requires
+        # its own separately admitted explicit CPU profile.
+        argv = [taskset, "--cpu-list", ",".join(map(str, affinity))] + argv
+    return argv
 
 
 def preflight(rpc, args, repo):
@@ -1193,6 +1362,7 @@ class Campaign:
             self.state.update(same_owner_control_capability=SAME_OWNER_CONTROL_CAPABILITY,
                               primary_stop_generation=self.primary_stop_generation,
                               checkpoint_requested=self.checkpoint_requested,
+                              stop_now=self.stop_now,
                               continuous=getattr(self.args, "continuous", False))
         self.state.update(updated_at=utc(), log_dir=str(self.log_dir), active_turns=self.active,
                           agents=self.output.snapshot(), console_log=str(self.log_dir / "console.log"),
@@ -1242,6 +1412,7 @@ class Campaign:
         view = dict(self.state, active_turns=dict(self.active), goal=self.goal,
                     stop_reason=self.stop_reason, stop_now=self.stop_now,
                     checkpoint_requested=self.checkpoint_requested)
+        view.pop("repair_context", None)  # Only fresh authenticated source-work validation may create it.
         key = blocked_repair_key(self.goal, view)
         reviews = self.state.get("blocked_repair_reviews", {})
         if not isinstance(reviews, dict):
@@ -1261,6 +1432,7 @@ class Campaign:
         view.update(self.state, active_turns=dict(self.active), goal=self.goal,
                     stop_reason=self.stop_reason, stop_now=self.stop_now,
                     checkpoint_requested=self.checkpoint_requested)
+        view.pop("repair_context", None)
         if blocked_repair_key(self.goal, view) != key:
             return
         message = blocked_repair_instruction(self.goal, view)
@@ -1366,7 +1538,27 @@ class Campaign:
         attempted = False
         read_failed = False
         control = item.get("control")
+        technical = control.get("technical_checkpoint") if isinstance(control, dict) else None
         receipt.update(control_kind="resume_same_owner", execution_admission=False, hold_release=False)
+
+        def stop_flags():
+            return {"stop_reason": self.stop_reason, "stop_now": self.stop_now,
+                    "checkpoint_requested": self.checkpoint_requested}
+
+        def runtime_view():
+            return dict(self.state, goal=self.goal, **stop_flags())
+
+        def stops_changed():
+            expected = technical or {"stop_reason": None, "stop_now": False,
+                                     "checkpoint_requested": False}
+            return stop_flags() != expected
+
+        def confirm_stopped_goal():
+            self.pause()
+            if self.goal and (self.goal.get("objective") != OBJECTIVE or
+                    self.goal.get("status") not in {"paused", "blocked", "complete",
+                                                   "usageLimited", "budgetLimited"}):
+                raise ValueError("Compensating pause did not confirm a stopped goal")
 
         def read(method, params):
             nonlocal read_failed
@@ -1379,8 +1571,7 @@ class Campaign:
         def ready():
             if (not getattr(self.args, "same_owner_control", False)
                     or self.state.get("same_owner_control_capability") != SAME_OWNER_CONTROL_CAPABILITY
-                    or not self.controlled or self.stop_reason or self.stop_now
-                    or self.checkpoint_requested or self.active
+                    or not self.controlled or self.active or stops_changed()
                     or self.primary_stop_generation != control["primary_stop_generation"]
                     or self.state.get("primary_stop_generation") != self.primary_stop_generation
                     or not self.goal or not (self.goal.get("status") == "blocked" or
@@ -1389,7 +1580,9 @@ class Campaign:
                         and _paused_retained_control(self.state))
                     or self.goal.get("objective") != OBJECTIVE
                     or _account_value_sha256(self.goal) != control["goal_sha256"]
-                    or _same_owner_control_blocker(self.state, receipt)
+                    or not control_context_eligible(runtime_view(), current_receipt=receipt)
+                    or technical is not None and any(self.state.get(key) != value
+                                                     for key, value in technical.items())
                     or (self.state.get("transport_failure") or {}).get("channel_unusable")):
                 raise ValueError("Same-owner resume context changed, stopped or unavailable")
             owner = _account_control_owner(self.state, self.directory, self.repo)
@@ -1404,6 +1597,8 @@ class Campaign:
         try:
             required = {"kind", "schema_version", "expected_owner", "goal_sha256",
                         "primary_stop_generation", "execution_admission", "hold_release"}
+            if technical is not None:
+                required.add("technical_checkpoint")
             if (not isinstance(control, dict) or set(control) != required
                     or control.get("kind") != "resume_same_owner" or control.get("schema_version") != 1
                     or control.get("execution_admission") is not False or control.get("hold_release") is not False
@@ -1411,12 +1606,19 @@ class Campaign:
                     or not isinstance(item.get("source_id"), str) or not 0 < len(item["source_id"]) <= 512
                     or item.get("capture_progress") != SAME_OWNER_CONTROL_LEGACY_BARRIER):
                 raise ValueError("Invalid source-bound same-owner control command")
+            if technical is not None and (not isinstance(technical, dict)
+                    or set(technical) != {"stop_reason", "stop_now", "checkpoint_requested"}
+                    or technical.get("stop_reason") not in TECHNICAL_CONTROL_STOPS
+                    or type(technical.get("stop_now")) is not bool
+                    or type(technical.get("checkpoint_requested")) is not bool):
+                raise ValueError("Invalid bound technical checkpoint")
             digest = hashlib.sha256(item["source_id"].encode()).hexdigest()
-            source = read_json(self.directory / "instructions" / "sources" / (digest + ".json"))
+            source = _read_private_json(self.directory / "instructions" / "sources" / (digest + ".json"))
             if (item.get("id") != "source-" + digest or sending.name != item["id"] + ".json"
                     or source.get("status") != "queued" or source.get("item") != item
                     or item.get("text_sha256") != hashlib.sha256(item["text"].encode()).hexdigest()):
                 raise ValueError("Same-owner control source binding differs")
+            self.current_control_receipt = receipt
             ready()
             # Flush the claimed original before any control RPC. A crash leaves
             # sending evidence, which the existing queue guard never replays.
@@ -1431,7 +1633,7 @@ class Campaign:
                 self.save(auth_mode=account.get("type"))
                 self.stop_reason, self.stop_now = "chatgpt_auth_changed", True
                 raise ValueError("Same-owner control authentication unavailable")
-            self.refresh_credit_budget()
+            self.refresh_credit_budget(control_only=True)
             ready()
             page = read("thread/turns/list", {"threadId": self.state["thread_id"],
                         "limit": 1, "sortDirection": "desc", "itemsView": "notLoaded"})
@@ -1456,16 +1658,13 @@ class Campaign:
                                      time.time_ns(), time.monotonic_ns(), current_receipt=receipt)
             attempted = True
             result = self.rpc.call("thread/goal/set", {"threadId": owner["thread_id"], "status": "active"})["goal"]
-            if (self.stop_reason or self.stop_now or self.checkpoint_requested
+            if (stops_changed()
+                    or _same_owner_control_blocker(self.state, receipt, allow_technical=technical is not None)
                     or self.primary_stop_generation != generation or not self.goal
                     or self.goal.get("status") in {"complete", "usageLimited", "budgetLimited"}):
                 # The normal protocol has no CAS. A later stop wins even when
                 # it arrives inside activation; compensate on the SAME RPC.
-                self.pause()
-                if self.goal and (self.goal.get("objective") != OBJECTIVE or
-                        self.goal.get("status") not in {"paused", "blocked", "complete",
-                                                       "usageLimited", "budgetLimited"}):
-                    raise ValueError("Compensating pause did not confirm a stopped goal")
+                confirm_stopped_goal()
                 receipt.update(status="cancelled_after_stop", delivered_at=utc())
             else:
                 if (not result or result.get("status") != "active" or result.get("objective") != OBJECTIVE
@@ -1474,13 +1673,34 @@ class Campaign:
                 self.remember_goal(result)
                 receipt.update(status="accepted_by_server", delivered_at=utc(),
                                goal_after_sha256=_account_value_sha256(result))
+                if technical is not None:
+                    # Acknowledge only the checkpoint explicitly bound by this
+                    # user command. Signals cannot be overwritten mid-clear.
+                    mask = signal.pthread_sigmask(signal.SIG_BLOCK,
+                        {signal.SIGINT, signal.SIGTERM, signal.SIGHUP, signal.SIGUSR1})
+                    try:
+                        if stops_changed() or self.primary_stop_generation != generation:
+                            raise ValueError("Technical checkpoint changed before acknowledgement")
+                        receipt["acknowledged_checkpoint"] = dict(technical)
+                        self.stop_reason, self.stop_now, self.checkpoint_requested = None, False, False
+                        self.save(stop_reason=None, last_instruction=receipt,
+                                  acknowledged_technical_checkpoint={
+                                      "instruction_id": item["id"], "checkpoint": dict(technical),
+                                      "primary_stop_generation": generation, "at": utc()})
+                    finally:
+                        signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+                    if (self.stop_reason or self.stop_now or self.checkpoint_requested
+                            or self.primary_stop_generation != generation):
+                        confirm_stopped_goal()
+                        receipt.update(status="cancelled_after_stop")
+                        self.save(stop_reason=self.stop_reason)
             self.finish_control_instruction(sending, receipt)
         except Exception as error:
             if attempted:
                 receipt.update(status="delivery_uncertain", error_type=type(error).__name__)
                 self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
                 self.stop_now = True
-                self.save(last_instruction=receipt, transport_uncertain={"at": utc(),
+                self.save(last_instruction=receipt, stop_reason=self.stop_reason, transport_uncertain={"at": utc(),
                           "method": "thread/goal/set", "reason": "same_owner_control_delivery_uncertain"})
                 self.output.notice("Same-owner control outcome uncertain; original intent retained at " + str(sending))
                 return
@@ -1488,14 +1708,146 @@ class Campaign:
                 self.stop_reason = self.stop_reason or "account_control_unknown"
                 self.stop_now = True
             receipt.update(status="same_owner_resume_refused", error=str(error), refused_at=utc())
+            if self.stop_reason is not None:
+                self.save(stop_reason=self.stop_reason)
             try:
                 self.finish_control_instruction(sending, receipt, refused=True)
             except OSError as archive_error:
                 receipt.update(status="control_archive_failed_before_activation", error_type=type(archive_error).__name__)
                 self.save(last_instruction=receipt)
+        finally:
+            if getattr(self, "current_control_receipt", None) is receipt:
+                del self.current_control_receipt
+
+    def deliver_source_work(self, item, receipt, sending):
+        """Consume one registered source-only command; never activate or release.
+
+        The runtime registry provider is trusted controller code, not JSON state:
+        it must join every current retained owner/hold to original admission and
+        custody receipts. No provider means unconfigured/closed, never empty RAM.
+        """
+        attempted = False
+        generation = self.primary_stop_generation
+        self.state.pop("repair_context", None)
+
+        def ready():
+            if (not self.controlled or not getattr(self.args, "same_owner_control", False)
+                    or not getattr(self.args, "repair_agent_failures", False)
+                    or type(self.state.get("source_work_capability")) is not int
+                    or self.state.get("source_work_capability") != SOURCE_WORK_CAPABILITY
+                    or item.get("capture_progress") != SOURCE_WORK_LEGACY_BARRIER
+                    or self.stop_reason or self.stop_now or self.checkpoint_requested or self.active
+                    or self.primary_stop_generation != generation or not self.goal
+                    or self.goal.get("status") != "blocked"):
+                raise ValueError("Source-only dispatch owner is not idle and admissible")
+            owner = _account_control_owner(self.state, self.directory, self.repo)
+            if (owner["worker_pid"] != os.getpid() or owner["server_pid"] != self.rpc.proc.pid
+                    or self.credit_guard is None or self.credit_guard.identifier != owner["credit_run_id"]
+                    or self.credit_guard.budget != amount(owner["credit_budget"], positive=True)
+                    or str(self.credit_guard.path) != owner["credit_ledger_path"]):
+                raise ValueError("Source dispatch original owner/finite ledger differs")
+            return owner
+
+        try:
+            owner = ready()
+            provider = getattr(self, "source_work_registry_provider", None)
+            if not callable(provider):
+                raise ValueError("Current original-Root source registries are unconfigured")
+            registry = provider(owner)
+            names = ("allowed_roots", "process_roots", "retained_charges", "exclusive_scopes")
+            if (not isinstance(registry, dict) or registry.get("owner") != owner
+                    or registry.get("hold_fields") != item["source_work"]["body"]["blocker"]["hold_fields"]
+                    or registry.get("records_sha256") != _account_value_sha256({key: registry[key] for key in names})):
+                raise ValueError("Original source registry receipt/hold coverage differs")
+            from os_goal_source_work import validate_registered_source_work, _fresh
+            _fresh((registry["observed_utc_ns"], registry["observed_mono_ns"]),
+                   (time.time_ns(), time.monotonic_ns()), 25_000_000_000)
+            binding = _source_work_binding(owner)
+
+            def terminal_lookup(thread, turn):
+                if thread != owner["thread_id"]:
+                    raise ValueError("No original Root ownership receipt for this child turn")
+                page = self.rpc.call("thread/turns/list", {"threadId": thread, "limit": 100,
+                    "sortDirection": "desc", "itemsView": "notLoaded"})
+                matches = [row for row in page["data"] if row.get("id") == turn]
+                if len(matches) != 1:
+                    raise ValueError("Exact original Root terminal turn is unavailable")
+                return {"root_thread_id": owner["thread_id"], "invocation": binding["invocation"],
+                        "thread_id": thread, "turn_id": turn, "status": matches[0]["status"]}
+
+            def account_guard(expected, utc_ns, mono_ns):
+                from os_goal_guard_protocol import read_json
+                self.refresh_credit_budget()
+                if ready() != owner or expected != binding:
+                    raise ValueError("Source dispatch owner changed during account read")
+                observation = observed_account_control(self.state, read_json(self.credit_guard.path), owner,
+                    time.time_ns(), time.monotonic_ns(), current_receipt=receipt)
+                return {"decision": "CLEAR_SOURCE_DISPATCH_ONLY", "binding": binding,
+                        "observed_utc_ns": observation["received_utc_ns"],
+                        "observed_mono_ns": observation["received_mono_ns"],
+                        "receipt_sha256": _account_value_sha256(observation)}
+
+            self.current_control_receipt = receipt
+            view = dict(self.state, goal=self.goal, active_turns=dict(self.active),
+                        stop_reason=self.stop_reason, stop_now=self.stop_now,
+                        checkpoint_requested=self.checkpoint_requested)
+            view.pop("repair_context", None)
+            validated = validate_registered_source_work(item, directory=self.directory, binding=binding,
+                goal=self.goal, state=view, terminal_turn_lookup=terminal_lookup, account_guard=account_guard,
+                queue_reader=_read_private_json, **{key: registry[key] for key in names})
+            ready()
+            receipt.update(status="sending", source_work_sha256=validated["source_work_sha256"],
+                           repair_key=validated["repair_key"], source_resources=validated["resources"],
+                           method="turn/start", execution_admission=False, release_authorized=False)
+            atomic_json(sending.parent / (sending.stem + ".control-intent.json"), receipt)
+            self.save(last_instruction=receipt)
+            ready()
+            body = item["source_work"]["body"]
+            message = ("Authenticated same-Root source-only dispatch; explicit Sol/MAX. " + ENGINEERING_SCOPE
+                + "The blocked task stays parked; its OS processes/RAM/jobs/leases remain retained. "
+                "Do only isolated source edits/test preparation or read-only review below. No compiler, "
+                "test/payload/service/device/native execution, account inspection, signal or hold release. "
+                "Use only the declared files; keep all other active owners untouched. Original check: "
+                + body["original_check"] + ". Inputs: " + json.dumps(body["inputs"], sort_keys=True)
+                + ". Exact permitted write paths: " + json.dumps(body["write_paths"])
+                + ". Source instruction:\n" + item["text"])
+            _fresh((validated["resources"]["observed_utc_ns"], validated["resources"]["observed_mono_ns"]),
+                   (time.time_ns(), time.monotonic_ns()), body["limits"]["max_age_ns"])
+            _fresh((validated["resources"]["account_observed_utc_ns"],
+                    validated["resources"]["account_observed_mono_ns"]),
+                   (time.time_ns(), time.monotonic_ns()), body["limits"]["max_age_ns"])
+            ready()
+            attempted = True
+            started = self.rpc.call("turn/start", {"threadId": owner["thread_id"],
+                "input": [{"type": "text", "text": message}]})
+            receipt.update(status="accepted_by_server", turn_id=self.remember_started_turn(owner["thread_id"], started["turn"]),
+                           delivered_at=utc())
+            self.finish_control_instruction(sending, receipt)
+        except Exception as error:
+            if attempted:
+                receipt.update(status="delivery_uncertain", error_type=type(error).__name__)
+                self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
+                self.stop_now = True
+                self.save(last_instruction=receipt, transport_uncertain={"at": utc(), "method": "turn/start",
+                    "reason": "source_work_delivery_uncertain"})
+            else:
+                receipt.update(status="source_work_refused_before_dispatch", error_type=type(error).__name__,
+                               reason=str(error), execution_admission=False, release_authorized=False)
+                self.finish_control_instruction(sending, receipt, refused=True)
+        finally:
+            self.state.pop("repair_context", None)
+            if hasattr(self, "current_control_receipt"):
+                del self.current_control_receipt
 
     def deliver_instruction(self, *, control_only=False):
         """Steer one active coordinator turn; retain uncertain deliveries for audit."""
+        self.state.pop("repair_context", None)
+        if (self.controlled and getattr(self.args, "same_owner_control", False)
+                and getattr(self.args, "repair_agent_failures", False)
+                and (type(self.state.get("source_work_capability")) is not int
+                     or self.state.get("source_work_capability") != SOURCE_WORK_CAPABILITY)):
+            self.save(source_work_capability=SOURCE_WORK_CAPABILITY,
+                      source_work_dispatch_status="requires_current_original_registries")
         ident = self.state.get("thread_id")
         waiting = (getattr(self.args, "repair_agent_failures", False) and self.goal
                    and self.goal.get("status") == "blocked" and not self.active)
@@ -1504,8 +1856,11 @@ class Campaign:
                                 self.goal.get("status") == "paused" and
                                 getattr(self.args, "continuous", False) and
                                 _paused_retained_control(self.state)) and not self.active)
-        if (not ident or not self.controlled or self.checkpoint_requested or self.stop_reason
-                or self.stop_now
+        eligible_control = (control_only and control_waiting and not self.active
+            and control_context_eligible(dict(self.state, goal=self.goal, stop_reason=self.stop_reason,
+                stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)))
+        if (not ident or not self.controlled or
+                (self.checkpoint_requested or self.stop_reason or self.stop_now) and not eligible_control
                 or not self.goal or self.goal.get("status") not in {"active", "blocked", "paused"}
                 or ident not in self.active and not waiting and not control_waiting):
             return
@@ -1515,7 +1870,7 @@ class Campaign:
             return  # An uncertain earlier delivery must be resolved before newer ones.
         pending = sorted(
             (control / "pending").glob("*.json"),
-            key=lambda path: (datetime.fromisoformat(json.loads(path.read_text())["submitted_at"]),
+            key=lambda path: (datetime.fromisoformat(_read_private_json(path)["submitted_at"]),
                               path.name))
         if not pending:
             return
@@ -1526,9 +1881,13 @@ class Campaign:
         source = pending[0]
         sending = sending_dir / source.name
         os.replace(source, sending)
-        item = json.loads(sending.read_text())
+        item = _read_private_json(sending)
+        _validate_instruction(item.get("text"))
         receipt = {"id": item["id"], "thread_id": ident,
                    "turn_id": self.active.get(ident), "submitted_at": item["submitted_at"]}
+        if "source_work" in item:
+            self.deliver_source_work(item, receipt, sending)
+            return  # Never fall through to ordinary text/steer, including refusal.
         if item.get("control") is not None:
             self.deliver_same_owner_resume(item, receipt, sending)
             return
@@ -1587,9 +1946,13 @@ class Campaign:
             # A timeout may mean the server accepted the steer. Never silently
             # retry a potentially non-idempotent user instruction.
             receipt.update(status="delivery_uncertain", error=str(error))
-            self.save(last_instruction=receipt, transport_uncertain={"at": utc(),
+            fields = {"last_instruction": receipt, "transport_uncertain": {"at": utc(),
                       "method": "turn/start" if waiting else "turn/steer", "error": str(error),
-                      "reason": "instruction_delivery_uncertain"})
+                      "reason": "instruction_delivery_uncertain"}}
+            failure = self.transport_error_record(error)
+            if failure is not None:
+                fields["transport_failure"] = failure
+            self.save(**fields)
             self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
             self.stop_now = True
             self.output.notice("Instruction delivery uncertain; inspect " + str(sending))
@@ -1742,7 +2105,10 @@ class Campaign:
                         status="REJECTED")
         try:
             from os_goal_guard_protocol import read_json
-            if (self.stop_reason or self.stop_now or self.checkpoint_requested
+            current_receipt = getattr(self, "current_control_receipt", None)
+            view = dict(self.state, goal=self.goal, stop_reason=self.stop_reason,
+                        stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)
+            if (not control_context_eligible(view, current_receipt=current_receipt)
                     or self.credit_guard is None or self.rpc.proc.pid != self.state.get("server_pid")
                     or os.getpid() != self.state.get("worker_pid")):
                 raise ValueError("account control original owner stopped or unavailable")
@@ -1757,7 +2123,8 @@ class Campaign:
                             credit_record_sha256=_account_value_sha256(ledger),
                             state_limits_and_credit_persisted=True)
             observed_account_control(dict(saved, last_account_control_observation=observed),
-                                     ledger, owner, time.time_ns(), time.monotonic_ns())
+                                     ledger, owner, time.time_ns(), time.monotonic_ns(),
+                                     current_receipt=current_receipt)
         except (OSError, ValueError, TypeError, AttributeError, KeyError, InvalidOperation) as error:
             observed.update(status="REJECTED", reason=str(error))
         self.save(last_account_control_observation=observed)
@@ -1805,7 +2172,11 @@ class Campaign:
             if not self.stop_reason and not self.stop_now and (
                     previous.get("status") == "ACCEPTED" or (
                         getattr(self.args, "same_owner_control", False)
-                        and previous.get("status") == "PENDING"
+                        and (previous.get("status") == "PENDING" or
+                             previous.get("status") == "REJECTED"
+                             and control_context_eligible(dict(self.state, goal=self.goal,
+                                 stop_reason=self.stop_reason, stop_now=self.stop_now,
+                                 checkpoint_requested=self.checkpoint_requested)))
                         and isinstance(previous_control, dict)
                         and previous_control.get("status") == "OBSERVED"
                         and order(previous_control) == order(previous))):
@@ -1881,7 +2252,10 @@ class Campaign:
             self.last_credit_notification = None
         previous = self.state.get("last_rate_limits") or {}
         self.save(last_rate_limits=limits)
-        if self.stop_reason:
+        if self.stop_reason and not control_context_eligible(dict(
+                self.state, goal=self.goal, stop_reason=self.stop_reason,
+                stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested),
+                current_receipt=getattr(self, "current_control_receipt", None)):
             return
         primary = (limits or {}).get("primary") or {}
         used = primary.get("usedPercent")
@@ -1915,10 +2289,17 @@ class Campaign:
         if self.stop_reason:
             self.output.notice("Usage/billing stop: " + self.stop_reason)
 
-    def refresh_credit_budget(self):
+    def refresh_credit_budget(self, *, control_only=False):
         """Poll without inference; only freshly persisted notifications cover transport failure."""
+        def may_read():
+            return ((not self.stop_reason and not self.stop_now)
+                    or control_only and control_context_eligible(dict(
+                        self.state, goal=self.goal, stop_reason=self.stop_reason,
+                        stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested),
+                        current_receipt=getattr(self, "current_control_receipt", None)))
+
         for attempt in range(3):
-            if self.stop_reason or self.stop_now:
+            if not may_read():
                 return
             try:
                 try:
@@ -1958,7 +2339,7 @@ class Campaign:
                     self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
                     self.stop_now = True
                     return
-                if self.stop_reason or self.stop_now:
+                if not may_read():
                     self.save(last_usage_read_error_after_stop={"at": utc(), "error": str(error)})
                     return
                 failure = (classify_usage_failure(str(error))
@@ -1969,7 +2350,7 @@ class Campaign:
                         and self.credit_guard is not None and observed is not None
                         and observed[0] is self.rpc and age is not None
                         and 0 <= age <= CREDIT_NOTIFICATION_MAX_AGE_SECONDS
-                        and not self.stop_reason and not self.stop_now
+                        and may_read()
                         and self.state.get("credit_budget_error") is None):
                     self.save(last_usage_read_notification_fallback={
                         "at": utc(), "age_seconds": age, "error": str(error),
@@ -1977,7 +2358,7 @@ class Campaign:
                     self.output.notice("Usage read transport failed; current validated notification "
                                        "already persisted the unchanged credit guard.")
                     return
-                if (attempt < 2 and not self.stop_reason and not self.stop_now
+                if (attempt < 2 and may_read()
                         and temporary_usage_read_failure(error)):
                     self.save(last_usage_read_retry={"at": utc(), "attempt": attempt + 1,
                                                     "error": str(error)})
@@ -2015,7 +2396,9 @@ class Campaign:
                         "require_active": require_active, "class": failure,
                         "error": str(error), "method": "account/rateLimits/read"})
                 self.save(credit_budget_error=str(error))
-                self.stop_reason = self.stop_reason or "credit_budget_unknown"
+                self.stop_reason = ("credit_budget_unknown" if control_only
+                    and self.stop_reason in TECHNICAL_CONTROL_STOPS else
+                    self.stop_reason or "credit_budget_unknown")
                 self.stop_now = True
                 return
 
@@ -2477,7 +2860,8 @@ class Campaign:
                 "worker_start": self.state.get("worker_start"),
                 "thread_id": self.state.get("thread_id"), "class": label,
                 "error": str(error), "error_type": type(error).__name__, "method": method,
-                "channel_unusable": label in {"disconnected", "broken_pipe", "connection_reset"},
+                "channel_unusable": bool(getattr(error, "rpc_send_incomplete", False) or
+                                         label in {"disconnected", "broken_pipe", "connection_reset"}),
                 "mutating": bool(getattr(error, "rpc_mutating", False) or
                                  method is not None and method not in READ_ONLY_RPC_METHODS)}
 
@@ -2552,6 +2936,10 @@ class Campaign:
                 return False
             self.stop_reason = reason
         self.checkpoint_requested = True
+        if retention_required(self.args, self.rpc):
+            self.save(checkpoint_requested=True, checkpoint_reason=self.stop_reason,
+                      checkpoint_cleanup_verified=False)
+            return True
         ident = self.state["thread_id"]
         turn = self.active.get(ident)
         if turn:
@@ -2632,8 +3020,12 @@ class Campaign:
             self.retention_pause_attempted = True
             try:
                 self.pause()
-            except Exception as error:
+            except (Exception, KeyboardInterrupt, SystemExit) as error:
                 self.retention_failure("pause", error)
+                if getattr(error, "rpc_mutating", False):
+                    self.state["transport_uncertain"] = {"at": utc(),
+                        "method": getattr(error, "rpc_method", "thread/goal/set"),
+                        "reason": "owner_retention_pause_delivery_uncertain"}
                 self.stop_reason = self.stop_reason or "owner_pause_unknown"
                 self.stop_now = True
         if not isinstance(self.state.get("owner_retention"), dict):
@@ -2646,14 +3038,18 @@ class Campaign:
                           owner_retention_errors=list(self.retention_errors))
         try:
             self.save()
-        except Exception as error:
+        except (Exception, KeyboardInterrupt, SystemExit) as error:
             self.retention_failure("save", error)
+            if isinstance(error, (KeyboardInterrupt, SystemExit)):
+                self.stop_reason = self.stop_reason or "owner_monitor_interrupted"
+                self.stop_now = True
 
     def retained_resume_ready(self):
         receipt = self.state.get("last_instruction") or {}
         return (getattr(self.args, "continuous", False) and self.rpc is self.retained_rpc
                 and not self.stop_reason and not self.stop_now and not self.checkpoint_requested
-                and not self.active and self.goal and self.goal.get("status") == "active"
+                and set(self.active) <= {self.state.get("thread_id")}
+                and self.goal and self.goal.get("status") == "active"
                 and self.goal.get("objective") == OBJECTIVE
                 and receipt.get("id") != self.retained_resume_id
                 and receipt.get("status") == "accepted_by_server"
@@ -2681,29 +3077,39 @@ class Campaign:
                 # No native-control polling, repairs, turn starts or ordinary
                 # instructions in custody retention. Typed control has its own
                 # fresh account/identity/stop checks and grants no job resources.
-                if not self.stop_reason and not self.stop_now and not self.checkpoint_requested:
+                view = dict(self.state, goal=self.goal, stop_reason=self.stop_reason,
+                            stop_now=self.stop_now, checkpoint_requested=self.checkpoint_requested)
+                if control_context_eligible(view):
                     self.deliver_instruction(control_only=True)
                 self.rpc.pump(timeout=1)
                 now = time.monotonic()
                 if now >= next_refresh:
-                    if not self.stop_reason and not self.stop_now and not self.checkpoint_requested:
-                        self.refresh_credit_budget()
+                    if control_context_eligible(view):
+                        self.refresh_credit_budget(control_only=True)
                     self.save(phase="owner_retained", heartbeat_at=utc(),
                               owner_retention_errors=list(self.retention_errors))
                     self.output.flush()
                     next_refresh = now + max(5, self.args.heartbeat_seconds)
-            except Exception as error:
+            except (Exception, KeyboardInterrupt, SystemExit) as error:
                 self.retention_failure("monitor", error)
+                if isinstance(error, (KeyboardInterrupt, SystemExit)):
+                    self.stop_reason = self.stop_reason or "owner_monitor_interrupted"
+                    self.stop_now = True
                 # A broken stream/save never closes or replaces the owner.
                 # Bounded backoff prevents a disconnected server hot loop.
-                time.sleep(min(30, max(1, self.args.heartbeat_seconds)))
+                try:
+                    time.sleep(min(30, max(1, self.args.heartbeat_seconds)))
+                except (KeyboardInterrupt, SystemExit) as interrupt:
+                    self.retention_failure("monitor_backoff", interrupt)
+                    self.stop_reason = self.stop_reason or "owner_monitor_interrupted"
+                    self.stop_now = True
 
     def run(self):
         begin = True
         while True:
             try:
                 code = self._run_until_stop(begin=begin)
-            except Exception as error:
+            except (Exception, KeyboardInterrupt, SystemExit) as error:
                 if not retention_required(self.args, self.rpc):
                     raise
                 self.retention_failure("work_loop", error)
@@ -2772,7 +3178,8 @@ class Campaign:
                     self.stop_reason = self.stop_reason or "work_window"
                     self.request_checkpoint()
                     stop_deadline = min(deadline, now + self.args.grace_seconds)
-                if self.checkpoint_requested and (not self.active or now >= stop_deadline):
+                if self.checkpoint_requested and (retention_required(self.args, self.rpc)
+                                                  or not self.active or now >= stop_deadline):
                     code = 10
                     break
                 if not self.active and now - self.last_activity > 120 and not blocked_wait:
@@ -2915,6 +3322,8 @@ def arguments(argv=None):
     mode.add_argument("--resume-same-owner", metavar="TEXT",
                       help="Queue explicit source-bound resume control for an opted-in idle blocked owner; grants no jobs or hold releases")
     parser.add_argument("--instruction-source-id", help="Stable user-source identity for an instruction or explicit same-owner resume")
+    parser.add_argument("--source-work-file", type=Path,
+                        help="Attach exact non-executable source spec to --instruct; requires a source ID and capable resident")
     parser.add_argument("--same-owner-control", action="store_true",
                         help="Opt in to factual control observations and explicit typed same-owner resume; never auto-activate")
     parser.add_argument("--retain-owner-on-stop", action="store_true",
@@ -2977,12 +3386,16 @@ def arguments(argv=None):
     args = parser.parse_args(argv)
     if args.continuous:
         args.same_owner_control = args.retain_owner_on_stop = args.repair_agent_failures = True
+        args.stop_after_m14_m15 = True
     if args.instruction_source_id is not None and (not 0 < len(args.instruction_source_id) <= 512
             or args.instruct is None and args.resume_same_owner is None):
         parser.error("instruction-source-id requires an instruction or explicit same-owner resume and at most 512 characters")
     if args.resume_same_owner is not None and (args.instruction_source_id is None
             or args.capture_progress_directory is not None):
         parser.error("same-owner resume requires instruction-source-id and no capture registration")
+    if args.source_work_file is not None and (args.instruct is None or args.instruction_source_id is None
+            or args.capture_progress_directory is not None or args.resume_same_owner is not None):
+        parser.error("source-work-file requires instruct/source ID and no capture or resume control")
     if args.guardian_run_id and (len(args.guardian_run_id) != 32 or any(c not in "0123456789abcdef" for c in args.guardian_run_id)):
         parser.error("Guardian run identity must be a 32-character hex nonce")
     if args.guardian_recovery_proof and (not args.guardian_run_id or not args.supervisor or args.worker or args.fresh_session):
@@ -3080,7 +3493,9 @@ def main(argv=None):
         return 0
     if args.instruct is not None:
         ident = queue_instruction(directory, args.instruct, args.capture_progress_directory,
-                                  source_id=args.instruction_source_id)
+                                  source_id=args.instruction_source_id,
+                                  source_work=(_read_private_json(args.source_work_file)
+                                               if args.source_work_file is not None else None))
         print("Queued instruction " + ident + "; it will reach the next active coordinator turn.")
         return 0
     if args.resume_same_owner is not None:
@@ -3184,4 +3599,5 @@ if __name__ == "__main__":
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as failure:
         say(str(failure))
         sys.exit(1)
+
 

@@ -17,7 +17,7 @@ jobs:
           lfs: false
       - name: Functional harness fake transport tests
         env:
-          PYTHONPATH: scripts
+          PYTHONPATH: scripts:scripts/tests
         run: |
           python3 -m unittest \
             scripts.tests.test_os_goal_launcher \

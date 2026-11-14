@@ -16,7 +16,9 @@ SOURCE = Path(__file__).resolve().parents[1] / 'run_os_goal.py'
 
 def extracted():
     tree = ast.parse(SOURCE.read_text())
-    names = {'utc', 'atomic_json', 'validate_capture_progress_directory', 'queue_instruction'}
+    names = {'utc', 'atomic_json', 'validate_capture_progress_directory', 'queue_instruction',
+             '_read_instruction_bytes', '_read_private_json', '_validate_instruction',
+             'is_policy_stop', 'failure_location'}
     nodes = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name in names]
     campaign = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == 'Campaign')
     methods = [node for node in campaign.body if isinstance(node, ast.FunctionDef)
@@ -37,12 +39,14 @@ class QueueRegistrationTests(unittest.TestCase):
         scope, cls = extracted()
         campaign = cls()
         campaign.directory = Path(directory)
+        campaign.args = SimpleNamespace(repair_agent_failures=False)
         campaign.log_dir = Path(directory) / 'runs' / 'instance-a'
         campaign.state = dict(schema_version=1, capture_progress_capability=scope['CAPTURE_PROGRESS_CAPABILITY'],
                               phase='running', thread_id='thread-a',
                               worker_pid=os.getpid(), log_dir=str(campaign.log_dir))
         campaign.controlled = True
         campaign.checkpoint_requested = False
+        campaign.stop_now = False
         campaign.stop_reason = None
         campaign.goal = {'status': 'active'}
         campaign.active = {'thread-a': 'turn-a'}
@@ -61,6 +65,17 @@ class QueueRegistrationTests(unittest.TestCase):
             campaign.calls.append((method, params, saved))
             return {}
         campaign.rpc = type('RPC', (), {'call': staticmethod(rpc_call)})()
+        def transport_error_record(error):
+            # The fake transport supplies its actual request attribution, just
+            # as RPC.call does after an incomplete mutating send. No closure or
+            # release is inferred from a transport diagnostic.
+            method = getattr(error, 'rpc_method', None)
+            if method is None:
+                return None
+            return dict(method=method, error=str(error), error_type=type(error).__name__,
+                mutating=getattr(error, 'rpc_mutating', False) is True,
+                channel_unusable=getattr(error, 'rpc_send_incomplete', False) is True)
+        campaign.transport_error_record = transport_error_record
         campaign.save()
         return scope, campaign
 
@@ -322,6 +337,34 @@ class QueueRegistrationTests(unittest.TestCase):
             self.assertEqual(campaign.calls, [])
             self.assertTrue((Path(directory) / 'instructions' / 'pending' / (ident + '.json')).exists())
             self.assertNotIn('capture_progress_registration', campaign.state)
+
+    def test_partial_steer_retains_original_instruction_and_attributed_uncertainty(self):
+        with tempfile.TemporaryDirectory(prefix='capture-queue-test-') as directory:
+            scope, campaign = self.fixture(directory)
+            ident = scope['queue_instruction'](Path(directory), 'Prepare capture; retain every existing owner',
+                                               Path(directory) / 'fresh')
+            original = (Path(directory) / 'instructions' / 'pending' / (ident + '.json')).read_bytes()
+            error = BrokenPipeError('controlled incomplete instruction send')
+            error.rpc_method = 'turn/steer'
+            error.rpc_mutating = True
+            error.rpc_send_incomplete = True
+            def fail(method, params):
+                campaign.calls.append((method, params, dict(campaign.state)))
+                raise error
+            campaign.rpc.call = fail
+            campaign.deliver_instruction()
+            campaign.deliver_instruction()
+            self.assertEqual(len(campaign.calls), 1)
+            self.assertEqual(campaign.state['last_instruction']['status'], 'delivery_uncertain')
+            self.assertEqual(campaign.state['transport_failure']['method'], 'turn/steer')
+            self.assertIs(campaign.state['transport_failure']['mutating'], True)
+            self.assertIs(campaign.state['transport_failure']['channel_unusable'], True)
+            self.assertEqual(campaign.state['transport_uncertain']['method'], 'turn/steer')
+            self.assertTrue(campaign.stop_now)
+            self.assertEqual(campaign.active, {'thread-a': 'turn-a'})
+            sending = Path(directory) / 'instructions' / 'sending' / (ident + '.json')
+            self.assertEqual(sending.read_bytes(), original)
+            self.assertFalse((Path(directory) / 'instructions' / 'delivered' / sending.name).exists())
 
     def test_nonsymlink_fresh_path_required_at_enqueue(self):
         with tempfile.TemporaryDirectory(prefix='capture-queue-test-') as directory:

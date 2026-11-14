@@ -108,6 +108,8 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
         self.ledger_bytes = (json.dumps(self.ledger, indent=3) + "\n").encode()
         self.ledger_path.write_bytes(self.ledger_bytes)
         self.entry = None
+        self.boundary_states = []
+        self.sleep_failures = []
         self.resource_admission = Mock()
         self.returned_from_wait = []
         self.initial_status = "paused"
@@ -170,6 +172,8 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
 
         def sleep(seconds):
             self.clock[0] += seconds
+            if self.sleep_failures:
+                raise self.sleep_failures.pop(0)
 
         with ExitStack() as stack:
             stack.enter_context(patch.object(launcher.time, "monotonic", side_effect=lambda: self.clock[0]))
@@ -207,6 +211,9 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
         self.assertTrue(self.rpc.owner_custody_retained)
         self.assertIsNotNone(self.entry)
         if parked:
+            self.assertTrue(self.boundary_states)
+            self.assertTrue(all(row["phase"] == "owner_retained" for row in self.boundary_states),
+                            self.boundary_states)
             self.assertEqual(campaign.state["phase"], "owner_retained")
             self.assertTrue(campaign.retained_for_stop)
             receipt = campaign.state["owner_retention"]
@@ -219,7 +226,11 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
                              for method, _ in self.rpc.calls))
 
     def end_while_retained(self, rpc):
-        self.assertEqual(self.campaign.state["phase"], "owner_retained")
+        # Assert the observed boundary outside Campaign's Exception handlers.
+        # An AssertionError raised here could otherwise be swallowed as a
+        # recoverable monitor failure and falsely pass after a later pump.
+        self.boundary_states.append({"phase": self.campaign.state.get("phase"),
+                                     "stop_reason": self.campaign.stop_reason})
         raise RetainedScenarioEnd("inspect original retained objects")
 
     def diagnostic_text(self):
@@ -256,6 +267,20 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
         self.run_to_fixture_boundary()
         self.assert_original_custody_survives()
         self.assertEqual(self.campaign.stop_reason, "work_window")
+
+    def test_checkpoint_with_remaining_grace_enters_retention_before_polling_controls(self):
+        self.args.continuous = True
+        self.args.hours, self.args.grace_seconds = 20 / 3600, 10
+        self.initial_status, self.initial_active = "active", True
+
+        def reach_checkpoint(rpc):
+            self.clock[0] = 111.0  # Checkpoint at 110; work deadline still 120.
+
+        self.rpc.steps.extend([reach_checkpoint, self.end_while_retained])
+        self.run_to_fixture_boundary()
+        self.assert_original_custody_survives()
+        self.assertEqual(self.campaign.stop_reason, "work_window")
+        self.assertEqual(self.campaign.poll_native_owner_control.call_count, 1)
 
     def test_running_pump_exception_retains_original_owner_instead_of_finally_cleanup(self):
         self.initial_status, self.initial_active = "active", True
@@ -312,6 +337,95 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
         self.assert_original_custody_survives()
         self.assertIn("retention receipt publication failed", self.diagnostic_text())
 
+    def assert_real_interrupt_keeps_owner(self, error_type, stage):
+        message = "offline " + stage + " interruption"
+        error = error_type(message)
+        write = None
+        if stage == "pause":
+            self.initial_status = "active"
+            self.initial_reason, self.initial_stop_now = "credit_budget_unknown", True
+            self.rpc.fail_calls["thread/goal/get"] = error
+        elif stage in {"work_loop", "monitor"}:
+            if stage == "work_loop":
+                self.initial_status, self.initial_active = "active", True
+
+            def interrupted_pump(rpc):
+                raise error
+
+            self.rpc.steps.append(interrupted_pump)
+        elif stage == "backoff":
+            def failed_monitor(rpc):
+                raise RuntimeError("offline monitor fault before interrupted backoff")
+
+            self.rpc.steps.append(failed_monitor)
+            self.sleep_failures.append(error)
+        elif stage == "save":
+            original_write = launcher.atomic_json
+            pending = [error]
+
+            def interrupted_write(path, value):
+                if (Path(path) == self.campaign.state_path
+                        and value.get("phase") == "owner_retained" and pending):
+                    raise pending.pop()
+                return original_write(path, value)
+
+            write = interrupted_write
+            self.rpc.steps.append(lambda rpc: None)  # Prove monitoring survives the interrupted save.
+        else:
+            self.fail("unknown fixture interruption stage")
+        self.rpc.steps.append(self.end_while_retained)
+        self.run_to_fixture_boundary(atomic_json=write)
+        self.assert_original_custody_survives()
+        self.assertTrue(any((row["stage"] == stage or stage == "backoff")
+                            and row["error_type"] == error_type.__name__
+                            and message in row["error"] for row in self.campaign.retention_errors))
+        if stage == "pause":
+            self.assertEqual(self.campaign.stop_reason, "credit_budget_unknown")
+
+    def test_keyboard_interrupt_in_work_loop_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(KeyboardInterrupt, "work_loop")
+
+    def test_system_exit_in_work_loop_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(SystemExit, "work_loop")
+
+    def test_keyboard_interrupt_during_pause_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(KeyboardInterrupt, "pause")
+
+    def test_system_exit_during_pause_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(SystemExit, "pause")
+
+    def test_keyboard_interrupt_in_retained_monitor_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(KeyboardInterrupt, "monitor")
+
+    def test_system_exit_in_retained_monitor_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(SystemExit, "monitor")
+
+    def test_keyboard_interrupt_during_retention_save_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(KeyboardInterrupt, "save")
+
+    def test_system_exit_during_retention_save_keeps_original_custody(self):
+        self.assert_real_interrupt_keeps_owner(SystemExit, "save")
+
+    def test_keyboard_interrupt_during_monitor_backoff_keeps_original_controller(self):
+        self.assert_real_interrupt_keeps_owner(KeyboardInterrupt, "backoff")
+
+    def test_system_exit_during_monitor_backoff_keeps_original_controller(self):
+        self.assert_real_interrupt_keeps_owner(SystemExit, "backoff")
+
+    def test_monitor_interrupt_preserves_the_original_account_stop(self):
+        self.initial_status, self.initial_active = "active", True
+        self.initial_reason, self.initial_stop_now = "credit_budget_unknown", True
+
+        def interrupted_monitor(rpc):
+            raise KeyboardInterrupt("offline interrupt after original account stop")
+
+        self.rpc.steps.extend([interrupted_monitor, self.end_while_retained])
+        self.run_to_fixture_boundary()
+        self.assert_original_custody_survives()
+        self.assertEqual(self.campaign.stop_reason, "credit_budget_unknown")
+        self.assertTrue(self.campaign.stop_now)
+        self.assertIn("offline interrupt after original account stop", self.diagnostic_text())
+
     def accepted_control(self, *, owner_changes=None, generation_delta=0):
         owner = self.owner()
         owner.update(owner_changes or {})
@@ -343,6 +457,50 @@ class CampaignOwnerRetentionTests(unittest.TestCase):
         self.rpc.steps.extend([explicit_resume, resumed_run])
         self.run_to_fixture_boundary()
         self.assert_original_custody_survives(parked=False)
+        self.assertEqual(self.returned_from_wait, ["running"])
+
+    def test_verified_activation_can_resume_with_its_immediate_same_root_turn(self):
+        self.args.continuous = True
+        self.initial_status = "blocked"
+        self.before_begin_return = self.park_from_begin
+        original_record = []
+        resumed_frames = []
+
+        def explicit_resume_with_root_turn(rpc):
+            original_record.append(copy.deepcopy(self.campaign.state["owner_retention"]))
+            self.campaign.save(last_instruction=self.accepted_control())
+            rpc.status("active")
+            rpc.started("immediate-root-turn")
+
+        def resumed_run(rpc):
+            resumed_frames.append({"phase": self.campaign.state.get("phase"),
+                                   "active": dict(self.campaign.active),
+                                   "retained_for_stop": self.campaign.retained_for_stop,
+                                   "owner_retention": copy.deepcopy(self.campaign.state["owner_retention"])})
+            raise RetainedScenarioEnd("same Root immediately active after explicit control")
+
+        self.rpc.steps.extend([explicit_resume_with_root_turn, resumed_run])
+        self.run_to_fixture_boundary()
+        self.assert_original_custody_survives(parked=False)
+        self.assertEqual(self.returned_from_wait, ["running"])
+        self.assertEqual(resumed_frames, [{"phase": "running", "active": {"test-thread": "immediate-root-turn"},
+                                         "retained_for_stop": False, "owner_retention": original_record[0]}])
+
+    def test_verified_activation_does_not_ignore_an_active_descendant(self):
+        self.args.continuous = True
+        self.initial_status = "blocked"
+        self.before_begin_return = self.park_from_begin
+
+        def explicit_resume_with_other_turn(rpc):
+            self.campaign.save(last_instruction=self.accepted_control())
+            rpc.status("active")
+            rpc.started("immediate-root-turn")
+            rpc.started("unresolved-child-turn", thread="original-child")
+
+        self.rpc.steps.extend([explicit_resume_with_other_turn, self.end_while_retained])
+        self.run_to_fixture_boundary()
+        self.assert_original_custody_survives()
+        self.assertEqual(self.returned_from_wait, [])
 
     def test_active_goal_without_explicit_control_stays_retained(self):
         self.args.continuous = True
