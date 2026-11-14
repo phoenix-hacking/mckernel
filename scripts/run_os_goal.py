@@ -1499,7 +1499,8 @@ class Campaign:
 
     def progress_enabled(self):
         return bool(getattr(self.args, "progress_control", False)
-                    or getattr(self.args, "stop_after_m14_m15", False))
+                    or getattr(self.args, "stop_after_m14_m15", False)
+                    or getattr(self.args, "continuous", False))
 
     def poll_closure_targets(self):
         """Adopt the newest same-invocation plan; explicitly supersede older plans."""
@@ -3814,7 +3815,8 @@ def arguments(argv=None):
         parser.error("Supervisor lineage requires a complete internal worker binding")
     if args.continuous:
         args.same_owner_control = args.retain_owner_on_stop = args.repair_agent_failures = True
-        args.stop_after_m14_m15 = True
+        # Continuously pursue the saved whole-OS goal. Only the explicit
+        # --stop-after-m14-m15 opt-in may pause after those two acceptances.
     if args.instruction_source_id is not None and (not 0 < len(args.instruction_source_id) <= 512
             or args.instruct is None and args.resume_same_owner is None):
         parser.error("instruction-source-id requires an instruction or explicit same-owner resume and at most 512 characters")

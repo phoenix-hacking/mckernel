@@ -373,3 +373,11 @@ The existing 20-minute checkpoint and 40-minute qualified-evidence stall default
 are preserved; the independent velocity deficit can request a finite decision
 at 30 minutes. The 156 original checks, holds, budgets, native custody, and
 all original file/integration and milestone acceptances remain unchanged.
+
+Future `--continuous` invocations now enable closure control WITHOUT implicitly
+setting `--stop-after-m14-m15`: after accepted M14 and M15 they keep working on
+the saved whole-OS original milestones in order. A *separately explicit*
+`--stop-after-m14-m15` still checkpoints the larger goal exactly as requested;
+for example the previously authorized overnight launcher uses that explicit flag.
+Neither this source change nor a new default changes a live invocation's actual
+startup arguments, process identity or saved Root.
