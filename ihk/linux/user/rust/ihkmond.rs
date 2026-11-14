@@ -18,6 +18,9 @@ use std::time::{Duration,Instant};
 macro_rules! c{($s:literal)=>{concat!($s,"\0").as_ptr().cast::<c_char>()};}
 const KMSG_SIZE:usize=(4<<20)-4096;const SLOT:usize=1<<20;const SLOTS:usize=64;
 const TMP:&str=env!("IHKMOND_TMP");const POLL_MS:c_int=250;
+// A stop/remove asks for one last real flush. This is a timeout, not proof
+// that the guest owns the lock or that the lock is permanently stuck.
+const KMSG_FINAL_FLUSH_TIMEOUT:Duration=Duration::from_secs(5);
 const GET_KMSG:c_ulong=0x112908;const READ_KMSG:c_ulong=0x112909;
 const RELEASE_KMSG:c_ulong=0x11290a;const DETECT:c_ulong=0x11290f;
 #[repr(C)]struct GetKmsg{os_index:c_int,handle:*mut c_void}
@@ -170,11 +173,12 @@ fn detect_hungup(args:&Args)->i32{fn run(args:&Args)->Result<(),i32>{
   }
  }
  Ok(())}run(args).err().unwrap_or(0)}
+enum LeaseReadError{Busy,Failure(i32)}
 struct Lease{dev:i32,os:i32,handle:*mut c_void,attempted:bool}
 impl Lease{
  fn get(dev_index:i32,os:i32)->Result<Self,i32>{let value=unsafe{ihklib_device_open(dev_index)};if value<0{return Err(fail(value,&format!("ihklib_device_open returned {value}\n")))}let dev=Fd(value);let mut desc=GetKmsg{os_index:os,handle:std::ptr::null_mut()};let ret=unsafe{ioctl(dev.0,GET_KMSG,&mut desc as *mut GetKmsg)};if ret<0{return Err(fail(ret,&format!("IHK_DEVICE_GET_KMSG_BUF returned {ret}\n")))}Ok(Self{dev:dev_index,os,handle:desc.handle,attempted:false})}
  fn release(&mut self)->Result<(),i32>{if self.attempted{return Ok(())}self.attempted=true;let value=unsafe{ihklib_device_open(self.dev)};if value<0{kprint(&format!("unreleased kmsg lease dev={} os={} handle={:p}\n",self.dev,self.os,self.handle));return Err(fail(value,"ihklib_device_open failed releasing kmsg lease\n"))}let dev=Fd(value);let ret=unsafe{ioctl(dev.0,RELEASE_KMSG,self.handle)};if ret!=0{kprint(&format!("unreleased kmsg lease dev={} os={} handle={:p}\n",self.dev,self.os,self.handle));Err(fail(ret,"IHK_DEVICE_RELEASE_KMSG_BUF failed\n"))}else{Ok(())}}
- fn bytes(&self)->Result<Vec<u8>,i32>{let value=unsafe{ihklib_device_open(self.dev)};if value<0{return Err(fail(value,&format!("ihklib_device_open returned {value}\n")))}let dev=Fd(value);let mut buf=vec![0u8;KMSG_SIZE+1];let desc=ReadKmsg{handle:self.handle,shift:1,buf:buf.as_mut_ptr()};let n=unsafe{ioctl(dev.0,READ_KMSG,&desc as *const ReadKmsg)};if n<0||n as usize>KMSG_SIZE{return Err(fail(if n<0{n}else{-22},"ioctl failed\n"))}buf.truncate(n as usize);Ok(buf)}
+ fn bytes(&self)->Result<Vec<u8>,LeaseReadError>{let value=unsafe{ihklib_device_open(self.dev)};if value<0{return Err(LeaseReadError::Failure(fail(value,&format!("ihklib_device_open returned {value}\n"))))}let dev=Fd(value);let mut buf=vec![0u8;KMSG_SIZE+1];let desc=ReadKmsg{handle:self.handle,shift:1,buf:buf.as_mut_ptr()};let n=unsafe{ioctl(dev.0,READ_KMSG,&desc as *const ReadKmsg)};if n<0&&errno()==16{return Err(LeaseReadError::Busy)}if n<0||n as usize>KMSG_SIZE{return Err(LeaseReadError::Failure(fail(if n<0{n}else{-22},"ioctl failed\n")))}buf.truncate(n as usize);Ok(buf)}
 }
 impl Drop for Lease{fn drop(&mut self){if !self.attempted{let _=self.release();}}}
 struct Ring{files:Vec<Option<File>>,sizes:[usize;SLOTS],order:VecDeque<usize>,prod:usize,os:i32}
@@ -196,10 +200,12 @@ impl Ring{
  }
 }
 struct LogGuard;impl Drop for LogGuard{fn drop(&mut self){unsafe{closelog();}}}
-fn consume(lease:&Lease,ring:&mut Ring,flush:bool)->Result<(),i32>{let bytes=lease.bytes().map_err(|n|fail(-22,&format!("fwrite_kmsg returned {n}\n")))?;
- #[cfg(ihkmond_kmsg_redirect)]{if bytes.is_empty(){return Ok(())}for line in bytes.split(|b|*b==b'\n'){let end=line.iter().position(|b|*b==0).unwrap_or(line.len());let mut text=b"<3>".to_vec();text.extend_from_slice(&line[..end]);kprint_bytes(&text);thread::sleep(Duration::from_micros(200));}let _=(ring,flush);}
+// EBUSY means no ring lock was acquired, no data was shifted, and a later
+// retry is needed. All other errors preserve the existing failure path.
+fn consume(lease:&Lease,ring:&mut Ring,flush:bool)->Result<bool,i32>{let bytes=match lease.bytes(){Ok(bytes)=>bytes,Err(LeaseReadError::Busy)=>return Ok(false),Err(LeaseReadError::Failure(n))=>return Err(fail(-22,&format!("fwrite_kmsg returned {n}\n")))};
+ #[cfg(ihkmond_kmsg_redirect)]{if bytes.is_empty(){return Ok(true)}for line in bytes.split(|b|*b==b'\n'){let end=line.iter().position(|b|*b==0).unwrap_or(line.len());let mut text=b"<3>".to_vec();text.extend_from_slice(&line[..end]);kprint_bytes(&text);thread::sleep(Duration::from_micros(200));}let _=(ring,flush);}
  #[cfg(not(ihkmond_kmsg_redirect))]{ring.append(&bytes).map_err(|n|fail(-22,&format!("fwrite_kmsg returned {n}\n")))?;if flush{ring.syslog().map_err(|n|fail(n,&format!("syslog_kmsg returned {n}\n")))?;}}
- Ok(())}
+ Ok(true)}
 fn redirect_kmsg(args:&Args)->i32{fn run(args:&Args)->Result<(),i32>{
  unsafe{openlog(args.logid.as_ptr(),1,args.facility);}let _log=LogGuard;
  let ep=Fd::new(unsafe{epoll_create(1)},"epoll_create failed\n")?;add(ep.0,args.life.removed.0)?;let mut ring=Ring::new(args.os);
@@ -207,11 +213,17 @@ fn redirect_kmsg(args:&Args)->i32{fn run(args:&Args)->Result<(),i32>{
   let mut lease=Lease::get(args.dev,args.os)?;
   let value=unsafe{ihk_os_get_eventfd(args.os,101)};if value<0{return Err(fail(-22,"ihk_os_get_eventfd\n"))}let kmsg=Fd(value);add(ep.0,kmsg.0)?;
   let value=unsafe{ihk_os_get_eventfd(args.os,2)};if value<0{return Err(fail(-22,"ihk_os_get_eventfd\n"))}let status=Fd(value);add(ep.0,status.0)?;
+  let mut pending=false;let mut flush=false;let mut retiring=false;let mut deadline=None;
   loop{
-   if args.life.stopping(){consume(&lease,&mut ring,true)?;break}
-   let mut events=[Event{events:0,data:0};2];let n=wait(ep.0,&mut events,POLL_MS)?;let mut removed=false;
-   for event in &events[..n]{let fd=(*event).fd();reap(fd)?;if fd==kmsg.0{consume(&lease,&mut ring,false)?;}else if fd==status.0{consume(&lease,&mut ring,true)?;}else if fd==args.life.removed.0{consume(&lease,&mut ring,true)?;removed=true;break}}
-   if removed{break}
+   if args.life.stopping()&&!retiring{retiring=true;pending=true;flush=true;deadline=Some(Instant::now()+KMSG_FINAL_FLUSH_TIMEOUT);}
+   if pending{
+    if consume(&lease,&mut ring,flush)?{pending=false;flush=false;if retiring{break}}
+    else if retiring&&deadline.is_some_and(|end|Instant::now()>=end){return Err(fail(-110,"kmsg final flush timed out waiting for ring lock\n"))}
+   }
+   // Continue servicing remove/stop and all notification FDs during contention.
+   // The timeout retries an already reaped kmsg event without inventing a wake.
+   let mut events=[Event{events:0,data:0};2];let n=wait(ep.0,&mut events,POLL_MS)?;
+   for event in &events[..n]{let fd=(*event).fd();reap(fd)?;if fd==kmsg.0{pending=true;}else if fd==status.0{pending=true;flush=true;}else if fd==args.life.removed.0{retiring=true;pending=true;flush=true;if deadline.is_none(){deadline=Some(Instant::now()+KMSG_FINAL_FLUSH_TIMEOUT);}break}}
   }
   // Release before closing notification endpoints, as in the reference. RAII
   // also releases once on every partial setup/error path. Failed release is
@@ -279,7 +291,7 @@ fn run()->i32{
  supervise(facility,kmsg!=0,interval,logid).err().unwrap_or(0)
 }
 #[cfg(ihkmond_fixture)]fn fixture_ring()->i32{
- fn body()->Result<(),i32>{let mut lease=Lease::get(0,0)?;let mut ring=Ring::new(0);for _ in 0..3{ring.append(&lease.bytes()?)?;}ring.syslog()?;lease.release()?;Ok(())}body().err().unwrap_or(0)
+ fn body()->Result<(),i32>{let mut lease=Lease::get(0,0)?;let mut ring=Ring::new(0);for _ in 0..3{let bytes=lease.bytes().map_err(|error|match error{LeaseReadError::Busy=>-16,LeaseReadError::Failure(n)=>n})?;ring.append(&bytes)?;}ring.syslog()?;lease.release()?;Ok(())}body().err().unwrap_or(0)
 }
 fn main(){
  #[cfg(ihkmond_fixture)]{if std::env::var_os("IHKMOND_HELPER").is_some(){std::process::exit(fixture_ring());}}

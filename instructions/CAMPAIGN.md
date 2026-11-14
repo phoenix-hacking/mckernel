@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T15:18Z
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T17:03:10+00:00
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -27,9 +27,14 @@ Corrected ABI776 caller1207959552B/job1 is Q8eec6493/Root3e584a05 scoped RETIRED
 Official vendor-descriptor family268435456B/job1 is Qa9850b57/Rootfc778733 scoped
 RETIRED. New one-case load_interp caller1207959552B/job1 is Q7c4bc2d2/Rootcaca1927
 scoped RETIRED. The authenticated-primary metadata family268435456B/job1 is
-Q5aeb9c4f/Rootd7bd0eda scoped RETIRED. Current known HOST reservations are ONLY
-old402653184B/jobs2 plus ALL overhead; one new payload slot still requires fresh
-actual source/account/permission/current-owner/aggregate admission.
+Q5aeb9c4f/Rootd7bd0eda scoped RETIRED. Exact RPM GET268435456B/job1 is
+Q5f20fb30/Root55ed0750 scoped RETIRED. Changed-monitor1342177280B/job1 is
+Q5e830846/Root9edfed67 scoped RETIRED. Passive genuine SDK loader export
+402653184B/job1 is Q23d72216/Rootf3716461 scoped RETIRED; that new384MiB is
+DISTINCT from old retained384MiB/jobs2. Stock RPM signature/header1342177280B/
+job1 is Qa30a69f6/Root9919f1a8 scoped RETIRED. Current known HOST reservations
+are ONLY old402653184B/jobs2 plus ALL overhead. Every next payload requires fresh
+actual full admission and exact source/permission/owner/account/resource gates.
 Actual6171 production family Q89a2730e/Root94a09169 retire ONLY its new1207959552B/
 job1. Every next family still requires its own fresh operation admission.
 Original tool14790 and C3tool32916 retain their original owning contexts. Actual
@@ -237,7 +242,9 @@ reviewed/tested61710a98 after original dd860184 unified patch/c33 preimage/posti
 check. Root preserves two harmless PREINPUT adoption refusals (wrong guessed patch
 filename, then an incorrect diff--git-header guard); neither changed source. The
 exact original ---/+++ one-file format then applied successfully, no build/test
-rerun. Coherent code/evidence checkpoint403b8c0be is pushed/fetched/blobverified;
+rerun. Coherent code/evidence checkpoint403b8c0be is pushed/fetched/blobverified; later bounded interpreter/
+authenticated-primary checkpoint91021d9bb is also pushed/fetched with all7 changed
+blobs byteverified;
 unrelated dirty source is preserved. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
 20261114/. No wholeF02/backend/main-success/phase1/native claim.
 Literal successor adjudication9101f3e3 is NOT_GO: next unmatched HOST branch is
@@ -270,15 +277,23 @@ and exact C/stage are docs/verification/m15-f02-load-interp-real-file-20261114/.
 M15Leaf successor073a0786 updated ONLY this qualified join in original9101/
 dc459 obligations; whole F02 remains NOT_GO. ONE next unmatched branch is
 successful load_interp PT_LOAD section/num_sections/entry/interp_align publication
-and returned-current-generation descriptor/borrowed section.fp lifetime. CredSource
-prepares only one real HOST case against d511 and genuine SAME SDK46d loader;
-loader whole-file SHA/PHDR facts are genuinely unissued, not a host/fabricated
-ELF substitute. CredSource froze successcaller0d2cebae/stageeb911f93 and typed
-loader-input seal contract; it is NOT complete READY_SOURCE before actual data.
-DispatchSource prepares only the exact selected SDK46d loader passive-export
-operation/lifecycle binding (read/copy/hash/fstat/ELF data, never loader execution).
-Exact original source/consumer contracts remain; no native quota.
-No old fourcase/Rust/production/ABI/provider rerun or count credit.
+and returned-current-generation descriptor/borrowed section.fp lifetime.
+The genuine SAME SDK46d loader passive export actually passed: one opened input,
+same-FD stable fstat/hash/copy/rawEhdr+PHDR/EOF/output closure, result a0d3b7c7/
+fullRoot92e33363. Actual930600B loader0853c866 has11PHDR/4PT_LOAD/noPT_INTERP,
+entry120256/maxalign4096; no loader execution or HOST/fabricated substitute.
+M15Leaf data/familyQ23d72216 and Rootf3716461 retire ONLY new384MiB/job1 after
+nine original waits/18 closed-fsynced streams/420 prefix closures/container/
+directory/lock/fullRoot0. Original UNKNOWN and unissued authority fields remain.
+Caller0d2cebae/stageeb911f93/headerb12c3a1e now bind those actual sealed bytes
+and genuine Q/Root in HANDOFF343d0f25/request5aef6441. Proc sourceGO98d24572
+passes only this ONE real-file success case; no case has run. DispatchSource is
+healthy on its minimal private operation/lifecycle binding from qualifiedc343/
+aca, with algorithms/profile/account/custody preserved. Distinct operationGO and
+fresh Root admission must precede ONLY new C compile/testlink/one case. Required
+actual nonNULL CURRENT allocation-generation, sealed PT_LOAD fields, borrowed
+FILE lifetime and exactly-once documented caller cleanup are still unproved.
+No Rust/production relink, earlier-case/ABI/provider/SDK rerun or count credit.
 Old402653184B/jobs2 and ALL overhead/other holds stay charged.
 
 NativeBinding separately authors ONLY F05 qualified-account-retained-resource-
@@ -363,10 +378,31 @@ are incomplete JSON; candidate stays UNISSUED, no runtime family. DebugContract
 owns one private bounded baseline/provenance correction, reusing every unaffected
 sourceproof/wait/capture/profile body. No prefix parsing/guessed original closure
 or relaxed Config/HostConfig comparison; bind genuine complete profiles or
-explicit new same46d qualified derivation plus exact literal monitor deltas. No invented
-intermediate object/link plan, staged/noevent
-mutation, build/native/wholeF08 acceptance. SMP whole-
-crate vendor192 compile and future genuineevent/byte/cleanup proof remain required.
+explicit new same46d qualified derivation plus exact literal monitor deltas.
+DebugContract froze complete-baseline-correction-1 handoff2b58d407/requeste81704cb/
+parentbfe2fd1f/outerf477ff3a using NEW complete c51f/c881 evidence and literal
+monitor Env/Ulimits; NativeCurrent changed-only review is active. All4 old
+truncated profiles/candidate remain intact. Exact changed operationGOeab8d32a/
+approvedbc0a633c qualified the30-field interface. Root fresh grant530dc474 ran
+ONLY approved outer once as originalTool52307: four SERIAL configure/normal
+changed-monitor rustc compile-link/passiveELF/private-stage phases all passed,
+result64dcdaf6/fullRoote6c99032. Actual5773600B production monitor58ad499c/mode755
+is checkpointeda819eba3, with matching private stage. Sourceproof15 occurs
+inside each owncontainer BEFORE its phasecommand/codegen. Root resource record
+measured4034383872B common physical-memory+storage headroom, preserved18GiB prior/
+4GiB OS floors and separate HOST4GiB total/1.25GiB peak; no guessed category,
+extra HOST quota or native borrowing. M15Leaf actual build/familyQ5e830846 passes;
+Root9edfed67 retires ONLY new1.25GiB/job1 after31 original waits/closed captures/
+heldinput closure/four terminal nonOOM Pid0 containers/exact nonforce removal/
+outer directory/fsync-close/fullRoot0. Eight payload-file fsyncs and parent
+capture-directory fsync remain explicitly UNOBSERVED, not invented or retried;
+the exact reviewed contract does not require a separate such operation.
+Root adopted ONLY reviewed/compiled/qualified monitor4a4707da into canonical
+IHK from clean tracked988945b1 with original patchf1b1cefb and receipt1794672405.
+Old frozen source/binary/noevent receipts remain intact. Upstream8d/tree9f is
+BASE plus this explicit project overlay; future bindings name actual newbytes.
+No monitor runtime/event/provider/SMP/native/wholeF08 acceptance. SMP whole-crate
+vendor192 compile and future genuineevent/byte/cleanup proof remain required.
 Create-v2 physical handoff remains a distinct unproved provider boundary.
 TimeSource's separately reviewed OFFICIAL signed-descriptor route107fe90a has
 operationGO5c682d13/argvf2b9f98a/contract1662feb4. Root fresh33-field grantf60eab6d
@@ -391,15 +427,52 @@ froze GET-only successor43201123/request91dd0754 after preserving one unissued
 profile-annotation candidate and bounded correction. FunctionalDelta reviews
 ONLY changed GET/profile/capture/34-field bindings (prior33+actualprimaryQ nested7).
 Root alone fills genuine Q5aeb/Rootd7bd and fresh admission AFTER GO; no new RPM
-operation is issued yet. Latest userb896c0ba scope: no install/signature/content extraction/compiler or Docker phase
-in this next grant, no descriptor/primary/key refetch or inferred runtime closure.
-FunctionalDelta reviews only that new operation after freeze. Cached46d/e015
-supplier and both old reservations remain untouched.
+operation was issued before fresh admission. Root then consumed exact GO4b8418ae/
+approved767687c4/34-field contractb49fed07, genuine primaryQ5aeb/Rootd7bd nested7
+and fresh actual grantbec9c3cd. ONE advertised RPM GET actually returned PASS
+result90292c33/fullRoot369f05d1/protectedcapturea6d6ab1c; M15Leaf qualifies ONLY
+byte/digest/HTTP/TLS/original waits/FD/capture/output/new256 family closure.
+ActualQ5f20fb30 and Root55ed0750 now retire ONLY this256MiB/job1. Actual saved
+RPM is31573199B/ffb092cb. A DISTINCT fresh reviewed signature/header operation
+GOf7ac0af5 then actually passed: resultb1789397/fullRootd8d3ee67, stock rpmkeys
+checksig0/header+payload digestsOK, then exact rust|0|1.92.0|1.el10|x86_64 header.
+Actual keyID6fedfc85 joins previously qualified full fingerprint/public key and
+immutable46d keyDB; full fingerprint was not emitted by rpmkeys. M15Leaf actual
+Qa30a69f6 plus Root9919f1a8 retire ONLY new1.25GiB/job1 after12 original waits/
+24 closed-fsynced streams/input/receipt/profile/container/absence/fullRoot0.
+No listing/extraction/ELF/runtime/compiler/SMP/device/original credit is inferred.
+TimeSource finished one narrow PRIVATE file-table checkpoint proposalef3bc1ca/
+request5731471d, exactly ONE stock rpm -qp --dump on this acquired authenticated
+RPM with existing2MiB cap. FunctionalDelta reviews only new operation/data/profile/
+capture bindings, reusing every passed signature/header/tool/provider/custody join.
+Actual file/member facts are needed before safely naming compiler/hashed-driver
+extraction inputs; no guessed filenames/hash/limits or new parser/framework.
+No GET/install/keydb/network/extraction/compiler effect is included. Cached46d/
+e015 supplier and both old reservations remain untouched; future grant UNISSUED.
+
+
+Separate future2GiB HOST operation remains UNADMITTED: NativeCurrent saved-data
+coverage470d6b42 proves only62779392B exact old-family PID/birth RSS overlap.
+Keeping fullold402653184B and independentoverhead1851740160B gives4401876992B,
+106909696B ABOVE4GiB even after hypothetical retirement of every new family.
+Unproved runtime2685744/b72911894 and C3outer2737329/b74028857 remain overhead;
+original owning-birth association supplier is the saved14790/32916 runtime owner.
+No accounting change/old retirement/new quota/native borrowing is made. Smaller
+independently eligible HOST cases do not wait on this separate2GiB gate.
 
 Root broad git status metadata traversal hit protected archived-directory
 PermissionError diagnostics (actual chunk ebe269, original truncated protocol
 record retained). That traversal is stopped with no privilege alternate/retry;
 checkpoint work uses explicit current paths only. No payload or hold changed.
+CSV evidence serialization initially changed LF to CRLF; failed exact whitespace
+check0218b9 is preserved. One bounded correction restored original LF, leaving
+only the intended evidence row changed; the necessary failed check then passed.
+No original criteria/weights/percent/denominator changed.
+Root checkpoint compare9cb1dc incorrectly included the existing updated_at status
+stamp in its criteria comparison; exact diff found that sole non-evidence metadata
+difference. The bounded check now joins the two literal timestamps separately;
+all criteria/weights/acceptance/rollups match HEAD exactly. No source/test/payload
+rerun or acceptance change followed from that local check failure.
 
 Publication prospective observability repair parent823b/keeper08e7/phase0af6f has
 independent SOURCE GOfda62213. Normal/FULL bodies and original signals/waits stay
