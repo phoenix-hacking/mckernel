@@ -99,6 +99,47 @@ class StatusFeedTests(unittest.TestCase):
                 ('state', 'state.json'), ('guardian', 'guardian.json'), ('watcher', 'watcher.json'),
                 ('mailbox', 'mailbox-state.json'), ('latest_stop', 'latest-stop.json'))})
 
+    def test_detached_observer_uses_saved_root_working_tree_ledger(self):
+        active = self.directory / 'active-worktree'
+        ledger_path = active / 'docs/verification/m14-m15-closure-progress.json'
+        ledger_path.parent.mkdir(parents=True)
+        expected = {'requirements': [{'id': 'ACTIVE-ONLY'}], 'tasks': []}
+        ledger_path.write_text(json.dumps(expected))
+        self.save('state.json', {'repo': str(active), 'thread_id': 'saved-root'})
+        with patch.object(self.feed, '_git_common_dir', return_value=Path('/same-object-store')) as check:
+            result = self.feed.tick()
+        self.assertEqual(result['status'], 'PUBLISHED')
+        self.assertEqual(result['source_repo'], str(active))
+        self.assertEqual(self.render.call_args.args[1], expected)
+        self.feed._revision.assert_called_once_with(active)
+        self.assertEqual(check.call_count, 2)
+
+    def test_detached_observer_refuses_unrelated_checkout_and_retains_prior_report(self):
+        active = self.directory / 'unrelated-repo'
+        active.mkdir()
+        self.save('state.json', {'repo': str(active), 'thread_id': 'saved-root'})
+        prior = self.directory / 'status.txt'
+        prior.write_text('Prior verified report\n')
+        with patch.object(self.feed, '_git_common_dir', side_effect=lambda repo: repo.resolve()):
+            result = self.feed.tick()
+        self.assertEqual(result['status'], 'ERROR')
+        self.assertIn('another Git repository', result['reason'])
+        self.assertEqual(prior.read_text(), 'Prior verified report\n')
+        self.render.assert_not_called()
+        self.publisher.publish.assert_not_called()
+
+    def test_missing_saved_root_checkout_does_not_publish_observer_ledger(self):
+        active = self.directory / 'unavailable-worktree'
+        self.save('state.json', {'repo': str(active), 'thread_id': 'saved-root'})
+        prior = self.directory / 'status.txt'
+        prior.write_text('Prior verified report\n')
+        result = self.feed.tick()
+        self.assertEqual(result['status'], 'ERROR')
+        self.assertEqual(result['error_type'], 'FileNotFoundError')
+        self.assertEqual(prior.read_text(), 'Prior verified report\n')
+        self.render.assert_not_called()
+        self.publisher.publish.assert_not_called()
+
     def test_six_hundred_second_cadence_skips_both_render_and_publication(self):
         first = self.feed.tick()
         self.assertEqual(first['next_refresh_at'], 1600)
