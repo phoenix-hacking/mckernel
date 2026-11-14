@@ -1,0 +1,77 @@
+name: Capacity11 exact affected16 offline qualification
+on:
+  push:
+    branches: [codex/capacity11-affected16-ci-20261114]
+permissions:
+  contents: read
+jobs:
+  affected:
+    name: Default6 explicit11 strict readback16 checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONPATH: scripts:scripts/tests
+      LANG: C
+      LC_ALL: C
+    steps:
+      - name: Check out immutable current-source candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 13b47dbde2cbb4b8bbd30dc2644ee37e04c9af4b
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /scripts/
+            /.github/
+            /instructions/
+            /docs/development/
+            /AGENTS.md
+            /CAMPAIGN.md
+      - name: Verify exact source and materialize the committed original tracker
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/capacity11-output" docs/verification
+          test "$(git rev-parse HEAD)" = '13b47dbde2cbb4b8bbd30dc2644ee37e04c9af4b'
+          test "$(git rev-parse 'HEAD^{tree}')" = '7047773d56fc360347cd0d72ecb89a2f0e438844'
+          git rev-parse HEAD 'HEAD^{tree}' > "$RUNNER_TEMP/capacity11-output/source-identity.txt"
+          git show HEAD:docs/verification/m14-m15-closure-progress.json > docs/verification/m14-m15-closure-progress.json
+          sha256sum --check > "$RUNNER_TEMP/capacity11-output/source-pins.txt" <<'PINS'
+          3fc6a250bcb6c7b14275040cc965077cb53902860d3055fec80ea5e72a772c28  scripts/os_goal_resources.py
+          6c9269842dbda03efbaf9e8e27362d7d2498594ab98f8faca94c86de824d3d7e  scripts/run_os_goal.py
+          0344a89a0eaecf60be5dd4b7ad2ed45945d461492adec56c3facf906ba4a0d1a  scripts/run_os_parallel.py
+          e262c7bf4edc13e4e1e2076953ca111f291ee377bb18cc707d654100438a910d  scripts/tests/test_os_goal_launcher.py
+          8da69997fd90d8c40ef48b782e51d74e7a067e1b880f0b364cd8bc5495d8c2e7  scripts/tests/test_os_goal_recovery.py
+          86b34ae0babf973b446e436e0c750f89e34cc95b620648b54c0e720f1aacc1ea  scripts/tests/test_os_goal_resources.py
+          732eb73b5da87b0fb0c56cf034b39dff052f3f64857823a3004addb61c2bdca7  scripts/tests/test_os_goal_timeout_recovery.py
+          PINS
+          cat "$RUNNER_TEMP/capacity11-output/source-pins.txt"
+          { python3 --version; git --version; } > "$RUNNER_TEMP/capacity11-output/toolchain.txt"
+      - name: Run only exact16 affected offline checks and reject skips
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          ulimit -c 0
+          ulimit -t 120
+          ulimit -v 524288
+          python3 -B -m unittest scripts.tests.test_os_goal_resources scripts.tests.test_os_goal_launcher.CampaignTests.test_explicit_eleven_slots_reach_strict_startup_and_require_exact_readback > "$RUNNER_TEMP/capacity11-output/command.stdout" 2> "$RUNNER_TEMP/capacity11-output/command.stderr"
+          status=$?
+          printf '%s\n' "$status" > "$RUNNER_TEMP/capacity11-output/command.exit"
+          cat "$RUNNER_TEMP/capacity11-output/command.stdout"
+          cat "$RUNNER_TEMP/capacity11-output/command.stderr" >&2
+          test "$status" = 0 || exit "$status"
+          grep -Eq '^Ran 16 tests in [0-9.]+s$' "$RUNNER_TEMP/capacity11-output/command.stderr" || exit 1
+          test "$(tail -n 1 "$RUNNER_TEMP/capacity11-output/command.stderr")" = OK || exit 1
+      - name: Retain original command captures and source joins
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: capacity11-exact-affected16
+          path: ${{ runner.temp }}/capacity11-output/
+          if-no-files-found: error
+          retention-days: 14
