@@ -78,7 +78,7 @@ def evaluate_readiness(directory, *, now=None, identity_checker=None):
 
     A healthy held/paused campaign can have monitoring ready. File timestamps
     alone never establish a successful poll or remote publication. Old receipts
-    must be refreshed by the current guardian while respecting normal cadence.
+    must be refreshed by the identified observer while respecting normal cadence.
     """
     directory = Path(directory)
     observed = _epoch(time.time() if now is None else now)
@@ -100,10 +100,14 @@ def evaluate_readiness(directory, *, now=None, identity_checker=None):
             return ((identity_checker(pid, birth) if identity_checker else process_start(pid) == birth) is True)
         except (OSError, ValueError, TypeError):
             return False
-    guard, mailbox, text, published, state, watcher = (
+    guard, mailbox, text, published, state, watcher, monitor = (
         load(name) for name in ("guardian.json", "mailbox-state.json", "status-text-state.json",
-                               "status-publish.json", "state.json", "watcher.json"))
+                               "status-publish.json", "state.json", "watcher.json", "mailbox-monitor.json"))
     stages = {name: {"ready": False, "missing": []} for name in ("guardian", "mailbox", "publication")}
+    independent = bool(monitor or (directory / "mailbox-monitor.json").exists()
+                       or guard.get("mailbox_poll_owner") == "independent")
+    monitoring_mode = "independent" if independent else "legacy_guardian"
+    required = ("monitor", "mailbox", "publication") if independent else ("guardian", "mailbox", "publication")
     gs, ms, ps = (stages[name] for name in ("guardian", "mailbox", "publication"))
     started = _epoch(guard.get("started_at"))
     heartbeat = _epoch(guard.get("heartbeat_at"))
@@ -124,10 +128,37 @@ def evaluate_readiness(directory, *, now=None, identity_checker=None):
               heartbeat_age_seconds=observed - heartbeat if heartbeat else None,
               identity_verified=live_guard, lease_verified=held)
 
+    owner, owner_name, owner_file = guard, "guardian", "guardian.json"
+    if independent:
+        owner, owner_name, owner_file = monitor, "mailbox monitor", "mailbox-monitor.json"
+        observer_stage = stages["monitor"] = {"ready": False, "missing": []}
+        started = _epoch(monitor.get("started_at"))
+        monitor_heartbeat = _epoch(monitor.get("heartbeat_at"))
+        live_monitor = identity(monitor.get("pid"), monitor.get("start"))
+        try:
+            monitor_held = not lease_free(directory, "mailbox-monitor.lock")
+        except (OSError, ValueError, TypeError):
+            monitor_held = False
+        if not live_monitor:
+            observer_stage["missing"].append("Current mailbox monitor process birth is unverified.")
+        if not monitor_held:
+            observer_stage["missing"].append("Current mailbox monitor lifetime lease is unverified.")
+        if started is None or started > observed + 5:
+            observer_stage["missing"].append("Current mailbox monitor started_at is missing or invalid.")
+        if (not _fresh(monitor_heartbeat, observed, GUARDIAN_MAX_AGE)
+                or started is not None and monitor_heartbeat is not None and monitor_heartbeat < started):
+            observer_stage["missing"].append("Mailbox monitor heartbeat is stale, missing or predates this instance.")
+        if not isinstance(monitor.get("monitor_id"), str) or not monitor["monitor_id"]:
+            observer_stage["missing"].append("Mailbox monitor instance identity is unavailable.")
+        if not _oneof(monitor.get("phase"), {"STARTING", "POLLING", "PUBLISHING", "MONITORING"}):
+            observer_stage["missing"].append("Mailbox monitor is stopped, blocked or unverified.")
+        observer_stage.update(started_at=_utc(started), heartbeat_at=_utc(monitor_heartbeat),
+                              identity_verified=live_monitor, lease_verified=monitor_held)
+
     polled = _epoch(mailbox.get("last_successful_poll_at"))
     next_poll = _epoch(mailbox.get("next_poll_at"))
     if started is None or polled is None or polled < started:
-        ms["missing"].append("A successful mailbox poll from this guardian instance is not yet proven.")
+        ms["missing"].append(f"A successful mailbox poll from this {owner_name} instance is not yet proven.")
     if not _fresh(polled, observed, RECEIPT_MAX_AGE):
         ms["missing"].append("Successful mailbox poll is stale or unavailable.")
     if next_poll is None:
@@ -136,17 +167,21 @@ def evaluate_readiness(directory, *, now=None, identity_checker=None):
         ms["missing"].append("The mailbox poll deadline is overdue.")
     if mailbox.get("last_error") not in (None, "") or mailbox.get("failures", 0) != 0:
         ms["missing"].append("Mailbox has an unresolved poll or delivery error.")
+    if independent and mailbox.get("poll_observer_id") != monitor.get("monitor_id"):
+        ms["missing"].append("Mailbox poll does not identify this independent monitor instance.")
+    if independent and monitor.get("poll_error"):
+        ms["missing"].append("Independent monitor retains a poll error.")
     ms.update(last_successful_poll_at=_utc(polled), next_poll_at=_utc(next_poll),
               successful_poll_age_seconds=observed - polled if polled else None)
 
     verified = _epoch(published.get("published_verified_at"))
     generated = _epoch(text.get("generated_at"))
     if started is None or verified is None or verified < started:
-        ps["missing"].append("Verified status publication from this guardian instance is not yet proven.")
+        ps["missing"].append(f"Verified status publication from this {owner_name} instance is not yet proven.")
     if not _fresh(verified, observed, RECEIPT_MAX_AGE):
         ps["missing"].append("Verified remote status publication is stale or unavailable.")
     if started is None or generated is None or generated < started or not _fresh(generated, observed, RECEIPT_MAX_AGE):
-        ps["missing"].append("The rendered status snapshot is stale or not from this guardian instance.")
+        ps["missing"].append(f"The rendered status snapshot is stale or not from this {owner_name} instance.")
     if not _oneof(published.get("status"), {"PUBLISHED", "UNCHANGED"}):
         ps["missing"].append("A successful PUBLISHED or UNCHANGED publication receipt is unavailable.")
     if not _oneof(text.get("status"), {"PUBLISHED", "UNCHANGED", "BACKOFF"}):
@@ -173,23 +208,41 @@ def evaluate_readiness(directory, *, now=None, identity_checker=None):
             ps["missing"].append("The current rendered desired hash lacks a matching successful publication receipt.")
     elif desired is not None and desired != actual:
         ps["missing"].append("The retained desired hash differs from the actual status bytes.")
+    if independent:
+        rendered_owner = text.get("observer") if isinstance(text.get("observer"), dict) else {}
+        if any(rendered_owner.get(key) != monitor.get(key) for key in ("monitor_id", "pid", "start", "started_at")):
+            ps["missing"].append("Rendered status does not identify this independent monitor instance.")
+        if monitor.get("publication_error"):
+            ps["missing"].append("Independent monitor retains a publication error.")
     ps.update(published_verified_at=_utc(verified), generated_at=_utc(generated),
               publication_age_seconds=observed - verified if verified else None,
               actual_sha256=actual, published_sha256=remote)
 
-    # Reject a guardian replacement observed during this multi-file read.
-    latest = load("guardian.json")
-    keys = ("pid", "start", "run_id", "started_at")
-    if any(latest.get(key) != guard.get(key) for key in keys) or not identity(guard.get("pid"), guard.get("start")):
-        gs["missing"].append("Guardian changed or exited during readiness observation.")
-    for stage in stages.values():
+    # Reject observer replacement during this multi-file read.
+    latest = load(owner_file)
+    keys = ("pid", "start", "monitor_id" if independent else "run_id", "started_at")
+    if any(latest.get(key) != owner.get(key) for key in keys) or not identity(owner.get("pid"), owner.get("start")):
+        stages["monitor" if independent else "guardian"]["missing"].append(
+            "Mailbox monitor changed or exited during readiness observation." if independent else
+            "Guardian changed or exited during readiness observation.")
+    for name, stage in stages.items():
         stage["ready"] = not stage["missing"]
+        stage["required_for_monitoring"] = name in required
 
     worker_live = identity(state.get("worker_pid"), state.get("worker_start"))
     watcher_live = identity(watcher.get("watcher_pid"), watcher.get("watcher_start"))
-    engine_live = bool(worker_live and watcher_live and watcher.get("worker_pid") == state.get("worker_pid")
-                       and isinstance(guard.get("run_id"), str)
-                       and state.get("guardian_run_id") == guard["run_id"] == watcher.get("guardian_run_id"))
+    same_worker = watcher.get("worker_pid") == state.get("worker_pid")
+    guardian_lineage = (isinstance(guard.get("run_id"), str) and bool(guard["run_id"])
+                        and state.get("guardian_run_id") == guard["run_id"] == watcher.get("guardian_run_id"))
+    manual_lineage = (state.get("supervision_mode") == watcher.get("supervision_mode") == "manual"
+                      and isinstance(state.get("supervision_id"), str) and bool(state["supervision_id"])
+                      and watcher.get("supervision_id") == state["supervision_id"]
+                      and watcher.get("worker_start") == state.get("worker_start")
+                      and all(isinstance(state.get(key), str) and bool(state[key])
+                              and watcher.get(key) == state[key] for key in ("log_dir", "thread_id"))
+                      and _fresh(_epoch(watcher.get("at")), observed, 120))
+    supervision_mode = "manual" if manual_lineage else "guardian" if guardian_lineage else "unverified"
+    engine_live = bool(worker_live and watcher_live and same_worker and (guardian_lineage or manual_lineage))
     state_heartbeat = _epoch(state.get("heartbeat_at"))
     current_engine = engine_live and _fresh(state_heartbeat, observed, 120)
     goal = state.get("goal") if isinstance(state.get("goal"), dict) else {}
@@ -197,13 +250,16 @@ def evaluate_readiness(directory, *, now=None, identity_checker=None):
     phase = state.get("phase") if _oneof(state.get("phase"), {"running", "waiting_for_input", "repair_review", "stopped", "starting", "ready", "stopping"}) else "unknown"
     reason = state.get("stop_reason") or guard.get("reason")
     work = {"engine_live": engine_live, "snapshot_current": current_engine,
+            "supervision_mode": supervision_mode, "lineage_verified": guardian_lineage or manual_lineage,
             "reported_goal_status": goal_status, "reported_phase": phase,
             "state": goal_status.upper() if current_engine else "UNVERIFIED" if state else "UNAVAILABLE",
             "reason": redact(reason, 400) if isinstance(reason, str) else None,
             "active_turn_count": len(state["active_turns"]) if current_engine and isinstance(state.get("active_turns"), dict) else None}
-    return {"schema_version": 1, "observed_at": _utc(observed),
-            "monitoring_ready": all(stage["ready"] for stage in stages.values()),
-            "stages": stages, "missing_stages": [name for name, stage in stages.items() if not stage["ready"]],
+    stages["engine"] = {"ready": current_engine, "engine_live": engine_live, "supervision_mode": supervision_mode,
+                        "required_for_monitoring": False, "missing": [] if current_engine else ["Current engine identity and supervision lineage are unverified."]}
+    return {"schema_version": 2, "observed_at": _utc(observed), "monitoring_mode": monitoring_mode,
+            "monitoring_ready": all(stages[name]["ready"] for name in required),
+            "stages": stages, "missing_stages": [name for name in required if not stages[name]["ready"]],
             "next_due": {"mailbox_poll_at": _utc(next_poll), "mailbox_poll_epoch": next_poll,
                          "status_refresh_at": _utc(_epoch(text.get("next_refresh_at"))),
                          "publication_at": _utc(_epoch(published.get("next_publish_at")))},

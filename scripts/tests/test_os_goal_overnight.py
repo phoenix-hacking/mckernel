@@ -492,7 +492,7 @@ class OvernightTests(unittest.TestCase):
         self.assertEqual(data["status"], "DRY_RUN")
         self.assertEqual(data["model_calls"], 0)
         self.assertIn("--hours", data["arguments"])
-        self.assertEqual(len(data["units"]), 2)
+        self.assertEqual(len(data["units"]), 3)
         self.assertTrue(any("WatchdogSec=90" in unit for unit in data["units"].values()))
 
 

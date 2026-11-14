@@ -77,6 +77,80 @@ class ServiceTests(unittest.TestCase):
         self.assertNotIn('WatchdogSec=', engine)
         self.assertNotIn('PartOf=', engine)
         self.assertNotIn('BindsTo=', engine)
+        mailbox = units[self.names['mailbox']]
+        self.assertIn(' mailbox\n', mailbox)
+        self.assertIn('Wants=' + self.names['mailbox'], monitor)
+        self.assertNotIn('PartOf=', mailbox)
+        self.assertNotIn('BindsTo=', mailbox)
+        self.assertNotIn('Requires=' + self.names['engine'], mailbox)
+
+    def test_start_mailbox_submits_only_observer_with_no_engine_authorization(self):
+        with patch.object(guardian, 'authorize_start') as authorize:
+            result = subject.start_mailbox(self.repo, self.directory)
+        self.assertEqual(result['status'], 'MAILBOX_START_REQUESTED')
+        self.assertTrue(result['submitted'])
+        self.install.assert_called_once_with(self.repo, self.directory, components=('mailbox',))
+        self.systemctl.assert_called_once_with('enable', '--now', self.names['mailbox'])
+        authorize.assert_not_called()
+        self.preflight.assert_not_called()
+        self.assertFalse((self.directory / subject.CONFIG).exists())
+
+    def test_mailbox_only_install_preserves_existing_guardian_and_engine_units(self):
+        import os_goal_power
+        root = self.repo / 'config'
+        unit_dir = root / 'systemd/user'
+        unit_dir.mkdir(parents=True)
+        preserved = {}
+        for kind in ('guardian', 'engine'):
+            path = unit_dir / self.names[kind]
+            path.write_text('Existing ' + kind + ' unit\n')
+            preserved[path] = path.read_bytes()
+        with patch.dict(subject.os.environ, {'XDG_CONFIG_HOME': str(root)}), \
+                patch.object(os_goal_power, 'ensure_linger'):
+            self.install_implementation(self.repo, self.directory, components=('mailbox',))
+        self.assertEqual({path: path.read_bytes() for path in preserved}, preserved)
+        self.assertIn(' mailbox\n', (unit_dir / self.names['mailbox']).read_text())
+        self.systemctl.assert_called_once_with('daemon-reload')
+
+    def test_verified_live_monitor_is_reused_without_unit_rewrites_during_service_launch(self):
+        import os_goal_readiness
+        observed = {'monitoring_mode': 'independent', 'stages': {'monitor': {'ready': True}}}
+        with subject._service_lock(self.directory), \
+                patch.object(os_goal_readiness, 'evaluate_readiness', return_value=observed), \
+                patch.object(subject, 'status', return_value={'mailbox_monitor_live': True}):
+            result = subject.start_mailbox(self.repo, self.directory)
+        self.assertEqual(result['status'], 'MAILBOX_START_REQUESTED')
+        self.assertTrue(result['existing_mailbox_monitor'])
+        self.assertFalse(result['submitted'])
+        self.install.assert_not_called()
+        self.systemctl.assert_not_called()
+
+    def test_stop_mailbox_stops_only_observer_and_preserves_engine_receipts(self):
+        self.write('state.json', {'thread_id': 'manual-root', 'goal': {'status': 'active'}})
+        prior = (self.directory / 'state.json').read_bytes()
+        with patch.object(guardian, 'request_stop') as stop:
+            result = subject.stop_mailbox(self.repo, self.directory)
+        self.assertEqual(result['status'], 'MAILBOX_STOPPED')
+        self.systemctl.assert_called_once_with('disable', '--now', self.names['mailbox'], timeout=85)
+        stop.assert_not_called()
+        self.assertEqual((self.directory / 'state.json').read_bytes(), prior)
+
+    def test_healthy_manual_lineage_is_not_reported_as_a_dead_historical_guardian(self):
+        self.live_guard()
+        lineage = {'supervision_mode': 'manual', 'supervision_id': 'c' * 32,
+                   'log_dir': '/saved/manual-invocation', 'thread_id': 'saved-root',
+                   'worker_pid': 20000008, 'worker_start': '322'}
+        self.write('state.json', dict(lineage, heartbeat_at=1000, phase='running', goal={'status': 'active'}))
+        self.write('watcher.json', dict(lineage, watcher_pid=20000009, watcher_start='323', at=1000))
+        births = {20000008: '322', 20000009: '323'}
+        with patch.object(subject, 'process_start', side_effect=lambda pid: births.get(pid)), \
+                patch.object(protocol, 'process_start', side_effect=lambda pid: births.get(pid)), \
+                patch('os_goal_readiness.process_start', side_effect=lambda pid: births.get(pid)), \
+                patch('os_goal_readiness.time.time', return_value=1000):
+            result = subject.status(self.repo, self.directory)
+        self.assertEqual(result['status'], 'MANUAL_ACTIVE')
+        self.assertFalse(result['guardian_live'])
+        self.assertTrue(result['readiness']['work_state']['engine_live'])
 
     def test_unit_path_environment_and_exec_arguments_use_their_correct_escaping(self):
         repo = self.repo / 'space and 100%$cash'
@@ -486,37 +560,26 @@ class ServiceTests(unittest.TestCase):
         self.exec.assert_not_called()
 
 
-    def test_guardian_retains_resume_reply_when_status_feed_fails_after_watchdog_ping(self):
+    def test_guardian_reads_resume_locally_without_network_poll_or_status_publication(self):
         import os_goal_mailbox as mailbox_module
         import os_goal_status_feed as feed_module
-        events, replies = [], []
-        reply = {'status': 'POLLED', 'resume_request_id': 'github-comment-123',
+        reply = {'status': 'LOCAL', 'resume_request_id': 'github-comment-123',
                  'resume_created_at': 900}
-        mailbox, feed, monitor = Mock(), Mock(), Mock()
-        mailbox.poll.side_effect = lambda context: events.append('mailbox') or reply
-        def broken_feed(context):
-            events.append('feed')
-            raise TypeError('Synthetic malformed status telemetry')
-        feed.tick.side_effect = broken_feed
-        monitor.run.return_value = 0
+        mailbox, monitor = Mock(), Mock()
+        mailbox.pending_resume.return_value = reply
         with patch.object(mailbox_module, 'Mailbox', return_value=mailbox), \
-                patch.object(feed_module, 'StatusFeed', return_value=feed), \
-                patch.object(guardian, 'sd_notify', side_effect=lambda message: events.append('notify')), \
-                patch.object(guardian, 'Guardian', return_value=monitor) as constructor, \
-                patch.object(subject.time, 'time', return_value=1000):
+                patch.object(feed_module, 'StatusFeed') as feed, \
+                patch.object(guardian, 'Guardian', return_value=monitor) as constructor:
             def run_one_cycle():
                 callback = constructor.call_args.kwargs['mailbox_poll']
-                replies.append(callback(self.directory, {
-                    'phase': 'HELD', 'engine_state': {'goal': {'status': 'blocked'}}}))
+                self.assertEqual(callback(self.directory, {'phase': 'HELD'}), reply)
                 return 0
             monitor.run.side_effect = run_one_cycle
             self.assertEqual(subject.guardian(self.repo, self.directory), 0)
-        self.assertEqual(events, ['mailbox', 'notify', 'feed'])
-        self.assertIs(replies[0], reply)
-        failure = protocol.read_json(self.directory / 'status-text-state.json')
-        self.assertEqual(failure['status'], 'ERROR')
-        self.assertIn('Synthetic malformed status telemetry', failure['reason'])
-        self.assertEqual(failure['next_refresh_at'], 1600)
+        mailbox.pending_resume.assert_called_once_with()
+        mailbox.poll.assert_not_called()
+        feed.assert_not_called()
+        monitor._save.assert_called_once_with(mailbox_poll_owner='independent')
         self.assertIs(constructor.call_args.kwargs['mailbox_ack'], mailbox.ack_resume)
         monitor.close.assert_called_once()
         self.systemctl.assert_not_called()

@@ -34,6 +34,7 @@ class InstructionQueueTests(unittest.TestCase):
         # Construct only the existing queue consumer; no server or resource work.
         campaign = launcher.Campaign.__new__(launcher.Campaign)
         campaign.directory = self.directory
+        campaign.log_dir = self.directory / "runs" / "queue-fixture"
         campaign.args = SimpleNamespace(repair_agent_failures=True)
         campaign.state = dict(self.initial)
         campaign.controlled = True

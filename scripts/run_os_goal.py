@@ -137,12 +137,73 @@ def utc():
     return datetime.now(timezone.utc).isoformat()
 
 
+def supervision_binding(args, directory):
+    """Recognize a positive supervisor lineage; absence never implies manual."""
+    mode = getattr(args, "supervision_mode", None)
+    if mode is None:
+        return {"supervision_mode": "direct", "supervision_id": None}
+    from os_goal_guard_protocol import lease_free, process_start, read_json
+    parent = getattr(args, "supervisor_pid", None)
+    birth = getattr(args, "supervisor_start", None)
+    ident = getattr(args, "supervision_id", None)
+    watch = read_json(Path(directory) / "watcher.json")
+    if (not getattr(args, "worker", False) or parent != os.getppid()
+            or not isinstance(birth, str) or not birth.isascii() or not birth.isdigit()
+            or process_start(parent) != birth or lease_free(directory, "watch.lock")
+            or not isinstance(ident, str) or len(ident) != 32
+            or any(c not in "0123456789abcdef" for c in ident)
+            or watch.get("watcher_pid") != parent or watch.get("watcher_start") != birth
+            or watch.get("supervision_mode") != mode or watch.get("supervision_id") != ident
+            or (mode == "guardian") != bool(getattr(args, "guardian_run_id", None))
+            or watch.get("guardian_run_id") != getattr(args, "guardian_run_id", None)):
+        raise RuntimeError("Worker lacks a matching live supervisor lineage")
+    return {"supervision_mode": mode, "supervision_id": ident,
+            "watcher_pid": parent, "watcher_start": birth}
+
+
+def ensure_mailbox_ready(repo, directory, *, timeout_seconds=60):
+    """Bounded startup verification; no engine launch or model call here."""
+    from os_goal_guard_protocol import EngineLaunchDeferred
+    from os_goal_readiness import evaluate_readiness
+    from os_goal_service import start_mailbox
+    if not math.isfinite(timeout_seconds) or timeout_seconds < 0 or timeout_seconds > 60:
+        raise ValueError("Mailbox startup wait must be finite and at most 60 seconds")
+    deadline = time.monotonic() + timeout_seconds
+    while True:
+        try:
+            report = start_mailbox(repo, directory)
+            break
+        except EngineLaunchDeferred as error:
+            # This exact exception positively proves no service submission was
+            # made. Ambiguous systemctl failures remain terminal for this try.
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise RuntimeError("Mailbox startup is still owned by another service submission; no new engine started") from error
+            time.sleep(min(0.1, remaining))
+    if report.get("status") not in {"MAILBOX_START_REQUESTED", "LEGACY_MAILBOX_OWNER"}:
+        raise RuntimeError("Mailbox monitor startup was not accepted: " + str(report.get("status")))
+    while True:
+        readiness = evaluate_readiness(directory)
+        stages = readiness["stages"]
+        owner_stage = "monitor" if readiness.get("monitoring_mode") == "independent" else "guardian"
+        if stages.get(owner_stage, {}).get("ready") and stages.get("mailbox", {}).get("ready"):
+            return readiness
+        if time.monotonic() >= deadline:
+            missing = stages.get(owner_stage, {}).get("missing", []) + stages.get("mailbox", {}).get("missing", [])
+            raise RuntimeError("Mailbox is not verified ready; no new engine started: " + "; ".join(missing))
+        time.sleep(min(0.5, max(0, deadline - time.monotonic())))
+
+
 def m14_m15_closed(repo):
     """Require original binary acceptance, never checklist percentages alone."""
     path = Path(repo) / "docs/verification/m14-m15-closure-progress.json"
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
         if data.get("original_criteria_unchanged") is not True:
+            return False
+        from os_goal_progress import validate_ledger
+        original = validate_ledger(data)
+        if any(row["percent_complete"] != 100 for row in original["tasks"].values()):
             return False
         requirements = data["requirements"]
         if not isinstance(requirements, list):
@@ -378,7 +439,7 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
                 owner = _account_control_owner(saved, directory, repo)
                 from os_goal_source_work import prepare_attachment
                 item["source_work"] = prepare_attachment(source_work, binding=_source_work_binding(owner),
-                    source_id=source_id, text=instruction, allowed_roots=[repo])
+                    source_id=source_id, text=instruction, allowed_roots=[repo], repo=repo)
             if resume_same_owner and prior is None:
                 # Only the first publication binds a source. A repeated source
                 # returns its original command, even after the goal changes.
@@ -398,6 +459,64 @@ def queue_same_owner_resume(directory, instruction, *, source_id):
     """Queue one explicit control command; never create a server or admit work."""
     return queue_instruction(directory, instruction, source_id=source_id,
                              resume_same_owner=True)
+
+
+def queue_closure_target(directory, repo, path):
+    """Submit a finite plan to its current Root; never edit controller state."""
+    from os_goal_progress import load_target
+    target = load_target(path, repo)
+    saved = _read_private_json(Path(directory) / "state.json")
+    if saved.get("closure_progress_capability") != 1 or saved.get("repo") != str(repo):
+        raise ValueError("Resident controller does not advertise closure-target support")
+    binding = {key: saved.get(key) for key in
+               ("thread_id", "log_dir", "worker_pid", "worker_start")}
+    if (not all(isinstance(binding[key], str) and binding[key] for key in
+                ("thread_id", "log_dir", "worker_start"))
+            or type(binding["worker_pid"]) is not int or binding["worker_pid"] <= 0):
+        raise ValueError("A closure target requires an identified existing controller")
+    plan_digest = _account_value_sha256({"target": target, "binding": binding})
+    base = Path(directory) / "closure-targets"
+    base.mkdir(mode=0o700, parents=True, exist_ok=True)
+    with (base / "queue.lock").open("a+") as lock:
+        os.chmod(lock.name, 0o600)
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        current = _read_private_json(Path(directory) / "state.json")
+        if {key: current.get(key) for key in binding} != binding:
+            raise ValueError("Closure target owner changed while submitting; use the current controller")
+        queued = []
+        for pending_path in (base / "pending").glob("*.json"):
+            request = _read_private_json(pending_path)
+            sequence = request.get("request_sequence")
+            if type(sequence) is not int or sequence < 1:
+                raise ValueError("Pending closure target sequence is UNKNOWN")
+            queued.append((sequence, request))
+        if queued:
+            latest = max(queued, key=lambda row: row[0])[1]
+            if (latest.get("plan_digest") == plan_digest and latest.get("binding") == binding
+                    and latest.get("target") == target and latest.get("id") == _account_value_sha256({
+                        "plan_digest": plan_digest, "request_sequence": latest["request_sequence"]})):
+                return latest["id"]
+        else:
+            applied = current.get("closure_target_applied_request") or current.get("closure_target_receipt") or {}
+            if (isinstance(applied, dict) and applied.get("status") == "applied"
+                    and applied.get("plan_digest") == plan_digest and applied.get("binding") == binding
+                    and current.get("closure_target") == target and type(applied.get("request_sequence")) is int
+                    and applied.get("id") == _account_value_sha256({"plan_digest": plan_digest,
+                        "request_sequence": applied["request_sequence"]})):
+                return applied["id"]
+        sequence_path = base / "sequence.json"
+        sequence = _read_private_json(sequence_path)["last_sequence"] if sequence_path.exists() else 0
+        if type(sequence) is not int or sequence < 0:
+            raise ValueError("Closure target submission sequence is UNKNOWN")
+        sequence += 1
+        atomic_json(sequence_path, {"schema_version": 1, "last_sequence": sequence})
+        ident = _account_value_sha256({"plan_digest": plan_digest, "request_sequence": sequence})
+        pending = base / "pending"
+        pending.mkdir(mode=0o700, parents=True, exist_ok=True)
+        atomic_json(pending / (ident + ".json"), {"schema_version": 1, "id": ident,
+            "origin": "local_plan_submission", "binding": binding, "target": target, "plan_digest": plan_digest,
+            "request_sequence": sequence, "submitted_at": utc(), "execution_admission": False})
+    return ident
 
 
 def progress_report(directory, repo):
@@ -1237,6 +1356,7 @@ class Campaign:
         self.native_owner_control_failed = False
         self.retained_for_stop = False
         self.retention_errors = []
+        self.next_progress_check = 0.0
         self.output = LiveOutput(self.log_dir, quiet=args.quiet, agent_windows=args.agent_windows)
         self.output.primary = self.state.get("thread_id")
         # Saved hints belong to the preceding launcher instance, never this monitor.
@@ -1364,6 +1484,8 @@ class Campaign:
     def save(self, **fields):
         self.state.update(fields)
         self.state['capture_progress_capability'] = CAPTURE_PROGRESS_CAPABILITY
+        if self.progress_enabled():
+            self.state['closure_progress_capability'] = 1
         if getattr(self.args, "same_owner_control", False):
             self.state.update(same_owner_control_capability=SAME_OWNER_CONTROL_CAPABILITY,
                               primary_stop_generation=self.primary_stop_generation,
@@ -1374,6 +1496,184 @@ class Campaign:
                           agents=self.output.snapshot(), console_log=str(self.log_dir / "console.log"),
                           agent_event_count=self.output.agent_event_count)
         atomic_json(self.state_path, self.state)
+
+    def progress_enabled(self):
+        return bool(getattr(self.args, "progress_control", False)
+                    or getattr(self.args, "stop_after_m14_m15", False))
+
+    def poll_closure_targets(self):
+        """Adopt the newest same-invocation plan; explicitly supersede older plans."""
+        if not self.progress_enabled():
+            return
+        from os_goal_progress import load_ledger, validate_target
+        base = self.directory / "closure-targets"
+        if not list((base / "pending").glob("*.json")):
+            return
+        with (base / "queue.lock").open("a+") as lock:
+            os.chmod(lock.name, 0o600)
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            pending = []
+            for source in (base / "pending").glob("*.json"):
+                try:
+                    record = _read_private_json(source)
+                    sequence = record.get("request_sequence")
+                    if type(sequence) is not int or sequence < 1:
+                        raise ValueError("Closure target request sequence is UNKNOWN")
+                    pending.append((sequence, source, record))
+                except (OSError, ValueError, KeyError, TypeError) as error:
+                    refused = base / "refused"
+                    refused.mkdir(mode=0o700, parents=True, exist_ok=True)
+                    receipt = {"id": source.stem, "status": "refused", "error": str(error),
+                               "at": utc(), "execution_admission": False}
+                    atomic_json(refused / (source.stem + ".receipt.json"), receipt)
+                    os.replace(source, refused / source.name)  # Preserve the actual malformed bytes.
+            if not pending:
+                return
+            pending.sort(key=lambda item: (item[0], item[1].name), reverse=True)
+            newest = pending[0]
+            applied = self.state.get("closure_target_receipt") or {}
+            applied_sequence = self.state.get("closure_target_last_sequence", applied.get("request_sequence", 0))
+            for sequence, source, record in pending:
+                receipt = {"id": record.get("id"), "at": utc(), "request_sequence": sequence,
+                           "plan_digest": record.get("plan_digest"),
+                           "execution_admission": False}
+                if sequence <= applied_sequence or (sequence, source, record) != newest:
+                    receipt.update(status="superseded", superseded_by=newest[2].get("id"))
+                    phase = "superseded"
+                else:
+                    try:
+                        binding = {key: self.state.get(key) for key in
+                                   ("thread_id", "log_dir", "worker_pid", "worker_start")}
+                        if (record.get("schema_version") != 1 or record.get("binding") != binding
+                                or record.get("origin") != "local_plan_submission"
+                                or record.get("execution_admission") is not False
+                                or record.get("id") != source.stem
+                                or record.get("plan_digest") != _account_value_sha256({
+                                    "target": record.get("target"), "binding": binding})
+                                or record.get("id") != _account_value_sha256({
+                                    "plan_digest": record.get("plan_digest"), "request_sequence": sequence})):
+                            raise ValueError("Closure target binding changed; submit to the current owner")
+                        target = validate_target(record["target"], load_ledger(self.repo), self.repo)
+                        receipt.update(status="applied", original_check=target["original_check"], binding=binding)
+                        self.save(closure_target=target, closure_target_receipt=receipt,
+                                  closure_target_applied_request=receipt,
+                                  closure_target_last_sequence=sequence)
+                        phase = "applied"
+                    except (ValueError, TypeError, KeyError, OSError) as error:
+                        receipt.update(status="refused", error=str(error))
+                        self.save(closure_target_receipt=receipt, closure_target_last_sequence=sequence)
+                        phase = "refused"
+                destination = base / phase
+                destination.mkdir(mode=0o700, parents=True, exist_ok=True)
+                atomic_json(destination / source.name, dict(record, receipt=receipt))
+                source.unlink()
+
+    def progress_dispatch_allowed(self):
+        """Existing active Root only; an advisory supplies no new authority."""
+        ident = self.state.get("thread_id")
+        if (not self.controlled or not ident or ident not in self.active
+                or not self.goal or self.goal.get("status") != "active"
+                or self.stop_reason or self.stop_now or self.checkpoint_requested):
+            return False
+        view = dict(self.state, stop_reason=self.stop_reason, stop_now=self.stop_now,
+                    checkpoint_requested=self.checkpoint_requested)
+        if _same_owner_control_blocker(view):
+            return False
+        control = self.directory / "instructions"
+        return not (
+            any((control / "pending").glob("*.json")) or any((control / "sending").glob("*.json")))
+
+    def poll_progress(self):
+        """Turn qualified outcomes and stagnation into one guarded Root decision."""
+        if not self.progress_enabled():
+            return
+        now = time.monotonic()
+        if now < getattr(self, "next_progress_check", 0):
+            return
+        self.next_progress_check = now + min(15, getattr(self.args, "progress_checkpoint_seconds", 1200))
+        self.poll_closure_targets()
+        from os_goal_progress import observe_progress
+        view = dict(self.state,
+                    progress_checkpoint_seconds=getattr(self.args, "progress_checkpoint_seconds", 1200),
+                    progress_stall_seconds=getattr(self.args, "progress_stall_seconds", 2400))
+        observed = observe_progress(self.repo, view)
+        snapshot, monitor = observed["snapshot"], observed["monitor"]
+        pending = self.state.get("progress_advisory")
+        if observed["advisory_key"]:
+            pending = {"key": observed["advisory_key"], "text": observed["advisory_text"],
+                       "fingerprint": snapshot["semantic_fingerprint"], "status": "pending", "at": utc()}
+        elif isinstance(pending, dict) and pending.get("status") == "pending":
+            if pending.get("key") != observed["applicable_advisory_key"]:
+                pending = dict(pending, status="superseded_before_dispatch", at=utc())
+        self.save(progress_snapshot=snapshot, progress_monitor=monitor, progress_advisory=pending)
+        if observed["checkpoint_due"]:
+            self.output.notice("Closure checkpoint: " + str(len(snapshot.get("closed_original_checks", [])))
+                               + "/156 verified; target=" + str(snapshot.get("current_target"))
+                               + "; next=" + str(snapshot.get("next_action")))
+        if not isinstance(pending, dict) or pending.get("status") != "pending" or not self.progress_dispatch_allowed():
+            return
+        reviews = self.directory / "progress-reviews"
+        reviews.mkdir(mode=0o700, parents=True, exist_ok=True)
+        path = reviews / (pending["key"] + ".json")
+        if path.exists():
+            prior = _read_private_json(path)
+            if prior.get("status") in {"sending", "delivery_uncertain"}:
+                self.stop_reason, self.stop_now = "rpc_delivery_uncertain", True
+                self.save(transport_uncertain={"at": utc(), "method": "turn/steer",
+                          "reason": "progress_review_delivery_uncertain"})
+            elif prior.get("status") == "refused_before_rpc" and prior.get("rpc_attempted") is False:
+                # Positive proof of no RPC permits a guarded retry of this same
+                # review. Preserve the prior intent/refusal before replacing it.
+                archive = reviews / (pending["key"] + ".refused-" + uuid4().hex + ".json")
+                atomic_json(archive, prior)
+            else:
+                self.save(progress_advisory=dict(pending, status=prior.get("status", "unknown_prior_attempt")))
+                return
+            if prior.get("status") in {"sending", "delivery_uncertain"}:
+                self.save(progress_advisory=dict(pending, status=prior["status"]))
+                return
+        # Refresh the actual account and goal; incoming stop notifications win.
+        self.refresh_credit_budget()
+        if not self.progress_dispatch_allowed():
+            return
+        ident, turn = self.state["thread_id"], self.active[self.state["thread_id"]]
+        self.remember_goal(self.rpc.call("thread/goal/get", {"threadId": ident})["goal"])
+        if not self.progress_dispatch_allowed() or self.active.get(ident) != turn:
+            return
+        receipt = {"schema_version": 1, "key": pending["key"], "status": "sending",
+                   "origin": "harness_observation", "thread_id": ident, "turn_id": turn,
+                   "log_dir": str(self.log_dir), "submitted_at": utc(),
+                   "text_sha256": hashlib.sha256(pending["text"].encode()).hexdigest(),
+                   "rpc_attempted": False, "execution_admission": False, "release_authorized": False}
+        atomic_json(path, receipt)
+        self.save(progress_review=receipt)
+        if not self.progress_dispatch_allowed() or self.active.get(ident) != turn:
+            receipt.update(status="refused_before_rpc", rpc_attempted=False, at=utc())
+            atomic_json(path, receipt)
+            self.save(progress_advisory=dict(pending, status="pending"), progress_review=receipt)
+            return
+        try:
+            receipt["rpc_attempted"] = True
+            atomic_json(path, receipt)
+            if not self.progress_dispatch_allowed() or self.active.get(ident) != turn:
+                receipt.update(status="refused_before_rpc", rpc_attempted=False, at=utc())
+                atomic_json(path, receipt)
+                self.save(progress_advisory=dict(pending, status="pending"), progress_review=receipt)
+                return
+            self.rpc.call("turn/steer", {"threadId": ident, "expectedTurnId": turn,
+                "input": [{"type": "text", "text": pending["text"] +
+                    " Submit the finite target with: python3 scripts/run_os_goal.py --set-closure-target PATH."}]})
+            receipt.update(status="accepted_by_server", delivered_at=utc())
+            atomic_json(path, receipt)
+            self.save(progress_advisory=dict(pending, status="accepted_by_server"), progress_review=receipt)
+        except Exception as error:
+            receipt.update(status="delivery_uncertain", error_type=type(error).__name__)
+            self.stop_reason, self.stop_now = self.stop_reason or "rpc_delivery_uncertain", True
+            # Set the in-memory stop before any secondary recording failure.
+            atomic_json(path, receipt)
+            self.save(progress_review=receipt, progress_advisory=dict(pending, status="delivery_uncertain"),
+                      transport_uncertain={"at": utc(), "method": "turn/steer",
+                      "reason": "progress_review_delivery_uncertain"})
 
     def record_stop_diagnostic(self, event, *, error=None, reason=None, exit_code=None, snapshot=None):
         """Keep failure history across restarts without changing recovery authority."""
@@ -1665,6 +1965,8 @@ class Campaign:
             ready()
             observed_account_control(self.state, read_json(self.credit_guard.path), owner,
                                      time.time_ns(), time.monotonic_ns(), current_receipt=receipt)
+            self.persist_delivery_attempt(item, receipt, "thread/goal/set")
+            ready()
             attempted = True
             result = self.rpc.call("thread/goal/set", {"threadId": owner["thread_id"], "status": "active"})["goal"]
             if (stops_changed()
@@ -1809,7 +2111,7 @@ class Campaign:
             view.pop("repair_context", None)
             validated = validate_registered_source_work(item, directory=self.directory, binding=binding,
                 goal=self.goal, state=view, terminal_turn_lookup=terminal_lookup, account_guard=account_guard,
-                queue_reader=_read_private_json, **{key: registry[key] for key in names})
+                queue_reader=_read_private_json, repo=self.repo, **{key: registry[key] for key in names})
             ready()
             current_registry = provider(owner)
             if any(current_registry.get(key) != registry.get(key) for key in
@@ -1838,6 +2140,8 @@ class Campaign:
             _fresh((validated["resources"]["account_observed_utc_ns"],
                     validated["resources"]["account_observed_mono_ns"]),
                    (time.time_ns(), time.monotonic_ns()), body["limits"]["max_age_ns"])
+            ready()
+            self.persist_delivery_attempt(item, receipt, "turn/start")
             ready()
             attempted = True
             started = self.rpc.call("turn/start", {"threadId": owner["thread_id"],
@@ -1905,8 +2209,7 @@ class Campaign:
         os.replace(source, sending)
         item = _read_private_json(sending)
         _validate_instruction(item.get("text"))
-        receipt = {"id": item["id"], "thread_id": ident,
-                   "turn_id": self.active.get(ident), "submitted_at": item["submitted_at"]}
+        receipt = self.instruction_receipt(item, self.active.get(ident))
         if "source_work" in item:
             self.deliver_source_work(item, receipt, sending)
             return  # Never fall through to ordinary text/steer, including refusal.
@@ -1943,6 +2246,7 @@ class Campaign:
             self.save(last_instruction=receipt)
             self.output.notice('Capture registration persistence failed before steering; retained instruction at ' + str(sending))
             return  # No RPC attempted; retain uncertain persistence evidence without replay.
+        attempted = False
         try:
             message = "Live user instruction " + item["id"] + ":\n" + item["text"] + progress_ack
             if waiting:
@@ -1950,10 +2254,19 @@ class Campaign:
                         or not self.goal or self.goal.get("status") != "blocked"):
                     os.replace(sending, source)
                     return
+                self.persist_delivery_attempt(item, receipt, "turn/start")
+                if self.stop_reason or self.stop_now or self.checkpoint_requested:
+                    raise RuntimeError("Stop received before instruction dispatch")
+                attempted = True
                 started = self.rpc.call("turn/start", {"threadId": ident,
                     "input": [{"type": "text", "text": message}]})
                 receipt["turn_id"] = self.remember_started_turn(ident, started["turn"])
             else:
+                self.persist_delivery_attempt(item, receipt, "turn/steer")
+                if (self.stop_reason or self.stop_now or self.checkpoint_requested
+                        or self.active.get(ident) != receipt["expected_turn_id"]):
+                    raise RuntimeError("Stop or active turn changed before instruction dispatch")
+                attempted = True
                 self.rpc.call("turn/steer", {"threadId": ident,
                               "expectedTurnId": receipt["turn_id"], "input": [{"type": "text",
                               "text": message}]})
@@ -1965,6 +2278,11 @@ class Campaign:
             self.save(last_instruction=receipt)
             self.output.notice("Delivered live instruction " + item["id"] + " to the coordinator.")
         except Exception as error:
+            if not attempted:
+                receipt.update(status="refused_before_rpc", error=str(error), refused_at=utc())
+                self.finish_control_instruction(sending, receipt, refused=True)
+                self.output.notice("Instruction refused before RPC: " + item["id"])
+                return
             # A timeout may mean the server accepted the steer. Never silently
             # retry a potentially non-idempotent user instruction.
             receipt.update(status="delivery_uncertain", error=str(error))
@@ -1978,6 +2296,31 @@ class Campaign:
             self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
             self.stop_now = True
             self.output.notice("Instruction delivery uncertain; inspect " + str(sending))
+
+    def instruction_receipt(self, item, turn_id):
+        """Bind an instruction result to its bytes and actual accepting owner."""
+        text_digest = hashlib.sha256(item["text"].encode("utf-8")).hexdigest()
+        if item.get("text_sha256", text_digest) != text_digest:
+            raise ValueError("Queued instruction bytes differ from their original digest")
+        return {"schema_version": 2, "id": item["id"],
+                "source_id": item.get("source_id"), "text_sha256": text_digest,
+                "thread_id": self.state.get("thread_id"), "turn_id": turn_id,
+                "submitted_at": item["submitted_at"],
+                "log_dir": str(self.log_dir), "invocation_id": self.log_dir.name,
+                "worker_pid": self.state.get("worker_pid"),
+                "worker_start": self.state.get("worker_start"),
+                "server_pid": self.state.get("server_pid"),
+                "server_start": self.state.get("server_start")}
+
+    def persist_delivery_attempt(self, item, receipt, method):
+        """Record exact intent before the mutating RPC; never overwrite a send."""
+        attempts = self.directory / "instructions" / "attempts"
+        attempts.mkdir(mode=0o700, parents=True, exist_ok=True)
+        path = attempts / (item["id"] + ".json")
+        if path.exists() or path.is_symlink():
+            raise RuntimeError("Existing delivery attempt requires reconciliation; refusing replay")
+        receipt.update(delivery_method=method, expected_turn_id=receipt.get("turn_id"))
+        atomic_json(path, dict(receipt, status="sending", attempted_at=utc()))
 
     def on_signal(self, signum, frame):
         self.state.pop("credit_timeout_shutdown_pause", None)
@@ -2515,8 +2858,25 @@ class Campaign:
                       "and checkpoint when BOTH original milestones are accepted. Do not "
                       "mark the larger saved whole-system goal complete at that point. "
                       if getattr(self.args, "stop_after_m14_m15", False) else "")
+        closure = ""
+        if self.progress_enabled():
+            from os_goal_progress import (load_ledger, remaining_work_view, remaining_work_instruction,
+                                          input_resolution_instruction)
+            closure = (
+                "The harness is tied to the remaining original milestone checks. Select one OPEN exact original ID "
+                "from the canonical ledger, submit its finite target with python3 scripts/run_os_goal.py "
+                "--set-closure-target PATH, then carry out its concrete next action after actual source/account/permission/owner/resource admission. "
+                "Qualify the real result at its actual original scope, reuse passing evidence, and immediately hand off to the next open original "
+                "when the current condition closes. If blocked, name the exact missing input and supplying owner, precisely block that check, "
+                "and continue genuinely eligible independent original work. A successful instruction delivery is not a completed fix. "
+                "Do not substitute arbitrary goals, repeated proof wrappers or harness self-improvement loops for the remaining milestone work. ")
+            closure += input_resolution_instruction()
+            try:
+                closure += remaining_work_instruction(remaining_work_view(load_ledger(self.repo)))
+            except (OSError, ValueError, TypeError, KeyError):
+                closure += "The canonical remaining-work ledger is UNKNOWN: reconcile its exact input error before selecting or executing a check. "
         return (
-            prefix + repair + milestones + ENGINEERING_SCOPE +
+            prefix + repair + milestones + closure + ENGINEERING_SCOPE +
             "Read CAMPAIGN.md as the SOLE human-readable plan, status and handoff. Do not read "
             "legacy narrative logs or follow their reading lists. This replaces the old reading "
             "order in the retained goal identity and archived conversation. On fresh/recovered "
@@ -2685,11 +3045,15 @@ class Campaign:
             raise RuntimeError("Instruction delivery is uncertain; reconcile before recovery")
         if (self.state.get("resume_instruction") or {}).get("status") in {"sending", "delivery_uncertain"}:
             raise RuntimeError("Resume instruction delivery is uncertain; reconcile its saved turn before resuming")
+        for attempt in (self.directory / "progress-reviews").glob("*.json"):
+            if _read_private_json(attempt).get("status") in {"sending", "delivery_uncertain"}:
+                raise RuntimeError("Progress review delivery is uncertain; reconcile before resuming")
         note = getattr(self.args, "startup_instruction", None)
         from watch_os_goal import process_start
         self.save(worker_pid=os.getpid(), worker_start=process_start(os.getpid()),
                   server_pid=None, server_start=None, retryable=False,
                   guardian_run_id=getattr(self.args, "guardian_run_id", None),
+                  **supervision_binding(self.args, self.directory),
                   startup_instruction_sha256=hashlib.sha256(note.encode()).hexdigest() if note else None)
         check_resources(launch_resources(self.args, self.repo))
         self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
@@ -3227,6 +3591,9 @@ class Campaign:
                     break
                 self.poll_native_owner_control()
                 self.deliver_instruction()
+                self.poll_progress()
+                if self.stop_now:
+                    continue
                 self.rpc.pump(timeout=1)
                 self.output.flush()
                 now = time.monotonic()
@@ -3352,6 +3719,8 @@ def arguments(argv=None):
     mode.add_argument("--check-sudo", action="store_true", help="Verify private askpass authentication with sudo id -u; no inference")
     mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
     mode.add_argument("--progress", action="store_true", help="Show live runner activity and the last engineering dashboard; no server")
+    mode.add_argument("--set-closure-target", type=Path, metavar="PATH",
+                      help="Queue a validated original-check plan for the existing controller; no execution or inference")
     mode.add_argument("--instruct", metavar="TEXT", help="Send a live instruction to the coordinator; queues through checkpoints")
     mode.add_argument("--resume-same-owner", metavar="TEXT",
                       help="Queue explicit source-bound resume control for an opted-in idle blocked owner; grants no jobs or hold releases")
@@ -3373,6 +3742,12 @@ def arguments(argv=None):
                         help="Exact original Root source/ownership record; default: campaign source-work-registry.json")
     parser.add_argument("--stop-after-m14-m15", action="store_true",
                         help="Checkpoint after BOTH original M14 and M15 file/integration acceptances; preserve the larger saved goal")
+    parser.add_argument("--progress-control", action="store_true",
+                        help="Enable bounded closure decisions; automatically enabled for M14/M15 runs")
+    parser.add_argument("--progress-checkpoint-seconds", type=float, default=1200,
+                        help="Report original closure/evidence progress at this interval (default 1200)")
+    parser.add_argument("--progress-stall-seconds", type=float, default=2400,
+                        help="Request one concrete decision after this long without required progress (default 2400)")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
     parser.add_argument("--model",
                         choices=list(dict.fromkeys((DEFAULT_DISPATCHER_MODEL,) + DISPATCHER_MODEL_PREFERENCE)),
@@ -3411,6 +3786,12 @@ def arguments(argv=None):
     parser.add_argument("--quiet", action="store_true", help="Hide live agent output; keep heartbeats and console.log")
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--supervisor", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--supervision-mode", choices=["manual", "guardian"], help=argparse.SUPPRESS)
+    parser.add_argument("--supervision-id", help=argparse.SUPPRESS)
+    parser.add_argument("--supervisor-pid", type=int, help=argparse.SUPPRESS)
+    parser.add_argument("--supervisor-start", help=argparse.SUPPRESS)
+    parser.add_argument("--mailbox-monitor", choices=["auto", "required", "off"], default="auto",
+                        help="Ensure the independent mailbox service before a supervised launch; auto enables it when configured")
     parser.add_argument("--guardian-run-id", help=argparse.SUPPRESS)
     parser.add_argument("--guardian-recovery-proof", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--recovered", action="store_true", help=argparse.SUPPRESS)
@@ -3420,6 +3801,13 @@ def arguments(argv=None):
     parser.add_argument("--allow-dispatcher-fallback", action="store_true",
                         help="Explicitly allow advertised model fallback for unpinned defaults; otherwise Sol/max stays pinned")
     args = parser.parse_args(argv)
+    if (not math.isfinite(args.progress_checkpoint_seconds) or args.progress_checkpoint_seconds <= 0
+            or not math.isfinite(args.progress_stall_seconds)
+            or args.progress_stall_seconds < args.progress_checkpoint_seconds):
+        parser.error("Progress intervals must be finite, positive and stall >= checkpoint")
+    lineage = (args.supervision_mode, args.supervision_id, args.supervisor_pid, args.supervisor_start)
+    if any(value is not None for value in lineage) and (not args.worker or any(value is None for value in lineage)):
+        parser.error("Supervisor lineage requires a complete internal worker binding")
     if args.continuous:
         args.same_owner_control = args.retain_owner_on_stop = args.repair_agent_failures = True
         args.stop_after_m14_m15 = True
@@ -3527,6 +3915,10 @@ def main(argv=None):
     if args.progress:
         print(progress_report(directory, REPO))
         return 0
+    if args.set_closure_target is not None:
+        ident = queue_closure_target(directory, REPO, args.set_closure_target)
+        print("Queued finite closure target " + ident + "; no execution admission or acceptance was granted.")
+        return 0
     if args.instruct is not None:
         ident = queue_instruction(directory, args.instruct, args.capture_progress_directory,
                                   source_id=args.instruction_source_id,
@@ -3596,6 +3988,10 @@ def main(argv=None):
             from start_os_overnight import launch_legacy
             return launch_legacy(list(sys.argv[1:] if argv is None else argv))
         check_resources(launch_resources(args, REPO))
+        configured = (REPO / "scripts/os_goal_mailbox.json").is_file()
+        if args.mailbox_monitor == "required" or args.mailbox_monitor == "auto" and configured:
+            ensure_mailbox_ready(REPO, directory)
+            say("Mailbox reader and its current successful poll are verified.")
         from watch_os_goal import supervise
         forwarded = list(sys.argv[1:] if argv is None else argv)
         if args.credit_budget is not None and args.credit_run_id is None:

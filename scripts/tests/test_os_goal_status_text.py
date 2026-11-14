@@ -65,9 +65,17 @@ class StatusTextTests(unittest.TestCase):
             self.assertEqual(rendered, [row["id"] for row in ledger[key]])
         self.assertIn("Rows: 31 requirements", text)
         self.assertIn("391 tasks", text)
-        self.assertIn("Counted evidence tasks: 156; verified at 100%: 73", text)
-        self.assertIn("accepted files 4/6; accepted integrations 0/3", text)
-        self.assertIn("accepted files 1/8; accepted integrations 0/4", text)
+        closed = sum(row.get("counted_in_requirement_rollup") is True and row["percent_complete"] == 100
+                     for row in ledger["tasks"])
+        self.assertIn(f"Counted evidence tasks: 156; verified at 100%: {closed}", text)
+        for milestone, files, integrations in (("M14", 6, 3), ("M15", 8, 4)):
+            accepted_files = sum(row.get("accepted") is True and row["id"].startswith(milestone + "-F")
+                                 for row in ledger["requirements"])
+            accepted_integrations = sum(row.get("accepted") is True and row["id"].startswith(milestone + "-I")
+                                        for row in ledger["requirements"])
+            self.assertIn(f"accepted files {accepted_files}/{files}; accepted integrations {accepted_integrations}/{integrations}", text)
+        self.assertLess(text.index("CLOSURE DECISION VIEW"), text.index("MILESTONE SUMMARY"))
+        self.assertIn(f"{closed}/156 closed; {156 - closed} remaining", text)
         self.assertLessEqual(len(text.encode()), subject.MAX_BYTES)
 
     def test_current_agents_are_union_of_roster_and_observed_turns(self):

@@ -12,13 +12,14 @@ import stat
 
 
 _RECENT = 100
-_STATUSES = ("WAITING", "ACCEPTED", "NOT_QUEUED", "ASSEMBLING", "PART_OF_QUEUED", "REJECTED_ASSEMBLY")
+_STATUSES = ("WAITING", "ACCEPTED", "HISTORICAL_ACCEPTED", "NOT_QUEUED", "ASSEMBLING", "PART_OF_QUEUED", "REJECTED_ASSEMBLY")
 _RECEIPT_FIELDS = {
     "source_kind", "source_key", "source_label", "source_url", "source_commit_sha", "source_blob_sha",
     "comment_id", "comment_url", "request_id", "source_created_at", "received_at", "command_recognized",
     "delivery_status", "instruction_utf8_bytes", "instruction_sha256", "not_queued_reason",
     "received_event_id", "accepted_event_id", "controller_accepted_at", "controller_thread_id",
     "controller_turn_id", "multipart_id", "logical_request_id", "completed_comment_id", "reason",
+    "controller_invocation_id", "receipt_issue",
 }
 _NOTICE_FIELDS = {
     "event_id", "kind", "requested", "created_order", "created_at", "source_key", "comment_id",

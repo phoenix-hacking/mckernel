@@ -45,8 +45,8 @@ class FakeRPC:
         self.bad_config = False
         self.bad_environment = False
         self.worker_model = "gpt-6.1-sol"
-        self.worker_effort = "max"
-        self.models = {"gpt-6.1-sol": ["low", "medium", "high", "max"]}
+        self.worker_effort = "xhigh"
+        self.models = {"gpt-6.1-sol": ["low", "medium", "high", "xhigh", "max"]}
         self.account_type = "chatgpt"
         self.limits = {"primary": {"usedPercent": 0, "windowDurationMins": 10080},
                        "credits": {"hasCredits": False, "balance": "0"}, "planType": "pro"}
@@ -144,8 +144,14 @@ class CampaignTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix="os-goal-test-")
         self.directory = Path(self.temp.name)
         self.args = launcher.arguments(["--hours", "0", "--agent-windows", "off"])
+        # These lifecycle scenarios use FakeRPC and launch no OS payload. Keep
+        # workstation disk/RAM admission in test_os_goal_resources, rather than
+        # failing before the lifecycle under test on a small CI filesystem.
+        self.resource_check = patch.object(launcher, "check_resources", return_value=None)
+        self.resource_check.start()
 
     def tearDown(self):
+        self.resource_check.stop()
         self.temp.cleanup()
 
     def saved(self, saved_goal):
@@ -183,7 +189,7 @@ class CampaignTests(unittest.TestCase):
         self.assertIn('model="gpt-6.1-sol"', command)
         self.assertIn('model_reasoning_effort="max"', command)
         self.assertIn('agents.default_subagent_model="gpt-6.1-sol"', command)
-        self.assertIn('agents.default_subagent_reasoning_effort="max"', command)
+        self.assertIn('agents.default_subagent_reasoning_effort="xhigh"', command)
         self.assertIn('sandbox_mode="danger-full-access"', command)
         self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
@@ -230,10 +236,10 @@ class CampaignTests(unittest.TestCase):
         routing = launcher.model_routing(self.args)
         self.assertEqual(routing, {
             "dispatcher": {"model": "gpt-6.1-sol", "effort": "max"},
-            "default_worker": {"model": "gpt-6.1-sol", "effort": "max"},
-            "complex_worker": {"model": "gpt-6.1-sol", "effort": "max"},
-            "auditor": {"model": "gpt-6.1-sol", "effort": "max"},
-            "reviewer": {"model": "gpt-6.1-sol", "effort": "max"},
+            "default_worker": {"model": "gpt-6.1-sol", "effort": "xhigh"},
+            "complex_worker": {"model": "gpt-6.1-sol", "effort": "xhigh"},
+            "auditor": {"model": "gpt-6.1-sol", "effort": "xhigh"},
+            "reviewer": {"model": "gpt-6.1-sol", "effort": "xhigh"},
         })
         self.assertTrue(all(selection["model"] == "gpt-6.1-sol" for selection in routing.values()))
 
@@ -271,7 +277,7 @@ class CampaignTests(unittest.TestCase):
                 self.assertEqual(settings["model_routing"]["dispatcher"],
                                  {"model": "gpt-6.1-sol", "effort": effort})
                 self.assertEqual(settings["model_routing"]["default_worker"],
-                                 {"model": "gpt-6.1-sol", "effort": "max"})
+                                 {"model": "gpt-6.1-sol", "effort": "xhigh"})
                 self.assertEqual(settings["agents"]["default_subagent_model"], "gpt-6.1-sol")
                 self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
@@ -312,8 +318,8 @@ class CampaignTests(unittest.TestCase):
             ])
 
     def test_advertised_fallback_resumes_exact_pair_and_preserves_worker_efforts(self):
-        # An unavailable default effort can fall back while Sol/MAX remains
-        # advertised for required workers. Removing Sol/MAX from the catalogue
+        # An unavailable default effort can fall back while Sol/XHIGH remains
+        # advertised for required workers. Removing Sol/XHIGH from the catalogue
         # would now correctly deny worker admission, regardless of dispatcher.
         with patch.object(launcher, "DEFAULT_DISPATCHER_EFFORT", "ultra"):
             self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
@@ -332,9 +338,9 @@ class CampaignTests(unittest.TestCase):
         params = next(p for m, p in rpc.calls if m == "thread/resume")
         self.assertEqual(params["model"], "gpt-6.1-sol")
         self.assertEqual(params["config"]["model_reasoning_effort"], "max")
-        self.assertEqual(settings["agents"]["default_subagent_reasoning_effort"], "max")
+        self.assertEqual(settings["agents"]["default_subagent_reasoning_effort"], "xhigh")
         self.assertEqual(settings["model_routing"]["reviewer"],
-                         {"model": "gpt-6.1-sol", "effort": "max"})
+                         {"model": "gpt-6.1-sol", "effort": "xhigh"})
 
     def test_explicit_dispatcher_pair_is_pinned_even_if_fallback_is_advertised(self):
         for argv in (["--model", "gpt-6.1-sol", "--effort", "max"],
@@ -1149,12 +1155,12 @@ class CampaignTests(unittest.TestCase):
                       "gpt-5.6-luna": ["low", "medium", "high"],
                       "gpt-6-astra": ["low", "medium", "high"]}
         state = self.run_campaign(rpc, 1)
-        self.assertIn("gpt-6.1-sol/max", state["last_error"])
+        self.assertIn("gpt-6.1-sol/xhigh", state["last_error"])
         self.assertEqual(rpc.goal["status"], "paused")
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
 
-    def test_missing_worker_max_refuses_resume_even_with_dispatcher_fallback(self):
-        for effort in ("max",):
+    def test_missing_worker_xhigh_refuses_resume_even_with_dispatcher_fallback(self):
+        for effort in ("xhigh",):
             with self.subTest(effort=effort):
                 self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
                 self.saved(goal("paused"))
@@ -1170,7 +1176,7 @@ class CampaignTests(unittest.TestCase):
         rpc = FakeRPC(self.args)
         settings = launcher.preflight(rpc, self.args, self.directory)
         self.assertEqual(settings["model_routing"]["auditor"],
-                         {"model": "gpt-6.1-sol", "effort": "max"})
+                         {"model": "gpt-6.1-sol", "effort": "xhigh"})
         self.assertTrue(all(selection["model"] == "gpt-6.1-sol"
                             for selection in settings["model_routing"].values()))
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))

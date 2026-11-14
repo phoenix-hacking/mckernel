@@ -58,14 +58,22 @@ class StatusFeed:
                 state = state if isinstance(state, dict) else {}
             else:
                 state = self._snapshot("state.json", notes)
-            guardian = ({key: value for key, value in context.items() if key != "engine_state"}
+            observer = (context.get("observer") if isinstance(context, dict)
+                        else self._snapshot("mailbox-monitor.json", notes))
+            observer = observer if isinstance(observer, dict) else {}
+            guardian = ((context.get("guardian") or {}) if isinstance(context, dict) and "observer" in context else
+                        {key: value for key, value in context.items() if key != "engine_state"}
                         if isinstance(context, dict) else self._snapshot("guardian.json", notes))
             runtime = None
-            if state or guardian:
+            if state or guardian or observer:
                 runtime = {"state": state, "guardian": guardian,
                            "watcher": self._snapshot("watcher.json", notes),
                            "mailbox": self._snapshot("mailbox-state.json", notes),
                            "latest_stop": self._snapshot("latest-stop.json", notes)}
+                if observer:
+                    runtime["observer"] = observer
+                    result["observer"] = {key: observer.get(key) for key in
+                                          ("monitor_id", "pid", "start", "started_at")}
             publication = self._snapshot("status-publish.json", notes)
             if publication.get("published_verified_at"):
                 notes.append("Last verified publication before this rendering: " + str(publication["published_verified_at"]))

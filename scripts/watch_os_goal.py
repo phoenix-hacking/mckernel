@@ -10,6 +10,7 @@ import stat
 import subprocess
 import sys
 import time
+from uuid import uuid4
 
 from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure,
                                classify_service_failure, classify_usage_failure)
@@ -427,6 +428,8 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
         from os_goal_guard_protocol import validate_recovery_proof
         guardian_proof = validate_recovery_proof(directory, args.guardian_recovery_proof, args.guardian_run_id)
     lease = lease_factory(directory / "watch.lock")
+    supervision_mode = "guardian" if getattr(args, "guardian_run_id", None) else "manual"
+    supervision_id = uuid4().hex
     state_path = directory / "state.json"
     watch_path = directory / "watcher.json"
     child = None
@@ -460,10 +463,16 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     def record(event, **values):
         data = dict(event=event, at=time.time(), watcher_pid=os.getpid(),
                     watcher_start=watcher_start if retain_owner else process_start(os.getpid()),
+                    supervision_mode=supervision_mode, supervision_id=supervision_id,
                     guardian_run_id=getattr(args, "guardian_run_id", None),
                     worker_pid=child.pid if child else None, restarts=restarts,
                     credit_timeout_recovery=timeout_recovery, transport_recovery=transport_recovery,
                     recovery_handoff=recovery_handoff, **values)
+        data.setdefault("worker_start", child_start)
+        if (child is not None and current.get("worker_pid") == child.pid
+                and current.get("worker_start") == child_start
+                and current.get("supervision_id") == supervision_id):
+            data.update(log_dir=current.get("log_dir"), thread_id=current.get("thread_id"))
         write_json(watch_path, data)
         log.write(json.dumps(data) + "\n")
         if event in {"worker_exited", "recovery_held_classification", "watcher_stopped", "watcher_failed"}:
@@ -520,7 +529,10 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
             if retain_owner and "--retain-owner-on-stop" not in worker_argv:
                 worker_argv.append("--retain-owner-on-stop")
             command = [sys.executable, "-B", str(repo / "scripts/run_os_goal.py"),
-                       *worker_argv, "--worker", "--hours", str(remaining / 3600 if args.hours else 0)]
+                       *worker_argv, "--worker", "--hours", str(remaining / 3600 if args.hours else 0),
+                       "--supervision-mode", supervision_mode, "--supervision-id", supervision_id,
+                       "--supervisor-pid", str(os.getpid()),
+                       "--supervisor-start", str(process_start(os.getpid()))]
             if restarts or guardian_proof:
                 command.append("--recovered")
                 if timeout_recovery is not None:
@@ -533,6 +545,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                     else:
                         command.extend(["--recovery-goal-sha256", origin["goal_after_sha256"]])
             server_retired, server_retirement_attempted = False, False
+            record("worker_launching", attempt=restarts + 1)
             child = subprocess.Popen(command, stdin=subprocess.DEVNULL, start_new_session=True)
             child_start = process_start(child.pid)
             record("worker_started", attempt=restarts + 1)

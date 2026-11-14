@@ -71,6 +71,60 @@ def _rows(ledger, key, missing):
     return rows
 
 
+def _closure_summary(ledger, runtime, now):
+    """Compact decision view first; never infer a runnable queue from dependencies."""
+    from os_goal_progress import project_progress
+    state = runtime.get("state", {}) if isinstance(runtime, dict) else {}
+    state = state if isinstance(state, dict) else {}
+    snapshot = state.get("progress_snapshot")
+    # Prefer a controller-persisted projection only when it has the expected
+    # derived schema. Recompute ledger counts rather than copying saved credit.
+    try:
+        current = project_progress(ledger, state={}, now=now)
+        canonical_ids = {row["id"] for row in ledger["tasks"] if row.get("counted_in_requirement_rollup") is True}
+        snapshot_target = snapshot.get("current_target") if isinstance(snapshot, dict) else None
+        target_matches = (snapshot_target is None and state.get("closure_target") is None
+                          or isinstance(snapshot_target, dict) and snapshot_target.get("original_check") in canonical_ids
+                          and isinstance(state.get("closure_target"), dict)
+                          and state["closure_target"].get("original_check") == snapshot_target["original_check"])
+        if (isinstance(snapshot, dict) and snapshot.get("schema_version") == 1
+                and snapshot.get("authority") == "derived_only" and target_matches
+                and snapshot.get("closed_original_checks") == current["closed_original_checks"]):
+            for key in ("current_target", "target_status", "next_action", "operation", "remaining_conditions",
+                        "retained_capacity", "review_required", "decision_pending_seconds", "decision_status", "results"):
+                if key in snapshot:
+                    current[key] = snapshot[key]
+        elif state.get("closure_target") is not None:
+            current = project_progress(ledger, state=state, repo=Path(__file__).resolve().parents[1], now=now)
+        if ((current.get("current_target") or {}).get("original_check") in current["closed_original_checks"]):
+            current["target_status"] = "CLOSED_IN_CANONICAL_LEDGER"
+            current["remaining_conditions"] = []
+    except (OSError, ValueError, TypeError, KeyError) as error:
+        return ["CLOSURE DECISION VIEW", "Original closure state: UNKNOWN; " + _text(str(error)),
+                "Current target/next action: reconcile canonical inputs; no readiness or acceptance inferred.", ""]
+    last = current.get("last_original_closure") or {}
+    target = current.get("current_target") or {}
+    operation = current.get("operation") or {}
+    lines = ["CLOSURE DECISION VIEW",
+             "Original checks: " + str(len(current["closed_original_checks"])) + "/" + str(current["counted_total"])
+             + " closed; " + str(current["remaining_count"]) + " remaining. Original conditions and weights unchanged.",
+             "Last original closure: " + _text(", ".join(last.get("original_checks", [])) or None) + " | UTC=" + _utc(last.get("at")),
+             "Current target: " + _text(target.get("original_check")) + " | owner=" + _text(target.get("owner"))
+             + " | state=" + _text(current.get("target_status")),
+             "Next concrete action: " + _text(current.get("next_action")),
+             "Matching operation: " + _text(operation.get("name")) + " | " + _text(operation.get("status"))
+             + " | liveness=" + _text(operation.get("liveness")) + " | declared deadline=" + _utc(operation.get("deadline_at")),
+             "Results: " + _text(json.dumps(current.get("results", {"qualified_matching_records": "UNKNOWN"}), sort_keys=True)),
+             "Retained capacity: " + _text(json.dumps(current.get("retained_capacity"), sort_keys=True)),
+             "Review required: " + _text(current.get("review_required", False))
+             + "; decision=" + _text(current.get("decision_status"))
+             + "; decision pending seconds=" + _text(current.get("decision_pending_seconds", 0))]
+    for condition in current.get("remaining_conditions", []):
+        lines.append("Remaining original condition: " + _text(condition))
+    lines += ["Readiness requires positive matching operation evidence and fresh actual admission. Ledger dependency order confers no execution authority.", ""]
+    return lines
+
+
 def _runtime(lines, runtime, now, checker):
     lines += ["WORKSTATION AND AGENTS", ""]
     if runtime is None:
@@ -81,6 +135,7 @@ def _runtime(lines, runtime, now, checker):
     guard = runtime.get("guardian") if isinstance(runtime.get("guardian"), dict) else {}
     watch = runtime.get("watcher") if isinstance(runtime.get("watcher"), dict) else {}
     mailbox = runtime.get("mailbox") if isinstance(runtime.get("mailbox"), dict) else {}
+    observer = runtime.get("observer") if isinstance(runtime.get("observer"), dict) else {}
     def verified(pid, birth):
         if checker is None or type(pid) is not int or not isinstance(birth, str) or not birth.isdigit():
             return False
@@ -102,6 +157,8 @@ def _runtime(lines, runtime, now, checker):
               if current else "STALE OR UNVERIFIED: saved agent status does not establish live agents."),
               f"Worker exact birth verified: {worker_live}; watcher exact birth verified: {watcher_live}; guardian exact birth verified: {guardian_live}",
               "Controller phase: " + _text(state.get("phase")) + "; goal: " + _text(goal.get("status")),
+              "Independent observer: " + _text(observer.get("phase")) + "; poll error: " + _text(observer.get("poll_error"))
+              + "; publication error: " + _text(observer.get("publication_error")),
               "State heartbeat UTC: " + _utc(state.get("heartbeat_at")) + "; state updated UTC: " + _utc(state.get("updated_at")),
               "State heartbeat age seconds: " + (f"{age:.1f}" if age is not None else "UNKNOWN"),
               "Guardian phase: " + _text(guard.get("phase")) + "; reason: " + _text(guard.get("reason")),
@@ -151,12 +208,12 @@ def _runtime(lines, runtime, now, checker):
     else:
         totals = mailbox.get("message_status_counts")
         if isinstance(totals, dict) and all(type(value) is int and value >= 0 for value in totals.values()):
-            counts = {name: totals.get(name, 0) for name in ("WAITING", "ACCEPTED", "NOT_QUEUED")}
+            counts = {name: totals.get(name, 0) for name in ("WAITING", "ACCEPTED", "NOT_QUEUED", "HISTORICAL_ACCEPTED")}
             counts.update({name: count for name, count in totals.items() if name not in counts and count})
             scope = "Instruction receipts: "
         else:
             counts = {name: sum(isinstance(v, dict) and v.get("delivery_status") == name for v in messages.values())
-                      for name in ("WAITING", "ACCEPTED", "NOT_QUEUED")}
+                      for name in ("WAITING", "ACCEPTED", "NOT_QUEUED", "HISTORICAL_ACCEPTED")}
             scope = ("Recent instruction receipts: " if type(mailbox.get("message_count")) is int
                      and mailbox["message_count"] > len(messages) else "Instruction receipts: ")
         lines.append(scope + "; ".join(f"{name}={count}" for name, count in counts.items()) + ". Acceptance is not completed work.")
@@ -198,7 +255,9 @@ def render_status_text(ledger, *, source_commit=None, runtime=None, generated_at
              "Ledger updated UTC: " + _utc(ledger.get("updated_at")), "Source commit: " + _text(source_commit),
              "Canonical ledger: docs/verification/m14-m15-closure-progress.json; human plan: CAMPAIGN.md.",
              "This is a derived view, not new acceptance or execution authority. Checklist percentages are not accepted milestones, engineering hours or converted LOC.",
-             "Scope: " + _text(ledger.get("scope")), "", "MILESTONE SUMMARY", ""]
+             "Scope: " + _text(ledger.get("scope")), ""]
+    lines += _closure_summary(ledger, runtime, now)
+    lines += ["MILESTONE SUMMARY", ""]
     summaries = ledger.get("summaries") if isinstance(ledger.get("summaries"), dict) else {}
     for milestone in ("M14", "M15"):
         summary = summaries.get(milestone)

@@ -67,6 +67,18 @@ class StatusFeedTests(unittest.TestCase):
         self.assertEqual(runtime['state'], {})
         self.assertEqual(runtime['guardian'], {'pid': 123, 'start': '45', 'phase': 'HELD'})
 
+    def test_observer_context_is_kept_separate_from_actual_guardian(self):
+        observer = {'monitor_id': 'b' * 32, 'pid': 123, 'start': '45', 'started_at': 900,
+                    'phase': 'MONITORING'}
+        state = {'supervision_mode': 'manual', 'thread_id': 'saved-root'}
+        result = self.feed.tick({'observer': observer, 'engine_state': state, 'guardian': {},
+                                 'status': 'MANUAL', 'reason': None})
+        runtime = self.render.call_args.kwargs['runtime']
+        self.assertEqual(runtime['observer'], observer)
+        self.assertEqual(runtime['guardian'], {})
+        self.assertEqual(runtime['state'], state)
+        self.assertEqual(result['observer']['monitor_id'], observer['monitor_id'])
+
     def test_missing_engine_in_explicit_context_does_not_mix_stale_disk_state(self):
         self.save('state.json', {'worker_pid': 987, 'agents': {'old-agent': {'status': 'inProgress'}}})
         context = {'pid': 123, 'start': '45', 'phase': 'HELD'}
