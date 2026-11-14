@@ -1,44 +1,50 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T21:26:52+00:00
+## BLOCKED execution — eleven-slot saved run — checkpoint 2026-11-14T22:06:19+00:00
 
 
-CURRENT MACHINE DELTA: actual vendor192 identity/startup is now Qe7b84e96/
-Root450766ce PASS: exact1.92.0/ded5c06cf/fullcommit/host/release, raw220Ba8dc and
-compilerreported LLVM21.1.6 (DISTINCT acquired llvm-libs21.1.8/db74).11original
-waits/22captures/3heldinputFDs/exact6mounts/profiles/container/fullRoot98719 close
-ONLY actualfresh4094 new1342177280B/job1, now scoped RETIRED. No codegen/sysroot/
-fulltoolchain/SMP/native/original acceptance. Public record+rawstdout:
-docs/verification/m15-f06-official-vendor-descriptor-20261114/QUALIFIED-VENDOR192-IDENTITY-STARTUP.json.
-Root issuer failures preserved: firstnull account6 attestation check beforegrant;
-correctedf101 reached actual95fea grant then135 refused obsolete token. Genuine
-no-startQc9a37/Root98332 retired ONLY that separate new1.25GiB; oldgrant/DATA stay
-immutable. Newb20/changedGO380b supported freshslot8/9 granted4094 and ran ONCE
-under unchanged runtimeGOb430. No stalegrant replay or accountpredicate waiver.
-Current known HOST payload reservations are ONLY old402653184B/jobs2+ALL overhead;
-native12/source/e01514790/32916/lease/IPC/globalUNKNOWN/rejected holds stay separate.
-Actual nonELF load_elf guard now Q0a7fe377/Root0ef9019e, onlynew1.125GiB retired,
-public exact caller/stage/CASE/diagnostic/proof at docs/verification/m15-f02-load-elf-nonelf-20261114/.
-Literal successor7bcd3a60 remains NOT_GO. ONE next successful4LOAD main/auxv/cred
-publication needs REAL GET_CREDV0x30a0290b/32B and8wordLinux credential correspondence.
-ROOT_CURRENT_MATCHED_MCCTRL_DEVICE_PROVIDER_INPUT is NOT_SUPPLIED (readinessd919):
-Root/coherent current IHK-mcctrl provider owner must supply matching device/module/
-BUILDID/access/new-ownFD lifetime via separately reviewed normal binding. Scope
-PARKED; no deviceabsence inference, fakeioctl/no-device case, repeated lookup or
-new guestCPU/image/CMake quota. No successcaller/runtime action currently eligible.
-Next ready SOURCE prerequisite: P=/home/holden/mckernel-work/m15-f06-affected-smp-crate-20261114
-has coherent50/1025628B MCD02ad+SMP35979504, pairedcf1f separateUNCOMPILED,
-retained111189482B/original62-token-Dwarnings/17mount/34+6+8 joins. Proc7c3254
-has grouped strict reviewer-route and AS metadata precision findings; original
-TimeSource healthy ONE bounded successor. Preserve existing Bash ulimit-v2097152
-command (source setter), label requested/configured versus actualeffectiveAS
-UNOBSERVED; no new cap, no guessed reduction. Real1.5GiB container/2GiBfamily
-unchanged. SAME Proc changed-only review after freeze; actualidentityQ/Root now
-supplied, but fresh whole2GiB-family fit remains unadmitted(last4GiB projection
-OVER by173600768B). No kernel/core/C/module/SDK build or native borrowing.
-Current111/156/45open, M14=80.19%/M15=74.59%/neither accepted, original156criteria/
-weights/M14-before-M15/allholds unchanged. Latest pushed/fetched5fca3cfd precedes
-this qualified nonELF and actual compiler-startup increment.
+CURRENT EXECUTION BLOCK: corrected whole-SMP Source/operation GO74c72af7 is
+COMPLETE (Proc, no findings), original62-token-Dwarnings command/coherent50files/
+retained111189482B/17mounts/34+6+identity8 reused. Requested/configured BashAS2GiB
+preserved; actualeffectiveinheritanceUNOBSERVED. No SMP compiler/object/depinfo,
+Kbuild/module/native operation has run. Same real1.5GiB container+512MiBcontrol=
+2GiBfamily/CPU7/job1 remains. Public scoped record:
+docs/verification/m15-f06-official-vendor-descriptor-20261114/SMP-SOURCE-GO-RESOURCE-BLOCK.json.
+ONE bounded NativeCurrent control-memory proof043c8307 found NO DEFENSIBLE SMALLER
+resident slice: capped pipe/capture bytes and total RSS observations do not bound
+parent/outer/CLI/interpreter/JSON/source/account heaps and qualified failure-frame
+retention. No profile delta, new helper/test, kill/restart, quota reduction or RAM
+waiver was issued. Do not rerun this proof/inventory unchanged.
+ONE actual fresh Root resource admissiond61cc924 REFUSED: old402653184B/jobs2 +
+ALL infrastructure/descendantRSS1906847744B + new2147483648B =4456984576B,
+OVER user shared4294967296B by162017280B. Actual account/source phase running and
+normal MemAvailable26GiB/host-scratch floors passed; NO payloadgrant/Docker/compiler
+was emitted. Scope PARKED awaiting GENUINELY CHANGED aggregate headroom or a
+separately justified/independently reviewed control-resident envelope. Supplier is
+Root HOST-resource/source owner with matching normal custody/accounting evidence;
+not another compiler/SDK/identity check. No unchanged admission/model loops,
+guessed smaller quota, native borrowing, held-family release or account override.
+Current known HOST payload reservations remain ONLY old402653184B/jobs2 plus ALL
+measured controls/owners; native12/source/e01514790/32916/lease/IPC/globalUNKNOWN/
+excluded worker01a1c48d-4d96-7cc3-b733-73a97973152f and turn01a1ce01-20cf-7e03-9442-f6d521fb8b02 stay intact.
+Other current runtime frontier F02 successful load_elf4LOAD/auxv/realGET_CREDV is
+PARKED on ROOT_CURRENT_MATCHED_MCCTRL_DEVICE_PROVIDER_INPUT NOT_SUPPLIED_d91922cb
+(source literal successor7bcd3a60). Root/coherent current IHK-mcctrl owner must
+supply matching device/module/cohort/BUILDID/access/new-ownFD lifetime via separately
+reviewed normal operation; no absent-device inference, repeated lookup/fakeioctl/
+no-device case or invented guestCPU/image/CMake quota. No successcaller issued.
+Preserve actual qualified main-descriptor Q13851/Root0f0c, nonELF Q0a7fe/Root0ef9,
+and vendor192 startup Qe7b84/Root4507. Exact1.92.0/ded5 fullcommit/host/release and
+reportedLLVM21.1.6 remain distinct acquired llvm-libs21.1.8/db74; no repeat/codegen/
+fulltoolchain/native credit. Their actual own newfamilies are scoped retired;
+failed95fea grant/DATA remain immutable after separate no-startQc9/Root98332.
+All canonical Source/ABI/provider/SDK/build/lifecycle green evidence stays reused.
+Current111/156/45open, M14=80.19%/M15=74.59%/NEITHER accepted. No original ID closed
+by source/resource preparation; criteria/weights/156/M14-before-M15 unchanged.
+Latest pushed/fetched0ab10af3f preserves nonELF and compiler identity before this
+source-GO/resource-block increment. SameRoot/finite7c6/52079.8011050000, no reset/
+backup/rejected replay/autorelaunch. Essential custody/controllers/keepers remain;
+this is a precise execution block, not OS completion or a user pause.
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
