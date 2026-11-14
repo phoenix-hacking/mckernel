@@ -220,7 +220,8 @@ class ProgressTests(unittest.TestCase):
 
     def test_out_of_order_target_requests_safe_redirection_not_operation_replay(self):
         later = next(row for row in self.ledger["tasks"]
-                     if row.get("counted_in_requirement_rollup") and row["id"].startswith("M15-"))
+                     if row.get("counted_in_requirement_rollup") and row["percent_complete"] == 0
+                     and row["id"].startswith("M15-"))
         self.target["original_check"] = later["id"]
         seen = self.observe(0)
         self.assertEqual(seen["snapshot"]["priority_milestone"], "M14")
