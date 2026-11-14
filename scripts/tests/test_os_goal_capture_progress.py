@@ -188,6 +188,7 @@ class QueueRegistrationTests(unittest.TestCase):
         exec(compile(ast.Module(body=[node], type_ignores=[]), '<private-real-save>', 'exec'), scope)
         output = type('Output', (), dict(snapshot=lambda self: {}, agent_event_count=0))()
         fake = type('SavedCampaign', (), {})()
+        fake.args = SimpleNamespace(same_owner_control=False)
         fake.state = {}
         fake.log_dir = Path('/private-fixture-run')
         fake.state_path = Path('/private-fixture-state.json')

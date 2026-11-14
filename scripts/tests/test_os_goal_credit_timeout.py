@@ -32,6 +32,8 @@ class CreditTimeout(unittest.TestCase):
         self.c = launcher.Campaign(args, self.root, self.root)
         self.addCleanup(self.c.output.close)
         self.c.rpc = Mock()
+        self.c.rpc.last_account_read_completion = None
+        self.c.rpc.last_account_notification = None
 
     def notification(self, value=None, now=100):
         with patch.object(launcher.time, 'monotonic', return_value=now):
