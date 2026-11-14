@@ -1,0 +1,66 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; NO SECURITY TESTING.",
+  "status": "SOURCE_DERIVED_PUBLIC_ACQUISITION_ROUTE; no RPM downloaded and no compiler/container executed by preparer",
+  "recorded_base_image": "rockylinux/rockylinux:10.2@sha256:e372170ca8630f0f03e9b70fdd0bf4a3ce3426b0de7cdba615f06337389de176",
+  "base_image_source": "/home/holden/mckernel/scripts/native_rust_exact_build_image_prepare.py:20",
+  "prior_local_SDK_image_id": "sha256:46d47ba9223a03f4c99db99758b741b2b58694a44cc083e13d4a7e7c78edfd94",
+  "bootstrap_limit": "The recorded SDK bootstrap requested gcc without a version pin. This route pins the subsequently recorded actual GCC package; hosted installation and file verification are still required.",
+  "dnf_install_argv": [
+    "dnf",
+    "-y",
+    "--setopt=install_weak_deps=False",
+    "install",
+    "gcc-14.3.1-4.4.el10.x86_64",
+    "cpp-14.3.1-4.4.el10.x86_64",
+    "binutils-2.41-63.el10.x86_64"
+  ],
+  "public_RPMs_HEAD_only": [
+    {
+      "nevra": "gcc-14.3.1-4.4.el10.x86_64",
+      "url": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/Packages/g/gcc-14.3.1-4.4.el10.x86_64.rpm",
+      "HTTP_status": 200,
+      "bytes": 39836892
+    },
+    {
+      "nevra": "cpp-14.3.1-4.4.el10.x86_64",
+      "url": "https://download.rockylinux.org/pub/rocky/10.2/AppStream/x86_64/os/Packages/c/cpp-14.3.1-4.4.el10.x86_64.rpm",
+      "HTTP_status": 200,
+      "bytes": 13437017
+    },
+    {
+      "nevra": "binutils-2.41-63.el10.x86_64",
+      "url": "https://download.rockylinux.org/pub/rocky/10.2/BaseOS/x86_64/os/Packages/b/binutils-2.41-63.el10.x86_64.rpm",
+      "HTTP_status": 200,
+      "bytes": 6669143
+    }
+  ],
+  "expected_gcc": {
+    "lookup": "/usr/bin/cc",
+    "resolved": "/usr/bin/gcc",
+    "package": "gcc-14.3.1-4.4.el10.x86_64",
+    "bytes": 1375456,
+    "sha256": "2092e32fa9abee9ccbf777a5f893b9cc608582b660c93e742a17c3eb7da109c2",
+    "GCC_include": "/usr/lib/gcc/x86_64-redhat-linux/14/include",
+    "source_record": "/home/holden/mckernel/docs/verification/m14-m15-sdk-source-qualification-20261110/python-correction/PREREQUISITE.json"
+  },
+  "config_h": {
+    "original_path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/config.h",
+    "packet_path": "config.h",
+    "compiler_path": "/work/output/build/config.h",
+    "bytes": 1055,
+    "sha256": "ca251af0e69e4c82df042063bb9ffc180cbba2bd1c34f246d7589f44ed7bfa3f",
+    "not_kernel_include": true
+  },
+  "IHK": {
+    "root": "/home/holden/mckernel/ihk",
+    "revision": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "required_include_roots": [
+      "cokernel/smp/x86_64/include",
+      "cokernel/smp/x86_64",
+      "ikc/include",
+      "linux/include"
+    ]
+  },
+  "toolchain_limits": "No retained GCC/cc1/as RPM archive or image export is supplied by this packet. Dnf resolves installed runtime dependencies in the pinned Rocky base. Actual cc1/assembler and runtime identities must be recorded from that hosted installation; no host-GCC substitution or identical whole-SDK claim is made.",
+  "execution_performed": false
+}
