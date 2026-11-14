@@ -1200,6 +1200,12 @@ class Campaign:
         self.log_dir.mkdir(parents=True, mode=0o700)
         self.rpc_factory, self.rpc = rpc_factory, None
         self.active = {}
+        # Normal production wiring. The adapter reads original Root records at
+        # use time and names missing suppliers; saved state cannot grant coverage.
+        from os_goal_source_registry import SourceWorkRegistry
+        self.source_work_registry = SourceWorkRegistry(
+            self, getattr(args, "source_work_registry_file", None))
+        self.source_work_registry_provider = self.source_work_registry
         self.capacity_children = {}
         self.child_capacity_failures = []
         self.goal = None
@@ -1397,6 +1403,9 @@ class Campaign:
                 not (completed.get("thread_id") == thread_id and completed.get("id") == ident
                      and completed.get("status") in terminal)):
             self.active[thread_id] = ident
+        registry = getattr(self, "source_work_registry", None)
+        if registry is not None:
+            registry.observe_turn(thread_id, dict(turn, status=turn.get("status", "inProgress")))
         self.last_activity = time.monotonic()
         return ident
 
@@ -1763,8 +1772,14 @@ class Campaign:
             _fresh((registry["observed_utc_ns"], registry["observed_mono_ns"]),
                    (time.time_ns(), time.monotonic_ns()), 25_000_000_000)
             binding = _source_work_binding(owner)
+            terminal_receipt = {}
 
             def terminal_lookup(thread, turn):
+                adapter = getattr(self, "source_work_registry", None)
+                if adapter is not None:
+                    result = adapter.terminal(thread, turn, owner)
+                    terminal_receipt.update(result)
+                    return result
                 if thread != owner["thread_id"]:
                     raise ValueError("No original Root ownership receipt for this child turn")
                 page = self.rpc.call("thread/turns/list", {"threadId": thread, "limit": 100,
@@ -1796,9 +1811,16 @@ class Campaign:
                 goal=self.goal, state=view, terminal_turn_lookup=terminal_lookup, account_guard=account_guard,
                 queue_reader=_read_private_json, **{key: registry[key] for key in names})
             ready()
+            current_registry = provider(owner)
+            if any(current_registry.get(key) != registry.get(key) for key in
+                   ("owner", "hold_fields", "records_sha256", "proof_sha256")):
+                raise ValueError("Original source/ownership registry changed across account observation")
             receipt.update(status="sending", source_work_sha256=validated["source_work_sha256"],
                            repair_key=validated["repair_key"], source_resources=validated["resources"],
                            method="turn/start", execution_admission=False, release_authorized=False)
+            if terminal_receipt:
+                receipt["parked_model_turn"] = dict(terminal_receipt,
+                    logical_slot_available=True, physical_charges_retained=True)
             atomic_json(sending.parent / (sending.stem + ".control-intent.json"), receipt)
             self.save(last_instruction=receipt)
             ready()
@@ -2007,6 +2029,9 @@ class Campaign:
         # No provenance is restored from last run's renderer/state snapshots.
         if child in self.capacity_children or len(self.capacity_children) < 64:
             self.capacity_children[child] = root
+        registry = getattr(self, "source_work_registry", None)
+        if registry is not None:
+            registry.observe_child(data)
 
     def record_child_capacity(self, error, reason, thread_id, turn_id):
         """Record a scoped capacity failure; never retry or call RPC from events."""
@@ -2414,6 +2439,9 @@ class Campaign:
             self.state.pop("transport_startup", None)
         if method in {"item/started", "item/completed"}:
             self.remember_child_provenance(data)
+            registry = getattr(self, "source_work_registry", None)
+            if method == "item/completed" and registry is not None:
+                registry.observe_peer_output(data)
         if "id" in message:
             if method == USER_INPUT_METHOD:
                 self.save(last_automatic_input={"thread_id": thread, "request_id": message["id"],
@@ -2431,9 +2459,15 @@ class Campaign:
             self.stop_reason, self.stop_now = "goal_cleared", True
         elif method == "turn/started":
             self.active[thread] = data["turn"]["id"]
+            registry = getattr(self, "source_work_registry", None)
+            if registry is not None:
+                registry.observe_turn(thread, dict(data["turn"], status="inProgress"))
             self.last_activity = time.monotonic()
             self.save()
         elif method == "turn/completed":
+            registry = getattr(self, "source_work_registry", None)
+            if registry is not None:
+                registry.observe_turn(thread, data["turn"])
             isolated = (data["turn"]["status"] == "failed" and
                         self.record_child_capacity(data["turn"].get("error"), "turn_failed",
                                                    thread, data["turn"]["id"]))
@@ -3335,6 +3369,8 @@ def arguments(argv=None):
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
     parser.add_argument("--repair-agent-failures", action="store_true",
                         help="Delegate eligible engineering repairs; diagnose a blocked goal once and retain monitored waiting")
+    parser.add_argument("--source-work-registry-file", type=Path,
+                        help="Exact original Root source/ownership record; default: campaign source-work-registry.json")
     parser.add_argument("--stop-after-m14-m15", action="store_true",
                         help="Checkpoint after BOTH original M14 and M15 file/integration acceptances; preserve the larger saved goal")
     parser.add_argument("--grace-seconds", type=float, default=600, help="Reserve up to this many seconds for a checkpoint")
