@@ -1,31 +1,44 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T20:10:03+00:00
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T21:26:52+00:00
 
 
-CURRENT MACHINE DELTA: actual LLVM NON-BASE LLVM_21.1 definition is now
-Q1876d7e6/Root4ba88398 PASS: raw818744B/2c40 .gnu.version_d definition10205,
-distinct BASE SONAME10204/needs10207, exact driver File/Name join, no cross-ELF
-index equality.11original waits/22captures/inputFD/report/container/fullRoot6a7c
-positively close ONLY its new1342177280B/job1, now scoped RETIRED. Standard-symbol/
-versioned-symbol ABI/runtime/compiler/SMP/device/original acceptance remain UNPROVED.
-Public compact proof: docs/verification/m15-f06-official-vendor-descriptor-20261114/QUALIFIED-LLVM-VERSION-DEFINITION.json.
-Current known HOST payload reservations are ONLY old402653184B/jobs2 plus ALL
-overhead; native12/source/e015/14790/32916/globalUNKNOWN holds remain separate.
-TimeSource's healthy next source proposal is ONE genuine vendor1.92.0/ded5 identity
-runtime-loading invocation, not codegen; no grant or execution exists yet. Distinct
-FunctionalDelta changed review/fresh Root admission required when it freezes.
-Normal main-descriptor Q13851/Root0f0c remains retired ONLY new1.125GiB and publicly
-checkpointed exact caller/stage/CASE/proof at docs/verification/m15-f02-main-desc-real-libc-20261114/.
-Literal successor4bfb1bab remains NOT_GO; ONE next load_elf real-nonELF FILE guard
-before allocation3172/GET_CREDV3273 now has CredSource frozen087a2b44/Cff6968ca/
-stage3595725c; Proc healthy changed callable/FILE oracle review. Require actual
-NULL/interpNULL/read64/FILEpos64/diagnostic55B+flush/borrowedFILE/onefclose+EBADF;
-no invented errno. After sourceGO, Dispatch only minimal binding, NativeBinding
-changed operationGO, then Root fresh admission for one C compile/testlink/case.
-Reuse productiond511/2282/SDK46d/providers/ABI/all prior qualified branches.
-Current111/156/45open, original156criteria/weights/M14-before-M15 and all holds
-unchanged; latest pushed/fetched verified checkpoint5b329d58 precedes this increment.
+CURRENT MACHINE DELTA: actual vendor192 identity/startup is now Qe7b84e96/
+Root450766ce PASS: exact1.92.0/ded5c06cf/fullcommit/host/release, raw220Ba8dc and
+compilerreported LLVM21.1.6 (DISTINCT acquired llvm-libs21.1.8/db74).11original
+waits/22captures/3heldinputFDs/exact6mounts/profiles/container/fullRoot98719 close
+ONLY actualfresh4094 new1342177280B/job1, now scoped RETIRED. No codegen/sysroot/
+fulltoolchain/SMP/native/original acceptance. Public record+rawstdout:
+docs/verification/m15-f06-official-vendor-descriptor-20261114/QUALIFIED-VENDOR192-IDENTITY-STARTUP.json.
+Root issuer failures preserved: firstnull account6 attestation check beforegrant;
+correctedf101 reached actual95fea grant then135 refused obsolete token. Genuine
+no-startQc9a37/Root98332 retired ONLY that separate new1.25GiB; oldgrant/DATA stay
+immutable. Newb20/changedGO380b supported freshslot8/9 granted4094 and ran ONCE
+under unchanged runtimeGOb430. No stalegrant replay or accountpredicate waiver.
+Current known HOST payload reservations are ONLY old402653184B/jobs2+ALL overhead;
+native12/source/e01514790/32916/lease/IPC/globalUNKNOWN/rejected holds stay separate.
+Actual nonELF load_elf guard now Q0a7fe377/Root0ef9019e, onlynew1.125GiB retired,
+public exact caller/stage/CASE/diagnostic/proof at docs/verification/m15-f02-load-elf-nonelf-20261114/.
+Literal successor7bcd3a60 remains NOT_GO. ONE next successful4LOAD main/auxv/cred
+publication needs REAL GET_CREDV0x30a0290b/32B and8wordLinux credential correspondence.
+ROOT_CURRENT_MATCHED_MCCTRL_DEVICE_PROVIDER_INPUT is NOT_SUPPLIED (readinessd919):
+Root/coherent current IHK-mcctrl provider owner must supply matching device/module/
+BUILDID/access/new-ownFD lifetime via separately reviewed normal binding. Scope
+PARKED; no deviceabsence inference, fakeioctl/no-device case, repeated lookup or
+new guestCPU/image/CMake quota. No successcaller/runtime action currently eligible.
+Next ready SOURCE prerequisite: P=/home/holden/mckernel-work/m15-f06-affected-smp-crate-20261114
+has coherent50/1025628B MCD02ad+SMP35979504, pairedcf1f separateUNCOMPILED,
+retained111189482B/original62-token-Dwarnings/17mount/34+6+8 joins. Proc7c3254
+has grouped strict reviewer-route and AS metadata precision findings; original
+TimeSource healthy ONE bounded successor. Preserve existing Bash ulimit-v2097152
+command (source setter), label requested/configured versus actualeffectiveAS
+UNOBSERVED; no new cap, no guessed reduction. Real1.5GiB container/2GiBfamily
+unchanged. SAME Proc changed-only review after freeze; actualidentityQ/Root now
+supplied, but fresh whole2GiB-family fit remains unadmitted(last4GiB projection
+OVER by173600768B). No kernel/core/C/module/SDK build or native borrowing.
+Current111/156/45open, M14=80.19%/M15=74.59%/neither accepted, original156criteria/
+weights/M14-before-M15/allholds unchanged. Latest pushed/fetched5fca3cfd precedes
+this qualified nonELF and actual compiler-startup increment.
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
