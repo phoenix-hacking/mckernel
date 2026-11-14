@@ -2369,12 +2369,16 @@ pub unsafe extern "C" fn act_execve_phase2(
     {
         unsafe {
             mcexec_execve2_transfer_desc_failed_bridge();
+            free(desc as *mut u8);
         }
         return -1;
     }
 
     unsafe { mcexec_execve2_transfer_desc_ok_bridge() };
-    if unsafe { transfer_image(fd, desc as *mut c_void) } != 0 {
+    let image_ret = unsafe { transfer_image(fd, desc as *mut c_void) };
+    // Both transfers borrow synchronously; later exec/FD callbacks use no desc.
+    unsafe { free(desc as *mut u8) };
+    if image_ret != 0 {
         unsafe { mcexec_execve2_transfer_image_failed_bridge() };
         return -1;
     }
