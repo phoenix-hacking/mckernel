@@ -1,0 +1,126 @@
+name: PR11 exact affected source qualification
+on:
+  push:
+    branches: [codex/pr11-affected-qualification-20261114]
+permissions:
+  contents: read
+jobs:
+  affected:
+    name: Reviewed PR11 affected25 outer tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      LANG: C
+      LC_ALL: C
+    steps:
+      - name: Check out immutable complete source candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: d80b745f74bb719c5e4c3775e2b93dd8ea48ab97
+          fetch-depth: 1
+          persist-credentials: false
+          submodules: false
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/
+            /kernel/
+            /arch/
+            /lib/
+            /scripts/
+            /host-kernel/
+            /cmake/
+            /executer/
+            /ihk/
+            /instructions/
+            /config/
+            /CMakeLists.txt
+            /config.h.in
+            /AGENTS.md
+            /CAMPAIGN.md
+            /docs/development/
+      - name: Bind exact source commit tree and reviewed inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pr11-affected-output"
+          test "$(git rev-parse HEAD)" = 'd80b745f74bb719c5e4c3775e2b93dd8ea48ab97'
+          test "$(git rev-parse 'HEAD^{tree}')" = '71c6b0f1ee1329b01548527003e6e3723309be21'
+          git rev-parse HEAD 'HEAD^{tree}' > "$RUNNER_TEMP/pr11-affected-output/source-identity.txt"
+          sha256sum --check > "$RUNNER_TEMP/pr11-affected-output/source-pins.txt" <<'PINS'
+          0618007c4ba174beb15eba7f16dcca01ca9b1d746dde95f328d7895decfeacd8  .github/workflows/final-push-tracker.yml
+          69d3b3f222c0e54ef7a37570ff169f7cc9e32fbc3ef25de2d4ca3f212665f87d  .github/workflows/m14-f06-qualification.yml
+          d3ca1fb670f8d91429a559c9a9db666be6153df470ce32d969b1aa4d8629ab86  .github/workflows/m14-focused.yml
+          4f6ea41af837748aae2d9581c7c45963c5cd5367093c8aebb1e62b12f75994ca  arch/x86_64/kernel/syscall.c
+          8848d536f2fa847a59af72d573ec9c55838c27cea664d46438ab4e038bf83649  kernel/include/process.h
+          b274e0c5d048d66c7326f1e75a183639f89e488206ba31f6ed6d98cdb8eb8053  kernel/syscall.c
+          ab95c1eda1bb7ebf0d988f582b42195e4019a92d0c32a3100a7e0ab632982982  scripts/derive_f06_origin.py
+          57570934d2469655fb065cab75f8d027e83f92d614e2b54854baee3364080f08  scripts/derive_f06_signal_metadata.py
+          49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003d1  scripts/f06_origin_command_profile.json
+          2f27bbfeed79d85867565118474bd83f7679b3cb294338009dddf6b884315471  scripts/f06_origin_source_binding.json
+          8c21230565685a6293611c9748e52efa3af0f8b5b7a0d8102b9058558c0abec4  scripts/run_m14_focused_checks.py
+          5695b8b04d85a56e4596a1b622668f7a161084872cd0fc0085b0384a2fb1d60e  scripts/tests/test_final_push_tracker_workflow.py
+          f439a3f34d458650278b2483f593acf6e5d3ec106a03cb98f3deacb90bafea5a  scripts/tests/test_m14_f03_host_cleanup.py
+          4e731cc7df2922c968d21ecc0fc06b5850bfdf7d7ce0bc7acfd959c009d50752  scripts/tests/test_m14_f03_ptrace_adapters.py
+          3bcb4df7e5c4fd609c37698af8485b78a8f8e7797d9091b87b921856ac352ed3  scripts/tests/test_m14_metadata_reuse.py
+          a4b16c3cc41aa874a209bf9a4eb0cdcfa1a0793a6c1e100ba10a5ad078c25e2d  scripts/tests/test_run_m14_focused_checks.py
+          PINS
+          cat "$RUNNER_TEMP/pr11-affected-output/source-pins.txt"
+      - name: Select existing pinned ordinary HOST test tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install nightly-2026-02-19 --profile minimal
+          compiler=$(rustup which --toolchain nightly-2026-02-19 rustc)
+          test "$("$compiler" --version)" = 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
+          python3 -m venv "$RUNNER_TEMP/pr11-tools"
+          "$RUNNER_TEMP/pr11-tools/bin/python" -m pip install --disable-pip-version-check PyYAML==6.0.2
+          echo "$RUNNER_TEMP/pr11-tools/bin" >> "$GITHUB_PATH"
+          echo "RUSTC=$compiler" >> "$GITHUB_ENV"
+          echo "CC=$(command -v gcc)" >> "$GITHUB_ENV"
+          {
+            "$compiler" --version --verbose
+            sha256sum "$compiler"
+            gcc --version
+            nm --version
+            git --version
+            bash --version
+            "$RUNNER_TEMP/pr11-tools/bin/python" --version
+            "$RUNNER_TEMP/pr11-tools/bin/python" -c 'import yaml; print("PyYAML " + yaml.__version__)'
+          } > "$RUNNER_TEMP/pr11-affected-output/toolchain.txt"
+          cat "$RUNNER_TEMP/pr11-affected-output/toolchain.txt"
+      - name: Command1 exact22 Python source workflow metadata tests
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          python3 -B -m unittest -v scripts.tests.test_run_m14_focused_checks scripts.tests.test_m14_metadata_reuse scripts.tests.test_final_push_tracker_workflow > "$RUNNER_TEMP/pr11-affected-output/command-1.stdout" 2> "$RUNNER_TEMP/pr11-affected-output/command-1.stderr"
+          status=$?
+          printf '%s\n' "$status" > "$RUNNER_TEMP/pr11-affected-output/command-1.exit"
+          cat "$RUNNER_TEMP/pr11-affected-output/command-1.stdout"
+          cat "$RUNNER_TEMP/pr11-affected-output/command-1.stderr" >&2
+          test "$status" = 0 || exit "$status"
+          grep -Eq '^Ran 22 tests in [0-9.]+s$' "$RUNNER_TEMP/pr11-affected-output/command-1.stderr" || exit 1
+          test "$(tail -n 1 "$RUNNER_TEMP/pr11-affected-output/command-1.stderr")" = OK || exit 1
+      - name: Command2 exact3 HOST cleanup and typed ptrace observer tests
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          python3 -B -m unittest -v scripts.tests.test_m14_f03_host_cleanup scripts.tests.test_m14_f03_ptrace_adapters > "$RUNNER_TEMP/pr11-affected-output/command-2.stdout" 2> "$RUNNER_TEMP/pr11-affected-output/command-2.stderr"
+          status=$?
+          printf '%s\n' "$status" > "$RUNNER_TEMP/pr11-affected-output/command-2.exit"
+          cat "$RUNNER_TEMP/pr11-affected-output/command-2.stdout"
+          cat "$RUNNER_TEMP/pr11-affected-output/command-2.stderr" >&2
+          test "$status" = 0 || exit "$status"
+          grep -Eq '^Ran 3 tests in [0-9.]+s$' "$RUNNER_TEMP/pr11-affected-output/command-2.stderr" || exit 1
+          test "$(tail -n 1 "$RUNNER_TEMP/pr11-affected-output/command-2.stderr")" = OK || exit 1
+      - name: Preserve complete original command captures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pr11-exact-affected25
+          path: ${{ runner.temp }}/pr11-affected-output/
+          if-no-files-found: error
+          retention-days: 14
