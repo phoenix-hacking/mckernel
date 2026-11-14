@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T09:29Z
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T11:28Z
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -18,8 +18,11 @@ artifact checkpoint41d7a5166 are pushed/fetched verified. Public evidence:
 docs/verification/m14-i01-original-acceptance-20261114/ and
 docs/verification/m15-f02-production-continuation-20261114/.
 
-CURRENT owned HOST reservation is268435456B/job1 for the FAILED, never-started
-cached supplier scope. Independent failed-entryQ96e6905c and Root377db7e0 retire
+CURRENT owned HOST reservations are268435456B/job1 for the FAILED supplier plus
+134217728B/job1 for retained C3 cleanup (402653184B/jobs2 TOTAL before ALL overhead).
+Original tool14790 and C3tool32916 retain their original owning contexts. Actual
+four-control testQb7d8b92e/Root e858b5ef retire ONLY
+their separate268435456B/job1. Failed-entryQ96e6905c and Root377db7e0 retire
 ONLY the separate134217728B/job1 cleanup entry family. Do not use older HOST0
 snapshots as current clearance. The cleanup parent2708491/b73405725 joined exit1,
 closed/fsynced captures and inputFD; fullRoot3ccfec25 is preserved privately.
@@ -27,6 +30,12 @@ It refused newest-account acceptance BEFORE execution-1/action creation; no
 container removal or signal occurred. Refused candidate status/sequence/reason
 were UNSAVED, and a later ACCEPTED snapshot does not reconstruct them. That Q/Root
 receipt proves no old supplier cancellation or CID closure; old256 remains.
+Actual FOUR corrected account-consumer controls now PASS, original Tool exit0,
+4tests/0.068s/no failures/errors/skips; helper89305965/testd6d042ea/SourceGOa6e03a86/
+testGO8afa1db8/finalRoot-use086e9373. Raw fullRoot013af6b7/resultc66f20fe are private
+under pending-completion-correction-1/one-bounded-correction-1/ROOT-ACTUAL-FOUR-TESTS-1.
+Its separate256MiB/job1 test reservation is scoped retired after positive original
+Tool/capture/FD proof; old supplier256MiB/job1 remains distinct. No test rerun.
 Original18067/40491 HOST2.25GiB/jobs2 writer/privatelease scope is genuinely Q39/
 Root49 retired, original outcomesUNKNOWN. Failed production compound Q917/Root4dae,
 passiveB Q8329/Rootf54a and first F05 Q456/Root8a25 are separately scoped retired.
@@ -81,14 +90,45 @@ correction, independent changed-boundary review and fresh actual128MiB admission
 Actual originaltool terminal/currentFD/channel/container/source proof plus independent
 canceled-physical-scopeQ/Root receipt are required for any256MiB retirement;
 nested Popen outcomes may stayUNSAVED/UNKNOWN. No process-death-only release.
-FunctionalDelta is preparing a helper-only bounded PENDING-completion correction
+FunctionalDelta completed the helper-only bounded PENDING-completion correction
 against d072, preserving canonical validator6c926984/newest ordering/all holds.
 The real producer publishes PENDING before accounting then ACCEPTED; this source
 fact identifies a possible race, not the proven cause of the UNSAVED refusals.
 Only newest PENDING may wait at most2s under fresh owner/state/ledger bookends;
 every actual rejection/hold/stop remains refusal, never older-ACCEPTED fallback.
-Future refusals must preserve their actual candidate status/sequence/reason. No
+Future refusals must preserve their actual candidate status/sequence/reason.
+Initial7a827/test31057 candidates remain NO_GOd8f59/3fc225, never executed; one
+bounded corrected8930/d6 candidate now has the actual four-control PASS above.
+TimeSource prepared pending-completion-binding-1/c702db41 with durable refusal
+capture and33-top/6-qualified-consumer grant fields. Proc reviews ONLY that
+binding against genuine c66f20fe and reuses991 physical guards. Fresh actual
+128MiB/CPU0/job1 admission remains mandatory before any cleanup effect. Actual
+C2/a4f6 attempt passed account, then parent2730100/b73870310 failed at initial
+FD metadata443 before Docker585/pidfd595/signal645. FullRoot7d4505/Q4a2963dc/
+Root6115e7ce retire ONLY that new128MiB/job1. One bounded metadata-only read has
+actual equal three-role identity/FD-set bookends, RESULTee5c65a0/fullRootb74c;
+Qa1d87/Root33f4 retire ONLY its new128MiB/job1. Original supplier256 remains.
+The exact omitted object is original wrapper2685745/b72911896 FD0, deleted
+here-doc REG /tmp/sh-thd.q3KRtE, dev66306/inode13896201/mode0100400/uidgid1000.
+Other /dev/null/eventpoll/pipe/regular branches already handle their source roles.
+TimeSource froze ONLY this proven stdin provenance/classifier correctionbdbaa229;
+Proc reviews that changed predicate, reusing991/a4/893/four-test PASS. No broad
+tmp/regular/deleted-file allowance or FD payload read. After exact newGO, Root
+fresh-admits once; oldtool14790/runtime2685744 are never signal targets. No
 unchanged cleanup retry, account request, producer/state edit or live hotpatch.
+C3/04dd was genuinely issued once as tool32916. Four owned Docker CLI waits0
+prove exact oldCID removal/absence. Saved first-role BEFORE and source-qualified
+controlflow prove one returned pidfd9 call, but terminal_metadata then hit actual
+PermissionError('/proc/2685747/fd'). Precise exit state/per-role terminal/empty-FD
+receipt remain UNSAVED; no later-role call or owned-pidfd close was reached.
+Parent2737331/b74028874 retains all3 pidfd contexts; its outer original Popen
+deadline expired and remains UNKNOWN. Root incident8d7f2489 + Proc saved/source
+NO_ACTIONe01530e0 preserve this LOCAL denied boundary and both reservations. No
+denied-path retry, privileged alternative, remaining-role replay/new cancellation,
+source hotpatch or absence-only release. Supplying runtime owner lacks a finite
+unwind/control endpoint in the selected code; a supported separately reviewed
+resolution contract is required for that affected family. Independent HOST work
+still needs its own real source/permission/account/ownership/resource admission.
 Future Ulimits fix must compare unique exact Name/Soft/Hard rows keyed byName,
 retain all other guards and make a known CREATED-only failure finite via reviewed
 ownCID cleanup; UNKNOWN running/FD outcomes still retain original custody.
@@ -109,6 +149,16 @@ Never substitute oldb245/80a or test-owned free for repaired production cleanup.
 Successful terminalELF/main/phase1 backend behavior remains separately unproved.
 Foreground review owners are healthy; no duplicate canonical reviews or green
 SDK/Linux/module/C4/78wordABI/provider/fixture reruns.
+New6171 current Root nine-CLI lifecycle body8b06bf97 has independent SourceGO
+fdd9dff4 for nonescaping per-original-Popen/report/FD custody and exact12Env/
+4Ulimits guards. Full protected IO/save prefix, qualified account/test bindings
+are now supplied by bounded prefixee588/changed-only SourceGOfd04 (original4dd
+NO_GOef87 remains preserved). Root composed operation binding request62375f44/
+fresh issueraa5807c8 with explicit old256+C3128 inventory, genuine tested account
+and exact single-literal context substitution. NativeBinding reviews ONLY these
+operation/context/isolation bindings; fresh Root compound permission/resources/
+grant/actual argv remain UNISSUED. Body/prefixGO is no compile. The denied cleanup
+scope is never accessed or cleared by this separate source6171 HOST operation.
 
 F08 current-invocation packet has exact operationGO5c6b153f/fullargv9a1d2133 after
 fixing old prefixed-scope/unprefixed-operation contradiction while retaining both
@@ -118,11 +168,21 @@ ONLY validator pin to actual canonical6c926984, all account guards identical.
 No F08 nonce/seed/provider-lifetime/no-event/source-permission/fresh33field grant or
 case has been issued. No successful publication/native prerequisite is added to
 this HOST no-event slice, but its exact real exclusive/lifetime/resource gates bind.
+Qualified-account successor qualified-account-binding-1 now has new operationGO
+4863cdf7/argv867b975f, binding893/a6/actualfourPASSc66 and durable captured refusal
+fields. All behavior/two-invocation/provider-life guards remain reused; only real
+fresh seed/admission/provider/noevent/owner/source/permission/resource gates remain.
+Old5c packet is preserved; no case/probe/nonce has run and no wholeF08 credit.
 
 Publication prospective observability repair parent823b/keeper08e7/phase0af6f has
 independent SOURCE GOfda62213. Normal/FULL bodies and original signals/waits stay
-exact. Separate failure-only owned lease/custody/finite-exit authority remains
-UNISSUED/UNIMPLEMENTED; no publisher/native replay or installation success inferred.
+exact. New failure-only candidate1324a0b0/f5905b53 preserves concrete CredSource
+NO_GO330112fa: original direct-entry loader HELD/CLOSE_HISTORY generations were
+missing from its close plan. One bounded original-loader bridge correctionde3c2520
+now has changed-only SourceGO3a42b65d: actual original registries/bookends/once-close
+history are included. Genuine Root policy/lateauthority and
+coherent final runtime bindings remain UNISSUED. No publisher/native replay,
+lease release or installation success is inferred.
 Native source/SDK/currentfree admission, real normal publication+NEW30physicalQ/
 BOTH namespaces precede designated signal.alternate-repeat c964/a2f/f133. New C4
 c818 direct-recipe proof is not silently substituted into that frozen case.
