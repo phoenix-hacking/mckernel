@@ -1,6 +1,6 @@
 {
   "schema": "mckernel-m14-m15-closure-progress-v1",
-  "updated_at": "2026-11-14T05:41:53.069563+00:00",
+  "updated_at": "2026-11-14T06:59:39.282101+00:00",
   "scope": "Original M14/M15 closure only; excludes separate S01-S06 and whole130/seven-language complete-system goals.",
   "canonical_human_plan": "CAMPAIGN.md",
   "sole_canonical_compositor": "saved Root01a18bc3-e072-7810-9426-75101b0856c0",
@@ -32,9 +32,9 @@
         "M14-I02",
         "M14-I03"
       ],
-      "checklist_percent_complete": 77.41,
+      "checklist_percent_complete": 80.19,
       "file_acceptance_percent": 66.67,
-      "integration_acceptance_percent": 33.33,
+      "integration_acceptance_percent": 66.67,
       "milestone_accepted": false,
       "original_file_gate_count": 6,
       "original_integration_gate_count": 3
@@ -698,8 +698,8 @@
       "kind": "original_integration_gate",
       "target": null,
       "owner": "Root integration owner; original hold/SDK/source/native authorities for each actual release",
-      "accepted": false,
-      "acceptance_percent": 0,
+      "accepted": true,
+      "acceptance_percent": 100,
       "demonstrated_scopes": [
         {
           "scope": "Bounded admitted F06 HOST object zero-C text/data/bss and unique Rust entries",
@@ -711,13 +711,15 @@
           "level": "verified_original_child_condition",
           "limits": "C4 reviewed live project-C; E2/E3/acceptance/native remain open.",
           "review": "docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json"
+        },
+        {
+          "scope": "Complete original M14-I01 source/header/macro/callback/provider ownership and inert ABI-witness condition on genuine C4 successor/final13-input image",
+          "level": "verified_explicit_original_integration_gate_acceptance",
+          "review": "docs/verification/m14-i01-original-acceptance-20261114/ADJUDICATION.json",
+          "limits": "Original final supported compute source/ABI/provider/coherent-image ownership only; no deployed/native/FUNCTIONAL/file/milestone acceptance or c818 substitution into frozen tasks."
         }
       ],
-      "remaining_actions": [
-        "Establish final selected/emitted compute ownership manifest across original sources, headers, macros, callbacks and unknown owners.",
-        "Verify each live project compute implementation is Rust or permitted assembly and real ABI/provider ownership is unique in supported default final image.",
-        "Retire live C only after complete replacement and actual final selection/link proof; retained references and compiler-elided source do not prove replacement."
-      ],
+      "remaining_actions": [],
       "dependencies": [
         "HOLD-GENERIC",
         "MMAP-XPMEM-CONTRACT",
@@ -727,7 +729,8 @@
       ],
       "references": [
         "CAMPAIGN.md",
-        "CAMPAIGN.md"
+        "docs/verification/m14-i01-original-acceptance-20261114/ADJUDICATION.json",
+        "docs/verification/m14-i01-original-acceptance-20261114/ROOT-ORIGINAL-I01-ACCEPTANCE.json"
       ],
       "task_ids": [
         "M14-I01-E1",
@@ -735,8 +738,10 @@
         "M14-I01-E3",
         "M14-I01-ACCEPT"
       ],
-      "percent_complete": 75.0,
-      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance"
+      "percent_complete": 100.0,
+      "progress_metric": "equal-weight completion of declared immediate checklist children; not hours, implementation LOC or acceptance",
+      "accepted_at": "2026-11-14T06:59:39.282101+00:00",
+      "explicit_acceptance_review": "docs/verification/m14-i01-original-acceptance-20261114/ADJUDICATION.json"
     },
     {
       "id": "M14-I02",
@@ -6276,9 +6281,9 @@
       "id": "M14-I01-ACCEPT",
       "parent": "M14-I01",
       "title": "Accept original M14-I01 scope",
-      "percent_complete": 0,
+      "percent_complete": 100,
       "progress_metric": "binary verified completion at stated scope",
-      "status": "unverified",
+      "status": "verified_explicit_original_integration_gate_acceptance",
       "owner": "Saved Root integration/review owner",
       "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
       "verification_method": "Review the accumulated source, build, ABI/provider, behavior, deployment and cleanup evidence against the original gate; record its acceptance without substituting focused HOST results or new quotas.",
@@ -6293,12 +6298,15 @@
       ],
       "evidence": [
         "CAMPAIGN.md",
-        "CAMPAIGN.md"
+        "docs/verification/m14-i01-original-acceptance-20261114/ADJUDICATION.json",
+        "docs/verification/m14-i01-original-acceptance-20261114/ROOT-ORIGINAL-I01-ACCEPTANCE.json"
       ],
-      "scope_limit": "",
+      "scope_limit": "Original final supported compute source/ABI/provider/coherent-image ownership only; no deployed/native/FUNCTIONAL/file/milestone acceptance or c818 substitution into frozen tasks.",
       "definition_status": "completion_condition_defined",
       "execution_profile": "retained_evidence_review",
-      "counted_in_requirement_rollup": true
+      "counted_in_requirement_rollup": true,
+      "verified_at": "2026-11-14T06:59:39.282101+00:00",
+      "whole_original_review": "docs/verification/m14-i01-original-acceptance-20261114/ADJUDICATION.json"
     },
     {
       "id": "M14-I02-ACCEPT",
@@ -17082,6 +17090,18 @@
       ],
       "counted_verified_before": 107,
       "counted_verified_after": 110,
+      "counted_denominator": 156,
+      "criteria_weights_changed": false
+    },
+    {
+      "at": "2026-11-14T06:59:39.282101+00:00",
+      "Root_record": "docs/verification/m14-i01-original-acceptance-20261114/ROOT-ORIGINAL-I01-ACCEPTANCE.json",
+      "task_ids": [
+        "M14-I01-ACCEPT"
+      ],
+      "accepted_original_gate": "M14-I01",
+      "counted_verified_before": 110,
+      "counted_verified_after": 111,
       "counted_denominator": 156,
       "criteria_weights_changed": false
     }

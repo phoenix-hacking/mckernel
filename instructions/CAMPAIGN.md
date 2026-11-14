@@ -1,5 +1,59 @@
 # McKernel: M14 → M15 → complete supported system
 
+## ACTIVE manual eleven-slot run — 2026-11-14T06:45:32.649815+00:00
+
+Operator completed the controlled same-Root restart. Current invocation
+20261114T063545Z-0eca897f is ACTIVE, worker2661996/b72441123 and server2661998/
+b72441133. Strict live backend/settings/env readbackd0969a52 is exactly11,
+Sol/xhigh/depth1; account is genuinely freshACCEPTED with unchanged finite7c6
+ceiling52079.8011050000/history. Eleven is a source coordination ceiling, not
+11 active owners or payload budgets. HOST0,6,7/max3/4GiB TOTAL includingALL
+controllers/owners/retained charges and fresh26GiB/floors remain; native2-5/
+12GiB/singleowner separate actual admission. No further restart/pause or capacity
+verification is needed. Earlier configuration-pause headings below are historical.
+
+Current original111/156 (45open), M14=80.19%, M15=74.59%, neither milestone accepted.
+Root explicitly accepted original M14-I01 source/ABI/image ownership using full-clause
+GO3aa05996; E1/E2/E3 stay closed. No new test/build/native operation or hold release.
+Public acceptance: docs/verification/m14-i01-original-acceptance-20261114/.
+Six counted source/image checks stay closed, including original I01 acceptance;
+no green adjudication/build rerun.
+Original18067/40491 HOST2.25/jobs2 is genuinely Q39/Root49 scoped retired; original
+outcomes remainUNKNOWN. Failed F02 compoundfamily1.125GiB/job1 is Q917/Root4dae
+retired and container removed. Native12/source-publication/otherlease/IPC/account/
+policy/scratch21/globalUNKNOWN/rejected-worker/turn/nonces remain preserved.
+
+Foreground active_source_integration exclusively authors the actual failed
+passive-B GNU nm correction and no-compile/no-relink continuation. Saved production
+A objectb245426d and actual linkedELF80a5598d/map are retained; DO NOT compile A or
+relink green inputs. Changed-source GObd244f51 is complete; Root next executes only failed passive
+continuation28f3123f under fresh admission. Actual119/124 provider Q1f0dda13 passes
+with zero deltas/unknowns and is reused; remaining unique-definition/lifetime
+metadata and actual own-family closure are unproved until this operation. Canonical disjoint source work
+may prepare normal-native-current/publication bindings and exact cached46d vendor
+RedHat192 compiler/runtime acquisition; Root alone performs privileged/native or
+payload execution after actual gates. The immutable SDK46d is reused, no imagebuild.
+
+Actual passive-B continuation now returned0 under fresh Root admission in exact46d,
+container857bb767/CPU7/1GiB. No compile/relink/readelf/undefined rerun: only supported
+nm and two descriptor-order disassemblies plus input/artifact captures. All11
+readonly inputs match before/after;9 original CLI waits/18streams are closed and
+fsynced, nonOOM/exited/Pid0/remove/absence proved. FullRoot4813a07a and actual
+EXECUTION are at passive-B-correction-1/ROOT-ACTUAL-PASSIVE-EXECUTION-1. NativeBinding
+independently qualifies final definitions/lifetime and this new1.125GiB/job1 scope;
+charge remains retained until actualQ/Root receipt. WholeF02/native not accepted.
+Supplier Proc reviewc23d0236 found only buffer-before-bound/lost owning-context
+contract; originalTimeSource is correcting that exact routine in private fresh
+capture-contract-correction-1, no compiler/network or green image review. Healthy
+NativeCurrent retains publication failure-boundary repair; no duplicate author.
+
+All new source owners/reviewers explicitly gpt-6.1-sol/xhigh/depth1. Excluded
+worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02
+and rejected collector/equivalents remain excluded, no replay/rephrase/reassign.
+No ledger reset, purchase/account/model workaround, auto-relaunch or fake holds
+clear. Continue real eligible original work; stop actual user/account/budget stop,
+M14 final beforeM15, checkpoint/pause after BOTH original acceptances only.
+
 ## USER-AUTHORIZED CONFIGURATION CHECKPOINT: pause for same-Root11 restart — 2026-11-14T06:10:24.016074+00:00
 
 Latest explicit user894e6f86 authorizes controlled STOP+START for capacity11 and

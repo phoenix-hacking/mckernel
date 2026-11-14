@@ -1,0 +1,209 @@
+{
+  "schema": "mckernel.original-M14-I01-ACCEPT-independent-adjudication.v1",
+  "at": "2026-11-14T06:44:32.743775+00:00",
+  "scope": "Functional McKernel OS/apps/Rust and allowed assembly only; NO SECURITY TESTING",
+  "reviewer": "/root/ownership_preflight_review; explicitly requested gpt-6.1-sol/xhigh",
+  "decision": "GO_ORIGINAL_M14_I01_ACCEPT_AT_FINAL_SUPPORTED_COMPUTE_SOURCE_IMAGE_OWNERSHIP_SCOPE",
+  "Root_alone_records_explicit_acceptance": true,
+  "literal_ACCEPT_row": {
+    "id": "M14-I01-ACCEPT",
+    "parent": "M14-I01",
+    "title": "Accept original M14-I01 scope",
+    "percent_complete": 0,
+    "progress_metric": "binary verified completion at stated scope",
+    "status": "unverified",
+    "owner": "Saved Root integration/review owner",
+    "done_when": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+    "verification_method": "Review the accumulated source, build, ABI/provider, behavior, deployment and cleanup evidence against the original gate; record its acceptance without substituting focused HOST results or new quotas.",
+    "required_inputs": {
+      "original_requirement": "M14-I01",
+      "matching_evidence": "All original applicable child conditions; retain prior unchanged proof."
+    },
+    "dependencies": [
+      "M14-I01-E1",
+      "M14-I01-E2",
+      "M14-I01-E3"
+    ],
+    "evidence": [
+      "CAMPAIGN.md",
+      "CAMPAIGN.md"
+    ],
+    "scope_limit": "",
+    "definition_status": "completion_condition_defined",
+    "execution_profile": "retained_evidence_review",
+    "counted_in_requirement_rollup": true
+  },
+  "literal_original_final_subgoal": {
+    "id": "M14-I01",
+    "title": "Account for the final supported compute image",
+    "status": "unassessed",
+    "requirement": "Reconcile all emitted executable implementation with the final selected sources and link inputs. Zero live McKernel-owned compute-C implementations; resolve unknown owners and included-header/macro bodies. Check the ABI witness stubs are absent/inert at runtime rather than assuming every C input requires porting. If another active file is discovered, add it with provenance.",
+    "evidence": []
+  },
+  "accepted_applicable_children": [
+    {
+      "id": "M14-I01-E1",
+      "status": "verified_original_ownership_manifest_condition",
+      "percent_complete": 100,
+      "evidence": [
+        "CAMPAIGN.md",
+        "docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json"
+      ],
+      "scope": "Literal whole selected/emitted ownership manifest only; four reviewed live project-C functions remain. E2/E3/C retirement/native/parent acceptance stay open."
+    },
+    {
+      "id": "M14-I01-E2",
+      "status": "demonstrated_at_stated_scope",
+      "percent_complete": 100,
+      "evidence": [
+        "CAMPAIGN.md",
+        "docs/verification/m14-default-ownership-20261114/NEXT-ADJUDICATION.json",
+        "docs/verification/m14-default-ownership-20261114/ROOT-NEXT-THREE-COMPLETIONS.json"
+      ],
+      "scope": "Exact accepted selected-compute SOURCE/ABI/IMAGE condition; holds/native behavior separate"
+    },
+    {
+      "id": "M14-I01-E3",
+      "status": "demonstrated_at_stated_scope",
+      "percent_complete": 100,
+      "evidence": [
+        "CAMPAIGN.md",
+        "docs/verification/m14-default-ownership-20261114/NEXT-ADJUDICATION.json",
+        "docs/verification/m14-default-ownership-20261114/ROOT-NEXT-THREE-COMPLETIONS.json"
+      ],
+      "scope": "Exact accepted selected-compute SOURCE/ABI/IMAGE condition; holds/native behavior separate"
+    }
+  ],
+  "evidence": {
+    "literal_current_ledger": {
+      "path": "/home/holden/mckernel/docs/verification/m14-m15-closure-progress.json",
+      "bytes": 981248,
+      "sha256": "8f119cb6586b3ba8ca0d776b7fce0e4466301970dc625b37e35fd92e26f43da6"
+    },
+    "original_contract": {
+      "path": "/home/holden/mckernel/docs/verification/os-milestones-20260914/rust-cutover-m14.json",
+      "bytes": 260383,
+      "sha256": "5d7993733de4338fb8cfe2047d7dbbcc12ea5992dcf2239830c221a629515f03"
+    },
+    "accepted_E1_independent_review": {
+      "path": "/home/holden/mckernel/docs/verification/m14-current-image-20261111/i01-ownership-manifest-e1-1/independent-review/REVIEW.json",
+      "bytes": 11011,
+      "sha256": "956fecb27ed293d818efe8bea692819e98dc1bc83323f3e59a83d25a8bdd5fcd"
+    },
+    "complete_historical_E1_manifest": {
+      "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/SELECTED-EMITTED-OWNERSHIP-MANIFEST.json",
+      "bytes": 28372,
+      "sha256": "0bfd151b0a7fc5e53a337762e675834cf20bec88edaa30989c28017822827a73"
+    },
+    "accepted_successor_full_clause_manifest": {
+      "path": "/home/holden/mckernel/docs/verification/m14-default-ownership-20261114/NEXT-ADJUDICATION.json",
+      "bytes": 60997,
+      "sha256": "cd01149c76ce5bb6cc4833105af1d26c8030211d872350fb01c79a96fb65a67a"
+    },
+    "Root_E2_E3_completion": {
+      "path": "/home/holden/mckernel/docs/verification/m14-default-ownership-20261114/ROOT-NEXT-THREE-COMPLETIONS.json",
+      "bytes": 2321,
+      "sha256": "3fa0bee4a655c5eee991727e3f996869c4c9a8b78ca4151d55abcfdd0309a936"
+    },
+    "reused_F03_complete_source_image_review": {
+      "path": "/home/holden/mckernel-work/c4-coherent-image-20261114/whole-f03-default-adjudication-1/ADJUDICATION.json",
+      "bytes": 20761,
+      "sha256": "7c96e8a20ad63d95ff6b7696959296d7a1722e4c026cd48278b754f2f9db1e70"
+    },
+    "actual_whole_Rust_result": {
+      "path": "/home/holden/mckernel-work/c4-coherent-image-20261114/hosted-whole-crate-1/RESULT.json",
+      "bytes": 11769,
+      "sha256": "39b87b35ba4615ed15192a1b05055da31473c044dffe354f30b983712bd51e23"
+    },
+    "actual_affected_C_ABI_result": {
+      "path": "/home/holden/mckernel-work/c4-coherent-image-20261114/hosted-c-object-1/downloaded/RESULT.json",
+      "bytes": 6515,
+      "sha256": "0803785fd6fb7162df224ba0214d89a94f3193869a5b74401a63c7fa9734595e"
+    },
+    "actual_final13_image_result": {
+      "path": "/home/holden/mckernel-work/c4-coherent-image-20261114/hosted-image-link-1/artifact/RESULT.json",
+      "bytes": 19677,
+      "sha256": "b74b7a00785193e46fa82bebb56f16d218f44b3aeb855e5ea7e5049eb410944e"
+    }
+  },
+  "cohort_join": {
+    "historical_E1": "Accepted c964/a2f full selected-source/header/macro/callback/unknown/provider map, including159 selected Rust paths,13 constituents and exhaustive physical classifications; its four-C limit remains historical and unchanged.",
+    "current_successor": "Accepted NEXT-ADJUDICATION embeds explicit current13 constituents and original six-file implementation map: eleven exact unchanged inputs retained, old genericC/wholeRust replaced with actual C4 complete production Rust cab24c893663a7c5c70f048e0496c3ea32edc1cfbfde3ca1dc7b9cf3b94dd875 and selected C c23dce74540c9290966c82e9af36f26efa007b877a1a653a72159060e3556516. Actual final c818df7cd8478eab94ed5f599bfb616469d0e1d2eeaf6b62ea6c1d2145bd71dc uses exactly that ordered13-input recipe.",
+    "complete_source_selection": "Full original file/region Rust/allowed-assembly mappings are retained; all five F03 regions now have complete technical DEFAULT proof. Four remaining exec/UTI bodies have complete reviewed Rust implementations, paired automatic ordinary-profile C/Rust selections, real production emission and actual unique final link definitions. Our reused F03 review compared ten relevant current selector/body/header/ABI files byte-identically with the qualified7cc4 C4 source.",
+    "ABI_provider": "Actual new input/final35-word C/Rust equality plus retained typed104-word/header/callback/provider contracts, matching genuine Rust core/integer builtins, no named UND/unknown required owners/unreviewed project C. Old per-symbol addresses are not relabeled as c818; unchanged input classifications and explicit two-object successor join supply provenance.",
+    "profile_limit": "Qualified ordinary x86_64/Rocky Linux6.12 IRQ-work C4 image cohort only. No claim of a new whole-current-HEAD build, normal CMake regeneration, loaded deployment or native adoption."
+  },
+  "original_literal_clause_decisions": [
+    {
+      "clause": "Reconcile all emitted executable implementation with the final selected sources and link inputs.",
+      "verdict": "SATISFIED",
+      "basis": "Accepted complete E1 coverage plus explicit current C4 successor manifest and actual exact13-input full executable image. Source/default selection, complete implementation maps, actual code/provider/ABI and final unique definitions are joined; no old address, partial helper, symbol-count shortcut or HOST fixture is substituted."
+    },
+    {
+      "clause": "Zero live McKernel-owned compute-C implementations; resolve unknown owners and included-header/macro bodies.",
+      "verdict": "SATISFIED_AT_FINAL_IMAGE_OWNERSHIP_SCOPE",
+      "basis": "Accepted E1 distinguishes project runtime from legitimate platform/upstream/generated data, covers header-inline/macro/local/padding/callback sources and all prior unknown owners. E2/E3 explicitly retain that coverage and close exactly the remaining four C4 implementations. Current seven C-origin/ABI TUs emit no executable implementation; three permitted architecture assembly inputs and genuine Rust crate/core/builtins provide live code. C data carriers remain honestly C-origin DATA. Complete original replacement maps, not compiler elision alone, justify ownership retirement."
+    },
+    {
+      "clause": "Check the ABI witness stubs are absent/inert at runtime rather than assuming every C input requires porting.",
+      "verdict": "SATISFIED_BY_SAVED_OBJECT_SOURCE_AND_FINAL_SYMBOL_EVIDENCE",
+      "basis": "Unchanged f8deda08 abi_checks.c declares only static local unused XPMEM witness bodies and compile-time assertions. Its exact unchanged e139686a object has zero runtime FUNC rows/bytes, zero strong imports and zero global/weak definitions/imports in accepted E1; exact same object is an actual c818 input. All five local witness-stub names are absent from saved c818 symbols. New exec35 ABI witnesses are actual280-byte OBJECT constant arrays with static_assert/const initializers, not executable replacement stubs or runtime callbacks."
+    },
+    {
+      "clause": "If another active file is discovered, add it with provenance.",
+      "verdict": "NO_UNACCOUNTED_ACTIVE_FILE_FOUND",
+      "basis": "Complete prior source/include/dependency map and explicit successor Rust modules/data providers/default selector are accounted by actual whole-crate compile and current manifest. No new unexplained compute-C constituent or required owner is discovered. This does not assert an unrelated supported profile is inventoried."
+    }
+  ],
+  "exact_witness_support": {
+    "current_abi_check_source": {
+      "path": "/home/holden/mckernel/kernel/rust/abi_checks.c",
+      "bytes": 65125,
+      "sha256": "f8deda08de0eccda152a6416a01bec00e6984c1cf4c998e9ca877b1bbe31c23a"
+    },
+    "reused_unchanged_abi_object_row": {
+      "classification": "original selected C/ABI translation unit emits no executable implementation at current scope; Rust replacement relies on existing accepted file/region proofs, not elision alone",
+      "global_definitions": 0,
+      "identity": {
+        "bytes": 2880,
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/compute-image-source-1/output/build/kernel/CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+        "sha256": "e139686acfa04f6d7576da5656693d13c4235e5beefb7f8ae3c9f7ccf03ea9b0"
+      },
+      "object": "CMakeFiles/mckernel.img.dir/rust/abi_checks.c.o",
+      "runtime_FUNC_rows": 0,
+      "runtime_FUNC_size_sum": 0,
+      "strong_imports": 0,
+      "weak_definitions": 0,
+      "weak_imports": 0
+    },
+    "saved_final_symbol_text": {
+      "path": "/home/holden/mckernel-work/c4-coherent-image-20261114/hosted-image-link-1/artifact/elf-symbols.txt",
+      "bytes": 532854,
+      "sha256": "2bf56a8957b3f5b072445fffcfb7b9dbcc2f7caba53854f155ae612b8a0c3230"
+    },
+    "local_witness_name_occurrences": {
+      "__xpmem_tg_ref_by_tgid_nolock_internal": 0,
+      "xpmem_tg_deref": 0,
+      "xpmem_seg_deref": 0,
+      "xpmem_ap_deref": 0,
+      "xpmem_att_deref": 0
+    },
+    "new_35word_witnesses": "f03_execveat_complete_c_abi_words and f03_execveat_complete_rust_abi_words are each280-byte OBJECT in saved final symtab; source C const unsigned long array/Rust pub static array. No runtime function is supplied by either array."
+  },
+  "ACCEPT_clause_decision": {
+    "literal": "Every applicable original child condition is demonstrated on the required matching supported cohort and the original gate is explicitly accepted. M15 final acceptance follows M14. Existing accepted scopes stay closed.",
+    "verdict": "ALL_APPLICABLE_CHILD_CONDITIONS_SATISFIED; ROOT_EXPLICIT_ACCEPTANCE_IS_FINAL_REMAINING_RECORD",
+    "basis": "E1/E2/E3 are each100 at their exact original scope, and the historical E1\u2192C4 successor join above addresses the matching-cohort requirement. This review recommends original I01 ownership acceptance; it does not itself record that acceptance. Existing accepted scopes stay closed and M14 final remains before M15 final."
+  },
+  "verification_method_scope": "The original I01 requirement is final compute source/image ownership. Applicable source/build/ABI/provider and actual artifact/capture/cleanup evidence is retained at exact scope. Separate application behavior, deployment/native/lifetime/resource-restoration criteria are neither imported as new quotas into I01 nor waived/passed by this review. No skipped/UNKNOWN runtime outcome is credited.",
+  "missing_original_I01_clause": null,
+  "minimum_new_operation": "None. Root may explicitly accept original M14-I01 using this literal ownership review and retained proof; no tests/compiler/link/container/native/normal-CMake or broad inventory rerun is needed.",
+  "preserved_limits": [
+    "All actual held generic/exec/ACK/TID/XPMEM/source/SDK/native12/account/resource/custody/lease/IPC/globalUNKNOWN and rejected-task constraints",
+    "No loaded-native C retirement or c818 adoption/substitution into a frozen native packet",
+    "No M14-I02/I03, F03/F06 FUNCTIONAL/file acceptance, whole M14/M15 or complete-system acceptance",
+    "No goal/credit/config/runtime-state/canonical/acceptance ledger mutation"
+  ],
+  "review_actions": "Read current CAMPAIGN and exact original/current task/accepted machine evidence; inspect only relevant witness source and five exact names/two OBJECT rows in saved final symbol text; reuse actual artifacts/qualifications. No old narrative logs, execution, test, download, compiler, container, native action, binary hash inventory or queued instruction.",
+  "new_canonical_acceptance_or_score_mutation": false
+}
