@@ -1,5 +1,5 @@
-"""Offline resource policy tests; no launcher, inference, build or guest runs."""
-
+"""Offline resource policy: mocked planning and explicit accounting, no payloads."""
+import copy
 import importlib.util
 import json
 import os
@@ -8,253 +8,233 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-
 SOURCE = Path(__file__).resolve().parents[1] / "os_goal_resources.py"
 SPEC = importlib.util.spec_from_file_location("os_goal_resources", SOURCE)
 resources = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(resources)
-GIB = 1024 ** 3
+GIB, MIB = 1024 ** 3, 1024 ** 2
 REPO = SOURCE.parents[1]
 
 
 class ResourceTests(unittest.TestCase):
-    def host(self, cpus=(2, 4, 6, 8, 10, 12, 14, 16), memory=64,
-             host_free=64 * GIB, scratch_free=32 * GIB, mounted=True):
-        """Mock OS observations, keeping the actual resolver and policy intact."""
-        def disk_usage(path):
-            self.assertIn(Path(path), (REPO, resources.SCRATCH))
-            return SimpleNamespace(free=scratch_free if Path(path) == resources.SCRATCH else host_free)
-
+    def host(self, cpus=range(8), memory=64, host_free=64 * GIB,
+             scratch_free=32 * GIB, mounted=True):
         def start(target, **kwargs):
             patcher = patch(target, **kwargs)
             result = patcher.start()
             self.addCleanup(patcher.stop)
             return result
-
         self.affinity = start("os.sched_getaffinity", return_value=set(cpus))
         self.set_affinity = start("os.sched_setaffinity", side_effect=AssertionError("affinity mutation"))
         self.meminfo = start("pathlib.Path.read_text", return_value=(
-            "MemTotal:       999999999 kB\nMemFree: 1 kB\n"
-            "MemAvailable:   {} kB\nSwapFree: 999999999 kB\n".format(int(memory * 1024 ** 2))))
-        self.mount = start("os.path.ismount", return_value=mounted)
-        self.disk = start("shutil.disk_usage", side_effect=disk_usage)
+            "MemTotal: 999999999 kB\nMemFree: 1 kB\nMemAvailable: {} kB\n"
+            .format(int(memory * 1024 ** 2))))
+        start("os.path.ismount", return_value=mounted)
+        start("shutil.disk_usage", side_effect=lambda path: SimpleNamespace(
+            free=scratch_free if Path(path) == resources.SCRATCH else host_free))
 
-    def test_aggressive_roomy_affinity_ceiling_and_json(self):
+    def test_profiles_cap_host_and_keep_native_separate(self):
         self.host()
-        result = resources.resolve_resources(repo=REPO)
-        self.assertEqual((result["profile"], result["max_agents"], result["build_jobs"],
-                          result["memory_gib"]), ("aggressive", 8, 8, 24))
-        self.assertEqual(result["cpu_affinity"], [2, 4, 6, 8, 10, 12, 14, 16])
-        self.assertEqual(result["cpu_count"], 8)
-        self.assertEqual(result["available_memory_gib"], 64)
-        self.assertEqual((result["memory_reserve_gib"], result["agent_memory_gib"]), (4, 2))
-        self.assertEqual((result["max_depth"], result["heavy_jobs"]), (1, 1))
-        self.assertEqual(json.loads(json.dumps(result, allow_nan=False)), result)
-        self.assertIsNone(resources.check_resources(result))
-        self.affinity.assert_called_once_with(0)
+        for profile in ("aggressive", "balanced"):
+            result = resources.resolve_resources(profile, repo=REPO)
+            self.assertEqual((result["max_agents"], result["build_jobs"], result["memory_gib"]),
+                             (6, 3, 4))
+            self.assertEqual(result["cpu_affinity"], [0, 6, 7])
+            self.assertEqual(result["observed_cpu_affinity"], list(range(8)))
+            self.assertEqual(result["native"], {
+                "cpu_affinity": [2, 3, 4, 5], "memory_gib": 12,
+                "max_owners": 1, "separate_admission_required": True})
+            self.assertIsNone(result["agent_memory_gib"])
+            self.assertTrue(result["payload_admission_required"])
+            self.assertEqual(json.loads(json.dumps(result, allow_nan=False)), result)
+            self.assertIsNone(resources.check_resources(result))
         self.set_affinity.assert_not_called()
-        self.assertEqual(result["host_disk"], {"path": str(REPO), "free_gib": 64, "min_free_gib": 16})
-        self.assertEqual(result["scratch_disk"], {"path": str(resources.SCRATCH), "mounted": True,
-                                                   "free_gib": 32, "min_free_gib": 12})
 
-    def test_defaults_follow_cpu_and_available_memory(self):
-        for cpus, memory, expected in (([7], 64, (2, 1, 24)),
-                                      ([2, 9], 64, (4, 2, 24)),
-                                      ([2, 9], 12, (4, 2, 8)),
-                                      ([2, 9], 11.5, (3, 2, 7.5)),
-                                      ([2, 9], 7, (1, 2, 3)),
-                                      (range(7), 64, (8, 7, 24)),
-                                      (range(32), 10, (3, 32, 6)),
-                                      (range(32), 64, (8, 32, 24)),
-                                      ([7], 4.5, (1, 1, 0.5))):
-            with self.subTest(cpus=cpus, memory=memory):
-                self.host(cpus=cpus, memory=memory)
-                result = resources.resolve_resources()
-                self.assertEqual(tuple(result[k] for k in ("max_agents", "build_jobs", "memory_gib")), expected)
-                self.assertIsNone(resources.check_resources(result))
+    def test_six_remote_slots_do_not_reserve_six_payload_slices(self):
+        self.host(cpus=[7], memory=5)
+        result = resources.resolve_resources()
+        self.assertEqual((result["max_agents"], result["build_jobs"], result["memory_gib"]), (6, 1, 1))
+        self.assertEqual(resources.resolve_resources(memory_gib=0.5)["max_agents"], 6)
+        self.assertEqual(resources.resolve_resources(max_agents=2)["max_agents"], 2)
 
-    def test_balanced_caps_and_constrained_host(self):
-        for cpus, memory, expected in ((range(32), 64, (3, 4, 12)),
-                                      ([2, 9], 64, (2, 2, 12)),
-                                      ([7], 7, (1, 1, 3))):
-            with self.subTest(cpus=cpus):
-                self.host(cpus=cpus, memory=memory)
-                result = resources.resolve_resources("balanced")
-                self.assertEqual(result["profile"], "balanced")
-                self.assertEqual(tuple(result[k] for k in ("max_agents", "build_jobs", "memory_gib")), expected)
-
-    def test_overrides_and_shared_memory_reduce_agent_capacity(self):
-        self.host()
-        result = resources.resolve_resources(max_agents=2, build_jobs=3, memory_gib=5.5)
-        self.assertEqual((result["max_agents"], result["build_jobs"], result["memory_gib"]), (2, 3, 5.5))
-        self.assertEqual(resources.resolve_resources(memory_gib=5.5)["max_agents"], 2)
-        with self.assertRaisesRegex(ValueError, "max_agents"):
-            resources.resolve_resources(max_agents=3, memory_gib=5.5)
-
-    def test_explicit_agents_can_exceed_aggressive_default_with_capacity(self):
+    def test_invalid_or_overlarge_overrides_never_expand_pool(self):
         self.host(cpus=range(32))
-        self.assertEqual(resources.resolve_resources(max_agents=12)["max_agents"], 12)
-        with self.assertRaisesRegex(ValueError, "max_agents"):
-            resources.resolve_resources(max_agents=13)
-
-    def test_extra_source_agents_do_not_expand_shared_execution_budget(self):
-        self.host(cpus=[2, 9])
-        result = resources.resolve_resources(max_agents=4)
-        self.assertEqual(result["build_jobs"], 2)
-        self.assertEqual(resources.resource_environment(result)["MAKEFLAGS"], "-j2")
-        self.assertIn("aggregate 2-job/24-GiB", resources.resource_instructions(result))
-        with self.assertRaisesRegex(ValueError, "max_agents"):
-            resources.resolve_resources(max_agents=5)
-        with self.assertRaisesRegex(ValueError, "build_jobs"):
-            resources.resolve_resources(max_agents=4, build_jobs=3)
-        with self.assertRaisesRegex(ValueError, "max_agents"):
-            resources.resolve_resources(max_agents=4, memory_gib=7.5)
-        self.assertEqual(resources.resolve_resources(build_jobs=1)["max_agents"], 4)
-
-    def test_override_validation_and_capacity(self):
-        self.host(cpus=[2, 7], memory=9)
-        for name in ("max_agents", "build_jobs", "memory_gib"):
-            for value in (0, -1, float("nan"), float("inf"), -float("inf"), True, "2", [], 10 ** 1000):
-                with self.subTest(name=name, value=repr(value)[:30]):
-                    with self.assertRaisesRegex(ValueError, name):
-                        resources.resolve_resources(**{name: value})
-        for name in ("max_agents", "build_jobs"):
-            for value in (1.5, 3):
-                with self.subTest(name=name, value=value):
-                    with self.assertRaisesRegex(ValueError, name):
-                        resources.resolve_resources(**{name: value})
-        with self.assertRaisesRegex(ValueError, "memory_gib"):
-            resources.resolve_resources(memory_gib=5.0001)
-        result = resources.resolve_resources(max_agents=2.0, build_jobs=2.0, memory_gib=5)
-        self.assertEqual((result["max_agents"], result["build_jobs"], result["memory_gib"]), (2, 2, 5))
-        self.assertIsInstance(result["max_agents"], int)
-        self.assertIsInstance(result["build_jobs"], int)
-        with self.assertRaisesRegex(ValueError, "profile"):
-            resources.resolve_resources("unknown")
-
-    def test_profile_ceilings_apply_to_explicit_overrides(self):
-        self.host(cpus=range(32))
-        for profile, kwargs in (("balanced", {"max_agents": 4}),
-                                ("balanced", {"build_jobs": 5}),
-                                ("balanced", {"memory_gib": 12.01}),
-                                ("aggressive", {"memory_gib": 24.01})):
-            with self.subTest(profile=profile, kwargs=kwargs):
+        for profile in ("aggressive", "balanced"):
+            for kwargs in ({"max_agents": 7}, {"build_jobs": 4}, {"memory_gib": 4.01}):
                 with self.assertRaises(ValueError):
                     resources.resolve_resources(profile, **kwargs)
+        for name in ("max_agents", "build_jobs", "memory_gib"):
+            for value in (0, -1, float("nan"), float("inf"), True, "2", [], 10 ** 1000):
+                with self.subTest(name=name, value=repr(value)[:20]):
+                    with self.assertRaises(ValueError):
+                        resources.resolve_resources(**{name: value})
+        for name in ("max_agents", "build_jobs"):
+            with self.assertRaises(ValueError):
+                resources.resolve_resources(**{name: 1.5})
+        with self.assertRaises(ValueError):
+            resources.resolve_resources("unknown")
 
-    def test_no_memory_headroom_reports_but_blocks_launch(self):
-        for available in (0, 3, 4):
-            with self.subTest(available=available):
-                self.host(memory=available)
-                result = resources.resolve_resources()
-                self.assertEqual(result["max_agents"], 1)
-                self.assertEqual(result["memory_gib"], 0)
-                json.dumps(result, allow_nan=False)
-                with self.assertRaisesRegex(RuntimeError, "host reserve"):
-                    resources.check_resources(result)
-                with self.assertRaisesRegex(ValueError, "memory_gib"):
-                    resources.resolve_resources(memory_gib=0.5)
+    def test_native_only_affinity_never_becomes_host_or_unlimited_make(self):
+        self.host(cpus=[2, 3, 4, 5])
+        result = resources.resolve_resources()
+        self.assertEqual((result["cpu_affinity"], result["build_jobs"]), ([], 0))
+        with self.assertRaisesRegex(RuntimeError, "No campaign HOST CPU"):
+            resources.check_resources(result)
+        with self.assertRaises(ValueError):
+            resources.resource_environment(result)
+        self.set_affinity.assert_not_called()
 
-    def test_memavailable_is_required_not_total_free_or_swap(self):
-        self.host()
-        for content in ("MemTotal: 999999999 kB\nMemFree: 999999 kB\n",
-                        "MemAvailable: invalid kB\n", "MemAvailable: -1 kB\n",
-                        "MemAvailable: 123 GiB\n", "MemAvailable:\n"):
-            with self.subTest(content=content):
-                self.meminfo.return_value = content
-                with self.assertRaisesRegex(RuntimeError, "MemAvailable"):
-                    resources.resolve_resources()
-
-    def test_measurement_errors_do_not_invent_capacity(self):
+    def test_unknown_or_insufficient_capacity_does_not_invent_headroom(self):
         self.host()
         self.affinity.side_effect = OSError("affinity unavailable")
-        with self.assertRaisesRegex(OSError, "affinity"):
+        with self.assertRaises(OSError):
             resources.resolve_resources()
         self.affinity.side_effect = None
         self.affinity.return_value = set()
         with self.assertRaisesRegex(RuntimeError, "No CPUs"):
             resources.resolve_resources()
-        self.affinity.return_value = {2}
-        self.meminfo.side_effect = OSError("meminfo unavailable")
-        with self.assertRaisesRegex(OSError, "meminfo"):
+        self.affinity.return_value = {7}
+        self.meminfo.return_value = "MemTotal: 9999999 kB\n"
+        with self.assertRaisesRegex(RuntimeError, "MemAvailable"):
             resources.resolve_resources()
-        self.meminfo.side_effect = None
-        self.disk.side_effect = OSError("disk unavailable")
-        with self.assertRaisesRegex(OSError, "disk"):
-            resources.resolve_resources()
+        self.host(memory=4)
+        result = resources.resolve_resources()
+        self.assertEqual(result["memory_gib"], 0)
+        with self.assertRaisesRegex(RuntimeError, "host reserve"):
+            resources.check_resources(result)
 
-    def test_disk_floors_allow_equality_reject_one_byte_below(self):
-        for host_free, scratch_free, passes in ((16 * GIB, 12 * GIB, True),
-                                               (16 * GIB - 1, 12 * GIB, False),
-                                               (16 * GIB, 12 * GIB - 1, False),
-                                               (0, 0, False)):
-            with self.subTest(host_free=host_free, scratch_free=scratch_free):
-                self.host(host_free=host_free, scratch_free=scratch_free)
-                result = resources.resolve_resources(repo=str(REPO))
-                self.assertEqual(result["host_disk"]["free_gib"], host_free / GIB)
-                self.assertEqual(result["scratch_disk"]["free_gib"], scratch_free / GIB)
-                json.dumps(result, allow_nan=False)  # A low-space dry run still reports.
-                if passes:
-                    self.assertIsNone(resources.check_resources(result))
-                else:
-                    with self.assertRaisesRegex(RuntimeError, "requires at least"):
-                        resources.check_resources(result)
-
-    def test_scratch_is_measured_only_if_mounted(self):
-        self.host(mounted=False, scratch_free=0)
+    def test_planning_floors_environment_and_no_payload_grant(self):
+        self.host(host_free=16 * GIB, scratch_free=12 * GIB)
         result = resources.resolve_resources(repo=REPO)
-        self.assertFalse(result["scratch_disk"]["mounted"])
-        self.assertIsNone(result["scratch_disk"]["free_gib"])
-        self.disk.assert_called_once_with(REPO)
-        self.mount.assert_called_once_with(resources.SCRATCH)
         self.assertIsNone(resources.check_resources(result))
-
-    def test_packet_can_raise_but_cannot_lower_disk_floors(self):
-        self.host(host_free=20 * GIB, scratch_free=14 * GIB)
-        for key, floor in (("host_disk", 21), ("scratch_disk", 15)):
-            with self.subTest(key=key):
-                result = resources.resolve_resources()
-                result[key]["min_free_gib"] = floor
-                with self.assertRaisesRegex(RuntimeError, "at least " + str(floor)):
-                    resources.check_resources(result)
-        self.host(host_free=15 * GIB, scratch_free=11 * GIB)
+        with patch.dict(os.environ, {"MAKEFLAGS": "-j999", "UNRELATED": "keep"}, clear=True):
+            before = dict(os.environ)
+            env = resources.resource_environment(result)
+            self.assertEqual(dict(os.environ), before)
+            self.assertEqual((env["MAKEFLAGS"], env["CARGO_BUILD_JOBS"], env["MCKERNEL_OS_MEMORY_GIB"]),
+                             ("-j3", "3", "4"))
+            self.assertEqual(env["MCKERNEL_OS_MAX_AGENTS"], "6")
+        with self.assertRaisesRegex(ValueError, "explicit payload accounting"):
+            resources.check_payload_admission(result, {}, now_utc_ns=1, now_mono_ns=1)
+        self.host(host_free=16 * GIB - 1, scratch_free=12 * GIB - 1)
         result = resources.resolve_resources()
         result["host_disk"]["min_free_gib"] = 1
         result["scratch_disk"]["min_free_gib"] = 1
         with self.assertRaisesRegex(RuntimeError, "at least 16.*at least 12"):
             resources.check_resources(result)
 
-    def test_environment_is_only_overrides_and_never_mutates_process(self):
-        self.host()
-        with patch.dict(os.environ, {"MAKEFLAGS": "-j999", "CARGO_BUILD_JOBS": "999",
-                                     "MCKERNEL_OS_MAX_AGENTS": "999", "UNRELATED": "keep"}, clear=True):
-            before = dict(os.environ)
-            result = resources.resolve_resources(max_agents=2, build_jobs=3, memory_gib=5.5)
-            overrides = resources.resource_environment(result)
-            self.assertEqual(dict(os.environ), before)
-            self.assertEqual(overrides, {
-                "MAKEFLAGS": "-j3", "CMAKE_BUILD_PARALLEL_LEVEL": "3", "CARGO_BUILD_JOBS": "3",
-                "MCKERNEL_OS_RESOURCE_PROFILE": "aggressive", "MCKERNEL_OS_MAX_AGENTS": "2",
-                "MCKERNEL_OS_BUILD_JOBS": "3", "MCKERNEL_OS_MEMORY_GIB": "5.5",
-                "MCKERNEL_OS_MAX_DEPTH": "1", "MCKERNEL_OS_HEAVY_JOBS": "1"})
-            self.assertEqual(dict(before, **overrides)["UNRELATED"], "keep")
-            self.assertNotIn("UNRELATED", overrides)
 
-    def test_instructions_share_budgets_and_preserve_reviewed_execution(self):
-        self.host()
-        text = resources.resource_instructions(resources.resolve_resources(build_jobs=6))
-        for expected in ("profile aggressive", "8 child agents", "no recursive",
-                         "one heavy build/guest at a time", "disjoint source", "light-test",
-                         "aggregate 6-job/24-GiB", "divide jobs", "older coordinator caps only",
-                         "CPUs 2-5", "12 GiB", "no network", "independent execution review",
-                         "launcher's process tree", "does not forward these variables",
-                         "automatically resize containers", "currently -j<=4",
-                         "not an enforced cgroup limit", "Do not widen affinity",
-                         "16/12 GiB", "greater measured packet",
-                         "Multiple light Docker checks may overlap",
-                         "disjoint output roots", "measured shared CPU/RAM/",
-                         "do not create another heavy build/guest lease"):
-            self.assertIn(expected, text)
+class PayloadAdmissionTests(unittest.TestCase):
+    def setUp(self):
+        self.utc, self.mono = 9_000_000_000_000_000_000, 100_000_000_000
+        self.snapshot = {
+            "observed_utc_ns": self.utc - 1_000_000_000,
+            "observed_mono_ns": self.mono - 1_000_000_000,
+            "cpu_affinity": list(range(8)), "MemAvailable_bytes": 26 * GIB,
+            "host_free_bytes": 17 * GIB, "scratch_free_bytes": 13 * GIB,
+            "retained_charges_complete": True,
+            "retained_charges": [
+                {"owner": "original-publisher", "planning_bytes": 2 * GIB, "jobs": 1, "state": "UNKNOWN"},
+                {"owner": "unjoined-reader", "planning_bytes": 256 * MIB, "jobs": 1, "state": "RETAINED"}],
+            "controller_worker_overhead_bytes": 128 * MIB,
+            "all_controller_worker_overhead_measured": True, "exclusive_scope_compatible": True}
+        self.request = {"CPU": [7], "planning_bytes": 768 * MIB, "jobs": 1,
+                        "host_floor_bytes": 17 * GIB, "scratch_floor_bytes": 13 * GIB,
+                        "max_age_ns": 25_000_000_000}
+
+    def check(self, snapshot=None, request=None, **clocks):
+        return resources.check_payload_admission(
+            self.snapshot if snapshot is None else snapshot,
+            self.request if request is None else request,
+            now_utc_ns=clocks.get("utc", self.utc), now_mono_ns=clocks.get("mono", self.mono))
+
+    def test_retained_225_gib_jobs2_survives_logical_slot_release(self):
+        before = copy.deepcopy((self.snapshot, self.request))
+        result = self.check()
+        self.assertEqual((result["retained_bytes"], result["retained_jobs"]), (2 * GIB + 256 * MIB, 2))
+        self.assertEqual((result["accounted_total_bytes"], result["accounted_total_jobs"]),
+                         (3 * GIB + 128 * MIB, 3))
+        self.assertEqual(result["scope"], "HOST_resource_check_only")
+        with self.assertRaisesRegex(RuntimeError, "Retained charges"):
+            self.check(request=dict(self.request, planning_bytes=2 * GIB))
+        self.assertEqual((self.snapshot, self.request), before)
+
+    def test_exact_total_equality_passes_one_byte_or_job_over_fails(self):
+        exact = 4 * GIB - (2 * GIB + 256 * MIB) - 128 * MIB
+        self.assertEqual(self.check(request=dict(self.request, planning_bytes=exact))[
+            "accounted_total_bytes"], 4 * GIB)
+        for request in (dict(self.request, planning_bytes=exact + 1), dict(self.request, jobs=2)):
+            with self.assertRaisesRegex(RuntimeError, "4 GiB/max3"):
+                self.check(request=request)
+
+    def test_missing_live_fields_never_default_to_zero(self):
+        for field in self.snapshot:
+            snapshot = copy.deepcopy(self.snapshot)
+            del snapshot[field]
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                self.check(snapshot=snapshot)
+        for field in self.request:
+            request = dict(self.request)
+            del request[field]
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                self.check(request=request)
+
+    def test_incomplete_accounting_unknown_exclusivity_or_overhead_denies(self):
+        for field in ("retained_charges_complete", "all_controller_worker_overhead_measured",
+                      "exclusive_scope_compatible"):
+            for value in (False, None, "UNKNOWN", 1):
+                with self.subTest(field=field, value=value), self.assertRaises(RuntimeError):
+                    self.check(snapshot=dict(self.snapshot, **{field: value}))
+        for value in (0, None, False, 1.0):
+            with self.assertRaises(ValueError):
+                self.check(snapshot=dict(self.snapshot, controller_worker_overhead_bytes=value))
+        self.assertEqual(self.check(snapshot=dict(self.snapshot, retained_charges=[]))["retained_bytes"], 0)
+        for change in ({"state": "closed"}, {"planning_bytes": None}, {"jobs": False},
+                       {"planning_bytes": 0}, {"jobs": 0}):
+            snapshot = copy.deepcopy(self.snapshot)
+            snapshot["retained_charges"][0].update(change)
+            with self.assertRaises(ValueError):
+                self.check(snapshot=snapshot)
+
+    def test_same_root_multiple_families_are_all_counted_not_one_agent_slot(self):
+        snapshot = copy.deepcopy(self.snapshot)
+        for row in snapshot["retained_charges"]:
+            row["owner"] = "same-root"
+        result = self.check(snapshot=snapshot)
+        self.assertEqual((result["retained_bytes"], result["retained_jobs"]),
+                         (2 * GIB + 256 * MIB, 2))
+        with self.assertRaises(RuntimeError):
+            self.check(snapshot=snapshot, request=dict(self.request, planning_bytes=2 * GIB))
+
+    def test_native_or_unmeasured_cpus_never_become_host_capacity(self):
+        for cpus in ([2], [1], [7, 7], [True]):
+            with self.subTest(cpus=cpus), self.assertRaises((ValueError, RuntimeError)):
+                self.check(request=dict(self.request, CPU=cpus))
+        with self.assertRaises(RuntimeError):
+            self.check(snapshot=dict(self.snapshot, cpu_affinity=[0]))
+
+    def test_paired_clocks_must_be_fresh_not_future_or_incoherent(self):
+        self.check(utc=self.utc + 24_000_000_000, mono=self.mono + 24_000_000_000)
+        for clocks in ({"utc": self.utc + 24_000_000_001, "mono": self.mono + 24_000_000_001},
+                       {"utc": self.utc - 2_000_000_000}, {"mono": self.mono - 2_000_000_000},
+                       {"utc": self.utc + 2_000_000_000}):
+            with self.subTest(clocks=clocks), self.assertRaises(RuntimeError):
+                self.check(**clocks)
+        with self.assertRaises(ValueError):
+            self.check(request=dict(self.request, max_age_ns=25_000_000_001))
+        with self.assertRaises(ValueError):
+            self.check(utc=float(self.utc))
+
+    def test_26_gib_and_exact_packet_disk_floors_cannot_be_lowered(self):
+        self.check()
+        for field in ("MemAvailable_bytes", "host_free_bytes", "scratch_free_bytes"):
+            snapshot = dict(self.snapshot)
+            snapshot[field] -= 1
+            with self.subTest(field=field), self.assertRaises(RuntimeError):
+                self.check(snapshot=snapshot)
+        for field, value in (("host_floor_bytes", 16 * GIB - 1), ("scratch_floor_bytes", 12 * GIB - 1)):
+            with self.assertRaises(ValueError):
+                self.check(request=dict(self.request, **{field: value}))
 
 
 if __name__ == "__main__":

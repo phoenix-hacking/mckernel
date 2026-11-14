@@ -1,0 +1,33 @@
+name: Continuous harness offline qualification
+on:
+  push:
+    branches: ['codex/continuous-harness-*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts
+          submodules: false
+          lfs: false
+      - name: Functional harness fake transport tests
+        env:
+          PYTHONPATH: scripts
+        run: |
+          python3 -m unittest \
+            scripts.tests.test_os_goal_launcher \
+            scripts.tests.test_os_goal_continuous \
+            scripts.tests.test_os_goal_continuous_eligibility \
+            scripts.tests.test_os_goal_owner_retention \
+            scripts.tests.test_os_goal_custody \
+            scripts.tests.test_os_goal_watcher_retention \
+            scripts.tests.test_os_goal_resources \
+            scripts.tests.test_os_goal_repair \
+            scripts.tests.test_os_goal_credit_timeout \
+            scripts.tests.test_os_goal_recovery \
+            scripts.tests.test_os_goal_timeout_recovery

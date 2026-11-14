@@ -38,6 +38,8 @@ from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure, clas
 from os_goal_stop_log import write_stop_record
 from os_goal_repair import (repair_instruction, blocked_repair_key,
                             blocked_repair_instruction)
+from os_goal_custody import (retention_required, guard_owner_close,
+                             make_retention_record, retention_error)
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -45,6 +47,10 @@ SUDO_HELPER = REPO / "scripts/os_goal_sudo_askpass.py"
 SUDO_CREDENTIAL = Path.home() / ".local/state/mckernel-os-goal/sudo-password"
 PLAN_REL = "docs/verification/os-milestones-20260914"
 CAPTURE_PROGRESS_CAPABILITY = 1
+SAME_OWNER_CONTROL_CAPABILITY = 1
+# Older launchers validate this existing envelope before steering. The reserved,
+# non-registration shape makes them refuse a control command before any turn RPC.
+SAME_OWNER_CONTROL_LEGACY_BARRIER = {"control_only": "resume_same_owner", "capability_version": 1}
 DEFAULT_DISPATCHER_MODEL = "gpt-6.1-sol"
 DEFAULT_DISPATCHER_EFFORT = "max"
 # User preference, 2026-10-30: Sol/max first; capable fallbacks before economy
@@ -55,7 +61,7 @@ DISPATCHER_MODEL_PREFERENCE = (
 )
 DISPATCHER_EFFORT_PREFERENCE = ("max", "ultra", "xhigh", "high")
 DEFAULT_WORKER_MODEL = "gpt-6.1-sol"
-MINIMUM_WORKER_EFFORT = "high"
+MINIMUM_WORKER_EFFORT = "max"
 AUDIT_MODEL = "gpt-6.1-sol"
 REVIEW_MODEL = "gpt-6.1-sol"
 OBJECTIVE = (
@@ -252,13 +258,19 @@ def validate_capture_progress_directory(value):
     return path
 
 
-def queue_instruction(directory, instruction, capture_progress_directory=None, *, source_id=None):
+def queue_instruction(directory, instruction, capture_progress_directory=None, *, source_id=None,
+                      resume_same_owner=False):
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
     if not instruction.strip() or len(instruction.encode("utf-8")) > 8192:
         raise ValueError("Instruction must be nonempty and at most 8192 UTF-8 bytes.")
     item = {"submitted_at": utc(), "text": instruction}
+    if resume_same_owner:
+        if source_id is None or capture_progress_directory is not None:
+            raise ValueError("Same-owner resume requires an explicit source ID and no capture registration")
+        item["control"] = {"kind": "resume_same_owner", "schema_version": 1}
+        item["capture_progress"] = dict(SAME_OWNER_CONTROL_LEGACY_BARRIER)
     if capture_progress_directory is not None:
         path = validate_capture_progress_directory(capture_progress_directory)
         state = json.loads((directory / 'state.json').read_text())
@@ -291,11 +303,20 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
             registry = sources / (digest + ".json")
             prior = json.loads(registry.read_text()) if registry.exists() else None
             if prior:
-                if prior.get("item", {}).get("text_sha256") != item["text_sha256"] or prior["item"].get("source_id") != source_id:
+                prior_item = prior.get("item", {})
+                if (prior_item.get("text_sha256") != item["text_sha256"]
+                        or prior_item.get("source_id") != source_id
+                        or bool(prior_item.get("control")) != resume_same_owner
+                        or resume_same_owner and (prior_item.get("control") or {}).get("kind") != "resume_same_owner"):
                     raise ValueError("Source instruction content changed; refusing replay")
                 if prior.get("status") == "queued" or any((directory / "instructions" / phase / (ident + ".json")).exists()
                         for phase in ("pending", "sending", "delivered", "refused")):
                     return ident
+                item = prior_item  # Recover the original durable publication intent.
+            if resume_same_owner and prior is None:
+                # Only the first publication binds a source. A repeated source
+                # returns its original command, even after the goal changes.
+                item["control"] = same_owner_resume_binding(directory)
             atomic_json(registry, {"status": "intent", "item": item})
             atomic_json(inbox / (ident + ".json"), item)
             atomic_json(registry, {"status": "queued", "item": item})
@@ -305,6 +326,12 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
     item["id"] = ident
     atomic_json(inbox / (ident + ".json"), item)
     return ident
+
+
+def queue_same_owner_resume(directory, instruction, *, source_id):
+    """Queue one explicit control command; never create a server or admit work."""
+    return queue_instruction(directory, instruction, source_id=source_id,
+                             resume_same_owner=True)
 
 
 def progress_report(directory, repo):
@@ -481,6 +508,203 @@ def accepted_account_observation(state, ledger, owner, now_utc_ns, now_mono_ns,
     return dict(newest)
 
 
+def _same_owner_control_blocker(state, current_receipt=None):
+    """Account/service stops block control; scoped execution holds stay intact."""
+    for key in ("stop_reason", "credit_budget_error", "service_hold", "policy_hold",
+                "auth_hold", "billing_hold", "budget_hold", "permission_hold",
+                "transport_uncertain", "pending_request", "account_hold",
+                "accounting_unknown", "budget_unknown", "user_paused", "pause_requested"):
+        if state.get(key):
+            return key
+    if is_policy_stop(state):
+        return "policy_stop"
+    from os_goal_guard_protocol import recovery_blocker
+    projection = {key: state.get(key) for key in
+                  ("log_dir", "last_error", "last_error_provenance", "last_failure")}
+    failure = recovery_blocker(projection, explicit_user=True)
+    if failure:
+        return failure
+    for key in ("resume_instruction", "last_instruction"):
+        receipt = state.get(key)
+        if (receipt and receipt is not current_receipt
+                and (not isinstance(receipt, dict) or receipt.get("status") in
+                     {"sending", "delivery_uncertain", "control_archive_failed_before_activation"})):
+            return "instruction_delivery_unreconciled"
+    return None
+
+
+def _paused_retained_control(state):
+    """Authenticate a technically paused continuous owner, without releasing it."""
+    row = state.get("owner_retention")
+    return (state.get("continuous") is True and state.get("phase") == "owner_retained"
+            and isinstance(row, dict) and row.get("custody") == "UNKNOWN"
+            and row.get("release_authorized") is False
+            and row.get("automatic_resume") is False
+            and all(row.get(key) == state.get(key) and state.get(key) is not None
+                    for key in ("worker_pid", "worker_start", "server_pid", "server_start",
+                                "thread_id", "log_dir")))
+
+
+def _account_control_owner(state, directory, repo):
+    """Independently join the saved owner to its existing live processes."""
+    from os_goal_guard_protocol import process_start
+    if state.get("repo") != str(repo):
+        raise ValueError("account control repository mismatch")
+    for role in ("worker", "server"):
+        pid, birth = state.get(role + "_pid"), state.get(role + "_start")
+        if (type(pid) is not int or pid <= 0 or not isinstance(birth, str)
+                or not birth.isascii() or not birth.isdigit() or process_start(pid) != birth):
+            raise ValueError("account control original process mismatch")
+    ledger = state.get("credit_budget")
+    if not isinstance(ledger, dict):
+        raise ValueError("account control retained ledger missing")
+    identifier = ledger.get("id")
+    if (not isinstance(identifier, str) or len(identifier) != 32
+            or any(c not in "0123456789abcdef" for c in identifier)):
+        raise ValueError("account control original credit identity missing")
+    return {"boot_id": Path("/proc/sys/kernel/random/boot_id").read_text().strip(),
+            "repo": str(repo), "guardian_run_id": state.get("guardian_run_id"),
+            "log_dir": state.get("log_dir"), "thread_id": state.get("thread_id"),
+            "goal_objective_sha256": _account_value_sha256((state.get("goal") or {}).get("objective")),
+            "worker_pid": state["worker_pid"], "worker_start": state["worker_start"],
+            "server_pid": state["server_pid"], "server_start": state["server_start"],
+            "credit_run_id": identifier,
+            "credit_budget": str(amount(ledger.get("budget"), positive=True)),
+            "credit_ledger_path": str(Path(directory) / "credit-runs" / (identifier + ".json"))}
+
+
+def observed_account_control(state, ledger, owner, now_utc_ns, now_mono_ns,
+                             max_age_seconds=25, *, current_receipt=None):
+    """Validate factual account control evidence independently of goal activity.
+
+    This separate opt-in receipt has NO execution or hold-release authority.
+    The original ACCEPTED helper and its active-goal contract remain unchanged.
+    """
+    def require(value, message):
+        if not value:
+            raise ValueError(message)
+
+    require(isinstance(state, dict) and isinstance(ledger, dict) and isinstance(owner, dict),
+            "account control snapshot shape")
+    require(type(state.get("same_owner_control_capability")) is int
+            and state["same_owner_control_capability"] == SAME_OWNER_CONTROL_CAPABILITY,
+            "account control capability unavailable")
+    require(isinstance(max_age_seconds, (int, float)) and not isinstance(max_age_seconds, bool)
+            and math.isfinite(max_age_seconds) and 0 < max_age_seconds <= 25,
+            "account control observation age bound")
+    require(type(now_utc_ns) is int and type(now_mono_ns) is int,
+            "account control clock shape")
+    observed = state.get("last_account_control_observation")
+    require(isinstance(observed, dict) and observed.get("schema_version") == 1
+            and observed.get("status") == "OBSERVED"
+            and observed.get("context") == "same_owner_control"
+            and observed.get("execution_authorized") is False,
+            "account control observation unavailable")
+    candidates = [state.get(name) for name in ("last_account_observation",
+                  "last_account_notification", "successful_account_read")
+                  if state.get(name) is not None]
+    require(bool(candidates), "account control receive evidence missing")
+    for received in candidates + [observed]:
+        require(isinstance(received, dict) and received.get("schema_version") == 1
+                and type(received.get("received_mono_ns")) is int
+                and type(received.get("sequence")) is int,
+                "account control receive ordering missing")
+    newest = max(candidates, key=lambda item: (item["received_mono_ns"], item["sequence"]))
+    require(newest.get("status") in {"PENDING", "ACCEPTED"}
+            and not newest.get("response_error"), "newest account control receive rejected")
+    for key in ("received_mono_ns", "received_utc_ns", "sequence", "source", "method",
+                "request_id", "server_pid", "rate_limits_sha256"):
+        require(observed.get(key) == newest.get(key), "newest account control observation differs")
+    require(observed.get("owner") == owner, "account control observation owner mismatch")
+    required = ("boot_id", "repo", "log_dir", "thread_id", "worker_pid", "worker_start",
+                "server_pid", "server_start", "credit_run_id", "credit_budget", "credit_ledger_path")
+    require(all(owner.get(key) is not None for key in required), "account control owner incomplete")
+    for key in ("boot_id", "repo", "log_dir", "thread_id"):
+        require(isinstance(owner.get(key), str) and bool(owner[key]), "account control owner identity missing")
+    for key in ("worker_pid", "server_pid"):
+        require(type(owner.get(key)) is int and owner[key] > 0, "account control owner pid invalid")
+    for key in ("worker_start", "server_start"):
+        require(isinstance(owner.get(key), str) and owner[key].isascii() and owner[key].isdigit(),
+                "account control owner birth invalid")
+    require((state.get("phase") in {"ready", "running", "waiting_for_input", "repair_review"}
+             or _paused_retained_control(state))
+            and not _same_owner_control_blocker(state, current_receipt), "account control owner stopped or held")
+    require(state.get("auth_mode") == "chatgpt", "account control authentication unknown")
+    for key in ("log_dir", "thread_id", "worker_pid", "worker_start", "server_pid",
+                "server_start", "repo", "guardian_run_id"):
+        require(state.get(key) == owner.get(key), "account control current owner mismatch")
+    goal = state.get("goal")
+    require(isinstance(goal, dict) and goal.get("status") in {"active", "blocked", "paused"}
+            and isinstance(goal.get("objective"), str) and bool(goal["objective"])
+            and _account_value_sha256(goal["objective"]) == owner.get("goal_objective_sha256")
+            and goal.get("threadId", owner["thread_id"]) == owner["thread_id"],
+            "account control saved goal mismatch or terminal")
+    source = observed.get("source")
+    require(observed.get("server_pid") == owner["server_pid"]
+            and ((source == "read" and observed.get("method") == "account/rateLimits/read"
+                  and type(observed.get("request_id")) is int)
+                 or (source == "notification" and observed.get("method") == "account/rateLimits/updated"
+                     and observed.get("request_id") is None)), "account control receive source mismatch")
+    require(type(observed.get("received_utc_ns")) is int, "account control UTC missing")
+    for now, received in ((now_utc_ns, observed["received_utc_ns"]),
+                          (now_mono_ns, observed["received_mono_ns"])):
+        require(0 <= now - received < max_age_seconds * 1000000000,
+                "account control observation stale")
+    limits = state.get("last_rate_limits")
+    require(isinstance(limits, dict) and isinstance(limits.get("primary"), dict),
+            "account control limits missing")
+    primary = limits["primary"]
+    used = primary.get("usedPercent")
+    require(isinstance(used, (int, float)) and not isinstance(used, bool) and math.isfinite(used)
+            and 0 <= used <= 100 and primary.get("windowDurationMins") == 10080,
+            "account control primary unknown")
+    require(_account_value_sha256(limits) == observed.get("rate_limits_sha256"),
+            "account control limits mismatch")
+    require(state.get("credit_budget") == ledger
+            and _account_value_sha256(ledger) == observed.get("credit_record_sha256"),
+            "account control durable credit mismatch")
+    require(type(ledger.get("schema_version")) is int and ledger["schema_version"] in (1, 2)
+            and ledger.get("id") == owner["credit_run_id"]
+            and amount(ledger.get("budget"), positive=True) == amount(owner["credit_budget"], positive=True),
+            "account control original credit identity mismatch")
+    initial, minimum, last, spent, remaining, budget = (
+        amount(ledger.get(key), positive=(key == "budget")) for key in
+        ("initial_balance", "minimum_balance", "last_balance", "spent", "remaining", "budget"))
+    require(minimum <= initial and minimum <= last and spent >= initial - minimum
+            and remaining == max(Decimal(0), budget - spent)
+            and (ledger["schema_version"] != 1 or (last <= initial and spent == initial - minimum)),
+            "account control retained credit accounting inconsistent")
+    require(last == available_balance(limits) and remaining > 0,
+            "account control credit exhausted or unknown")
+    require(observed.get("state_limits_and_credit_persisted") is True,
+            "account control persistence unconfirmed")
+    return dict(observed)
+
+
+def same_owner_resume_binding(directory):
+    """Bind explicit user control to a fresh observation of the original owner."""
+    from os_goal_guard_protocol import read_json
+    state = read_json(Path(directory) / "state.json")
+    if (type(state.get("same_owner_control_capability")) is not int
+            or state["same_owner_control_capability"] != SAME_OWNER_CONTROL_CAPABILITY):
+        raise ValueError("Resident controller does not advertise same-owner control capability v1; no resume command queued")
+    current = state.get("goal") or {}
+    if (not (current.get("status") == "blocked" or
+             current.get("status") == "paused" and _paused_retained_control(state))
+            or current.get("objective") != OBJECTIVE
+            or state.get("active_turns") or state.get("checkpoint_requested")
+            or type(state.get("primary_stop_generation")) is not int
+            or state["primary_stop_generation"] < 0):
+        raise ValueError("Same-owner resume requires the exact idle blocked campaign")
+    owner = _account_control_owner(state, directory, Path(state["repo"]))
+    ledger = read_json(owner["credit_ledger_path"])
+    observed_account_control(state, ledger, owner, time.time_ns(), time.monotonic_ns())
+    return {"kind": "resume_same_owner", "schema_version": 1,
+            "expected_owner": owner, "goal_sha256": _account_value_sha256(current),
+            "primary_stop_generation": state["primary_stop_generation"],
+            "execution_admission": False, "hold_release": False}
+
+
 class RPC:
     """JSON-lines transport; waiting and goal observation consume no model tokens."""
     def __init__(self, argv, log_dir, on_event):
@@ -616,6 +840,7 @@ class RPC:
         return response["result"]
 
     def close(self):
+        guard_owner_close(getattr(self, "owner_custody_retained", False))
         # Only this launcher's server process; never kill a host-wide process name.
         self.close_errors = []
         if self.proc.stdin:
@@ -641,7 +866,7 @@ class RPC:
 
 
 def launch_resources(args, repo):
-    """Resolve once per worker so configuration, prompts and evidence agree."""
+    """Cache configuration/planning only; actual jobs need fresh admission."""
     if not hasattr(args, "resources"):
         args.resources = resolve_resources(args.profile, args.max_agents,
                                            args.build_jobs, args.memory_gib, repo)
@@ -809,7 +1034,10 @@ class Campaign:
         self.capacity_children = {}
         self.child_capacity_failures = []
         self.goal = None
-        self.primary_stop_generation = 0
+        self.primary_stop_generation = (self.state.get("primary_stop_generation", 0)
+                                       if getattr(args, "same_owner_control", False) else 0)
+        if type(self.primary_stop_generation) is not int or self.primary_stop_generation < 0:
+            raise ValueError("Invalid saved primary stop generation")
         self.stop_reason = None
         self.stop_now = False
         self.checkpoint_requested = False
@@ -823,14 +1051,17 @@ class Campaign:
         self.state.pop("transport_startup", None)
         self.state.pop("transport_failure", None)
         for key in ("successful_account_read", "last_account_observation",
-                    "last_account_notification"):
+                    "last_account_notification", "last_account_control_observation"):
             self.state.pop(key, None)
+        self.state.pop("same_owner_control_capability", None)
         self.last_credit_notification = None
         self.last_activity = time.monotonic()
         self.stopping = False
         self.controlled = False
         self.native_owner_control = None
         self.native_owner_control_failed = False
+        self.retained_for_stop = False
+        self.retention_errors = []
         self.output = LiveOutput(self.log_dir, quiet=args.quiet, agent_windows=args.agent_windows)
         self.output.primary = self.state.get("thread_id")
         # Saved hints belong to the preceding launcher instance, never this monitor.
@@ -958,6 +1189,11 @@ class Campaign:
     def save(self, **fields):
         self.state.update(fields)
         self.state['capture_progress_capability'] = CAPTURE_PROGRESS_CAPABILITY
+        if getattr(self.args, "same_owner_control", False):
+            self.state.update(same_owner_control_capability=SAME_OWNER_CONTROL_CAPABILITY,
+                              primary_stop_generation=self.primary_stop_generation,
+                              checkpoint_requested=self.checkpoint_requested,
+                              continuous=getattr(self.args, "continuous", False))
         self.state.update(updated_at=utc(), log_dir=str(self.log_dir), active_turns=self.active,
                           agents=self.output.snapshot(), console_log=str(self.log_dir / "console.log"),
                           agent_event_count=self.output.agent_event_count)
@@ -1104,14 +1340,174 @@ class Campaign:
         return ('\nLauncher visibility acknowledgment: ' + json.dumps(registration, sort_keys=True)
                 + '\nThis registers progress only. Existing execution, ownership and terminal checks still apply.')
 
-    def deliver_instruction(self):
+    def finish_control_instruction(self, sending, receipt, *, refused=False):
+        """Archive a claimed control command durably, without requeueing it."""
+        destination = self.directory / "instructions" / ("refused" if refused else "delivered")
+        destination.mkdir(mode=0o700, parents=True, exist_ok=True)
+        if refused:
+            os.link(sending, destination / sending.name, follow_symlinks=False)
+            path = destination / (sending.stem + ".receipt.json")
+        else:
+            path = destination / sending.name
+        atomic_json(path, receipt)
+        self.save(last_instruction=receipt)
+        sending.unlink()
+        (sending.parent / (sending.stem + ".control-intent.json")).unlink(missing_ok=True)
+        for directory in (sending.parent, destination):
+            fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+            try:
+                os.fsync(fd)
+            finally:
+                os.close(fd)
+
+    def deliver_same_owner_resume(self, item, receipt, sending):
+        """Apply an explicit bound control on this RPC; never grant job resources."""
+        from os_goal_guard_protocol import read_json
+        attempted = False
+        read_failed = False
+        control = item.get("control")
+        receipt.update(control_kind="resume_same_owner", execution_admission=False, hold_release=False)
+
+        def read(method, params):
+            nonlocal read_failed
+            try:
+                return self.rpc.call(method, params)
+            except Exception:
+                read_failed = True
+                raise
+
+        def ready():
+            if (not getattr(self.args, "same_owner_control", False)
+                    or self.state.get("same_owner_control_capability") != SAME_OWNER_CONTROL_CAPABILITY
+                    or not self.controlled or self.stop_reason or self.stop_now
+                    or self.checkpoint_requested or self.active
+                    or self.primary_stop_generation != control["primary_stop_generation"]
+                    or self.state.get("primary_stop_generation") != self.primary_stop_generation
+                    or not self.goal or not (self.goal.get("status") == "blocked" or
+                        self.goal.get("status") == "paused"
+                        and getattr(self.args, "continuous", False)
+                        and _paused_retained_control(self.state))
+                    or self.goal.get("objective") != OBJECTIVE
+                    or _account_value_sha256(self.goal) != control["goal_sha256"]
+                    or _same_owner_control_blocker(self.state, receipt)
+                    or (self.state.get("transport_failure") or {}).get("channel_unusable")):
+                raise ValueError("Same-owner resume context changed, stopped or unavailable")
+            owner = _account_control_owner(self.state, self.directory, self.repo)
+            if (owner != control["expected_owner"] or self.rpc.proc.pid != owner["server_pid"]
+                    or os.getpid() != owner["worker_pid"] or self.credit_guard is None
+                    or self.credit_guard.identifier != owner["credit_run_id"]
+                    or self.credit_guard.budget != amount(owner["credit_budget"], positive=True)
+                    or str(self.credit_guard.path) != owner["credit_ledger_path"]):
+                raise ValueError("Same-owner resume original owner or credit run changed")
+            return owner
+
+        try:
+            required = {"kind", "schema_version", "expected_owner", "goal_sha256",
+                        "primary_stop_generation", "execution_admission", "hold_release"}
+            if (not isinstance(control, dict) or set(control) != required
+                    or control.get("kind") != "resume_same_owner" or control.get("schema_version") != 1
+                    or control.get("execution_admission") is not False or control.get("hold_release") is not False
+                    or type(control.get("primary_stop_generation")) is not int
+                    or not isinstance(item.get("source_id"), str) or not 0 < len(item["source_id"]) <= 512
+                    or item.get("capture_progress") != SAME_OWNER_CONTROL_LEGACY_BARRIER):
+                raise ValueError("Invalid source-bound same-owner control command")
+            digest = hashlib.sha256(item["source_id"].encode()).hexdigest()
+            source = read_json(self.directory / "instructions" / "sources" / (digest + ".json"))
+            if (item.get("id") != "source-" + digest or sending.name != item["id"] + ".json"
+                    or source.get("status") != "queued" or source.get("item") != item
+                    or item.get("text_sha256") != hashlib.sha256(item["text"].encode()).hexdigest()):
+                raise ValueError("Same-owner control source binding differs")
+            ready()
+            # Flush the claimed original before any control RPC. A crash leaves
+            # sending evidence, which the existing queue guard never replays.
+            for directory in (sending.parent, self.directory / "instructions" / "pending"):
+                fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+                try:
+                    os.fsync(fd)
+                finally:
+                    os.close(fd)
+            account = read("account/read", {"refreshToken": False}).get("account") or {}
+            if account.get("type") != "chatgpt":
+                self.save(auth_mode=account.get("type"))
+                self.stop_reason, self.stop_now = "chatgpt_auth_changed", True
+                raise ValueError("Same-owner control authentication unavailable")
+            self.refresh_credit_budget()
+            ready()
+            page = read("thread/turns/list", {"threadId": self.state["thread_id"],
+                        "limit": 1, "sortDirection": "desc", "itemsView": "notLoaded"})
+            if any(turn.get("status") == "inProgress" for turn in page["data"]):
+                raise ValueError("Same-owner control found an existing active turn")
+            generation = self.primary_stop_generation
+            current = read("thread/goal/get", {"threadId": self.state["thread_id"]})["goal"]
+            ready()  # Read-time pause/stop notifications beat a stale read response.
+            if not current or _account_value_sha256(current) != control["goal_sha256"]:
+                raise ValueError("Same-owner control exact saved goal changed")
+            self.remember_goal(current)
+            owner = ready()
+            observed_account_control(self.state, read_json(self.credit_guard.path), owner,
+                                     time.time_ns(), time.monotonic_ns(), current_receipt=receipt)
+            receipt.update(status="sending", source_id=item["source_id"],
+                           goal_before_sha256=control["goal_sha256"], owner=owner,
+                           primary_stop_generation=generation, method="thread/goal/set")
+            atomic_json(sending.parent / (sending.stem + ".control-intent.json"), receipt)
+            self.save(last_instruction=receipt)
+            ready()
+            observed_account_control(self.state, read_json(self.credit_guard.path), owner,
+                                     time.time_ns(), time.monotonic_ns(), current_receipt=receipt)
+            attempted = True
+            result = self.rpc.call("thread/goal/set", {"threadId": owner["thread_id"], "status": "active"})["goal"]
+            if (self.stop_reason or self.stop_now or self.checkpoint_requested
+                    or self.primary_stop_generation != generation or not self.goal
+                    or self.goal.get("status") in {"complete", "usageLimited", "budgetLimited"}):
+                # The normal protocol has no CAS. A later stop wins even when
+                # it arrives inside activation; compensate on the SAME RPC.
+                self.pause()
+                if self.goal and (self.goal.get("objective") != OBJECTIVE or
+                        self.goal.get("status") not in {"paused", "blocked", "complete",
+                                                       "usageLimited", "budgetLimited"}):
+                    raise ValueError("Compensating pause did not confirm a stopped goal")
+                receipt.update(status="cancelled_after_stop", delivered_at=utc())
+            else:
+                if (not result or result.get("status") != "active" or result.get("objective") != OBJECTIVE
+                        or result.get("threadId", owner["thread_id"]) != owner["thread_id"]):
+                    raise ValueError("Same-owner activation response differs")
+                self.remember_goal(result)
+                receipt.update(status="accepted_by_server", delivered_at=utc(),
+                               goal_after_sha256=_account_value_sha256(result))
+            self.finish_control_instruction(sending, receipt)
+        except Exception as error:
+            if attempted:
+                receipt.update(status="delivery_uncertain", error_type=type(error).__name__)
+                self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
+                self.stop_now = True
+                self.save(last_instruction=receipt, transport_uncertain={"at": utc(),
+                          "method": "thread/goal/set", "reason": "same_owner_control_delivery_uncertain"})
+                self.output.notice("Same-owner control outcome uncertain; original intent retained at " + str(sending))
+                return
+            if read_failed:
+                self.stop_reason = self.stop_reason or "account_control_unknown"
+                self.stop_now = True
+            receipt.update(status="same_owner_resume_refused", error=str(error), refused_at=utc())
+            try:
+                self.finish_control_instruction(sending, receipt, refused=True)
+            except OSError as archive_error:
+                receipt.update(status="control_archive_failed_before_activation", error_type=type(archive_error).__name__)
+                self.save(last_instruction=receipt)
+
+    def deliver_instruction(self, *, control_only=False):
         """Steer one active coordinator turn; retain uncertain deliveries for audit."""
         ident = self.state.get("thread_id")
         waiting = (getattr(self.args, "repair_agent_failures", False) and self.goal
                    and self.goal.get("status") == "blocked" and not self.active)
+        control_waiting = (getattr(self.args, "same_owner_control", False) and self.goal
+                           and (self.goal.get("status") == "blocked" or
+                                self.goal.get("status") == "paused" and
+                                getattr(self.args, "continuous", False) and
+                                _paused_retained_control(self.state)) and not self.active)
         if (not ident or not self.controlled or self.checkpoint_requested or self.stop_reason
-                or not self.goal or self.goal.get("status") not in {"active", "blocked"}
-                or ident not in self.active and not waiting):
+                or self.stop_now
+                or not self.goal or self.goal.get("status") not in {"active", "blocked", "paused"}
+                or ident not in self.active and not waiting and not control_waiting):
             return
         control = self.directory / "instructions"
         sending_dir = control / "sending"
@@ -1123,6 +1519,9 @@ class Campaign:
                               path.name))
         if not pending:
             return
+        if (control_only or control_waiting and not waiting and ident not in self.active) \
+                and json.loads(pending[0].read_text()).get("control") is None:
+            return
         sending_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
         source = pending[0]
         sending = sending_dir / source.name
@@ -1130,6 +1529,9 @@ class Campaign:
         item = json.loads(sending.read_text())
         receipt = {"id": item["id"], "thread_id": ident,
                    "turn_id": self.active.get(ident), "submitted_at": item["submitted_at"]}
+        if item.get("control") is not None:
+            self.deliver_same_owner_resume(item, receipt, sending)
+            return
         try:
             progress_ack = self.register_instruction_capture_progress(item, receipt)
         except ValueError as error:
@@ -1332,6 +1734,34 @@ class Campaign:
                         "require_active": active, "class": "service_transient",
                         "error": failure["error"], "method": None})
 
+    def publish_account_control_observation(self, context):
+        """Publish opt-in control evidence without granting execution ACCEPTED."""
+        if not getattr(self.args, "same_owner_control", False):
+            return
+        observed = dict(context, context="same_owner_control", execution_authorized=False,
+                        status="REJECTED")
+        try:
+            from os_goal_guard_protocol import read_json
+            if (self.stop_reason or self.stop_now or self.checkpoint_requested
+                    or self.credit_guard is None or self.rpc.proc.pid != self.state.get("server_pid")
+                    or os.getpid() != self.state.get("worker_pid")):
+                raise ValueError("account control original owner stopped or unavailable")
+            saved = read_json(self.state_path)
+            owner = _account_control_owner(saved, self.directory, self.repo)
+            if (owner["credit_run_id"] != self.credit_guard.identifier
+                    or amount(owner["credit_budget"]) != self.credit_guard.budget
+                    or owner["credit_ledger_path"] != str(self.credit_guard.path)):
+                raise ValueError("account control original ledger mismatch")
+            ledger = read_json(self.credit_guard.path)
+            observed.update(status="OBSERVED", owner=owner,
+                            credit_record_sha256=_account_value_sha256(ledger),
+                            state_limits_and_credit_persisted=True)
+            observed_account_control(dict(saved, last_account_control_observation=observed),
+                                     ledger, owner, time.time_ns(), time.monotonic_ns())
+        except (OSError, ValueError, TypeError, AttributeError, KeyError, InvalidOperation) as error:
+            observed.update(status="REJECTED", reason=str(error))
+        self.save(last_account_control_observation=observed)
+
     def record_rate_limits(self, limits, *, notification=False,
                            read_completion=None):
         context = None
@@ -1341,6 +1771,7 @@ class Campaign:
             elif read_completion is getattr(self.rpc, "last_account_read_completion", None):
                 context = read_completion
         previous = self.state.get("last_account_observation")
+        previous_control = self.state.get("last_account_control_observation")
         previous_limits = self.state.get("last_rate_limits")
         order = lambda item: (item["received_mono_ns"], item["sequence"])
         late_read = (context is not None and previous is not None
@@ -1353,6 +1784,9 @@ class Campaign:
                 fields = {"last_account_observation": context}
                 if notification:
                     fields["last_account_notification"] = context
+                if getattr(self.args, "same_owner_control", False):
+                    fields["last_account_control_observation"] = dict(
+                        context, context="same_owner_control", execution_authorized=False)
                 self.save(**fields)
         # Original accounting, including the original durable ledger and all
         # real holds.  Even a late read remains conservatively accounted.
@@ -1368,8 +1802,13 @@ class Campaign:
                 raise ValueError("newer account observation payload mismatch")
             self.save(last_rate_limits=previous_limits)
             context = dict(previous, status="PENDING")
-            if not self.stop_reason and not self.stop_now \
-                    and previous.get("status") == "ACCEPTED":
+            if not self.stop_reason and not self.stop_now and (
+                    previous.get("status") == "ACCEPTED" or (
+                        getattr(self.args, "same_owner_control", False)
+                        and previous.get("status") == "PENDING"
+                        and isinstance(previous_control, dict)
+                        and previous_control.get("status") == "OBSERVED"
+                        and order(previous_control) == order(previous))):
                 self._record_rate_limits_accounting(previous_limits, notification=False)
             else:
                 rejected = dict(context, status="REJECTED")
@@ -1377,6 +1816,7 @@ class Campaign:
                 if context.get("source") == "notification":
                     fields["last_account_notification"] = rejected
                 self.save(**fields)
+                self.publish_account_control_observation(rejected)
                 return
         newest = self.state.get("last_account_observation")
         if newest is None or order(newest) != order(context):
@@ -1389,7 +1829,9 @@ class Campaign:
             if publish_notification:
                 fields["last_account_notification"] = rejected
             self.save(**fields)
+            self.publish_account_control_observation(rejected)
             return
+        self.publish_account_control_observation(context)
         # Starting/paused/blocked workers still use the original accounting.
         # Only the actual running saved-goal owner can publish this new receipt.
         if self.state.get("phase") != "running" \
@@ -1669,8 +2111,10 @@ class Campaign:
             + usage + window +
             "An explicit user pause remains authoritative; never auto-resume it or replace it "
             "with an older continuous-run instruction. A normal checkpoint alone is not a pause. "
-            "M14 exclusively until original supported-scope acceptance, then M15, then final "
-            "complete-system delivery with existing Rocky/Linux support, as specified in CAMPAIGN.md. "
+            "Keep original M14 FINAL acceptance before M15 FINAL acceptance, then complete-system "
+            "delivery with existing Rocky/Linux support, as specified in CAMPAIGN.md. Prepare "
+            "eligible independent M14 and M15 source, tests and focused reviews in parallel; "
+            "retain every genuine operation-specific source, account, ownership and resource hold. "
             "Keep four accepted M14 files and the accepted M15 file closed at their exact scope. "
             "No source/typecheck/mock result alone retires C or accepts an image. "
             "Dispatcher model/effort and separate worker routing: "
@@ -1681,6 +2125,8 @@ class Campaign:
             "sudo -A/askpass only within actual execution admission; never read or log the "
             "credential, call its helper directly, or expose it in commands/environment. "
             + resource_instructions(launch_resources(self.args, self.repo)) + " " +
+            "Cached resource settings are planning only; every actual job requires fresh aggregate "
+            "admission including original retained charges, measured overhead and current floors. "
             "Preserve service/account/source holds, rejected-request exclusions, failed evidence, "
             "historical ledger, native owners, scratch21 and UNKNOWN reservations. Do not replay "
             "an old nonce or infer native retirement from model/process recovery. Do not edit "
@@ -1830,6 +2276,8 @@ class Campaign:
                   startup_instruction_sha256=hashlib.sha256(note.encode()).hexdigest() if note else None)
         check_resources(launch_resources(self.args, self.repo))
         self.rpc = self.rpc_factory(server_argv(self.args, self.repo), self.log_dir, self.event)
+        if retention_required(self.args, self.rpc):
+            self.rpc.owner_custody_retained = True
         proc = getattr(self.rpc, "proc", None)
         birth = None
         if proc:
@@ -2163,7 +2611,112 @@ class Campaign:
         # Runtime cleanup is an OS evidence contract. Interruption/EOF is never
         # recorded as proof that a guest, container or retained owner was cleaned.
 
+    def retention_failure(self, stage, error):
+        """Bound diagnostics even if a multiday monitor repeatedly loses I/O."""
+        row = retention_error(stage, error)
+        if not self.retention_errors or self.retention_errors[-1] != row:
+            self.retention_errors.append(row)
+            del self.retention_errors[:-16]
+
+    def retain_owner(self, reason):
+        """Latch custody before any fallible pause, publication or monitoring."""
+        self.retained_for_stop = True
+        if self.rpc is not None:
+            self.rpc.owner_custody_retained = True
+        if not hasattr(self, "retention_errors"):
+            self.retention_errors = []
+        if not hasattr(self, "retained_rpc"):
+            self.retained_rpc = self.rpc
+            self.retained_resume_id = (self.state.get("last_instruction") or {}).get("id")
+        if not getattr(self, "retention_pause_attempted", False):
+            self.retention_pause_attempted = True
+            try:
+                self.pause()
+            except Exception as error:
+                self.retention_failure("pause", error)
+                self.stop_reason = self.stop_reason or "owner_pause_unknown"
+                self.stop_now = True
+        if not isinstance(self.state.get("owner_retention"), dict):
+            from os_goal_guard_protocol import process_start
+            self.state["owner_retention"] = make_retention_record(
+                self.state, watcher_pid=os.getppid(), watcher_start=process_start(os.getppid()),
+                reason=reason, errors=self.retention_errors)
+        self.state.update(phase="owner_retained", controller_dispatch_enabled=False,
+                          stop_reason=self.stop_reason,
+                          owner_retention_errors=list(self.retention_errors))
+        try:
+            self.save()
+        except Exception as error:
+            self.retention_failure("save", error)
+
+    def retained_resume_ready(self):
+        receipt = self.state.get("last_instruction") or {}
+        return (getattr(self.args, "continuous", False) and self.rpc is self.retained_rpc
+                and not self.stop_reason and not self.stop_now and not self.checkpoint_requested
+                and not self.active and self.goal and self.goal.get("status") == "active"
+                and self.goal.get("objective") == OBJECTIVE
+                and receipt.get("id") != self.retained_resume_id
+                and receipt.get("status") == "accepted_by_server"
+                and receipt.get("control_kind") == "resume_same_owner"
+                and receipt.get("primary_stop_generation") == self.primary_stop_generation
+                and not _same_owner_control_blocker(self.state)
+                and receipt.get("owner") == _account_control_owner(self.state, self.directory, self.repo))
+
+    def wait_retained_owner(self, reason):
+        """Keep original channels alive; only explicit typed control can resume.
+
+        Pausing a goal prevents future continuations. Existing turns/children may
+        still run: neither a heartbeat nor this loop proves their quiescence.
+        """
+        self.retain_owner(reason)
+        next_refresh = time.monotonic()
+        while True:
+            try:
+                if self.retained_resume_ready():
+                    self.retained_for_stop = False
+                    self.retention_pause_attempted = False
+                    self.retained_resume_id = (self.state.get("last_instruction") or {}).get("id")
+                    self.save(phase="running", controller_dispatch_enabled=True)
+                    return True
+                # No native-control polling, repairs, turn starts or ordinary
+                # instructions in custody retention. Typed control has its own
+                # fresh account/identity/stop checks and grants no job resources.
+                if not self.stop_reason and not self.stop_now and not self.checkpoint_requested:
+                    self.deliver_instruction(control_only=True)
+                self.rpc.pump(timeout=1)
+                now = time.monotonic()
+                if now >= next_refresh:
+                    if not self.stop_reason and not self.stop_now and not self.checkpoint_requested:
+                        self.refresh_credit_budget()
+                    self.save(phase="owner_retained", heartbeat_at=utc(),
+                              owner_retention_errors=list(self.retention_errors))
+                    self.output.flush()
+                    next_refresh = now + max(5, self.args.heartbeat_seconds)
+            except Exception as error:
+                self.retention_failure("monitor", error)
+                # A broken stream/save never closes or replaces the owner.
+                # Bounded backoff prevents a disconnected server hot loop.
+                time.sleep(min(30, max(1, self.args.heartbeat_seconds)))
+
     def run(self):
+        begin = True
+        while True:
+            try:
+                code = self._run_until_stop(begin=begin)
+            except Exception as error:
+                if not retention_required(self.args, self.rpc):
+                    raise
+                self.retention_failure("work_loop", error)
+                self.stop_reason = self.stop_reason or "launcher_error"
+                self.stop_now = True
+                self.retain_owner(self.stop_reason)
+                code = 1
+            if not retention_required(self.args, self.rpc):
+                return code
+            self.wait_retained_owner(self.stop_reason or (self.goal or {}).get("status"))
+            begin = False  # Resume the SAME Campaign/RPC; never call begin again.
+
+    def _run_until_stop(self, *, begin=True):
         started = time.monotonic()
         deadline = started + self.args.hours * 3600 if self.args.hours else float("inf")
         checkpoint_at = max(started, deadline - min(self.args.grace_seconds, self.args.hours * 1800))
@@ -2177,12 +2730,14 @@ class Campaign:
         try:
             self.output.notice("Starting launcher; worker_pid=" + str(os.getpid())
                                + "; live log: " + str(self.log_dir / "console.log"))
-            self.begin()
+            if begin:
+                self.begin()
             while True:
                 now = time.monotonic()
                 status = self.goal["status"] if self.goal else None
                 blocked_wait = (status == "blocked" and
-                                getattr(self.args, "repair_agent_failures", False)
+                                (getattr(self.args, "repair_agent_failures", False)
+                                 or getattr(self.args, "same_owner_control", False))
                                 and not self.stop_reason and not self.stop_now
                                 and not self.checkpoint_requested)
                 current_turn = (self.state.get("last_turn") or {}).get("id")
@@ -2207,7 +2762,10 @@ class Campaign:
                         stop_deadline = min(deadline, now + self.args.grace_seconds)
                         blocked_wait = False
                 if blocked_wait:
-                    self.review_blocked_goal()
+                    if getattr(self.args, "repair_agent_failures", False):
+                        self.review_blocked_goal()
+                    elif self.state.get("phase") != "waiting_for_input":
+                        self.save(phase="waiting_for_input", waiting_reason="explicit_same_owner_control_required")
                     if self.stop_now:
                         continue
                 if not self.checkpoint_requested and (self.stop_reason or now >= checkpoint_at):
@@ -2277,68 +2835,71 @@ class Campaign:
                     "class": failure["class"], "error": failure["error"], "method": failure["method"]})
             self.output.notice(str(error))
         finally:
-            # Preserve an already propagating interruption and any interruption
-            # acquired while closing the data channel across ALL later cleanup.
-            native_primary = sys.exc_info()[1]
-            native_close_interrupt = (native_primary if isinstance(native_primary, (KeyboardInterrupt, SystemExit))
-                                      else getattr(native_primary, "interrupt", None))
-            native_close_errors = []
-            if self.native_owner_control is not None:
-                try:self.native_owner_control.close()
-                except BaseException as native_error:
-                    native_close_errors.append(native_error)
-                    if native_close_interrupt is None:
-                        native_close_interrupt = (native_error if isinstance(native_error, (KeyboardInterrupt, SystemExit))
-                                                  else getattr(native_error, "interrupt", None))
-            # Retain exception objects before formatting or persistence.
-            self.native_owner_control_cleanup_errors = native_close_errors
-            try:
-                self.state["native_current_owner_close_errors"] = [str(x) for x in native_close_errors]
-                # Capture the actual reason/goal before shutdown may pause it. Keep
-                # the original diagnostic identity; old failures are not relabelled.
-                stop_snapshot = dict(self.state, goal=dict(self.goal) if self.goal else None,
-                                     stop_reason=self.stop_reason, phase="stopping",
-                                     active_turns=dict(self.active))
+            if retention_required(self.args, self.rpc):
+                self.retain_owner(self.stop_reason or (self.goal or {}).get("status") or "owner_unknown")
+            else:
+                # Preserve an already propagating interruption and any interruption
+                # acquired while closing the data channel across ALL later cleanup.
+                native_primary = sys.exc_info()[1]
+                native_close_interrupt = (native_primary if isinstance(native_primary, (KeyboardInterrupt, SystemExit))
+                                          else getattr(native_primary, "interrupt", None))
+                native_close_errors = []
+                if self.native_owner_control is not None:
+                    try:self.native_owner_control.close()
+                    except BaseException as native_error:
+                        native_close_errors.append(native_error)
+                        if native_close_interrupt is None:
+                            native_close_interrupt = (native_error if isinstance(native_error, (KeyboardInterrupt, SystemExit))
+                                                      else getattr(native_error, "interrupt", None))
+                # Retain exception objects before formatting or persistence.
+                self.native_owner_control_cleanup_errors = native_close_errors
                 try:
-                    self.stop()
-                finally:
+                    self.state["native_current_owner_close_errors"] = [str(x) for x in native_close_errors]
+                    # Capture the actual reason/goal before shutdown may pause it. Keep
+                    # the original diagnostic identity; old failures are not relabelled.
+                    stop_snapshot = dict(self.state, goal=dict(self.goal) if self.goal else None,
+                                         stop_reason=self.stop_reason, phase="stopping",
+                                         active_turns=dict(self.active))
                     try:
-                        close_errors = []
-                        try:
-                            if self.rpc:
-                                self.rpc.close()
-                        except Exception as error:
-                            close_errors.append(str(error))
-                        known = getattr(self.rpc, "close_errors", None)
-                        if isinstance(known, list):
-                            close_errors = known + close_errors
-                        self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
-                                  server_close_errors=close_errors, cleanup_verified=False,
-                                  stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
-                                      "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
-                                      "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
-                        if self.stop_reason == "guardian_recovery" and self.state.get("guardian_checkpoint_request"):
-                            request = self.state["guardian_checkpoint_request"]
-                            self.save(guardian_checkpoint={"run_id": request["run_id"], "request_id": request["request_id"],
-                                      "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")})
-                        self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
-                                                    exit_code=code, snapshot=stop_snapshot)
-                        self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
-                                           + "; " + (self.stop_reason or "goal status") + ".")
-                        self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
+                        self.stop()
                     finally:
-                        self.output.close()
-            except BaseException as native_cleanup_error:
-                native_close_errors.append(native_cleanup_error)
-                if native_close_interrupt is None:
-                    native_close_interrupt = (native_cleanup_error if isinstance(native_cleanup_error, (KeyboardInterrupt, SystemExit))
-                                              else getattr(native_cleanup_error, "interrupt", None))
-                raise
-            finally:
-                if native_close_interrupt is not None:
-                    native_close_interrupt.native_primary_error = native_primary
-                    native_close_interrupt.native_secondary_errors = list(native_close_errors)
-                    raise native_close_interrupt
+                        try:
+                            close_errors = []
+                            try:
+                                if self.rpc:
+                                    self.rpc.close()
+                            except Exception as error:
+                                close_errors.append(str(error))
+                            known = getattr(self.rpc, "close_errors", None)
+                            if isinstance(known, list):
+                                close_errors = known + close_errors
+                            self.save(phase="stopped", stop_reason=self.stop_reason, exit_code=code,
+                                      server_close_errors=close_errors, cleanup_verified=False,
+                                      stop_decision={"goal_status": (stop_snapshot.get("goal") or {}).get("status"),
+                                          "log_dir": str(self.log_dir), "worker_pid": self.state.get("worker_pid"),
+                                          "worker_start": self.state.get("worker_start"), "reason": self.stop_reason})
+                            if self.stop_reason == "guardian_recovery" and self.state.get("guardian_checkpoint_request"):
+                                request = self.state["guardian_checkpoint_request"]
+                                self.save(guardian_checkpoint={"run_id": request["run_id"], "request_id": request["request_id"],
+                                          "worker_pid": os.getpid(), "worker_start": self.state.get("worker_start")})
+                            self.record_stop_diagnostic("worker_stopped", reason=self.stop_reason,
+                                                        exit_code=code, snapshot=stop_snapshot)
+                            self.output.notice("Stopped: goal reports " + str((self.goal or {}).get("status", "unknown"))
+                                               + "; " + (self.stop_reason or "goal status") + ".")
+                            self.output.notice("State: " + str(self.state_path) + "; " + restart_advice(self.state))
+                        finally:
+                            self.output.close()
+                except BaseException as native_cleanup_error:
+                    native_close_errors.append(native_cleanup_error)
+                    if native_close_interrupt is None:
+                        native_close_interrupt = (native_cleanup_error if isinstance(native_cleanup_error, (KeyboardInterrupt, SystemExit))
+                                                  else getattr(native_cleanup_error, "interrupt", None))
+                    raise
+                finally:
+                    if native_close_interrupt is not None:
+                        native_close_interrupt.native_primary_error = native_primary
+                        native_close_interrupt.native_secondary_errors = list(native_close_errors)
+                        raise native_close_interrupt
         return code
 
 
@@ -2351,6 +2912,15 @@ def arguments(argv=None):
     mode.add_argument("--status", action="store_true", help="Read the last saved launcher snapshot; no server")
     mode.add_argument("--progress", action="store_true", help="Show live runner activity and the last engineering dashboard; no server")
     mode.add_argument("--instruct", metavar="TEXT", help="Send a live instruction to the coordinator; queues through checkpoints")
+    mode.add_argument("--resume-same-owner", metavar="TEXT",
+                      help="Queue explicit source-bound resume control for an opted-in idle blocked owner; grants no jobs or hold releases")
+    parser.add_argument("--instruction-source-id", help="Stable user-source identity for an instruction or explicit same-owner resume")
+    parser.add_argument("--same-owner-control", action="store_true",
+                        help="Opt in to factual control observations and explicit typed same-owner resume; never auto-activate")
+    parser.add_argument("--retain-owner-on-stop", action="store_true",
+                        help="Keep the original server and channels on stop; never infer child closure")
+    parser.add_argument("--continuous", action="store_true",
+                        help="Opt in to owner retention, guarded control and eligible repairs; preserves finite budgets and work windows")
     parser.add_argument('--capture-progress-directory', type=Path,
                         help='Explicit fresh capture directory; with --instruct register it before steering, otherwise at startup')
     parser.add_argument("--hours", type=float, default=0, help="Optional work window in hours; 0 means no time limit (default: 0)")
@@ -2367,9 +2937,9 @@ def arguments(argv=None):
                         help="Pin dispatcher reasoning; max preferred by default, workers retain separate effort levels")
     parser.add_argument("--profile", choices=["aggressive", "balanced"], default="aggressive",
                         help="Dedicated-machine parallelism (default) or historical balanced limits")
-    parser.add_argument("--max-agents", type=int, help="Child-agent ceiling; default up to 8 aggressive / 3 balanced")
-    parser.add_argument("--build-jobs", type=int, help="Aggregate build jobs; default all affinity CPUs in aggressive mode")
-    parser.add_argument("--memory-gib", type=float, help="Aggregate build memory budget; default up to 24 GiB aggressive / 12 balanced")
+    parser.add_argument("--max-agents", type=int, help="Coordination slots; default six canonical owners, subject to admission")
+    parser.add_argument("--build-jobs", type=int, help="Aggregate HOST light-job ceiling, at most 3 on CPUs 0,6,7")
+    parser.add_argument("--memory-gib", type=float, help="HOST aggregate ceiling, at most 4 GiB including retained charges and overhead")
     parser.add_argument("--agent-windows", choices=["auto", "on", "off"], default="auto",
                         help="Separate live desktop window per child (default: auto when a desktop is available); logs always retained")
     parser.add_argument("--fresh-session", action="store_true",
@@ -2405,6 +2975,14 @@ def arguments(argv=None):
     parser.add_argument("--allow-dispatcher-fallback", action="store_true",
                         help="Explicitly allow advertised model fallback for unpinned defaults; otherwise Sol/max stays pinned")
     args = parser.parse_args(argv)
+    if args.continuous:
+        args.same_owner_control = args.retain_owner_on_stop = args.repair_agent_failures = True
+    if args.instruction_source_id is not None and (not 0 < len(args.instruction_source_id) <= 512
+            or args.instruct is None and args.resume_same_owner is None):
+        parser.error("instruction-source-id requires an instruction or explicit same-owner resume and at most 512 characters")
+    if args.resume_same_owner is not None and (args.instruction_source_id is None
+            or args.capture_progress_directory is not None):
+        parser.error("same-owner resume requires instruction-source-id and no capture registration")
     if args.guardian_run_id and (len(args.guardian_run_id) != 32 or any(c not in "0123456789abcdef" for c in args.guardian_run_id)):
         parser.error("Guardian run identity must be a 32-character hex nonce")
     if args.guardian_recovery_proof and (not args.guardian_run_id or not args.supervisor or args.worker or args.fresh_session):
@@ -2501,8 +3079,14 @@ def main(argv=None):
         print(progress_report(directory, REPO))
         return 0
     if args.instruct is not None:
-        ident = queue_instruction(directory, args.instruct, args.capture_progress_directory)
+        ident = queue_instruction(directory, args.instruct, args.capture_progress_directory,
+                                  source_id=args.instruction_source_id)
         print("Queued instruction " + ident + "; it will reach the next active coordinator turn.")
+        return 0
+    if args.resume_same_owner is not None:
+        ident = queue_same_owner_resume(directory, args.resume_same_owner,
+                                        source_id=args.instruction_source_id)
+        print("Queued explicit same-owner control " + ident + "; this admits no jobs and releases no holds.")
         return 0
     if args.dry_run:
         print(json.dumps({"command": shlex.join(server_argv(args, REPO)), "hours": args.hours,
@@ -2514,6 +3098,7 @@ def main(argv=None):
                           "heartbeat_seconds": args.heartbeat_seconds, "live_output": not args.quiet,
                           "stall_seconds": args.stall_seconds,
                           "repair_agent_failures": args.repair_agent_failures,
+                          "same_owner_control": args.same_owner_control,
                           "stop_after_m14_m15": args.stop_after_m14_m15,
                           "stop_journal": str(directory / "stop-events.jsonl"),
                           "resources": launch_resources(args, REPO), "policy_sha256": policy_hashes(REPO),

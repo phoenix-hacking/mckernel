@@ -12,6 +12,8 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 spec = importlib.util.spec_from_file_location('watch_candidate', (Path(__file__).resolve().parents[1] / 'watch_os_goal.py'))
 watcher = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(watcher)
@@ -57,8 +59,8 @@ class CreditWatcher(unittest.TestCase):
             third = Mock(pid=103, returncode=0); third.poll.return_value = 0
             args = SimpleNamespace(hours=.1, max_restarts=2, fresh_on_recovery=True,
                                    restart_delay=0, heartbeat_seconds=10)
-            terminal = state('complete', worker_pid=102, stop_reason=None)
-            initial = state()
+            terminal = state('complete', worker_pid=102, worker_start='700', stop_reason=None)
+            initial = state(worker_start='700')
             if owned:
                 goal = {'status': 'paused', 'updatedAt': 2, 'objective': 'same-objective'}
                 initial.update(goal=goal, worker_start='700')
