@@ -5,6 +5,7 @@ import subprocess
 import time
 
 from os_goal_guard_protocol import atomic_json, process_start, read_json
+from os_goal_mailbox_status import read_mailbox_status
 from os_goal_stop_log import _text as redacted_text
 from os_goal_status_publish import StatusPublisher
 from os_goal_status_text import write_status_text
@@ -27,6 +28,8 @@ class StatusFeed:
 
     def _snapshot(self, name, notes):
         try:
+            if name == "mailbox-state.json":
+                return read_mailbox_status(self.directory / name)
             return read_json(self.directory / name)
         except FileNotFoundError:
             return {}

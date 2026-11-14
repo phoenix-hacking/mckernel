@@ -3,6 +3,7 @@
 import copy
 from datetime import datetime, timezone
 import json
+import hashlib
 from pathlib import Path
 import subprocess
 import sys
@@ -45,21 +46,38 @@ class MailboxTests(unittest.TestCase):
     def api(self, endpoint, *, method="GET", payload=None, timeout=10):
         self.assertGreater(timeout, 0)
         self.assertLessEqual(timeout, 10)
-        if method == "GET":
-            self.assertEqual(endpoint, "repos/phoenix-hacking/mckernel/issues/123/comments?per_page=100&page=1")
-            return copy.deepcopy(self.comments)
+        if endpoint == "graphql":
+            self.assertEqual(method, "POST")
+            self.assertEqual(payload["query"], mailbox._COMMENTS_QUERY)
+            variables = payload["variables"]
+            self.assertEqual({k: variables[k] for k in ("owner", "name", "number")},
+                             {"owner": "phoenix-hacking", "name": "mckernel", "number": 123})
+            after = int(variables["after"].split(":")[1]) if variables["after"] else 0
+            rows = [c for c in self.comments if type(c.get("id")) is int and c["id"] > after]
+            rows.sort(key=lambda c: c["id"])
+            page = copy.deepcopy(rows[:mailbox._COMMENT_PAGE_SIZE])
+            return self.page(page, more=len(rows) > len(page))
         self.assertEqual(endpoint, "repos/phoenix-hacking/mckernel/actions/workflows/mckernel-mailbox-notify.yml/dispatches")
         self.assertEqual(method, "POST")
         state = self.state()
         event_id = payload["inputs"]["event_id"]
-        self.assertIn(event_id, state["notices"], "Outbox must be durable before dispatch")
-        self.assertEqual(state["notices"][event_id]["body"], payload["inputs"]["body"])
+        parts = [part for notice in state["notices"].values()
+                 for part in notice.get("parts", [notice])]
+        stored = next(part for part in parts if part["event_id"] == event_id)
+        self.assertEqual(stored["body"], payload["inputs"]["body"], "Outbox must be durable before dispatch")
         self.assertEqual(set(payload["inputs"]), {"event_id", "body"})
         self.assertEqual(payload["ref"], "development")
         self.assertEqual(len(event_id), 64)
-        self.assertLessEqual(len(payload["inputs"]["body"].encode()), 6000)
+        self.assertLessEqual(len(json.dumps(payload).encode()), 65535)
         self.dispatches.append(copy.deepcopy(payload))
         return None
+
+    @staticmethod
+    def page(rows, more=False):
+        return {"data": {"repository": {"pullRequest": {"comments": {
+            "nodes": rows, "pageInfo": {
+                "endCursor": "comment:" + str(rows[-1]["id"]) if rows else None,
+                "hasNextPage": more}}}}}}
 
     def state(self):
         return json.loads((self.directory / mailbox.STATE_FILE).read_text())
@@ -183,7 +201,7 @@ class MailboxTests(unittest.TestCase):
     def test_unknown_dispatch_retries_same_durable_event_after_backoff(self):
         normal = self.api
         def lost_reply(endpoint, **kwargs):
-            if kwargs.get("method") == "POST":
+            if endpoint != "graphql" and kwargs.get("method") == "POST":
                 normal(endpoint, **kwargs)
                 raise subprocess.TimeoutExpired(["gh", "api"], 10)
             return normal(endpoint, **kwargs)
@@ -209,7 +227,8 @@ class MailboxTests(unittest.TestCase):
         body = self.dispatches[0]["inputs"]["body"]
         for secret in ("hunter2", "abc123", "alice:secret", "@outsider"):
             self.assertNotIn(secret, body)
-        self.assertLessEqual(len(body.encode()), 6000)
+        self.assertGreater(len(body.encode()), 6000)
+        self.assertLessEqual(len(body.encode()), 48000)
 
     def test_only_exact_verified_human_first_line_instruction_is_queued(self):
         self.comments = [
@@ -327,29 +346,31 @@ class MailboxTests(unittest.TestCase):
         self.assertIn("enqueue_intent", self.state())
         self.assertEqual(self.pending(), [])
 
-    def test_oversized_reply_is_rejected_without_blocking_a_later_valid_comment(self):
-        self.comments = [self.comment(10, "/mckernel-instruct\n" + "x" * 8192), self.comment(11)]
+    def test_large_reply_is_preserved_and_does_not_block_a_later_comment(self):
+        text = "é🙂" * 9000 + " trailing spaces \n"
+        self.comments = [self.comment(10, "/mckernel-instruct\n" + text), self.comment(11)]
         result = self.mailbox.poll(self.context)
-        self.assertEqual(len(result["queued_instruction_ids"]), 1)
-        self.assertEqual(self.state()["rejected_comment"]["comment_id"], 10)
+        self.assertEqual(len(result["queued_instruction_ids"]), 2)
+        item = next(json.loads(p.read_text()) for p in self.pending()
+                    if json.loads(p.read_text())["source_id"].endswith(":10"))
+        self.assertTrue(item["text"].endswith("\n\n" + text))
+        receipt = self.state()["messages"]["10"]
+        self.assertEqual(receipt["instruction_sha256"], hashlib.sha256(item["text"].encode()).hexdigest())
         self.assertEqual(self.state()["last_seen_comment_id"], 11)
 
-    def test_comments_are_paginated_and_only_exact_pr_endpoint_is_read(self):
-        pages = []
-        def api(endpoint, **kwargs):
-            if kwargs.get("method") == "POST":
-                return self.api(endpoint, **kwargs)
-            pages.append(endpoint)
-            if endpoint.endswith("page=1"):
-                return [self.comment(n, "No instruction marker") for n in range(1, 101)]
-            if endpoint.endswith("page=2"):
-                return [self.comment(101)]
-            raise AssertionError(endpoint)
-        self.api_mock.side_effect = api
+    def test_comments_are_cursor_paginated_with_no_total_history_cap(self):
+        self.comments = [self.comment(n, "unrelated", user={"type": "User", "id": 1, "login": "other"})
+                         for n in range(1, 1202)] + [self.comment(1202)]
         result = self.mailbox.poll(self.context)
-        self.assertEqual(len(pages), 2)
-        self.assertTrue(all("/issues/123/comments?" in p for p in pages))
+        reads = [call for call in self.api_mock.call_args_list if call.args[0] == "graphql"]
+        self.assertEqual(len(reads), 25)
         self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertEqual(self.state()["comment_cursor"], "comment:1202")
+        self.assertFalse(result["comment_scan_pending"])
+        self.advance()
+        self.mailbox.poll(self.context)
+        self.assertEqual([c for c in self.api_mock.call_args_list if c.args[0] == "graphql"][-1].kwargs["payload"]["variables"]["after"],
+                         "comment:1202")
 
     def test_malformed_network_response_has_backoff_and_no_instruction(self):
         self.api_mock.return_value = None
@@ -396,7 +417,7 @@ class MailboxTests(unittest.TestCase):
         first = self.mailbox.poll(self.context)
         self.assertEqual(first["next_poll_at"], 1600)
         self.assertEqual(len(self.dispatches), 1)
-        get_calls = lambda: sum(c.kwargs.get("method", "GET") == "GET" for c in self.api_mock.call_args_list)
+        get_calls = lambda: sum(c.args[0] == "graphql" for c in self.api_mock.call_args_list)
         self.assertEqual(get_calls(), 1)
         self.assertEqual(len(self.pending()), 2)
         for ident in first["queued_instruction_ids"]:
@@ -406,7 +427,7 @@ class MailboxTests(unittest.TestCase):
         self.assertEqual(second["status"], "BACKOFF")
         self.assertEqual(get_calls(), 1)
         self.assertEqual(len(self.dispatches), 2)
-        self.assertTrue(all("📥 RECEIVED — phone" in p["inputs"]["body"] for p in self.dispatches))
+        self.assertTrue(all("📥 RECEIVED:" in p["inputs"]["body"] for p in self.dispatches))
         self.advance(10)
         self.mailbox.poll(self.context)
         self.assertEqual(get_calls(), 1)
@@ -433,9 +454,11 @@ class MailboxTests(unittest.TestCase):
         body = self.dispatches[0]["inputs"]["body"]
         self.assertIn("📥 RECEIVED", body)
         self.assertIn("⏳ WAITING for controller acceptance", body)
-        self.assertIn("2026-11-10T03:00:00Z", body)
-        self.assertIn("1970-01-01T00:16:40Z", body)
-        self.assertIn(request_id, body)
+        message = self.state()["messages"]["10"]
+        self.assertEqual(message["source_created_at"], "2026-11-10T03:00:00Z")
+        self.assertEqual(message["received_at"], "1970-01-01T00:16:40Z")
+        self.assertEqual(message["request_id"], request_id)
+        self.assertNotIn("timestamp", body)
         for changes in ({"id": "unrelated"}, {"status": "delivery_uncertain"},
                         {"turn_id": ""}, {"delivered_at": "not-a-time"}, {"delivered_at": "2026-11-10T03:10:00"}):
             with self.subTest(changes=changes):
@@ -465,7 +488,7 @@ class MailboxTests(unittest.TestCase):
         self.comments = [self.comment()]
         normal = self.api
         def lost_reply(endpoint, **kwargs):
-            if kwargs.get("method") == "POST":
+            if endpoint != "graphql" and kwargs.get("method") == "POST":
                 normal(endpoint, **kwargs)
                 raise subprocess.TimeoutExpired(["gh", "api"], 10)
             return normal(endpoint, **kwargs)
@@ -528,8 +551,8 @@ class MailboxTests(unittest.TestCase):
         self.assertFalse(message["command_recognized"])
         self.assertEqual(message["delivery_status"], "NOT_QUEUED")
         self.assertIn("📥 RECEIVED", self.dispatches[0]["inputs"]["body"])
-        self.assertIn("⏳ WAITING", self.dispatches[0]["inputs"]["body"])
-        self.assertIn("NOT QUEUED", self.dispatches[0]["inputs"]["body"])
+        self.assertIn("Not queued:", self.dispatches[0]["inputs"]["body"])
+        self.assertNotIn("Put `/mckernel", self.dispatches[0]["inputs"]["body"])
         event_id = message["received_event_id"]
         self.comments += [self.comment(20, mailbox.MARKER.format(event_id=event_id),
                                       user={"id": 41898282, "login": "github-actions[bot]", "type": "Bot"})]
@@ -559,16 +582,18 @@ class MailboxTests(unittest.TestCase):
         self.assertEqual(message["received_at"], "1970-01-01T00:16:40Z")
         self.assertEqual(len(self.pending()), 1)
         self.assertEqual(len(self.dispatches), 1)
-        self.assertIn("1970-01-01T00:16:40Z", self.dispatches[0]["inputs"]["body"])
+        self.assertNotIn("timestamp", self.dispatches[0]["inputs"]["body"])
 
-    def test_outgoing_blocker_has_sent_and_waiting_signs_and_default_interval_is_600(self):
+    def test_outgoing_blocker_is_message_only_and_default_interval_is_600(self):
         config = dict(self.config)
         config.pop("poll_seconds")
         self.assertEqual(mailbox.Mailbox(self.repo, self.directory, config).poll_seconds, 600)
         self.mailbox.poll(self.context)
         body = self.dispatches[0]["inputs"]["body"]
-        self.assertIn("📤 SENT — computer → phone", body)
-        self.assertIn("⏳ WAITING FOR YOUR REPLY", body)
+        self.assertTrue(body.startswith("M14/M15 is blocked."))
+        self.assertNotIn("SENT", body)
+        self.assertNotIn("Reply in this PR", body)
+        self.assertTrue(self.state()["notices"][self.state()["active_notice_event_id"]]["requested"])
         self.assertNotIn("human received", body)
         self.assertNotIn("email delivered", body)
 
@@ -585,6 +610,364 @@ class MailboxTests(unittest.TestCase):
             result = self.mailbox.poll(self.context)
         self.assertEqual(len(result["queued_instruction_ids"]), 1)
         self.assertIn(text, json.loads(self.pending()[0].read_text())["text"])
+
+
+    def test_page_deadline_checkpoints_and_next_poll_continues(self):
+        self.comments = [self.comment(n, "unrelated", user={"type": "User", "id": 1, "login": "other"})
+                         for n in range(1, 51)] + [self.comment(51)]
+        with patch.object(mailbox.time, "monotonic", side_effect=[0.0, 0.0, 31.0]):
+            first = self.mailbox.poll(dict(self.context, status="ACTIVE"))
+        self.assertEqual(first["status"], "POLLED")
+        self.assertTrue(first["comment_scan_pending"])
+        self.assertEqual(self.state()["comment_cursor"], "comment:50")
+        self.assertEqual(self.pending(), [])
+        self.advance()
+        second = self.mailbox.poll(self.context)
+        self.assertEqual(len(second["queued_instruction_ids"]), 1)
+        reads = [c for c in self.api_mock.call_args_list if c.args[0] == "graphql"]
+        self.assertEqual(reads[-1].kwargs["payload"]["variables"]["after"], "comment:50")
+        self.assertFalse(second["comment_scan_pending"])
+
+    def test_graphql_partial_error_never_advances_the_affected_page(self):
+        self.comments = [self.comment()]
+        original = self.api
+        def api(endpoint, **kwargs):
+            result = original(endpoint, **kwargs)
+            if endpoint == "graphql":
+                result["errors"] = [{"message": "partial query error"}]
+            return result
+        self.api_mock.side_effect = api
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(result["status"], "ERROR")
+        self.assertEqual(self.pending(), [])
+        self.assertIsNone(self.state().get("comment_cursor"))
+        self.assertEqual(self.state()["last_seen_comment_id"], 0)
+
+    def test_graphql_bigint_comment_id_is_exact(self):
+        comment = self.comment(6862643464)
+        comment["id"] = str(comment["id"])
+        original = self.api
+        self.api_mock.side_effect = lambda endpoint, **kwargs: (
+            self.page([copy.deepcopy(comment)]) if endpoint == "graphql" else original(endpoint, **kwargs))
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertEqual(self.state()["last_seen_comment_id"], 6862643464)
+        self.assertIn("6862643464", self.state()["messages"])
+
+    def test_multipart_preserves_large_utf8_text_and_queues_only_after_all_parts(self):
+        from os_goal_mailbox_protocol import format_instruction_comments
+        text = ("A complete source plan 🙂é\r\n \t" * 14000) + "end \n"
+        self.assertGreater(len(text.encode()), 256 * 1024)
+        parts = format_instruction_comments(text)
+        self.assertGreater(len(parts), 1)
+        self.comments = [self.comment(index, body) for index, body in enumerate(parts[:-1], 1)]
+        first = self.mailbox.poll(self.context)
+        self.assertEqual(first["queued_instruction_ids"], [])
+        self.assertEqual(self.pending(), [])
+        self.assertEqual(self.dispatches, [], "Do not email a receipt for every transport part")
+        self.assertTrue(all(m["delivery_status"] == "ASSEMBLING" for m in self.state()["messages"].values()))
+        self.comments.append(self.comment(len(parts), parts[-1]))
+        self.advance()
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        item = json.loads(self.pending()[0].read_text())
+        self.assertTrue(item["text"].endswith("\n\n" + text))
+        self.assertEqual(len(self.dispatches), 1)
+        self.assertEqual(self.state()["messages"][str(len(parts))]["delivery_status"], "WAITING")
+        # A retry with new GitHub comment IDs is still the same logical message.
+        self.comments.extend(self.comment(len(parts) + index, body) for index, body in enumerate(parts, 1))
+        self.advance()
+        again = self.mailbox.poll(self.context)
+        self.assertEqual(again["queued_instruction_ids"], [])
+        self.assertEqual(len(self.pending()), 1)
+        self.assertEqual(json.loads(self.pending()[0].read_text())["text"], item["text"])
+
+    def test_multipart_foreign_edited_or_conflicting_parts_do_not_execute(self):
+        from os_goal_mailbox_protocol import format_instruction_comments
+        text = "verified 🙂 " * 10000
+        parts = format_instruction_comments(text)
+        self.assertGreater(len(parts), 2)
+        self.comments = [self.comment(1, parts[0]),
+            self.comment(2, parts[1], user={"type": "User", "id": 2, "login": "other"}),
+            self.comment(3, parts[1], updated_at="later"),
+            self.comment(4, parts[0] + "conflict")]
+        self.comments.extend(self.comment(index, body) for index, body in enumerate(parts[2:], 5))
+        first = self.mailbox.poll(self.context)
+        self.assertEqual(first["queued_instruction_ids"], [])
+        self.assertIn("Conflicting", self.state()["messages"]["4"]["not_queued_reason"])
+        ident = self.comments[-1]["id"] + 1
+        self.comments.append(self.comment(ident, parts[1]))
+        self.advance()
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertTrue(json.loads(self.pending()[0].read_text())["text"].endswith("\n\n" + text))
+
+    def test_duplicate_part_receipts_follow_the_completed_logical_message(self):
+        from os_goal_mailbox_protocol import format_instruction_comments
+        parts = format_instruction_comments("duplicate part status " * 4000)
+        self.comments = [self.comment(1, parts[0]), self.comment(2, parts[0])]
+        self.comments.extend(self.comment(index, body) for index, body in enumerate(parts[1:], 3))
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        for ident in ("1", "2"):
+            receipt = self.state()["messages"][ident]
+            self.assertEqual(receipt["delivery_status"], "PART_OF_QUEUED")
+            self.assertEqual(receipt["logical_request_id"], result["queued_instruction_ids"][0])
+
+    def test_multipart_digest_mismatch_is_not_queued_and_later_message_runs(self):
+        body = "/mckernel-instruct-part " + "a" * 64 + " 1/1\nwrong content"
+        self.comments = [self.comment(1, body), self.comment(2)]
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertIn("digest", self.state()["messages"]["1"]["not_queued_reason"])
+        self.assertTrue(json.loads(self.pending()[0].read_text())["source_id"].endswith(":2"))
+
+    def test_failed_digest_is_retained_and_a_fresh_complete_resend_can_succeed(self):
+        text = "first second"
+        digest = hashlib.sha256(text.encode()).hexdigest()
+        command = "/mckernel-instruct-part " + digest
+        self.comments = [self.comment(1, command + " 1/2\nwrong "),
+                         self.comment(2, command + " 2/2\nsecond")]
+        first = self.mailbox.poll(self.context)
+        self.assertEqual(first["queued_instruction_ids"], [])
+        self.assertEqual(self.state()["messages"]["1"]["delivery_status"], "REJECTED_ASSEMBLY")
+        self.comments += [self.comment(3, command + " 1/2\nfirst "),
+                          self.comment(4, command + " 2/2\nsecond")]
+        self.advance()
+        second = self.mailbox.poll(self.context)
+        self.assertEqual(len(second["queued_instruction_ids"]), 1)
+        self.assertTrue(json.loads(self.pending()[0].read_text())["text"].endswith("\n\n" + text))
+        group = self.state()["multipart"][digest]
+        self.assertEqual(group["rejected_attempts"][0]["parts"]["1"]["text"], "wrong ")
+        self.assertEqual(self.state()["messages"]["1"]["delivery_status"], "REJECTED_ASSEMBLY")
+
+    def test_multipart_queue_crash_recovers_once_without_source_comments(self):
+        from os_goal_mailbox_protocol import format_instruction_comments
+        text = "exact repeated Unicode 🙂\n" * 3000
+        parts = format_instruction_comments(text)
+        self.comments = [self.comment(index, body) for index, body in enumerate(parts, 1)]
+        original = mailbox.queue_instruction
+        def crash(*args, **kwargs):
+            original(*args, **kwargs)
+            raise SystemExit("after durable queue, before acknowledgement")
+        with patch.object(mailbox, "queue_instruction", side_effect=crash):
+            with self.assertRaises(SystemExit):
+                self.mailbox.poll(self.context)
+        self.assertEqual(len(self.pending()), 1)
+        self.assertIn("enqueue_intent", self.state())
+        self.comments = []
+        self.advance()
+        result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertEqual(len(self.pending()), 1)
+        self.assertTrue(json.loads(self.pending()[0].read_text())["text"].endswith("\n\n" + text))
+        self.assertNotIn("enqueue_intent", self.state())
+
+    def test_long_outbox_keeps_all_text_and_waits_for_every_part_receipt(self):
+        context = dict(self.context, missing_input="long detailed result 🙂\n" * 5000)
+        result = self.mailbox.poll(context)
+        event_id = result["notice_event_id"]
+        expected = self.state()["notices"][event_id]["body"]
+        count = len(self.state()["notices"][event_id]["parts"])
+        self.assertGreater(count, 1)
+        for _ in range(count - 1):
+            self.advance(1)
+            self.mailbox.poll(context)
+        self.assertEqual(len(self.dispatches), count)
+        self.assertEqual("".join(p["inputs"]["body"] for p in self.dispatches), expected)
+        self.assertEqual(len({p["inputs"]["event_id"] for p in self.dispatches}), count)
+        self.comments = [self.comment(1, mailbox.MARKER.format(event_id=self.dispatches[0]["inputs"]["event_id"]),
+                                      user={"type": "Bot", "login": "github-actions[bot]"})]
+        self.advance(600)
+        partial = self.mailbox.poll(context)
+        self.assertFalse(partial["observed_notice"])
+        self.comments.extend(self.comment(index, mailbox.MARKER.format(event_id=payload["inputs"]["event_id"]),
+                             user={"type": "Bot", "login": "github-actions[bot]"})
+                             for index, payload in enumerate(self.dispatches[1:count], 2))
+        self.advance()
+        complete = self.mailbox.poll(context)
+        self.assertTrue(complete["observed_notice"])
+        self.assertEqual(len(self.state()["notices"][event_id]["observed_comment_ids"]), count)
+
+    def file_revision(self, commit="a" * 40, text="Continue the current functional work.\r\n"):
+        return {"status": "READY", "commit_sha": commit, "blob_sha": "b" * 40,
+                "text": text, "source_url": "https://github.com/phoenix-hacking/mckernel/blob/" + commit + "/mailbox.txt",
+                "author_login": "phoenix-hacking", "author_id": 175406809}
+
+    def enable_file(self):
+        self.mailbox.config.update(file_inbox_branch="codex/mckernel-control-mailbox",
+                                   file_inbox_path="mailbox.txt", file_reply_path="mailbox-reply.txt")
+        self.mailbox.file_enabled = True
+
+    def test_file_revision_is_queued_once_and_new_revision_is_independent(self):
+        self.enable_file()
+        revision = self.file_revision(text="plain text without a slash command\r\n" * 10000)
+        with patch.object(mailbox, "read_revision", return_value=revision), \
+                patch.object(mailbox, "write_reply", return_value={"status": "POSTED", "blob_sha": "c" * 40}):
+            first = self.mailbox.poll(self.context)
+            self.assertEqual(len(first["queued_instruction_ids"]), 1)
+            item = json.loads(self.pending()[0].read_text())
+            self.assertTrue(item["text"].endswith("\n\n" + revision["text"]))
+            self.assertEqual(self.state()["last_seen_comment_id"], 0)
+            self.advance()
+            self.assertEqual(self.mailbox.poll(self.context)["queued_instruction_ids"], [])
+        changed = self.file_revision(commit="d" * 40, text="A new revision.")
+        with patch.object(mailbox, "read_revision", return_value=changed), \
+                patch.object(mailbox, "write_reply", return_value={"status": "POSTED"}):
+            self.advance()
+            second = self.mailbox.poll(self.context)
+        self.assertEqual(len(second["queued_instruction_ids"]), 1)
+        self.assertEqual(len(self.pending()), 2)
+
+    def test_file_receipt_acceptance_is_mirrored_as_plain_latest_reply(self):
+        self.enable_file()
+        revision = self.file_revision()
+        with patch.object(mailbox, "read_revision", return_value=revision), \
+                patch.object(mailbox, "write_reply", return_value={"status": "POSTED"}) as writer:
+            first = self.mailbox.poll(self.context)
+            self.assertIn("📥 RECEIVED", writer.call_args.args[1])
+            self.write_delivery(first["queued_instruction_ids"][0])
+            self.advance(10)
+            self.mailbox.poll(self.context)
+            self.assertEqual(self.state()["file_inbox"]["status"], "ACCEPTED")
+            self.assertIn("✅ RECEIVED BY CONTROLLER", writer.call_args.args[1])
+            self.assertIn("WAITING for the work result", writer.call_args.args[1])
+            self.assertNotIn("Reply here", writer.call_args.args[1])
+            self.assertEqual(writer.call_count, 2)
+
+    def test_file_read_failure_does_not_block_valid_comment(self):
+        self.enable_file()
+        self.comments = [self.comment()]
+        with patch.object(mailbox, "read_revision", side_effect=ValueError("Unverified file commit")), \
+                patch.object(mailbox, "write_reply", return_value={"status": "POSTED"}):
+            result = self.mailbox.poll(self.context)
+        self.assertEqual(result["status"], "POLLED")
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertEqual(self.state()["file_inbox"]["status"], "ERROR")
+        self.assertNotIn("last_seen_commit", self.state()["file_inbox"])
+
+    def test_late_acceptance_preserves_a_newer_work_result(self):
+        self.enable_file()
+        state = self.mailbox._state()
+        self.mailbox._event(state, "received", "first", "Received instruction")
+        with patch.object(mailbox, "write_reply", return_value={"status": "POSTED", "blob_sha": "c" * 40}):
+            self.mailbox._publish_reply(state, self.clock[0])
+        accepted = self.mailbox._event(state, "accepted", "first", "WAITING for the work result")
+        with patch.object(mailbox, "write_reply", return_value={"status": "PRESERVED", "blob_sha": "d" * 40}) as writer:
+            self.mailbox._publish_reply(state, self.clock[0] + 1)
+            self.assertEqual(writer.call_args.kwargs["expected_blob_sha"], "c" * 40)
+            self.assertEqual(state["file_reply"]["event_id"], accepted)
+            self.assertEqual(state["file_reply"]["status"], "PRESERVED")
+            self.assertNotIn("published_at", state["file_reply"])
+            self.mailbox._publish_reply(state, self.clock[0] + 601)
+            self.assertEqual(writer.call_count, 1)
+            self.mailbox._event(state, "accepted", "second", "A later acceptance")
+            self.mailbox._publish_reply(state, self.clock[0] + 602)
+            self.assertIsNone(writer.call_args.kwargs["expected_blob_sha"])
+
+    def test_uncertain_acceptance_preserves_expected_reply_blob_across_restart(self):
+        self.enable_file()
+        state = self.mailbox._state()
+        state["file_reply"] = {"event_id": "previous", "status": "POSTED", "blob_sha": "c" * 40}
+        self.mailbox._event(state, "accepted", "first", "WAITING for the work result")
+        with patch.object(mailbox, "write_reply", side_effect=RuntimeError("Unconfirmed PUT")) as writer:
+            self.mailbox._publish_reply(state, self.clock[0])
+            self.assertEqual(writer.call_args.kwargs["expected_blob_sha"], "c" * 40)
+        restored = self.mailbox._state()
+        self.assertEqual(restored["file_reply"]["status"], "ERROR")
+        self.assertEqual(restored["file_reply"]["expected_blob_sha"], "c" * 40)
+        with patch.object(mailbox, "write_reply", return_value={"status": "OBSERVED", "blob_sha": "d" * 40}) as writer:
+            self.mailbox._publish_reply(restored, self.clock[0] + 600)
+            self.assertEqual(writer.call_args.kwargs["expected_blob_sha"], "c" * 40)
+        # With no prior confirmed mirror, acceptance must expect an absent file.
+        fresh = self.mailbox._state()
+        fresh.pop("file_reply")
+        with patch.object(mailbox, "write_reply", return_value={"status": "PRESERVED", "blob_sha": "e" * 40}) as writer:
+            self.mailbox._publish_reply(fresh, self.clock[0] + 1200)
+            self.assertIn("expected_blob_sha", writer.call_args.kwargs)
+            self.assertIsNone(writer.call_args.kwargs["expected_blob_sha"])
+
+    def test_file_queue_crash_recovers_original_revision_once(self):
+        self.enable_file()
+        revision = self.file_revision()
+        original = mailbox.queue_instruction
+        def crash(*args, **kwargs):
+            original(*args, **kwargs)
+            raise SystemExit("after file instruction queued")
+        with patch.object(mailbox, "read_revision", return_value=revision), \
+                patch.object(mailbox, "queue_instruction", side_effect=crash):
+            with self.assertRaises(SystemExit):
+                self.mailbox.poll(self.context)
+        self.assertEqual(len(self.pending()), 1)
+        self.assertEqual(self.state()["enqueue_intent"]["source_kind"], "file")
+        with patch.object(mailbox, "read_revision", return_value=revision), \
+                patch.object(mailbox, "write_reply", return_value={"status": "POSTED"}):
+            result = self.mailbox.poll(self.context)
+        self.assertEqual(len(result["queued_instruction_ids"]), 1)
+        self.assertEqual(len(self.pending()), 1)
+        self.assertEqual(self.state()["file_inbox"]["last_seen_commit"], revision["commit_sha"])
+
+    def test_file_read_recovery_keeps_an_already_accepted_delivery(self):
+        self.enable_file()
+        revision = self.file_revision()
+        with patch.object(mailbox, "read_revision", return_value=revision) as reader, \
+                patch.object(mailbox, "write_reply", return_value={"status": "POSTED", "blob_sha": "c" * 40}):
+            first = self.mailbox.poll(self.context)
+            self.write_delivery(first["queued_instruction_ids"][0])
+            self.advance(10)
+            self.mailbox.poll(self.context)
+            self.assertEqual(self.state()["file_inbox"]["status"], "ACCEPTED")
+            reader.side_effect = RuntimeError("Temporary file read failure")
+            self.advance(590)
+            self.mailbox.poll(self.context)
+            self.assertEqual(self.state()["file_inbox"]["status"], "ERROR")
+            reader.side_effect = None
+            self.advance()
+            result = self.mailbox.poll(self.context)
+            self.assertEqual(result["queued_instruction_ids"], [])
+            self.assertEqual(self.state()["file_inbox"]["status"], "ACCEPTED")
+            self.assertEqual(len(self.state()["messages"]), 1)
+
+    def test_empty_file_is_inactive_and_does_not_cancel_existing_instruction(self):
+        self.enable_file()
+        with patch.object(mailbox, "read_revision", return_value={"status": "EMPTY", "commit_sha": "a" * 40}), \
+                patch.object(mailbox, "write_reply", return_value={"status": "POSTED"}):
+            result = self.mailbox.poll(dict(self.context, status="ACTIVE"))
+        self.assertEqual(result["queued_instruction_ids"], [])
+        self.assertEqual(self.pending(), [])
+        self.assertEqual(self.state()["file_inbox"]["status"], "EMPTY")
+        self.assertEqual(json.loads((self.directory / "state.json").read_text()), self.saved)
+
+    def test_uncertain_reply_write_backs_off_without_disabling_email(self):
+        self.enable_file()
+        with patch.object(mailbox, "read_revision", return_value=self.file_revision()), \
+                patch.object(mailbox, "write_reply", side_effect=RuntimeError("Unconfirmed PUT")) as writer:
+            first = self.mailbox.poll(self.context)
+            self.assertEqual(first["status"], "POLLED")
+            self.assertEqual(len(self.dispatches), 1)
+            self.assertEqual(self.state()["file_reply"]["status"], "ERROR")
+            self.advance(10)
+            self.mailbox.poll(self.context)
+            self.assertEqual(writer.call_count, 1)
+        with patch.object(mailbox, "read_revision", return_value=self.file_revision()), \
+                patch.object(mailbox, "write_reply", return_value={"status": "OBSERVED"}) as writer:
+            self.advance(590)
+            self.mailbox.poll(dict(self.context, status="ACTIVE"))
+            self.assertEqual(writer.call_count, 1)
+            self.assertEqual(self.state()["file_reply"]["status"], "OBSERVED")
+
+    def test_mailbox_state_above_old_two_mib_cap_reloads_without_loss(self):
+        state = self.mailbox._state()
+        state["retained_test_message"] = "🙂" * 200000
+        mailbox._save(self.mailbox.path, state)
+        self.assertGreater(self.mailbox.path.stat().st_size, 2 * 1024 * 1024)
+        self.assertEqual(self.mailbox._state(), state)
+        before = self.mailbox.path.read_bytes()
+        with patch.object(mailbox.json, "dump", side_effect=OSError("storage unavailable")):
+            with self.assertRaises(OSError):
+                mailbox._save(self.mailbox.path, dict(state, new=True))
+        self.assertEqual(self.mailbox.path.read_bytes(), before)
+        self.assertEqual(list(self.directory.glob("mailbox-state.json.*.tmp")), [])
 
 
 class TransportTests(unittest.TestCase):
@@ -612,3 +995,4 @@ class TransportTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

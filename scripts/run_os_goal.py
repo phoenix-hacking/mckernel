@@ -157,25 +157,66 @@ def m14_m15_closed(repo):
         return False
 
 
-def read_startup_instruction(path):
-    """Load an explicit invocation note before thread/resume can start work."""
+def _read_instruction_bytes(path, description, *, private=False):
+    """Read a stable regular file in chunks, without imposing a payload quota."""
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         before = os.fstat(fd)
-        if not stat.S_ISREG(before.st_mode) or before.st_size > 8192:
-            raise ValueError("Startup instruction must be a regular file of at most 8192 bytes")
-        raw = os.read(fd, 8193)
+        if not stat.S_ISREG(before.st_mode):
+            raise ValueError(description + " must be a regular file")
+        if private and (before.st_uid != os.getuid() or before.st_nlink != 1):
+            raise ValueError(description + " must be an owner-controlled single-link file")
+        chunks, size = [], 0
+        # Read at most the observed file plus one byte: concurrent growth is a
+        # changed input, while a complete immutable instruction has no size cap.
+        while size <= before.st_size:
+            chunk = os.read(fd, min(65536, before.st_size + 1 - size))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            size += len(chunk)
         after = os.fstat(fd)
-        if (len(raw) != before.st_size or
-                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) !=
-                (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns)):
-            raise ValueError("Startup instruction changed during read")
-        note = raw.decode("utf-8")
-        if not note.strip() or "\0" in note:
-            raise ValueError("Startup instruction must be nonempty UTF-8 text without NUL")
-        return note
+        if (size != before.st_size or
+                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns,
+                 before.st_ctime_ns, before.st_uid, before.st_nlink) !=
+                (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns,
+                 after.st_ctime_ns, after.st_uid, after.st_nlink)):
+            raise ValueError(description + " changed during read")
+        return b"".join(chunks)
     finally:
         os.close(fd)
+
+
+def _read_private_json(path):
+    raw = _read_instruction_bytes(path, "Instruction JSON", private=True)
+    value = json.loads(raw.decode("utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError("Instruction JSON must contain an object")
+    return value
+
+
+def _validate_instruction(instruction):
+    if not isinstance(instruction, str):
+        raise ValueError("Instruction must be UTF-8 text")
+    try:
+        instruction.encode("utf-8")
+    except UnicodeEncodeError as error:
+        raise ValueError("Instruction must be valid UTF-8 text") from error
+    if not instruction.strip():
+        raise ValueError("Instruction must be nonempty UTF-8 text")
+    return instruction
+
+
+def read_startup_instruction(path):
+    """Load an explicit invocation note before thread/resume can start work."""
+    raw = _read_instruction_bytes(path, "Startup instruction")
+    try:
+        note = raw.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise ValueError("Startup instruction must be valid UTF-8 text") from error
+    if not note.strip() or "\0" in note:
+        raise ValueError("Startup instruction must be nonempty UTF-8 text without NUL")
+    return note
 
 
 def say(message):
@@ -256,8 +297,7 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
     """Queue an owner's instruction without touching the running server lease."""
     if not (directory / "state.json").is_file():
         raise RuntimeError("No saved OS campaign exists; start the runner first.")
-    if not instruction.strip() or len(instruction.encode("utf-8")) > 8192:
-        raise ValueError("Instruction must be nonempty and at most 8192 UTF-8 bytes.")
+    _validate_instruction(instruction)
     item = {"submitted_at": utc(), "text": instruction}
     if capture_progress_directory is not None:
         path = validate_capture_progress_directory(capture_progress_directory)
@@ -289,7 +329,10 @@ def queue_instruction(directory, instruction, capture_progress_directory=None, *
         try:
             fcntl.flock(lock, fcntl.LOCK_EX)
             registry = sources / (digest + ".json")
-            prior = json.loads(registry.read_text()) if registry.exists() else None
+            try:
+                prior = _read_private_json(registry)
+            except FileNotFoundError:
+                prior = None
             if prior:
                 if prior.get("item", {}).get("text_sha256") != item["text_sha256"] or prior["item"].get("source_id") != source_id:
                     raise ValueError("Source instruction content changed; refusing replay")
@@ -500,12 +543,43 @@ class RPC:
         self.proc = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=self.stderr, bufsize=0, start_new_session=True,
                                      env=runtime_environment())
+        os.set_blocking(self.proc.stdin.fileno(), False)
         self.selector = selectors.DefaultSelector()
         self.selector.register(self.proc.stdout, selectors.EVENT_READ)
 
-    def send(self, value):
-        self.proc.stdin.write((json.dumps(value) + "\n").encode())
-        self.proc.stdin.flush()
+    def send(self, value, *, deadline=None):
+        # A raw pipe may accept only part of a large JSON line. Never replay the
+        # whole request after a partial send; call/delivery owns uncertainty.
+        if getattr(self, "_send_failure", None) is not None:
+            raise self._send_failure
+        if deadline is None:
+            deadline = getattr(self, "_call_deadline", None)
+        if deadline is None:
+            deadline = time.monotonic() + 45.0
+        view = memoryview((json.dumps(value) + "\n").encode("utf-8"))
+        fd = self.proc.stdin.fileno()
+        try:
+            with selectors.DefaultSelector() as writable:
+                writable.register(fd, selectors.EVENT_WRITE)
+                while view:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise RecoverableFailure("App-server request timed out while sending")
+                    if not writable.select(min(1.0, remaining)):
+                        continue
+                    try:
+                        written = os.write(fd, view)
+                    except (BlockingIOError, InterruptedError):
+                        continue
+                    if written <= 0:
+                        raise BrokenPipeError("App-server stdin stopped accepting request bytes")
+                    view = view[written:]
+        except (RecoverableFailure, BrokenPipeError, ConnectionResetError) as error:
+            # Appending another line could complete a malformed or uncertain
+            # request. Retain this failure and prohibit further channel writes.
+            error.rpc_send_incomplete = True
+            self._send_failure = error
+            raise
 
     def pump(self, timeout=1.0):
         self.pump_stderr()
@@ -516,8 +590,6 @@ class RPC:
             if not chunk:
                 raise RecoverableFailure("Codex app server disconnected; see retained stderr.")
             self.buffer += chunk
-        if len(self.buffer) > 32 * 1024 * 1024:
-            raise RuntimeError("Oversized app-server record; stopped without discarding logs.")
         while b"\n" in self.buffer:
             line, self.buffer = self.buffer.split(b"\n", 1)
             message = json.loads(line)
@@ -586,15 +658,19 @@ class RPC:
                 self.on_event({"method": "launcher/serverStderr", "params": {"delta": value}})
 
     def call(self, method, params, timeout=45.0):
+        deadline = time.monotonic() + timeout
+        previous_deadline = getattr(self, "_call_deadline", None)
+        if previous_deadline is not None:
+            deadline = min(deadline, previous_deadline)
         if method == "account/rateLimits/read":
             self.last_account_read_completion = None
         self.next_id += 1
         ident = self.next_id
         self.pending_methods[ident] = method
         self.events.write(json.dumps({"at": utc(), "request": method, "id": ident}) + "\n")
+        self._call_deadline = deadline
         try:
-            self.send({"id": ident, "method": method, "params": params})
-            deadline = time.monotonic() + timeout
+            self.send({"id": ident, "method": method, "params": params}, deadline=deadline)
             while ident not in self.responses:
                 if time.monotonic() >= deadline:
                     raise RecoverableFailure("App-server request timed out: " + method)
@@ -605,7 +681,12 @@ class RPC:
             if not hasattr(error, "rpc_method"):
                 error.rpc_method = method
                 error.rpc_mutating = method not in READ_ONLY_RPC_METHODS
+            if (isinstance(error, RecoverableFailure) and
+                    str(error) == "App-server request timed out while sending"):
+                error.args = ("App-server request timed out: " + error.rpc_method,)
             raise
+        finally:
+            self._call_deadline = previous_deadline
         response = self.responses.pop(ident)
         self.pending_methods.pop(ident, None)
         completion = self.response_contexts.pop(ident, None)
@@ -1119,7 +1200,7 @@ class Campaign:
             return  # An uncertain earlier delivery must be resolved before newer ones.
         pending = sorted(
             (control / "pending").glob("*.json"),
-            key=lambda path: (datetime.fromisoformat(json.loads(path.read_text())["submitted_at"]),
+            key=lambda path: (datetime.fromisoformat(_read_private_json(path)["submitted_at"]),
                               path.name))
         if not pending:
             return
@@ -1127,7 +1208,8 @@ class Campaign:
         source = pending[0]
         sending = sending_dir / source.name
         os.replace(source, sending)
-        item = json.loads(sending.read_text())
+        item = _read_private_json(sending)
+        _validate_instruction(item.get("text"))
         receipt = {"id": item["id"], "thread_id": ident,
                    "turn_id": self.active.get(ident), "submitted_at": item["submitted_at"]}
         try:
@@ -1185,9 +1267,13 @@ class Campaign:
             # A timeout may mean the server accepted the steer. Never silently
             # retry a potentially non-idempotent user instruction.
             receipt.update(status="delivery_uncertain", error=str(error))
-            self.save(last_instruction=receipt, transport_uncertain={"at": utc(),
+            fields = {"last_instruction": receipt, "transport_uncertain": {"at": utc(),
                       "method": "turn/start" if waiting else "turn/steer", "error": str(error),
-                      "reason": "instruction_delivery_uncertain"})
+                      "reason": "instruction_delivery_uncertain"}}
+            failure = self.transport_error_record(error)
+            if failure is not None:
+                fields["transport_failure"] = failure
+            self.save(**fields)
             self.stop_reason = self.stop_reason or "rpc_delivery_uncertain"
             self.stop_now = True
             self.output.notice("Instruction delivery uncertain; inspect " + str(sending))
@@ -2029,7 +2115,8 @@ class Campaign:
                 "worker_start": self.state.get("worker_start"),
                 "thread_id": self.state.get("thread_id"), "class": label,
                 "error": str(error), "error_type": type(error).__name__, "method": method,
-                "channel_unusable": label in {"disconnected", "broken_pipe", "connection_reset"},
+                "channel_unusable": bool(getattr(error, "rpc_send_incomplete", False) or
+                                         label in {"disconnected", "broken_pipe", "connection_reset"}),
                 "mutating": bool(getattr(error, "rpc_mutating", False) or
                                  method is not None and method not in READ_ONLY_RPC_METHODS)}
 
@@ -2599,4 +2686,5 @@ if __name__ == "__main__":
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as failure:
         say(str(failure))
         sys.exit(1)
+
 

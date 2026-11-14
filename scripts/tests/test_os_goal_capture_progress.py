@@ -16,7 +16,9 @@ SOURCE = Path(__file__).resolve().parents[1] / 'run_os_goal.py'
 
 def extracted():
     tree = ast.parse(SOURCE.read_text())
-    names = {'utc', 'atomic_json', 'validate_capture_progress_directory', 'queue_instruction'}
+    names = {'utc', 'atomic_json', 'validate_capture_progress_directory', 'queue_instruction',
+             '_read_instruction_bytes', '_read_private_json', '_validate_instruction',
+             'is_policy_stop', 'failure_location'}
     nodes = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name in names]
     campaign = next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == 'Campaign')
     methods = [node for node in campaign.body if isinstance(node, ast.FunctionDef)
@@ -37,6 +39,7 @@ class QueueRegistrationTests(unittest.TestCase):
         scope, cls = extracted()
         campaign = cls()
         campaign.directory = Path(directory)
+        campaign.args = SimpleNamespace(repair_agent_failures=False)
         campaign.log_dir = Path(directory) / 'runs' / 'instance-a'
         campaign.state = dict(schema_version=1, capture_progress_capability=scope['CAPTURE_PROGRESS_CAPABILITY'],
                               phase='running', thread_id='thread-a',
