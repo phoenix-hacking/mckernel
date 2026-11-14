@@ -10,7 +10,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          sparse-checkout: |
+            kernel/rust
+            ci/c4-whole-crate
+          persist-credentials: false
       - name: Install the exact already-qualified compiler
         shell: bash
         run: |
@@ -25,5 +30,10 @@ jobs:
         if: always()
         with:
           name: c4-whole-production-rust-object
-          path: c4-whole-crate-output/
+          path: |
+            c4-whole-crate-output/mckernel_rust.o
+            c4-whole-crate-output/mckernel_rust.raw.d
+            c4-whole-crate-output/command.json
+            c4-whole-crate-output/defined-symbols.txt
+            c4-whole-crate-output/RESULT.json
           retention-days: 7
