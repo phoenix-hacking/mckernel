@@ -1,5 +1,65 @@
 # McKernel: M14 → M15 → complete supported system
 
+## USER-AUTHORIZED CONFIGURATION CHECKPOINT: pause for same-Root11 restart — 2026-11-14T06:10:24.016074+00:00
+
+Latest explicit user894e6f86 authorizes controlled STOP+START for capacity11 and
+requires this turn to finish after checkpoint. NEW engineering/payload/worker
+dispatch is stopped; only the already-completed production family's bounded
+qualification/retirement and qualified source integration were finished. This is
+an operator configuration pause, not OS/milestone completion or permanent stop.
+Operator foreground performs normal stop/start of the known same savedRoot and
+finite7c6 ledger; no hot JSON/RPC/source reload/newRoot/crash autorelaunch/timer.
+Next manual invocation resumes normally after actual normal startup/readback.
+
+Qualified exact4-path capacity patchbde5dd5d is applied; SourceGO5f98632e and actual
+CI43563096183/job132350906039 passed ONLY16 affected resource/strict-startup tests
+in0.012s,zero skips/errors/failures. Default6 remains; explicit11/>11 rejection
+qualified. CURRENT loaded server is still6, Sol/xhigh/depth1, sharedHOST0,6,7/
+3jobs/4GiB TOTAL and separate native2-5/12GiB/singleowner. Do not claim real11
+availability until normal backend/config/env exact11 readback; preserve real
+backend refusal. Source/mock PASS is not live capacity or original acceptance.
+
+ProductionA+B ACTUALLY ran once in exact46d container, no imagebuild. A whole
+mcexec Rust compile0/2.263s produced763256B objectb245426d (checkpoint0444).
+B linked398112B ELF80a5598d but failed passive GNU nm '--global' unsupported;
+wholeB/F02/native remains NOT PASS. Exact failure/raw captures preserved, Q91732ae0
+qualifies A only at its source/ABI artifact scope and FAILED family's positive
+closure: original9CLI waits/18streams closed/fsynced, nonOOM exited1/Pid0, exact
+remove/absence, lockclosed. Root retired ONLY its1207959552B/job1. All known current
+Root HOST payload families now have actual scopedQ/receipts and current census0
+bytes/0jobs; controller/worker overhead remains real and every future job needs
+fresh admission. No assumption of zero global containers/native handles.
+
+Next after MANUAL restart: smallest changed source fix for B's supported nm external
+symbol option, independent review, then resume failed passive/B boundary using
+actual A object/linkedELF/map. DO NOT recompile unchanged A or rerun6/32 fixture,
+25/16/C4/lifecycle greens. Failed and partial artifacts stay intact. TimeSource's
+existing46d passive vendorcompiler/runtime read/export proposal6c9b5218 is ready;
+first resolve genuine cached RedHat192 bytes/runtime, official auth fallbackaffa/
+fdb remains ready. No Linux/core/module/SDK rebuild/stub/upstream substitution.
+Native12/currentfree/source-generation/registered-loader/SDK/permission/lease/
+account/service/globalUNKNOWN and rejected-worker/turn/nonces remain binding.
+
+Original accepted check progress110/156 (46open), M14=77.41%, M15=74.59%, neither
+milestone accepted. This run closed03-02DEFAULT,03-01DEFAULT,F03DEFAULT,I01E2/E3
+only at exact source/ABI/image clauses; no FUNCTIONAL/native/parent/file/final
+acceptance. Original criteria/weights/156 denominator unchanged. Old18067/40491
+HOST2.25GiB/jobs2 writer/privatelease scope is Q39feb/Root49ed retired; original
+operation outcomes stayUNKNOWN, no historical waits/ACK/publication success or
+physical2.25GiB RAM-return fabricated. Other oldsource/scratch21/native/IPC holds
+remain. SameRoot01a18bc3-e072-7810-9426-75101b0856c0, cumulative7c6 ceiling
+52079.8011050000/history preserved, no accounting/goal reset/backups/replay.
+
+Controlled restart readiness will be written only after commit/push/fetch and
+all current owned operations' positive closure at
+/home/holden/mckernel-work/source-owner-capacity-11-20261114/ROOT-READY-FOR-CONTROLLED-RESTART.json.
+It must retain actual controller/server IDs, state/credit refs, positive closure
+proofs and inherited nativeUNKNOWN—not assumed zeros. Foreground's runbooka2c30191
+remains PRIVATE until workflow stable, final targetinstructions/M14-M15-REPRODUCIBILITY.md;
+reference only, not another plan. Resume real native/currentcohort and independent
+M15 production/SMP/device work within genuine grants. M14 FINAL before M15 FINAL;
+after BOTH checkpoint/pause larger goal, never mark OS complete at this checkpoint.
+
 ## Five original source/image checks closed; old HOST scope retired — 2026-11-14T05:41:53.069563+00:00
 
 Root accepted exact original M14-F03-DEFAULT, M14-I01-E2 and M14-I01-E3 after the

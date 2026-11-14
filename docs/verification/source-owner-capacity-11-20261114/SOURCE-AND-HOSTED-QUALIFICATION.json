@@ -1,0 +1,92 @@
+{
+  "scope": "Functional McKernel OS/apps/Rust efficiency only; NO SECURITY TESTING.",
+  "status": "PASS_EXACT_CAPACITY16_OFFLINE_SOURCE_CHECKS",
+  "at_utc": "2026-11-14T05:48:50.528951+00:00",
+  "run_id": 43563096183,
+  "run_url": "https://github.com/phoenix-hacking/mckernel/actions/runs/43563096183",
+  "job_id": 132350906039,
+  "source_commit": "13b47dbde2cbb4b8bbd30dc2644ee37e04c9af4b",
+  "source_tree": "7047773d56fc360347cd0d72ecb89a2f0e438844",
+  "qualification_mirror_commit": "99f8396106fcc79f9b38f0f36887220d1c68d657",
+  "patch": {
+    "bytes": 8527,
+    "path": "/home/holden/mckernel-work/source-owner-capacity-11-20261114/CAPACITY-11.patch",
+    "sha256": "bde5dd5d89859fce3afd4dc630bda57df7cfa5722622f4497ff59bf9121de557"
+  },
+  "source_review": {
+    "path": "/home/holden/mckernel-work/source-owner-capacity-11-20261114/INDEPENDENT-SOURCE-REVIEW.json",
+    "sha256": "5f98632e5e4d7bde9166086cfb15096ed7c0220f4d6feb7bc0991d4dfcc3c269"
+  },
+  "command": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "scripts.tests.test_os_goal_resources",
+    "scripts.tests.test_os_goal_launcher.CampaignTests.test_explicit_eleven_slots_reach_strict_startup_and_require_exact_readback"
+  ],
+  "outer_tests": 16,
+  "seconds": 0.012,
+  "exit_code": 0,
+  "failures": 0,
+  "errors": 0,
+  "skips": 0,
+  "expected_failures": 0,
+  "unexpected_successes": 0,
+  "source_pins_verified": 7,
+  "artifact": {
+    "id": 14101525442,
+    "sha256": "bcd9d9114c481de81e1dabff5807d8ef6f50f5a2a8d48e0ce308ef6c6719ffe2"
+  },
+  "source_paths": [
+    {
+      "path": "scripts/os_goal_resources.py",
+      "before_sha256": "0406b0b8cddc06af5289a1c1a5f9a65499a5a0af788e26ca4cb483cf89b24c4b",
+      "after_sha256": "3fc6a250bcb6c7b14275040cc965077cb53902860d3055fec80ea5e72a772c28",
+      "observed_current_sha256": "0406b0b8cddc06af5289a1c1a5f9a65499a5a0af788e26ca4cb483cf89b24c4b",
+      "current_state": "before"
+    },
+    {
+      "path": "scripts/run_os_goal.py",
+      "before_sha256": "eb465021dd4efb18abfb3e6ce504e935b2f46b5c1aec1ce1c834b27a0267af59",
+      "after_sha256": "6c9269842dbda03efbaf9e8e27362d7d2498594ab98f8faca94c86de824d3d7e",
+      "observed_current_sha256": "eb465021dd4efb18abfb3e6ce504e935b2f46b5c1aec1ce1c834b27a0267af59",
+      "current_state": "before"
+    },
+    {
+      "path": "scripts/tests/test_os_goal_resources.py",
+      "before_sha256": "6732419a679905aaca7e448f4dc20f22d0f1258471cc43466c68ef856a38925d",
+      "after_sha256": "86b34ae0babf973b446e436e0c750f89e34cc95b620648b54c0e720f1aacc1ea",
+      "observed_current_sha256": "6732419a679905aaca7e448f4dc20f22d0f1258471cc43466c68ef856a38925d",
+      "current_state": "before"
+    },
+    {
+      "path": "scripts/tests/test_os_goal_launcher.py",
+      "before_sha256": "73dbc83446c2273ba8555634fda8f8e08453faee90235f54eff4d12af864dc75",
+      "after_sha256": "e262c7bf4edc13e4e1e2076953ca111f291ee377bb18cc707d654100438a910d",
+      "observed_current_sha256": "73dbc83446c2273ba8555634fda8f8e08453faee90235f54eff4d12af864dc75",
+      "current_state": "before"
+    }
+  ],
+  "verified_contract": "Default6, explicit11 ceiling, >11 rejection, exact strict requested/readback11 versus6/12 refusal; unchanged shared CPU/memory/native/depth/xhigh/UNKNOWN/accounting guards. No actual model/server/thread/turn dispatch in selected mocks.",
+  "unchanged_green_reuse": "No494/243/25/16 oldgreen rerun or local compiler/native; prior qualified C4/F02/IHK/instructions preserved in complete source snapshot.",
+  "actual_live_11_capacity": false,
+  "backend_11_running_or_original_acceptance_credit": false,
+  "canonical_or_live_runtime_mutation": false,
+  "mirror_warning": "Never merge pruned qualification mirror; Root integrates only exact reviewed4-path delta, preserving unrelated current source and instruction/state/credit/holds.",
+  "Root_source_integration": {
+    "at": "2026-11-14T06:04:37.284036+00:00",
+    "exact_four_paths_applied": [
+      "scripts/os_goal_resources.py",
+      "scripts/run_os_goal.py",
+      "scripts/tests/test_os_goal_resources.py",
+      "scripts/tests/test_os_goal_launcher.py"
+    ],
+    "already_adopted_skipped": [],
+    "actual_running_server_cap": 6,
+    "requested_future_cap": 11,
+    "live11_or_transition_proven": false,
+    "no_live_config_or_state_edit": true,
+    "user_authorized_operator_controlled_sameRoot_restart": "source-894e6f861f7fa909af0275c2276dd5b49f48342c1639bdba3aff557f426d7976"
+  }
+}

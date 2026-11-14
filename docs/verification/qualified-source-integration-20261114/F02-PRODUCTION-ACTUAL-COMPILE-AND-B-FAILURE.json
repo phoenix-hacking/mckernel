@@ -1,0 +1,31 @@
+{
+  "schema": "mckernel.F02-actual-production-object-and-metadata-failure.v1",
+  "scope": "Functional McKernel OS/apps/Rust only; NO SECURITY TESTING",
+  "at": "2026-11-14T06:10:24.015214+00:00",
+  "actual_A": {
+    "compiler": "Qualified Rust1.95c043/70eb, exact original production CMake argv/16source cohort/BUILDID8d",
+    "source_helpers_sha256": "c33b6018308b1648287a38182e4efb95f6639f2798311a2acea218f44faf5b57",
+    "returncode": 0,
+    "seconds": 2.263033444993198,
+    "object_bytes": 763256,
+    "object_sha256": "b245426d68723200ad11f0523f6231568e08eb935f69fd22f92faf8200dfa57b",
+    "object_reuse_required": true
+  },
+  "actual_B": {
+    "returncode": 1,
+    "linked_ELF_bytes": 398112,
+    "linked_ELF_sha256": "80a5598d137ff336e4eaea3b189858fceaa20728394495055b72ed0911957035",
+    "failure": "/usr/bin/nm: unrecognized option --global",
+    "complete_provider_metadata_or_F02_acceptance": false
+  },
+  "next_after_manual_restart": "Fix only supported GNU nm external-symbol option, independently review then continue failed B/passive proof using preserved actual object/ELF/map where supported; no unchanged A recompile. Normal source/operation/account/resource gates remain.",
+  "whole_family_closure": {
+    "Q_sha256": "91732ae002ad9391ec6e5e7a67555dbf5f56ccc24ad7e3dfe91087a2f1a5086e",
+    "nonOOM": true,
+    "all9_originalCLI_waits_18_captures_closed": true,
+    "exact_owned_container_removed_and_absent": true,
+    "Root_retired_only_bytes": 1207959552,
+    "Root_retired_only_jobs": 1
+  },
+  "no_original_native_milestone_credit_or_other_hold_release": true
+}

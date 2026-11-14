@@ -17,7 +17,8 @@ MEMORY_RESERVE_GIB = 4
 HOST_CPUS = frozenset({0, 6, 7})
 HOST_MEMORY_GIB = 4
 HOST_MAX_JOBS = 3
-SOURCE_OWNER_SLOTS = 6
+DEFAULT_SOURCE_OWNER_SLOTS = 6
+SOURCE_OWNER_SLOTS = 11
 PAYLOAD_MEMAVAILABLE_GIB = 26
 MAX_ADMISSION_AGE_NS = 25_000_000_000
 MAX_PAIRED_CLOCK_SKEW_NS = 1_000_000_000
@@ -65,8 +66,9 @@ def resolve_resources(profile="aggressive", max_agents=None, build_jobs=None,
     """Return planning ceilings, never free payload capacity or a live grant.
 
     Both retained profile names obey the current campaign's three HOST jobs and
-    4 GiB TOTAL ceiling. Six remote source-owner slots do not reserve 2 GiB each;
-    their measured local overhead belongs in the shared total at admission.
+    4 GiB TOTAL ceiling. Source-owner slots default to six, with an explicit
+    ceiling of eleven. They do not reserve memory slices; their measured local
+    overhead belongs in the shared total at admission.
     No CPU affinity or execution profile is changed by this function.
     """
     if profile not in ("aggressive", "balanced"):
@@ -100,7 +102,7 @@ def resolve_resources(profile="aggressive", max_agents=None, build_jobs=None,
     scratch_mounted = os.path.ismount(SCRATCH)
     return {
         "profile": profile,
-        "max_agents": SOURCE_OWNER_SLOTS if max_agents is None else int(max_agents),
+        "max_agents": DEFAULT_SOURCE_OWNER_SLOTS if max_agents is None else int(max_agents),
         "build_jobs": job_limit if build_jobs is None else int(build_jobs),
         "memory_gib": memory,
         "cpu_count": cpu_count,

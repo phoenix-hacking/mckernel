@@ -3382,7 +3382,7 @@ def arguments(argv=None):
                         help="Pin dispatcher reasoning; max preferred by default, workers retain separate effort levels")
     parser.add_argument("--profile", choices=["aggressive", "balanced"], default="aggressive",
                         help="Dedicated-machine parallelism (default) or historical balanced limits")
-    parser.add_argument("--max-agents", type=int, help="Coordination slots; default six canonical owners, subject to admission")
+    parser.add_argument("--max-agents", type=int, help="Coordination slots; default six, explicit ceiling eleven, subject to admission")
     parser.add_argument("--build-jobs", type=int, help="Aggregate HOST light-job ceiling, at most 3 on CPUs 0,6,7")
     parser.add_argument("--memory-gib", type=float, help="HOST aggregate ceiling, at most 4 GiB including retained charges and overhead")
     parser.add_argument("--agent-windows", choices=["auto", "on", "off"], default="auto",

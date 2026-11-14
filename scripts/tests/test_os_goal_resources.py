@@ -57,10 +57,33 @@ class ResourceTests(unittest.TestCase):
         self.assertEqual(resources.resolve_resources(memory_gib=0.5)["max_agents"], 6)
         self.assertEqual(resources.resolve_resources(max_agents=2)["max_agents"], 2)
 
+    def test_explicit_eleven_slots_keep_one_shared_host_pool_and_native_owner(self):
+        self.host()
+        for profile in ("aggressive", "balanced"):
+            result = resources.resolve_resources(profile, max_agents=11)
+            self.assertEqual((result["max_agents"], result["source_owner_slots"]), (11, 11))
+            self.assertEqual((result["build_jobs"], result["memory_gib"], result["cpu_affinity"]),
+                             (3, 4, [0, 6, 7]))
+            self.assertEqual(result["max_depth"], 1)
+            self.assertEqual(result["native"], {
+                "cpu_affinity": [2, 3, 4, 5], "memory_gib": 12,
+                "max_owners": 1, "separate_admission_required": True})
+            self.assertIsNone(result["agent_memory_gib"])
+            self.assertTrue(result["payload_admission_required"])
+            self.assertIsNone(resources.check_resources(result))
+            env = resources.resource_environment(result)
+            self.assertEqual((env["MCKERNEL_OS_MAX_AGENTS"], env["MAKEFLAGS"],
+                              env["MCKERNEL_OS_MEMORY_GIB"]), ("11", "-j3", "4"))
+        self.host(cpus=[7], memory=5)
+        small = resources.resolve_resources(max_agents=11)
+        self.assertEqual((small["max_agents"], small["build_jobs"], small["memory_gib"]),
+                         (11, 1, 1))
+        self.set_affinity.assert_not_called()
+
     def test_invalid_or_overlarge_overrides_never_expand_pool(self):
         self.host(cpus=range(32))
         for profile in ("aggressive", "balanced"):
-            for kwargs in ({"max_agents": 7}, {"build_jobs": 4}, {"memory_gib": 4.01}):
+            for kwargs in ({"max_agents": 12}, {"build_jobs": 4}, {"memory_gib": 4.01}):
                 with self.assertRaises(ValueError):
                     resources.resolve_resources(profile, **kwargs)
         for name in ("max_agents", "build_jobs", "memory_gib"):
