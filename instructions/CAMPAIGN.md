@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T18:59:31+00:00
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T19:19:18+00:00
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -33,9 +33,9 @@ Q5e830846/Root9edfed67 scoped RETIRED. Passive genuine SDK loader export
 402653184B/job1 is Q23d72216/Rootf3716461 scoped RETIRED; that new384MiB is
 DISTINCT from old retained384MiB/jobs2. Stock RPM signature/header1342177280B/
 job1 is Qa30a69f6/Root9919f1a8 scoped RETIRED. Current known HOST reservations
-are old402653184B/jobs2 plus new LLVMauth/header/rawtable1342177280B/job1 PENDING
-independent NativeCurrent Q/Root, plus ALL overhead. Successful caller new
-1207959552B/job1 is Q82281842/Rootaf3dc14e scoped RETIRED. Twoendpoint new402653184B/job1 is Q7d25b2c1/
+are ONLY old402653184B/jobs2 plus ALL overhead. LLVMauth/header/rawtable new
+1342177280B/job1 is Qb08b55fd/Root1312e976 scoped RETIRED; successful caller
+new1207959552B/job1 is Q82281842/Rootaf3dc14e scoped RETIRED. Twoendpoint new402653184B/job1 is Q7d25b2c1/
 Root71012297 scoped RETIRED; selected-vendor-members1342177280B/job1 is Q7c231a20/
 Root094cbc39 scoped RETIRED; LLVMGET268435456B/job1 is Q5636d527/Root9fc71af2
 scoped RETIRED. Old identical384MiB/jobs2 remains distinct and held. Runtime-refused corrected caller
@@ -255,8 +255,10 @@ rerun. Coherent code/evidence checkpoint403b8c0be is pushed/fetched/blobverified
 authenticated-primary checkpoint91021d9bb is also pushed/fetched with all7 changed
 blobs byteverified;
 qualified monitor source/build, signed RPM/header and genuine loader-data checkpoint
-a0edaa05c is pushed/fetched with all8 intended blobs verified. Unrelated dirty
-source is preserved. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
+a0edaa05c is pushed/fetched with all8 intended blobs verified. Later bounded
+filetable/failure checkpoint e155b299d has4 verified blobs; scoped real-success/
+matched-source/vendor-byte checkpoint3c628cc9f has9 verified blobs, all on active
+branch. Unrelated dirty source is preserved. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
 20261114/. No wholeF02/backend/main-success/phase1/native claim.
 Literal successor adjudication9101f3e3 is NOT_GO: next unmatched HOST branch is
 load_interp PT_INTERP-on-interpreter rejection/realloc/free ownership. CredSource
@@ -371,11 +373,17 @@ joining ONLY the successful interpreter fact into original073a/dc459. WholeF02
 remains NOT_GO. ONE next unmatched normal main-descriptor preparation/publication
 mcexec_prepare_main_desc_body6100-6139, realmain4022/C5127 consumer and typed
 providers279-292 needs realrlimits/env/flattenedargv/CPU/vDSO/lastborrow ownership
-before PREPARE_IMAGE. No ioctl occurs in this callable. CredSource now authors
-ONLY one private real-libc HOST case from exact handoff: ownedprefix/bin/true+
-tail script -> argswords[2,32,42,49], published49 versus capacity56; envX=1 ->
-published28 versus capacity32. Stop before finish_main_image_body2408/PREPARE_IMAGE;
-no productionmain/backend/native, invented source inventory or green rerun.
+before PREPARE_IMAGE. No ioctl occurs in this callable. CredSource froze
+ONLY one private real-libc HOST caller f24a2d68/contract28cac932/C6d9d8306/
+stagef253c598 from exact handoff: ownedprefix/bin/true+tail script -> argswords
+[2,32,42,49], published49 versus capacity56; envX=1 -> words[1,24,28], published28
+versus capacity32. Real16slot getrlimit snapshots/return+errno/outputpointer,
+CPU7/vDSO1 descriptor DATA and five explicit PREFIX/TEMP40/ARGS/ENV/DESC allocation
+roles preserve consumedprefix/temp lastcopy then publishedargs/borrowedenv/final
+descriptor borrow/caller cleanup. Proc now reviews ONLY newcaller/oracle/realtyped
+provider ownership; SourceGO/admission/runtime remain UNISSUED. Stop before
+finish_main_image_body2408/PREPARE_IMAGE; no affinity change/productionmain/
+backend/native, invented source inventory or green rerun.
 No new inventory/native quota/green rerun. Public case proof and exact matched
 caller/stage/seal are success-case-1 under m15-f02-load-interp-real-file-20261114/.
 No wholeF02/native/backend/main/phase1 acceptance or count credit inferred. A compiled-bookkeeping optimization is a candidate, not proved cause.
@@ -584,9 +592,21 @@ next operation before distinct GO/currentcaller scoped retirement and fresh Root
 admission. Those gates then genuinely passed: operationGO05b84a68/fresh34grant
 ea3d1894 ran ONLY three stock calls once as originaltool64442. Actualresult
 21f21a9e/fullRoot6480f694 reports PASS9HOST+3stock, no GET/extraction/ELF/runtime.
-NativeCurrent now independently qualifies only actual signature/exactheader/rawtable
-and own13process/FD/capture/container/fullRoot/new1.25GiB scope while M15Leaf
-finishes originalF02 adjudication; charge stays pendingQ/Root. Exact initialAPI
+NativeCurrent Qb08b55fd now positively qualifies only actual stock signature before
+exactLLVMheader before3979B rawtable085ac4d0, and13 originalPopen waits0/26 full
+closed-fsynced captures/input/report/sourcebookends/terminal0 nonOOM Pid0/wait0/
+nonforceexactrm/positiveabsence/fullRoot. Root1312e976 retires ONLYnew1.25GiB/
+job1; Q did not parse rawtable or infer extraction/runtime. TimeSource now derives
+ONLY actual required LLVM regular member/prospective stock extraction+passiveELF:
+observed /usr/lib64/libLLVM.so.21.1 itself125217496B/0755/db74ab2e; alias points
+TO it, no link extraction needed. New package-derived CPIO max125501440B and
+349923151B diskheadroom are proposed UNISSUED below unchanged256MiB globalCPIO/
+FSIZE ceilings/1GiB memory/2MiB metadata caps. TimeSource froze one-member source
+7971bca1/request42c2afbc, bound actualH Qb08/Root1312 before freeze. FunctionalDelta
+reviews ONLY newpackage/member/cardinality/bounds/Root33+6/stock5 joins and reused
+closed3case/capture/profile guards. Source includes passivebasicELF/SONAME only,
+not broadversion-info; LLVM_21.1 version-provider/runtime remains unproved.
+No silent global limit expansion or actual extraction/member/ELF/compiler yet. Exact initialAPI
 reply5d835308/terminalpollbd11cdff preserve prior original objects, and finalRoot
 is the original lossless completed protocol record, no reconstructed states. No compiler/driver/
 loader/runtime execution, SMP/device/native/whole-original credit. Root PREINPUT
