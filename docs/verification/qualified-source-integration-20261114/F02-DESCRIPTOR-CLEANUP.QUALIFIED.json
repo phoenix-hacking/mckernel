@@ -1,0 +1,59 @@
+{
+  "scope": "Functional McKernel OS/Rust only; NO SECURITY TESTING",
+  "status": "PASS_EXACT_NEW_F02_DESCRIPTOR_LIFETIME_FIXTURE",
+  "at_utc": "2026-11-14T04:32:24.599540+00:00",
+  "target_original_leaf": "M15-F02-complete-ABI-behavior",
+  "source_commit": "6b9ac7515291fda8bc3c83edb522b365facb3cad",
+  "source_tree": "e04823993af6f76a5187fb0e8e9ade3ae9e3b89b",
+  "production_after_sha256": "c33b6018308b1648287a38182e4efb95f6639f2798311a2acea218f44faf5b57",
+  "patch": {
+    "bytes": 12768,
+    "path": "/home/holden/mckernel-work/m15-f02-execve-descriptor-cleanup-20261114/FUNCTIONAL-DELTA.patch",
+    "sha256": "e8b2fc8e542ad2f5b6d7ebaa1e81b3b2b2ede2c292a7fbb2519c4e50321850cc"
+  },
+  "run_id": 43556747599,
+  "run_url": "https://github.com/phoenix-hacking/mckernel/actions/runs/43556747599",
+  "job_id": 132331209260,
+  "artifact_id": 14098722135,
+  "artifact_sha256": "a9e0e077fcab5730c92d2d701292a18886325d2053aa547c6cbed550c0a68667",
+  "qualification_mirror": "61b65bbf8fa8d1a0faf29fd38ef6a53eaaf9ad97",
+  "command": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "scripts.tests.test_m15_f02_execve_descriptor_cleanup"
+  ],
+  "outer_tests": 1,
+  "seconds": 0.214,
+  "exit_code": 0,
+  "errors": 0,
+  "failures": 0,
+  "skips": 0,
+  "compiled_Rust_cases_asserted_by_reviewed_test": 6,
+  "success_cycles": 32,
+  "scope_limit": "The original outer unittest capture is retained. Its unchanged reviewed assertion requires6 Rust cases pass; the inner Rust stdout is captured by that test, not separately printed. This is the selected verbatim function against allocator/provider doubles, not complete F02/native/device/C-Rust-equivalence acceptance.",
+  "source_provider_pins_verified": 8,
+  "local_compiler_test_or_native": false,
+  "no_original_acceptance_credit": true,
+  "reuse": "Existing624B/78word ABI/libdir/selection/HOST evidence and25/9 greens reused, no rerun.",
+  "mirror_warning": "Never merge stripped qualification mirror; Root alone applies the exact3-file patch preserving current source.",
+  "Root_applied_exact_paths": [
+    {
+      "path": "executer/user/rust/mcexec_helpers.rs",
+      "before_sha256": "ab6aaa29b9a9b8d07077a9bb27e02c7dc7a353fe3a0d0b538b119e41bd264a24",
+      "after_sha256": "c33b6018308b1648287a38182e4efb95f6639f2798311a2acea218f44faf5b57"
+    },
+    {
+      "path": "scripts/tests/test_m15_f02_execve_descriptor_cleanup.py",
+      "before_sha256": null,
+      "after_sha256": "476b62b80a8c412871b75e40715705098f74eb44ab3b1ef54e1eec8f402ac5db"
+    },
+    {
+      "path": "scripts/tests/fixtures/m15_f02_execve_descriptor_cleanup.rs",
+      "before_sha256": null,
+      "after_sha256": "1124b976cce679b2dd5588004359a70ada1fc10df701d75c923962bf6039f78b"
+    }
+  ],
+  "independent_review_sha256": "2f9b95f9c4028b96a6d459823516141371109bb1ed9d6852f9faeb3de5d08d12"
+}

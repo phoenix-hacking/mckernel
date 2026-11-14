@@ -23,7 +23,8 @@ class RestoreError(RuntimeError):
 
 def git(repo, *args, input=None):
     result = subprocess.run(
-        ["git", "-C", str(repo), *args], input=input,
+        ["git", "-c", "maintenance.auto=false", "-c", "gc.auto=0",
+         "-C", str(repo), *args], input=input,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
     )
     if result.returncode:

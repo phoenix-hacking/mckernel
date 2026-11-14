@@ -1,5 +1,48 @@
 # McKernel: M14 → M15 → complete supported system
 
+## Qualified F02/IHK increment and exact native-admission gap — 2026-11-14T04:35:47.959088+00:00
+
+Root integrated only qualified F02 descriptor-lifetime3-path patch e8b2fc8e and
+IHK7-path correction2f704172 on ACTIVE codex/local-native-staging-repair; exact
+before/postimage pins checked, unrelated dirty edits preserved. F02 act_execve_phase2
+frees the owned descriptor on failed pull and after the final synchronous image
+borrow, preserving ABI/provider/error order. Independent GO2f9b95f9 plus actual
+CI43556747599/job132331209260:1outer/0.214s,6 compiled Rust cases required by the
+reviewed assertion, including32 successful cycles; zero skips/errors/failures.
+This fixes a real leak; full original F02/device/native/restoration remains OPEN.
+
+IHK16 selectors are satisfied by reused9 CI43556256531 plus changed7
+CI43556887197/job132331666423; actual1/5/1 tests exit0,zero skips/errors/failures.
+Exact history8d/historical CMake7d91805d, ordinary build tree9f1d, image-driver pin,
+Kbuild authority triple/masked selfdigest and owned per-command Git maintenance
+controls qualify at their stated scope. Trace776 events had0 maintenance/gc starts;
+prior ENOTEMPTY cause remains inference. Broader image-owner/offline/native routes
+are not accepted. No25/9/183/C4 green rerun, compiler/module/cache rebuild or stripped
+mirror merge. Root is committing/pushing this bounded qualified source increment.
+An outer patch-parser assumption rejected IHK's standard unified-diff header after
+F02 had already applied. Exact postimages were preserved/skipped; only that parser
+assumption was corrected, then unchanged IHK bytes passed apply/whitespace checks.
+
+Current original M14-I03-E1 gap remains the3 post-cancellation scan errors. The
+cancellation128 and verify160 families each have positive independent Q/Root
+own-scope retirements; original2415919104B/jobs2 remains held. NativeCurrent owns
+the one exact3PID source/argv packet (3933/b1825,1598579/b52703067,
+1750677/b55741607), with no fdinfo/inotify-marklist/global reread. Proc next reviews
+that frozen packet; NativeBinding retains independent actual observations Q. No
+old operation success/directwait is reconstructed. Source/raw metadata/helper
+captures stay private.6a incompatible reconciliation adapter is not adopted.
+
+FunctionalDelta independently adjudicates literal original M14-03-02-DEFAULT
+against complete C4 source/artifact/profile/provider/final-definition facts; only
+then03-01 if shared facts suffice. No original row is accepted until every clause
+passes. TimeSource supplies only the missing pinned public-key/HOST verifier
+binding for exact vendor RedHat Rust1.92; no download/compiler action yet. MCD02ad
+remains private until actual matching whole-SMP-Dwarnings qualification. Original
+105/156,M14=70.00%,M15=74.59%,neither accepted; no artificial acceptance credit.
+All account/source/native/lease/IPC/UNKNOWN/rejected-task/nonce holds, sameRoot,
+finite credit history and current HOST/native limits remain. M14 final beforeM15;
+manual run remains active until a real stop or both original acceptances.
+
 ## Active source checkpoint and exact residual HOST closure — 2026-11-14T04:19:20.675842+00:00
 
 Canonical Root integrated the exact reviewed11-path PR11 delta b57ed1d5 on ACTIVE
@@ -8,8 +51,9 @@ current instructions/harness/xhigh, ordinary IHK1344tree9f1d and unrelated edits
 Actual hosted25 PASS CI43555050423/job132325902938:22tests/0.464s plus3/14.741s,
 zero failures/errors/skips. Source candidate d80b745f/tree71c6b0f,16 consumed pins;
 artifact14097936263/a24ff210. Reuse these and prior183 lifecycle/C4 Rust/C/35-word
-ABI/13-input image proof; no green rerun. Qualified source checkpoint is being
-committed/pushed by Root only. IHK affected16 qualification is separate/pending;
+ABI/13-input image proof; no green rerun. Qualified source checkpoint83c7c2fc616d84fc8ca811d5e6fc76cdb95f11a0 is
+pushed and fetched-verified by Root; exact11 postimages and ordinary IHKtree9f1d
+match. Receipt: /home/holden/mckernel-work/qualified-source-checkpoint-20261114/PUSH-VERIFIED.json. IHK affected16 qualification is separate/pending;
 no full tracker/normal CMake/native or original acceptance follows from these25.
 
 Actual current cancellation is complete once: newPopen2613080/b71460384 wait0,

@@ -164,7 +164,7 @@ class RestoreIhkSourceTests(unittest.TestCase):
         for mutation, message in (
             (lambda m: m["base"].update(commit="bad"), "40-digit"),
             (lambda m: m["bundles"][0].update(blob=self.commits[0]), "committed tree"),
-            (lambda m: m["bundles"][-1].update(tip=self.commits[0]), "gitlink"),
+            (lambda m: m["bundles"][-1].update(tip=self.commits[0]), "source revision"),
         ):
             with self.subTest(message=message):
                 manifest = self.manifest_copy()

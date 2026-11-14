@@ -1,0 +1,151 @@
+{
+  "scope": "Functional McKernel OS/Rust only; NO SECURITY TESTING",
+  "status": "PASS_16_REVIEWED_SELECTORS_AS_REUSED9_PLUS_CHANGED7",
+  "at_utc": "2026-11-14T04:32:24.634271+00:00",
+  "source_commit": "239c3f5a66c0dd1bee6e7b4d501da9e8ffccc7bb",
+  "source_tree": "19f425662c47aa465c9515b79f117c963f95b08a",
+  "run_id": 43556887197,
+  "run_url": "https://github.com/phoenix-hacking/mckernel/actions/runs/43556887197",
+  "job_id": 132331666423,
+  "artifact_id": 14097893966,
+  "artifact_sha256": "503dffe51b1706989b4109578a6026d0e6487bf2a750ef53f46e870a1ee3caa9",
+  "qualification_mirror": "c7a6dfac029ea332b6fcea4a6b7b5664f1e82b17",
+  "commands": [
+    {
+      "id": 1,
+      "tests": 1,
+      "seconds": 0.089,
+      "exit": 0,
+      "skips": 0,
+      "errors": 0,
+      "failures": 0
+    },
+    {
+      "id": 2,
+      "tests": 5,
+      "seconds": 0.806,
+      "exit": 0,
+      "skips": 0,
+      "errors": 0,
+      "failures": 0
+    },
+    {
+      "id": 3,
+      "tests": 1,
+      "seconds": 0.0,
+      "exit": 0,
+      "skips": 0,
+      "errors": 0,
+      "failures": 0
+    }
+  ],
+  "reused9": {
+    "run": 43556256531,
+    "job": 132329663449,
+    "source_commit": "06712df907bb6a9a72621234f4cbe1f74b2a47df",
+    "source_tree": "b7412bb993b06ce6afee7d1c4b8bc03b60c55f71",
+    "artifact_id": 14098601298,
+    "artifact_sha256": "90727c8f1b08d53c0d69fbdaecd0a5e6f961a29e0207984923fdca3d5c84ba63",
+    "accepted_selectors": [
+      "test_positive_all_five_phases_and_inventory (scripts.tests.test_native_rust_exact_build_offline.DriverTests.test_positive_all_five_phases_and_inventory) ... ok",
+      "test_head_submodule_and_dirty_mutations (scripts.tests.test_native_rust_exact_build_offline.DriverTests.test_head_submodule_and_dirty_mutations) ... ok",
+      "test_input_mutation_and_incomplete_inventory_reject (scripts.tests.test_native_rust_exact_build_offline.DriverTests.test_input_mutation_and_incomplete_inventory_reject) ... ok",
+      "test_exact_clean_checkout_is_unchanged_noop (scripts.tests.test_restore_ihk_source.RestoreIhkSourceTests.test_exact_clean_checkout_is_unchanged_noop) ... ok",
+      "test_manifest_hash_and_gitlink_bindings_reject_changes (scripts.tests.test_restore_ihk_source.RestoreIhkSourceTests.test_manifest_hash_and_gitlink_bindings_reject_changes) ... ok",
+      "test_generated_identity_reproduces_unchanged_ihk_consumer_git_rule (scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_generated_identity_reproduces_unchanged_ihk_consumer_git_rule) ... ok",
+      "test_generated_identity_uses_consumer_version_for_source_archive (scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_generated_identity_uses_consumer_version_for_source_archive) ... ok",
+      "test_generated_identity_rejects_unreviewed_consumer_rule (scripts.tests.test_rocky_rust_staging.RockyRustStagingTests.test_generated_identity_rejects_unreviewed_consumer_rule) ... ok",
+      "test_frozen_legacy_oracle_and_shared_evidence_path_are_available (scripts.tests.test_native_rust_exact_build_workflow.NativeRustExactBuildWorkflowTests.test_frozen_legacy_oracle_and_shared_evidence_path_are_available) ... ok"
+    ],
+    "accepted_selector_count": 9,
+    "failed_selector": "scripts.tests.test_restore_ihk_source.RestoreIhkSourceTests.test_reconstructs_from_committed_blobs_and_empty_destination",
+    "failed_result": "ERROR during test-owned TemporaryDirectory cleanup, ENOTEMPTY Git objects/info; assertion body did not report a failure",
+    "pending_selectors": 6,
+    "attempt_raw_exit": 1,
+    "reuse_9_green_without_rerun": true,
+    "no_whole_batch_PASS_claim": true
+  },
+  "selectors_total": 16,
+  "latest_run_tests": 7,
+  "no_green25_or9_rerun": true,
+  "combined_reviewed_patch": {
+    "path": "/home/holden/mckernel-work/ihk-vendoring-20261114/fixture-correction-1/hosted-qualification-1/QUALIFIED-SEVEN-PATH-SOURCE.patch",
+    "sha256": "2f70417284e3012d818bde5303353d05d9b1fefd319404c723a06925c0ac8b0f",
+    "bytes": 9843,
+    "paths": [
+      {
+        "path": "scripts/tests/test_native_rust_exact_build_offline.py",
+        "before_sha256": "ddd75ccd0a8d83123d4854a3835c9b807acf4e9818a1e08f052e419aa522061e",
+        "after_sha256": "c6dcce5d5dca53007836b5b033dfccf2917445bc160e82f15b0ec9dfc095fd2f"
+      },
+      {
+        "path": "scripts/tests/test_restore_ihk_source.py",
+        "before_sha256": "49e0f0b362c831d8da457f1b3061c1aa829314d5d8ddf9a70f1e153ec7898999",
+        "after_sha256": "30f346a323975b89c41a229b51c15f82a2249b2c6ff8b50a2522bf7416035054"
+      },
+      {
+        "path": "scripts/tests/test_rocky_rust_staging.py",
+        "before_sha256": "6d55dc778e2ab5873465ac8f8001ef8b150b4830f1cc75af4d34d6dd5d261577",
+        "after_sha256": "5b1a7f3a85e94555a1449d3260424e257a3028faed72e6bbe2a3b9cbcffa06a3"
+      },
+      {
+        "path": "scripts/tests/test_native_rust_exact_build_workflow.py",
+        "before_sha256": "f1ca4e4e000c9bf5227179164f040b139df0d1bf54c4597f3407bac7ff69a991",
+        "after_sha256": "b46b4dd67eeb0b68db31235acd2d5995c7b0f38971a6a69e4deca31a1c068499"
+      },
+      {
+        "path": "scripts/native_rust_exact_mckernel_image_container_owner.py",
+        "before_sha256": "0261597b4b09ad4d0088e6339f980d1de4bf69450ad842c667b93d10ed6130d0",
+        "after_sha256": "5c61abf496991b398387f5bf967afb133b7da925f62e4adead5f0dc46e62970d"
+      },
+      {
+        "path": "scripts/native_rust_runtime_evidence.py",
+        "before_sha256": "e77b2e3d5728cc0e8f2c1c28313c1760da60fe66a0e2162dbf7d411a89ff30ec",
+        "after_sha256": "e7093537b711164f216ca2ef30414b705da1fc27e2bfda86717eb4f3b050606e"
+      },
+      {
+        "path": "scripts/restore_ihk_source.py",
+        "before_sha256": "72aca7173cb59b42ba40a5b4421314cb6221414df645495545ca767a4a858161",
+        "after_sha256": "db40344f762da9c5026e6b860ef86e08c57b0300fbe083e9ae27d9cb87bbcef3"
+      }
+    ],
+    "private_preimage_apply_check": "PASS; no canonical/index mutation"
+  },
+  "source_patch_inputs": [
+    {
+      "path": "/home/holden/mckernel-work/ihk-vendoring-20261114/fixture-correction-1/FOUR-ADAPTER-FIXTURES.patch",
+      "sha256": "297c34e26f55064e1cdf6d5b4f5ffe61f0699c5a2a9649a5ee93ee28d948e888"
+    },
+    {
+      "path": "/home/holden/mckernel-work/ihk-image-driver-pin-20261114/IMAGE-DRIVER-PIN.patch",
+      "sha256": "0432c85fcbd7ef190504698eaaa95a261d36e41d64c0243a5935b1858fa9ede9"
+    },
+    {
+      "path": "/home/holden/mckernel-work/ihk-vendoring-20261114/semantic-authority-pin-correction-1/SEMANTIC-AUTHORITY-PIN.patch",
+      "sha256": "581df9bf7ce2711f40e6d2ce78d140f0c9c94ec894f3f70bb7c10b19e49eea87"
+    },
+    {
+      "path": "/home/holden/mckernel-work/ihk-vendoring-20261114/restore-git-lifecycle-correction-1/RESTORE-GIT-LIFECYCLE.patch",
+      "sha256": "99c75c6c54446b97971031e5dd2d7469ff4044c4174f1df390b3c59f1083cb7e"
+    }
+  ],
+  "history": {
+    "HEAD": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+    "historical_CMake_sha256": "7d91805dac7ed1fb0514e536383dd6cde43b91fe8b4114fe6ed00ba3e4b0e65d",
+    "ordinary_vendored_IHK_tree": "9f1d0170ba199eb1a477f1ed85de44442f985cd1",
+    "external_history_never_build_source": true
+  },
+  "lifecycle_observation": {
+    "original_ENOTEMPTY_cause": "Detached Git maintenance remains an inference; original process trace unavailable.",
+    "changed_selector_PASS": true,
+    "owned_git_trace2_events": 776,
+    "automatic_maintenance_or_gc_starts_in_changed_selector": 0,
+    "no_cleanup_mask_or_global_config_or_kills": true
+  },
+  "dependent_pins": "Exact image driver83501ae pin and Kbuild-closure triple/masked selfdigest corrected under independent GO; no old historical runtime contracts or checks weakened. Broader image-owner admission/remaining offline fixtures/native routes remain outside this qualification.",
+  "original_check_relation": "Original M14/M15 source/provider/coherent-image prerequisites: authenticated ordinary IHK build identity, frozen historical consumers, and source restore Git ownership. No whole original or native acceptance.",
+  "C4_lifecycle_25_reuse": true,
+  "local_tests_compilers_native_or_hold_release": false,
+  "mirror_warning": "Never merge any stripped qualification mirror; Root alone applies exact bounded7-path source delta after current before/after checks.",
+  "Root_applied_exact_seven_paths": true
+}

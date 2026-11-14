@@ -25,9 +25,9 @@ import tempfile
 import types
 from typing import Any
 
-EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'git_blob_sha1': 'bbd2adcdce2c5cd075cc1298badffaf300dde9f5',
-                         'sha256': 'dcf60a94f46a8312cf60a67cba0a28d3dc27654083d1d0c5d25bf3ccad6c0523',
-                         'size': 69374},
+EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'git_blob_sha1': 'b8bfbc7f3d283ee37b6743ec4dc0f0adfe26c627',
+                         'sha256': '604a7ea4807038ddea88dd0b1af797bcd9612513905ed4f119787b07fe5062f8',
+                         'size': 70965},
  'kconfig_policy': {'git_blob_sha1': 'c28c7e4dc1c85941002f61f15803bea3e9c270c6',
                     'sha256': '3e3e73a3ea0ef090dba1a7e79ff250e3ff3cb80377d51d5398edb7b74ee6467b',
                     'size': 8623},
@@ -35,7 +35,7 @@ EXPECTED_REPOSITORY_SEMANTIC_AUTHORITY_IDENTITIES = {'kbuild_link_closure': {'gi
                     'sha256': 'fbb89bdb8766dcd446e8d75440c9e6bed1cf0a286107312510daef6626e80ab4',
                     'size': 46669}}
 ISOLATED_SELF_DIGEST = (
-    "ISOLATED_SELF_DIGEST:60f1d2fd65b9bb8a706724fcd887042b7540917db9e80e3c4322bf45fc8eb5fe"
+    "ISOLATED_SELF_DIGEST:13600619f5bc5d220b0f3a00f1988b85e0c87a1cdde035d32a59673d8eb4ce8b"
 ).split(":", 1)[1]
 
 _SEMANTIC_AUTHORITY_FILENAMES = {
