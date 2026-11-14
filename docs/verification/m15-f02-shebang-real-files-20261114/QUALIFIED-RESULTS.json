@@ -1,0 +1,120 @@
+{
+  "CRT_entry": "Actual _start loads __wrap_main and calls real libc_start_main; original production main remains distinct and is never invoked.",
+  "Root_scoped_retirement": {
+    "bytes": 2874,
+    "sha256": "3e584a051bfa321c9c3a106649228ca7351e77054135341067408557f54dbd47"
+  },
+  "actual_CASE_stderr": {
+    "bytes": 65,
+    "expected": "/output/outer.shebang: could not load program: Exec format error\n",
+    "sha256": "8c04bb036771ebe10d41bc18f4cfbba1ac6af1a6f23866b66b086475bc6f32a6"
+  },
+  "actual_CASE_stdout": {
+    "bytes": 1139,
+    "sha256": "65b3e1633fae38c4586a60ddb994c92ec4e7d48465136b9c3393577c6219fa78"
+  },
+  "all_other_actual_holds_preserved": true,
+  "canonical_helper": {
+    "adopted_after_exact_c33_preimage_and_reviewed_original_unified_patch": true,
+    "bytes": 260975,
+    "path": "executer/user/rust/mcexec_helpers.rs",
+    "sha256": "61710a98f81d6be8ad5083924db4b855f7786d962285500cff3ffd09595b42b4"
+  },
+  "cases": [
+    {
+      "caller_transferred_base_frees": 1,
+      "case": 0,
+      "case_pass": true,
+      "copy_before_old_free": 0,
+      "exact_trim_base_return": true,
+      "file_closes": 1,
+      "file_opens": 1,
+      "getline_allocations": 1,
+      "main_error_free_after_recursive_borrows": 0,
+      "production_getline_frees": 0,
+      "production_packed_frees": 0,
+      "result": 0
+    },
+    {
+      "caller_transferred_base_frees": 0,
+      "case": 1,
+      "case_pass": true,
+      "copy_before_old_free": 0,
+      "exact_trim_base_return": false,
+      "file_closes": 1,
+      "file_opens": 1,
+      "getline_allocations": 1,
+      "main_error_free_after_recursive_borrows": 0,
+      "production_getline_frees": 1,
+      "production_packed_frees": 0,
+      "result": 8
+    },
+    {
+      "caller_transferred_base_frees": 0,
+      "case": 2,
+      "case_pass": true,
+      "copy_before_old_free": 0,
+      "exact_trim_base_return": false,
+      "file_closes": 1,
+      "file_opens": 1,
+      "getline_allocations": 1,
+      "main_error_free_after_recursive_borrows": 0,
+      "production_getline_frees": 1,
+      "production_packed_frees": 0,
+      "result": 2
+    },
+    {
+      "caller_transferred_base_frees": 0,
+      "case": 3,
+      "case_pass": true,
+      "copy_before_old_free": 1,
+      "exact_trim_base_return": false,
+      "file_closes": 3,
+      "file_opens": 3,
+      "getline_allocations": 3,
+      "main_error_free_after_recursive_borrows": 1,
+      "production_getline_frees": 3,
+      "production_packed_frees": 2,
+      "result": 1
+    }
+  ],
+  "family_closure": "Nine original PID/birth/waits,18 fsynced/closed captures,441 ordinary protected-prefix FDs plus lock/directory/final-save closure, terminal0/nonOOM/Pid0/container removal/absence/fullRoot0.",
+  "independent_bounded_results_and_family_Q": {
+    "bytes": 36554,
+    "sha256": "8eec6493b51f1e0aa44758981e5873c98ee811cf7bc0b2054414824083670dad"
+  },
+  "new_Rust_compile_production_relink_green_provider_ABI_or_SDK_rerun": false,
+  "original_condition_adjudication": "Pending separate literal whole-condition evaluation against existing behavior map; four cases alone are not wholeF02 acceptance.",
+  "original_full_Root_tool": {
+    "bytes": 2845,
+    "sha256": "20f897826392094417df1baa97402d51dc4fbf65bada6403e28e55ba2ea597ba"
+  },
+  "original_progress_at_increment": {
+    "accepted": 111,
+    "criteria_weights_changed": false,
+    "denominator": 156,
+    "new_original_credit": 0
+  },
+  "ownership": "Case0 is legitimate transferred-base caller cleanup; cases1\u20133 observe actual production getline/packed frees through real libc. No caller compensation for production ownership.",
+  "production_artifact_Q_sha256": "05951bc8665fdddcb2c28a185f921ba9cde8d1de17669b54ebdac123040fafec",
+  "production_executor_sha256": "2282fb6086bafcfa1b0aded4fe69d634921c674d2d2af4dc0a44e759b7711cfd",
+  "production_main_ioctl_backend_phase1_native_whole_F02_milestone_acceptance": false,
+  "production_object_sha256": "d511b91b230c1ccb4f84ff00de6ed8b5a770829373d2f81ca752d22f09dce445",
+  "production_source_GO_sha256": "d603cb319de82061673df55b8d4e841ac55ade9ed6d914d270ef4d450ecc43cf",
+  "remaining_old_HOST_quarantine_bytes": 402653184,
+  "remaining_old_HOST_quarantine_jobs": 2,
+  "retired_only_new_HOST_bytes": 1207959552,
+  "retired_only_new_HOST_jobs": 1,
+  "schema": "mckernel.M15-F02.qualified-real-file-shebang-ownership-increment.v1",
+  "scope": "Functional McKernel OS/apps/Rust/allowed assembly only; NO SECURITY TESTING",
+  "status": "PASS_FOUR_FIXED_REAL_LIBC_FILE_OWNERSHIP_CASES_AND_SCOPED_FAMILY_CLOSURE",
+  "strict_selected_descriptor_layout": {
+    "aggregate_ABI_witness624B_is_separate": true,
+    "alignment": 8,
+    "bytes": 776,
+    "sections_offset": 776
+  },
+  "test_ELF_sha256": "6ffc96880d35fe1db04eeecd990687103b7a9089422288767fd0864edf43fc8c",
+  "test_caller_object_sha256": "9539ca6e752960710e7198e86e64adc161b3b3a46b876cfce0d47ec0ca0f0168",
+  "test_map_sha256": "85249fbead94372df9824f3e0c55dd8a8a462487e97cf1453f5e193313c8bfaf"
+}

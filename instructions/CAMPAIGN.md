@@ -1,6 +1,6 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T12:39Z
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T14:15Z
 
 Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
 20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
@@ -20,10 +20,15 @@ docs/verification/m15-f02-production-continuation-20261114/.
 
 CURRENT old HOST reservations are268435456B/job1 for the FAILED supplier plus
 134217728B/job1 for retained C3 cleanup (402653184B/jobs2 before ALL overhead).
-New F08 no-event family805306368B/job1 is terminal0 but still RESERVED pending
-independent actualQ/Root receipt: current total1207959552B/jobs3 plus ALL overhead.
+F08 no-event family805306368B/job1 is Q558b47f3/Roota3693e03 scoped RETIRED.
+Failed caller family1207959552B/job1 is Q13a13e81/Rootf434df39 scoped RETIRED.
+F05 compile/passive family805306368B/job1 is Q04854f7a/Rootc9565217 scoped RETIRED.
+Corrected ABI776 caller1207959552B/job1 is Q8eec6493/Root3e584a05 scoped RETIRED.
+New official vendor-descriptor family268435456B/job1 is terminal0/PASS but RESERVED
+pending independent actual authentication/own-familyQ and Root receipt:
+total671088640B/jobs3 plus ALL overhead.
 Actual6171 production family Q89a2730e/Root94a09169 retire ONLY its new1207959552B/
-job1. No new HOST payload fits until the F08 job is genuinely scoped retired;
+job1. No new HOST payload fits until this descriptor job is genuinely scoped retired;
 then one slot requires its own fresh operation admission.
 Original tool14790 and C3tool32916 retain their original owning contexts. Actual
 four-control testQb7d8b92e/Root e858b5ef retire ONLY
@@ -191,11 +196,73 @@ protected wait/FD algorithms and actualA/B remain
 unchanged. Root fresh source-only admission is ACCEPTED/running, retains402MiB/
 jobs2 plus actual1.89GiB infrastructure RSS; it grants no payload execution.
 Never recompile/relink this passingA/B or use oldb245/80a as repaired evidence.
+LATEST matched caller: Root genuine fresh caller grant88f5a588 and corrected
+operationGO859 ran once after F08 scope retirement. Actual compile exited1:
+caller329 asserts sizeof(program_load_desc)==624, failing the qualified public
+header1770. No caller object/link/fourcase/production main/ioctl/backend was run.
+ExactCID627fe607 is terminalexited1/nonOOM/Pid0/removed/absent; fullRoot7f6ab373
+returned0 for completed own lifecycle, artifact_execution_pass remains FALSE.
+Raw actual failure/reuse handoff0afdf31c and EXECUTIONcc129d51 are private. CredSource
+owns one bounded ABI-assertion/source-contract correction derived from actual
+C/Rust layout, no blind guard relaxation or production/provider/header change.
+One overbroad filename lookup by that author hit unrelated protected-directory
+PermissionError and is stopped/preserved; no retry/privilege alternative or payload
+read. Exact already-readable header/Rust definition correction remains isolated.
+M15Leaf independent failedcallerQ13a13e81 and Rootf434df39 retire ONLY1.125GiB/
+job1 after positive9 original waits/18streams/FDs/lock/directory/container/fullRoot
+closure. Failed ABI assertion/attach1 remain preserved. CredSource correction
+9c1ee686/caller240cb874/stagee89fcab7 derives strict776-byte/alignment8 assertion
+from actual C header and selected Rust fields; four-case body is exact unchanged.
+Proc reviews ONLY changed assertion/ABI derivation; Dispatch prepares only the
+necessary corrected source/pin/fresh-output operation adapter. Neither can issue
+Root authority or recompile the passing executor object/production ELF.
+That exact changed C/layout has Proc SourceGOb7346d54. New operation adapter
+preserves source-generation NO_GOc55f8582 for missing LF at map/def boundary;
+one-byte correctione6109b6b has exact changed-boundary GO1abc5146. Root then issued
+fresh callergrant7b4dd254 and ran only corrected C compile/link/four cases once,
+originalTool79661/fullRoot20f89782 exit0. New EXECUTION3c45d019 has attach0,
+artifact_execution_passTRUE, no pending/primary/secondary, positive original
+waits/captures/FD/container remove/absence. CASE.stdout65b3e163 has four exact
+case_passTRUE results: direct transferred-base caller-owned cleanup; EOF production
+getline cleanup; NULLargv/ENOENT production cleanup; recursive main-error last-
+borrow ordering with3 FILE opens/closes,3 production getline frees and2 packed
+frees. Expected Exec format error stderr8c04bb03 remains intact. Actual testELF
+6ffc9688/callerobject9539ca6e reused productiond511/ELF2282/providers, no Rust or
+production relink. M15Leaf independently qualifies ONLY these bounded actual
+results/new1.125GiB family. Q8eec6493 and Root3e584a05 now pass/retire ONLY that
+1.125GiB/job1, leaving old402MiB/jobs2/alloverhead. Canonical helper actually equals
+reviewed/tested61710a98 after original dd860184 unified patch/c33 preimage/postimage
+check. Root preserves two harmless PREINPUT adoption refusals (wrong guessed patch
+filename, then an incorrect diff--git-header guard); neither changed source. The
+exact original ---/+++ one-file format then applied successfully, no build/test
+rerun. Public machine proof/source is docs/verification/m15-f02-shebang-real-files-
+20261114/. No wholeF02/backend/main-success/phase1/native claim.
+Literal successor adjudication9101f3e3 is NOT_GO: next unmatched HOST branch is
+load_interp PT_INTERP-on-interpreter rejection/realloc/free ownership. CredSource
+prepared only one newcasec491fb1f/stage88b6be7b/HANDOFF012cc6e2, real retained
+testELF6ffc9688 read-only as input, real allocator/realloc1000/free/borrowedFILE
+oracle. Proc independently reviews only new source/contract. No fourcase/Rust/
+production link/ABI/provider/SDK rerun; runtime binding/admission remain unissued.
 
 NativeBinding separately authors ONLY F05 qualified-account-retained-resource-
 binding-1: helper893/SourceGOa6/actualfourc66 and old256+C3128 resources, preserving
-cc710 same-original owning wait/FD/Env-map bodies. FunctionalDelta is the distinct
-changed-binding reviewer once frozen; actual permission/admission remains unissued.
+cc710 same-original owning wait/FD/Env-map bodies. FunctionalDelta exact changed-
+bindingGO312a6dda/approvedargv0e257d85/Rootcontract43e9b6e7 are ready. The stale
+unused explanatory argv review descriptor is preserved and superseded by the
+reviewer-approved interface; no consumed guard changed. Root actual permission/
+admission was genuinely issued AFTER failed caller family retirement. Root fresh
+30-field granta8399402 ran the exact reviewed source once; original outer2769811/
+b74729971 waited0, fullRoot9336f5a1 exit0/RootEXECUTIONe07363b9 has positive capture/
+FD closure and no primary/secondary/missing bounds. Actual two-phase result851ea0ad
+is PASS_PRIVATE_F05_FOUR_CALLER_COMPILE_PASSIVE_PENDING_INDEPENDENT_QUALIFICATION.
+NativeCurrent artifactQaf63b4c1 PASS confirms actual49160B ELF3d1157c2,8 selected
+headers,4 default-versioned observer exports and16 actual provider joins; only
+3 original unversioned startup weak exceptions remain. M15Leaf Q04854f7a and
+Rootc9565217 retire ONLY805MiB/job1 after all original Root/outer/parent/16CLI
+waits/captures/FDs/source bookends and both exact nonforce rm0/CID acknowledgements.
+No distinct post-rm negative lookup exists or is claimed/required by this reviewed
+16-client contract. No library/backend/device/four-operand
+runtime/physical-restoration/wholeF05 acceptance follows from this compile/passive.
 
 F08 current-invocation packet has exact operationGO5c6b153f/fullargv9a1d2133 after
 fixing old prefixed-scope/unprefixed-operation contradiction while retaining both
@@ -221,8 +288,37 @@ waits and exactCIDc69f4209 terminal/nonOOM/Pid0/nonforce removal/absence. CredSo
 actual behaviorQ0a6e66a8 PASS has38 true predicates: stable task/FD graph for
 2.003127s, final gate2.022144s,3.8296ms from final gate to TERM intent, one approved
 TERM and normal joins; worker joins remain honestly source-bound.
-M15Leaf separately qualifies only805MiB/job1 own-family captures/FDs/fullRoot.
-Root has not retired this new family or accepted wholeF08/native/original credit.
+M15Leaf own-familyQ558b47f3 passes all11 originalHOSTwaits/22streams, inside normal
+launcher/daemon waits, FD/source/capture/container/fullRoot boundaries. Roota3693e03
+retires ONLY805306368B/job1; censusaf226482 leaves old402653184B/jobs2 plus ALL
+overhead. No wholeF08/native/original acceptance or any other hold release.
+NEXT F08 real-event proposal7b3addc9 derives genuine ihkconfig95b661ae create ADD
+candidate and monitor's actual GET_KMSG-before-eventfd sequence. Exact qualified
+HOST SMP source099/moduleae67 binding07810874 lacks GET_KMSG0x112908 and records
+subscribers=0; this is a concrete source boundary, not a designated c964/a2f/f133
+native observation. NativeCurrent joins ONLY exact source/artifact/cohort refs;
+no native/workload/producer grant or synthetic event stand-in is issued. ADD
+before registry commit and kmsg strict2095104-byte high-water/interrupt precondition
+remain honestly source-order/trigger concerns. No no-event baseline rerun.
+F08 actual declared cohort join5022c62f/5e0cdf74 confirms HOST078108/source099
+modules match native270d/141e DECLARED c964/a2f/f133 inputs; no loaded/current-free
+claim. DebugContract's private GET/READ/RELEASE source family fixes the real absent
+lease boundary, including preboot RELEASE/newest surviving minor/boot refs and
+uncertainSTART retention. Independent grouped NO_GO8ae8c3b1 + exact02ad supplement
+a4992baf require genuine EFAULT propagation, transient ring-contention behavior
+that does not terminate monitor, and correct MCD02ad composition. One bounded
+private successor is active; no known-broken compile/integration/native action.
+Create-v2 physical handoff remains a distinct unproved provider boundary.
+TimeSource's separately reviewed OFFICIAL signed-descriptor route107fe90a has
+operationGO5c682d13/argvf2b9f98a/contract1662feb4. Root fresh33-field grantf60eab6d
+ran exactly5 approved commands once, originalTool69522/fullRoot332827ae exit0.
+ActualRESULT52ed8757 is PASS_OFFICIAL_ROCKY_SIGNED_APPSTREAM_DESCRIPTOR_DISCOVERY_ONLY;
+no primary/RPM GET/compiler/Docker/oldfamily action. Signed primary envelope
+aae78c93 identifies2178044B compressed3d01e7cc/open26085865Ba63216ce. M15Leaf
+independently qualifies actual HTTP/key/signature/5+outer waits/FD/capture/fullRoot
+and ONLYnew256MiB/job1 retirement eligibility. TimeSource prepares only the next
+authenticated-primary GET/check/parse operation; no future grant/primary/RPM fact
+is inferred. Cached46d/e015 supplier and both old reservations remain untouched.
 
 Publication prospective observability repair parent823b/keeper08e7/phase0af6f has
 independent SOURCE GOfda62213. Normal/FULL bodies and original signals/waits stay

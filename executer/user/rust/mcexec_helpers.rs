@@ -2228,6 +2228,7 @@ pub unsafe extern "C" fn act_execve_phase1(
     filename = pathbuf;
 
     ret = unsafe { load_elf_desc_shebang(filename, &mut desc, &mut shebang_argv, 0) as c_long };
+    let shebang_argv_owner = ShebangArgvOwner(shebang_argv);
     if ret != 0 {
         unsafe { do_syscall_return(fd, cpu, ret, 0, 0, 0, 0) };
         return;
@@ -2303,6 +2304,9 @@ pub unsafe extern "C" fn act_execve_phase1(
         }
         unsafe { free(shebang_argv_flat) };
     }
+    // Flattening copied the final borrowed argv strings. Earlier error returns
+    // drop the same owner, including partial recursive argv on load failure.
+    drop(shebang_argv_owner);
 
     let transfer = RemoteTransfer {
         rphys: unsafe { (*w).sr.args[3] },
@@ -3514,6 +3518,34 @@ unsafe fn trim_shebang_line(mut shebang: *mut u8) -> *mut u8 {
     shebang
 }
 
+// getline owns its allocation base. Keep that base as the returned owner even
+// when trimming skips leading whitespace; the returned string bytes are unchanged.
+unsafe fn shebang_trim_to_base(base: *mut u8) -> *mut u8 {
+    let trimmed = unsafe { trim_shebang_line(base) };
+    if trimmed != base {
+        let mut index = 0usize;
+        loop {
+            let byte = unsafe { *trimmed.add(index) };
+            unsafe { *base.add(index) = byte };
+            if byte == 0 {
+                break;
+            }
+            index += 1;
+        }
+    }
+    base
+}
+
+// Production shebang argv owns one malloc allocation containing its pointer
+// table and copied string bytes. The public borrowed-string helper is unchanged.
+struct ShebangArgvOwner(*mut *mut u8);
+
+impl Drop for ShebangArgvOwner {
+    fn drop(&mut self) {
+        unsafe { free(self.0 as *mut u8) };
+    }
+}
+
 unsafe fn load_desc_publish_exec_path(filename: *const u8) -> c_int {
     if unsafe { *filename } == b'/' {
         let path = unsafe { strdup(filename) };
@@ -3602,13 +3634,24 @@ pub unsafe extern "C" fn load_elf_desc(
         let mut shebang: *mut u8 = core::ptr::null_mut();
         let mut shebang_len = 0usize;
 
+        // EOF need not set errno. Clear it so only this getline call can
+        // supply an error code, and capture it before diagnostics/cleanup.
+        unsafe { *__errno_location() = 0 };
         if unsafe { getline(&mut shebang, &mut shebang_len, fp) } == -1 {
-            unsafe { mcexec_load_desc_shebang_read_failed_bridge(filename as *const u8) };
+            let error = unsafe { *__errno_location() };
+            unsafe {
+                mcexec_load_desc_shebang_read_failed_bridge(filename as *const u8);
+                fclose(fp);
+                free(shebang);
+            }
+            // getline may allocate on failure, but publishes no terminated
+            // string. Never trim it or publish either output on this path.
+            return if error > 0 { error } else { ENOEXEC };
         }
 
         unsafe {
             fclose(fp);
-            *shebang_p = trim_shebang_line(shebang);
+            *shebang_p = shebang_trim_to_base(shebang);
         }
         return 0;
     }
@@ -3701,16 +3744,23 @@ pub unsafe extern "C" fn load_elf_desc_shebang(
 
     if !shebang.is_null() {
         if shebang_argv_p.is_null() {
-            return unsafe {
+            let ret = unsafe {
                 load_elf_desc_shebang(shebang, desc_p, core::ptr::null_mut(), execvp)
             };
+            unsafe { free(shebang) };
+            return ret;
         }
 
-        if unsafe { mcexec_shebang_argv_extend_result(shebang_argv_p, shebang) } < 0 {
+        if unsafe { shebang_argv_extend_owned(shebang_argv_p, shebang) } < 0 {
+            unsafe { free(shebang) };
             return ENOMEM;
         }
 
-        return unsafe { load_elf_desc_shebang(shebang, desc_p, shebang_argv_p, execvp) };
+        let ret = unsafe { load_elf_desc_shebang(shebang, desc_p, shebang_argv_p, execvp) };
+        // Recursion has finished borrowing this real getline base. The argv
+        // strings are independent copies owned by their single allocation.
+        unsafe { free(shebang) };
+        return ret;
     }
 
     0
@@ -4484,6 +4534,12 @@ pub unsafe extern "C" fn mcexec_load_main_desc_body(
 ) -> c_int {
     let ret = unsafe { load_elf_desc_shebang(path, desc_p, shebang_argv_p, 1) };
     if ret != 0 {
+        if !shebang_argv_p.is_null() {
+            unsafe {
+                free(*shebang_argv_p as *mut u8);
+                *shebang_argv_p = core::ptr::null_mut();
+            }
+        }
         unsafe { mcexec_main_load_desc_error_bridge(path as *const u8, ret) };
         return 1;
     }
@@ -6050,6 +6106,7 @@ pub unsafe extern "C" fn mcexec_prepare_main_desc_body(
     target_core: c_int,
     enable_vdso: c_int,
 ) {
+    let shebang_argv_owner = ShebangArgvOwner(shebang_argv);
     if desc.is_null() {
         return;
     }
@@ -6076,7 +6133,7 @@ pub unsafe extern "C" fn mcexec_prepare_main_desc_body(
             target_core,
             enable_vdso,
         );
-        free(shebang_argv as *mut u8);
+        drop(shebang_argv_owner);
         free(shebang_argv_flat);
     }
 }
@@ -6130,6 +6187,93 @@ pub unsafe extern "C" fn mcexec_shebang_argv_extend_result(
             free(old as *mut u8);
         }
         *shebang_argv_p = new_argv;
+    }
+    0
+}
+
+// Only the production recursive loader calls this owning variant. Old argv
+// strings remain alive until every byte has been copied into the new allocation.
+unsafe fn shebang_argv_extend_owned(
+    shebang_argv_p: *mut *mut *mut u8,
+    shebang: *mut u8,
+) -> i32 {
+    if shebang_argv_p.is_null() || shebang.is_null() {
+        return -EINVAL;
+    }
+
+    let mut param_count = 1usize;
+    let mut params = core::ptr::null_mut();
+    let mut index = 0usize;
+    while unsafe { *shebang.add(index) } != 0 {
+        if unsafe { *shebang.add(index) } == b' ' {
+            unsafe {
+                *shebang.add(index) = 0;
+                params = shebang.add(index + 1);
+            }
+            param_count += 1;
+            break;
+        }
+        index += 1;
+    }
+
+    let old = unsafe { *shebang_argv_p };
+    let old_count = unsafe { count_cstr_array(old) };
+    let Some(new_count) = old_count.checked_add(param_count) else {
+        return -ENOMEM;
+    };
+    let Some(table_bytes) = new_count
+        .checked_add(1)
+        .and_then(|count| count.checked_mul(core::mem::size_of::<*mut u8>()))
+    else {
+        return -ENOMEM;
+    };
+    let mut bytes = table_bytes;
+    index = 0;
+    while index < new_count {
+        let string = if index == 0 {
+            shebang
+        } else if index < param_count {
+            params
+        } else {
+            unsafe { *old.add(index - param_count) }
+        };
+        let Some(next) = unsafe { cstr_len(string as *const u8) }
+            .checked_add(1)
+            .and_then(|len| bytes.checked_add(len))
+        else {
+            return -ENOMEM;
+        };
+        bytes = next;
+        index += 1;
+    }
+
+    let base = unsafe { malloc(bytes) };
+    if base.is_null() {
+        return -ENOMEM;
+    }
+    let new_argv = base as *mut *mut u8;
+    let mut out = unsafe { base.add(table_bytes) };
+    index = 0;
+    while index < new_count {
+        let string = if index == 0 {
+            shebang
+        } else if index < param_count {
+            params
+        } else {
+            unsafe { *old.add(index - param_count) }
+        };
+        let len = unsafe { cstr_len(string as *const u8) } + 1;
+        unsafe {
+            *new_argv.add(index) = out;
+            copy_ptr_bytes(out, string as *const u8, len);
+            out = out.add(len);
+        }
+        index += 1;
+    }
+    unsafe {
+        *new_argv.add(new_count) = core::ptr::null_mut();
+        *shebang_argv_p = new_argv;
+        free(old as *mut u8);
     }
     0
 }
