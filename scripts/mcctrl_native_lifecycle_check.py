@@ -999,7 +999,7 @@ def _validate_kconfig(text: str, contract: dict[str, Any]) -> None:
 
 def _validate_kbuild(text: str, contract: dict[str, Any]) -> None:
     try:
-        validate_native_rust_kbuild(text)
+        mappings = validate_native_rust_kbuild(text)
     except KconfigPolicyError as error:
         raise ValidationError(f"shared native Rust Kbuild policy violation: {error}") from error
     expected = (
@@ -1009,8 +1009,11 @@ def _validate_kbuild(text: str, contract: dict[str, Any]) -> None:
     matches = [line.strip() for line in text.splitlines() if line.strip() == expected]
     if len(matches) != 1:
         raise ValidationError(f"Kbuild must contain exactly one {expected!r} mapping")
-    if re.search(r"^\s*mcctrl-(?:y|objs)\s*[:+]?=", text, re.MULTILINE):
-        raise ValidationError("mcctrl.ko may not use a composite project-object list")
+    # The locked graph contains the staged Rust crate and two reviewed assembly
+    # inputs; an arbitrary composite (including another .o) remains forbidden.
+    composite = "mcctrl-y := mcctrl_rust.o m15_mmap_trace_gates.o m15_mm_write_warning.o"
+    if tuple(line for line in mappings if line.startswith("mcctrl-")) != (composite,):
+        raise ValidationError("mcctrl.ko lacks the exact ordered Rust/assembly composite")
     forbidden_lines = [
         line.strip()
         for line in text.splitlines()
@@ -1029,8 +1032,8 @@ def _validate_stage_manifest(
     build = manifest.get("build_contract", {})
     if build.get("project_c_link_objects") != 0:
         raise ValidationError("stage manifest does not enforce zero project C objects")
-    if build.get("allowed_project_source_suffixes") != [".rs"]:
-        raise ValidationError("stage manifest permits non-Rust project sources")
+    if build.get("allowed_project_source_suffixes") != [".rs", ".S"]:
+        raise ValidationError("stage manifest source suffixes differ from locked Rust/assembly policy")
     modules = [item for item in manifest.get("modules", []) if item.get("crate") == "mcctrl"]
     if len(modules) != 1:
         raise ValidationError("stage manifest must contain exactly one mcctrl crate")

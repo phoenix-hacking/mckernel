@@ -11,6 +11,17 @@ from pathlib import Path
 import re
 
 
+def _write_text_if_changed(path, content):
+    # Preserve dependency timestamps when a reconfigure derives identical bytes.
+    data = content.encode("utf-8")
+    try:
+        if path.read_bytes() == data:
+            return
+    except FileNotFoundError:
+        pass
+    path.write_bytes(data)
+
+
 def signal_body(source: str) -> tuple[str, int]:
     signature = "int\ndo_signal("
     if source.count(signature) != 1:
@@ -85,8 +96,8 @@ def write_signal_metadata(source_path: Path, origin: str, output: Path) -> None:
     for name, value in sorted(fields.items()):
         kind = "u32" if name.endswith("FLAGS") else "i32"
         declarations.append(f"const {name}: {kind} = {value};")
-    (output / "f06_signal_metadata.rs").write_text("\n".join(declarations) + "\n")
-    (output / "f06_signal_metadata.json").write_text(json.dumps({
+    _write_text_if_changed(output / "f06_signal_metadata.rs", "\n".join(declarations) + "\n")
+    _write_text_if_changed(output / "f06_signal_metadata.json", json.dumps({
         "scope": "SOURCE_METADATA_ONLY_NO_RUNTIME_AUTHORITY",
         "source_sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(),
         "origin": origin,

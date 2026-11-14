@@ -1,0 +1,166 @@
+{
+  "schema": "mckernel.complete-util-thread-private-source-increment.v1",
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; NO SECURITY TESTING.",
+  "owner": "/root/verified_120_path; explicit Sol/MAX; no subagents",
+  "private_checkout": "/home/holden/mckernel-work/util-thread-complete-20261114",
+  "baseline_commit": "655c36d2538e6bf026a45b03e4229de791dbe774",
+  "new_complete_function": "util_thread(struct uti_attr *) -> C int; unique Rust export only in the paired ordinary supported profile",
+  "owned_existing_callers": [
+    "syscall_util_thread_bridge: original C-int to C-long sign extension",
+    "utilthr_migrate: unchanged mode-before-call order and ignored result"
+  ],
+  "real_providers": {
+    "data_initialization": "byte-for-byte reviewed f03_uti_info_data_initialize_v1 / EXISTING_DATA_PROVIDERS",
+    "allocation_mapping_context": "existing Rust mem_helpers::kmalloc_tracked/kfree_tracked, x86_memory_helpers::virt_to_phys, syscall_policy::save_uctx, cls, x86_local, futex",
+    "dispatch": "actual selected syscall_offload_entry::do_syscall",
+    "profile": "existing syscall_policy::f03_util_profile_v1::util_show_syscall_profile, reexport only",
+    "exit": "existing selected f03_do_exit_selected_v2::f03_do_exit_supported_v2, reexport only",
+    "group_exit": "existing selected f03_terminate::terminate",
+    "logging": "existing debug::kprintf with four original mutable __verbose records and logical source identities"
+  },
+  "preserved_behavior": [
+    "PROLOGUE before first allocation; original -ENOMEM and ordered common null cleanup for both allocation failures",
+    "current context translation before save, then second allocation and unchanged twelve-field partial initialization",
+    "optional complete UtiAttr byte copy and signed C-int parent CPU to C-long promotion in local UtiKattr",
+    "original syscall number and address domains, all six argument slots including previously accepted zero args[5], RUNNING before submission",
+    "genuine synchronous provider; EPILOGUE then profile then host-produced refill TID read before either free",
+    "original normal frees before terminal branches; exit_group/nohost/status/signal bits, ordinary exit, exact proxy-dead -512 branch, negative error diagnostic",
+    "possible-return void exit/terminate semantics: two final NULL frees and original C-long to C-int result conversion; no owner access after terminal provider",
+    "original tracked C filename/logical allocation/free origins and debug lines; exact C fallback remains under opposite selection"
+  ],
+  "reuse": {
+    "inputs": [
+      {
+        "path": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/C4-SOURCE-OWNER-CONTRACTS.json",
+        "bytes": 20797,
+        "sha256": "22f0146493e251163b070ffaea860768acd24f55c1371c07caec9f9a2db8d659"
+      },
+      {
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/UTI-DATA-TYPES.patch",
+        "bytes": 1771,
+        "sha256": "00e8fdb4acd95433de3d178fe50d1851fd45e5be2cfdbc4e7b556ed6ed5084a4"
+      },
+      {
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-time-functional-1/uti-abi-data-1/proposal/postimage/kernel/rust/abi.rs",
+        "bytes": 77702,
+        "sha256": "c19d2f6f42f861e4b1dfe7af710fba024b93a5c17082bbdc5a2b4bf914278523"
+      },
+      {
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/candidate/kernel/rust/uti_data_providers.rs",
+        "bytes": 10722,
+        "sha256": "9b8c1127f1427329ff17a73ff49336a310eff29985e32b95e50f279eb4163634"
+      },
+      {
+        "path": "/home/holden/mckernel-work/resume-20261112T094452Z-UTI-private-data-provider-1/paired-info-initializer-1/independent-source-review-1/REVIEW.json",
+        "bytes": 21058,
+        "sha256": "fa6208cb0f2b525a94a15f9c2a025ec7cc3c3ffdc97a2ee7a707dc17dfa7fe6a"
+      },
+      {
+        "path": "/home/holden/mckernel/docs/verification/m14-uti-private-object-20261113/paired-info-initializer/actual-emission-use/ACTUAL-QUALIFICATION.json",
+        "bytes": 37967,
+        "sha256": "6b5b1ef2fec77f4c96cc537e7339e9271e31f3e3e2b6625ca934dfedc44b751f"
+      }
+    ],
+    "initializer_exact_output": {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/rust/uti_data_providers.rs",
+      "bytes": 10722,
+      "sha256": "9b8c1127f1427329ff17a73ff49336a310eff29985e32b95e50f279eb4163634"
+    },
+    "ABI_note": "Only the existing measured UtiInfo/UtiKattr declarations are reused; their leading status comment is updated. Existing ABI35 passing scope is reused, not relabeled as full-body qualification.",
+    "pending_UTI13_link": "Existing initializer pair/13-input candidate link remains frozen and separate; this source changes the future whole-body cohort and does not rewrite that operation or its inputs.",
+    "disabled_logger": "Existing source5dd6/review29b0 remains retained separately and unchanged; no duplicate logger implementation.",
+    "exec_owner": "/root/exec_orchestration_rust owns do_execveat plus syscall_execveat_bridge in a separate checkout; adjacent CMake/lib integration remains Root-owned."
+  },
+  "hosted_qualification_prepared": {
+    "entry": "python3 -B -m unittest -v scripts.tests.test_m14_util_thread",
+    "ci_route": "Existing m14-focused.yml exact-head hosted suite via the existing strict allowlist",
+    "new_runtime_tests": 5,
+    "debug_profiles": [
+      "0",
+      "1"
+    ],
+    "actual_inputs": "Complete new Rust module, byte-identical reviewed initializer and real full Rust ABI source; actual bridge/proxy classifier extracted without rewriting",
+    "observations": [
+      "both allocation failures and original free origins",
+      "all successful/negative/group/proxy result families",
+      "complete attribute bits, sign promotion and real return ABI",
+      "all twelve initialized fields, nine untouched host pointer fields and alignment padding",
+      "real HOST thread synchronously borrows heap plus request/attribute stack slots and completes before free",
+      "HOST mmap/mprotect prevents Thread/Process access after returning terminal providers"
+    ],
+    "test_provider_limit": "Fixture observation providers are explicit doubles, never production linker/provider or native evidence.",
+    "executed_locally": false
+  },
+  "pending_proof": [
+    "independent changed-source/provider/ABI/lifetime review of this whole-function increment",
+    "exact-head hosted focused tests with no failures/errors/skips",
+    "necessary selected C TU and full Rust-crate compilation plus emitted/imported/provider uniqueness and actual affected final-link ownership",
+    "actual allowed matching functional/native request/completion/refill/exit/lifecycle and resource-restoration evidence under genuine admission",
+    "original host completion/ACK/drain, held source/exec/TID/native/UNKNOWN scopes remain independently unproved; source migration supplies no release"
+  ],
+  "original_counted_checks_closed": 0,
+  "local_tests_compilers_builds_payloads_native_services_RPC_original_handles_executed": false,
+  "live_main_candidate_harness_criteria_ledgers_or_held_inputs_edited": false,
+  "source_files": [
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/CMakeLists.txt",
+      "bytes": 75963,
+      "sha256": "fe1c46408e69596d838060c11e71dc7d3981b97b75b230d528aa2bfb6efd135e",
+      "relative_path": "kernel/CMakeLists.txt"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/syscall.c",
+      "bytes": 968793,
+      "sha256": "7496899c5353c0a174dd5acb95dcb006fac1d0e455047927fe5dac97ade6bfe3",
+      "relative_path": "kernel/syscall.c"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/rust/abi.rs",
+      "bytes": 77707,
+      "sha256": "4d9d44ded3f61056ff882cb63a82b5c15fbda0d0dccc02376e6dfdc2377e6011",
+      "relative_path": "kernel/rust/abi.rs"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/rust/lib.rs",
+      "bytes": 5370,
+      "sha256": "ce1769f07ef5d6c71d734650b1812c7408e938de5ba12a51d8e77697b7bd6e16",
+      "relative_path": "kernel/rust/lib.rs"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/rust/syscall_policy.rs",
+      "bytes": 1248124,
+      "sha256": "5965a2b205a1411ba27c3e0fced5c8e4ead9b9a9227ea67db904490fb75f5153",
+      "relative_path": "kernel/rust/syscall_policy.rs"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/rust/f03_util_thread.rs",
+      "bytes": 13252,
+      "sha256": "08f5ce80a935a5fc938640d594afc718861fce86785ba0b8b984f7032e73f803",
+      "relative_path": "kernel/rust/f03_util_thread.rs"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/kernel/rust/uti_data_providers.rs",
+      "bytes": 10722,
+      "sha256": "9b8c1127f1427329ff17a73ff49336a310eff29985e32b95e50f279eb4163634",
+      "relative_path": "kernel/rust/uti_data_providers.rs"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/scripts/run_m14_focused_checks.py",
+      "bytes": 6066,
+      "sha256": "19d9e87eb2cde362688e42805064a6ffc1e531d720b2f41024a999e335aee02e",
+      "relative_path": "scripts/run_m14_focused_checks.py"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/scripts/tests/test_m14_util_thread.py",
+      "bytes": 3507,
+      "sha256": "dcd44178aed360deab4d7978d403104b2be7a2e8cd78b1365e13e3ee441e5043",
+      "relative_path": "scripts/tests/test_m14_util_thread.py"
+    },
+    {
+      "path": "/home/holden/mckernel-work/util-thread-complete-20261114/scripts/tests/fixtures/f03_util_thread_lifecycle.rs",
+      "bytes": 19816,
+      "sha256": "cb74e91486640914bc88f54168a295d34f26c34c8b6f3801326cd55b34a79336",
+      "relative_path": "scripts/tests/fixtures/f03_util_thread_lifecycle.rs"
+    }
+  ]
+}

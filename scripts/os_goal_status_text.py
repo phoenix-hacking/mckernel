@@ -10,6 +10,7 @@ import tempfile
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from os_goal_guard_protocol import read_json
+from os_goal_mailbox_status import read_mailbox_status, receipt_source_label
 from os_goal_stop_log import _text as redact
 
 
@@ -148,9 +149,25 @@ def _runtime(lines, runtime, now, checker):
     if messages is None:
         lines.append("Instruction receipt counts: UNAVAILABLE.")
     else:
-        counts = {name: sum(isinstance(v, dict) and v.get("delivery_status") == name for v in messages.values())
-                  for name in ("WAITING", "ACCEPTED", "NOT_QUEUED")}
-        lines.append("Instruction receipts: " + "; ".join(f"{name}={count}" for name, count in counts.items()) + ". Acceptance is not completed work.")
+        totals = mailbox.get("message_status_counts")
+        if isinstance(totals, dict) and all(type(value) is int and value >= 0 for value in totals.values()):
+            counts = {name: totals.get(name, 0) for name in ("WAITING", "ACCEPTED", "NOT_QUEUED")}
+            counts.update({name: count for name, count in totals.items() if name not in counts and count})
+            scope = "Instruction receipts: "
+        else:
+            counts = {name: sum(isinstance(v, dict) and v.get("delivery_status") == name for v in messages.values())
+                      for name in ("WAITING", "ACCEPTED", "NOT_QUEUED")}
+            scope = ("Recent instruction receipts: " if type(mailbox.get("message_count")) is int
+                     and mailbox["message_count"] > len(messages) else "Instruction receipts: ")
+        lines.append(scope + "; ".join(f"{name}={count}" for name, count in counts.items()) + ". Acceptance is not completed work.")
+        total = mailbox.get("message_count", len(messages))
+        lines.append(f"Recent instruction receipt metadata: {len(messages)} shown of {_text(total)} total.")
+        for key, message in list(messages.items())[-5:]:
+            if isinstance(message, dict):
+                lines.append("Instruction " + _text(receipt_source_label(message, key))
+                             + " | " + _text(message.get("delivery_status"))
+                             + " | received UTC=" + _utc(message.get("received_at"))
+                             + " | source=" + _text(message.get("source_url") or message.get("comment_url")))
     last = state.get("last_instruction") if isinstance(state.get("last_instruction"), dict) else {}
     lines += ["Last controller instruction: " + _text(last.get("id")) + " | " + _text(last.get("status"))
               + " | accepted timestamp=" + _utc(last.get("delivered_at")), ""]
@@ -332,7 +349,8 @@ def main(argv=None):
         runtime = {}
         for key, name in (("state", "state.json"), ("guardian", "guardian.json"), ("watcher", "watcher.json"), ("mailbox", "mailbox-state.json"), ("latest_stop", "latest-stop.json")):
             try:
-                runtime[key] = read_json(args.runtime_directory / name)
+                reader = read_mailbox_status if name == "mailbox-state.json" else read_json
+                runtime[key] = reader(args.runtime_directory / name)
             except FileNotFoundError:
                 pass
         from os_goal_guard_protocol import process_start

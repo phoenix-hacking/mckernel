@@ -343,14 +343,19 @@ def git_output(repo: Path, arguments: Sequence[str]) -> bytes:
     return completed.stdout
 
 
+def ihk_history_repo(repo: Path) -> Path:
+    root = Path(os.environ.get("MCKERNEL_IHK_HISTORY", str(repo / "ihk")))
+    if not (root / ".git").exists():
+        raise ApiNeedsError("frozen IHK Git history is required; set MCKERNEL_IHK_HISTORY")
+    return root
+
+
 def source_blob(repo: Path, logical_path: str) -> bytes:
     path = PurePosixPath(logical_path)
     if path.is_absolute() or ".." in path.parts or "\\" in logical_path:
         raise ApiNeedsError("invalid frozen source path: {0}".format(logical_path))
     if logical_path.startswith("ihk/"):
-        ihk_repo = repo / "ihk"
-        if not (ihk_repo / ".git").exists():
-            raise ApiNeedsError("IHK submodule is not initialized")
+        ihk_repo = ihk_history_repo(repo)
         relative = logical_path[len("ihk/") :]
         return git_output(ihk_repo, ["show", FROZEN_IHK_REF + ":" + relative])
     return git_output(repo, ["show", FROZEN_PARENT_REF + ":" + logical_path])
@@ -385,7 +390,7 @@ def verify_inventory_replay(repo: Path, inventory: Dict[str, Any]) -> None:
     parent = git_output(repo, ["rev-parse", FROZEN_PARENT_REF]).decode().strip()
     if parent != FROZEN_PARENT_REF:
         raise ApiNeedsError("cannot resolve frozen parent commit")
-    ihk_repo = repo / "ihk"
+    ihk_repo = ihk_history_repo(repo)
     ihk = git_output(ihk_repo, ["rev-parse", FROZEN_IHK_REF]).decode().strip()
     if ihk != FROZEN_IHK_REF:
         raise ApiNeedsError("cannot resolve frozen IHK commit")

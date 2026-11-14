@@ -8002,6 +8002,50 @@ extern int f03_execveat_ptrace_report_v1(struct thread *, ihk_mc_user_context_t 
 extern long f03_execveat_finish_switch_v1(struct thread *, long);
 #endif
 
+/* Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+ * Complete Rust exec and its exact callback are selected atomically. No C
+ * lifecycle provider is introduced; the retained body below is other profiles.
+ */
+#ifdef MCKERNEL_RUST_F03_EXECVEAT_COMPLETE
+#if !defined(__x86_64__) || !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_F03_EXEC_DEFINED_TAIL) || !defined(MCKERNEL_RUST_DO_SYSCALL_OUTER) || !defined(MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL)
+#error "complete Rust exec requires its paired ordinary x86/provider cohort"
+#endif
+_Static_assert(sizeof(int) == 4 && sizeof(long) == 8, "exec LP64 ABI");
+_Static_assert(__NR_execve == 59 && SIGKILL == 9, "exec protocol constants");
+_Static_assert((PTATTR_NO_EXECUTE | PTATTR_WRITABLE | PTATTR_FOR_USER) == 0x8000000000020002UL, "exec range attributes");
+_Static_assert(PAGE_SIZE == 4096 && PAGE_P2ALIGN == 0 && IHK_MC_AP_NOWAIT == 2 && IHK_MC_PG_KERNEL == 0 && KERNEL_STACK_NR_PAGES == 32, "exec existing helper allocation/context profile");
+struct f03_execveat_dma_request { struct syscall_request request IHK_DMA_ALIGN; };
+_Static_assert(sizeof(struct f03_execveat_dma_request) == 72 && __alignof__(struct f03_execveat_dma_request) == 8, "exec selected DMA request ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_syscall), long (*)(struct syscall_request *, int)), "exec genuine transport ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&prepare_process_ranges_args_envs), int (*)(struct thread *, struct program_load_desc *, struct program_load_desc *, enum ihk_mc_pt_attribute, char *, int, char *, int)), "exec genuine range provider ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&flatten_strings_from_user), int (*)(char *, char **, char **)), "exec genuine flatten provider ABI");
+_Static_assert(__builtin_types_compatible_p(__typeof__(&do_kill), unsigned long (*)(struct thread *, int, int, int, struct siginfo *, int)), "exec genuine kill provider ABI");
+__attribute__((used)) const unsigned long f03_execveat_complete_c_abi_words[] = {
+    sizeof(int), __alignof__(int), sizeof(long), __alignof__(long),
+    sizeof(struct syscall_request), __alignof__(struct syscall_request),
+    __builtin_offsetof(struct syscall_request, number), __builtin_offsetof(struct syscall_request, args),
+    sizeof(ihk_mc_user_context_t), __alignof__(ihk_mc_user_context_t),
+    sizeof(struct program_load_desc), __alignof__(struct program_load_desc),
+    sizeof(struct program_image_section), __alignof__(struct program_image_section),
+    __builtin_offsetof(struct program_load_desc, num_sections),
+    __builtin_offsetof(struct program_load_desc, args),
+    __builtin_offsetof(struct program_load_desc, args_len),
+    __builtin_offsetof(struct program_load_desc, entry),
+    __builtin_offsetof(struct thread, vm), __builtin_offsetof(struct thread, proc),
+    __builtin_offsetof(struct thread, tid), __builtin_offsetof(struct process, pid),
+    __builtin_offsetof(struct process, execed), __builtin_offsetof(struct process_vm, region),
+    __builtin_offsetof(struct vm_regions, user_start), __builtin_offsetof(struct vm_regions, user_end),
+    __NR_execve, SIGKILL, PTATTR_NO_EXECUTE | PTATTR_WRITABLE | PTATTR_FOR_USER,
+    PAGE_SIZE, PAGE_P2ALIGN, IHK_MC_AP_NOWAIT, IHK_MC_PG_KERNEL, 4, KERNEL_STACK_NR_PAGES,
+};
+_Static_assert(sizeof(f03_execveat_complete_c_abi_words) == 35 * sizeof(unsigned long), "exec paired layout readback extent");
+#else
+#ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#define MCKERNEL_EXECVEAT_ORIGINAL_ENTRY_LINE 7531
+#else
+#define MCKERNEL_EXECVEAT_ORIGINAL_ENTRY_LINE 7538
+#endif
+#line MCKERNEL_EXECVEAT_ORIGINAL_ENTRY_LINE
 static int do_execveat(ihk_mc_user_context_t *ctx, int dirfd,
 		const char *filename, char **argv, char **envp, int flags)
 {
@@ -8241,7 +8285,14 @@ end:
 #endif
 }
 
+#endif /* MCKERNEL_RUST_F03_EXECVEAT_COMPLETE: complete do_execveat */
+
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
+#ifdef MCKERNEL_RUST_F03_EXECVEAT_COMPLETE
+extern int syscall_execveat_bridge(void *, int, const char *, char **, char **, int);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&syscall_execveat_bridge),
+    int (*)(void *, int, const char *, char **, char **, int)), "exec caller/provider callback ABI");
+#else
 int
 syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
 		char **argv, char **envp, int flags)
@@ -8249,6 +8300,7 @@ syscall_execveat_bridge(void *ctx, int dirfd, const char *filename,
 	return do_execveat((ihk_mc_user_context_t *)ctx, dirfd, filename,
 			argv, envp, flags);
 }
+#endif /* MCKERNEL_RUST_F03_EXECVEAT_COMPLETE: exact callback */
 
 long sys_execve(int n, ihk_mc_user_context_t *ctx);
 #else
@@ -29494,6 +29546,24 @@ int util_show_syscall_profile()
 	return 0;
 }
 #endif
+#ifdef MCKERNEL_RUST_F03_UTIL_THREAD
+#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_DO_SYSCALL_OUTER) || !defined(MCKERNEL_RUST_F03_DO_EXIT_V2) || !defined(MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER) || !defined(__x86_64__) || defined(DCFA_KMOD)
+#error "complete Rust util_thread requires its genuine ordinary dispatch/exit providers"
+#endif
+_Static_assert(sizeof(int) == 4 && sizeof(long) == 8,
+               "qualify changed util_thread C integer ABI");
+_Static_assert(sizeof(struct syscall_request) == 72 &&
+               __alignof__(struct syscall_request) == 8 &&
+               offsetof(struct syscall_request, args) == 24,
+               "qualify changed util_thread request ABI");
+_Static_assert(sizeof(struct uti_ctx) == 4096 &&
+               sizeof(struct uti_info) == 160 &&
+               sizeof(struct uti_attr) == 136,
+               "qualify changed util_thread DATA ABI");
+extern int util_thread(struct uti_attr *);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&util_thread),
+               int (*)(struct uti_attr *)), "util_thread exact int(pointer) ABI");
+#else
 #line 28297
 
 
@@ -29601,6 +29671,8 @@ int util_thread(struct uti_attr *arg)
 	return rc;
 }
 
+#endif
+#line 28403
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern long syscall_util_thread_bridge(void *);
 #else
@@ -29642,12 +29714,12 @@ long sys_util_migrate_inter_kernel(int n, ihk_mc_user_context_t *ctx)
 #endif
 
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
-void
-syscall_util_indicate_clone_disabled_bridge(void)
-{
-	kprintf("%s: error: --enable-uti mcexec option not specified\n",
-			"sys_util_indicate_clone");
-}
+extern void
+syscall_util_indicate_clone_disabled_bridge(void);
+
+
+
+
 
 long sys_util_indicate_clone(int n, ihk_mc_user_context_t *ctx);
 #else

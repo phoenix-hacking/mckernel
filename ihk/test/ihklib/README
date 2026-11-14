@@ -1,0 +1,101 @@
+==========
+How to run
+==========
+(1) cp <build>/mckernel/mck_test_config.sample \
+    ~/.mck_test_config
+(2) cp <build>/ihk/mck_test_config.mk.sample \
+    ~/.mck_test_config.mk
+(3) ./run.sh <ihklibxxx>
+    Example: ./run.sh ihklib001
+
+===================================
+How to judge it behaves as expected
+===================================
+Follow the instruction given by run.sh.
+
+=====================
+Descripation of tests
+=====================
+ihklib001:
+boot sequence, use ihklib function for ikc_map
+
+ihklib002:
+makedumpfile
+
+ihklib003:
+eventfd oom
+
+ihklib004:
+eventfd panic
+
+ihklib005:
+eventfd hungup using ihkmond
+passing "-k 0" to mcreboot.sh
+
+ihklib006:
+redirect kmsg when destroying /dev/mcos0
+
+ihklib007:
+redirect kmsg when the amount of kmsg exceeds the threshold
+-k 0 option
+
+ihklib008:
+redirect kmsg stops the redirection when /dev/mcos0 is deleted and resume redirection when /dev/mcos0 is created again
+
+ihklib009:
+detect_hungup stops the detection when /dev/mcos0 is deleted and resume detection when /dev/mcos0 is created again
+
+ihklib010:
+McKernel sends event when the amount of kmsg exceeds the threshold
+
+ihklib011:
+overwrap test for -k 0
+
+ihklib012:
+dead-lock check of struct ihk_kmsg_buf::lock
+
+ihklib013:
+overwrap test for ihkmond file slots
+
+ihklib014:
+host_driver.c acquires/releases kmsg_buf by using reference counter with passing "-k 0" to ihkmond
+
+ihklib015:
+ihkmond acquires/releases kmsg_buf with passing "-k 1" to ihkmond
+
+ihklib016:
+host_driver.c deletes stray kmsg_buf when too many of them are created
+
+ihklib017:
+perform syslog() when detecting panic/hungup
+
+ihklib018:
+* Hang detection in mcexec using ihk_os_get_eventfd()
+* Non-MPI program
+
+ihklib019:
+* Hang detection in mcexec using ihk_os_get_eventfd()
+* MPI program
+* Two execution styles are covered:
+  1) Run by executing mpiexec directly
+  2) Run through job submission system
+
+ihklib020:
+ihk_os_get_assigned_cpus() and ihk_os_query_cpu()
+
+ihklib021:
+ihk_get_reserved_cpus() and ihk_query_cpu()
+
+ihklib022:
+ihk_os_create_pseudofs() and ihk_os_destroy_pseudofs()
+
+ihklib023:
+Check if the following functions are thread-safe
+* ihk_[os_]query_cpu()
+* ihk_[os_]query_mem()
+* ihk_os_get_ikc_map()
+
+ihklib024:
+Check if ihk_os_{create,destroy}_pseudofs() returns -ECHILD when the
+children of the internal fork()s (including those called by system()s)
+are stolen by waitpid(-1, ...) of another thread

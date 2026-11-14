@@ -19,6 +19,7 @@ import time
 from uuid import uuid4
 
 from os_goal_guard_protocol import EngineLaunchDeferred, atomic_json, lease_free, process_start, read_json
+from os_goal_mailbox_status import read_mailbox_status
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -217,14 +218,7 @@ def status(repo, directory):
                   heartbeat_at=guard.get("heartbeat_at"), reason=guard.get("reason"),
                   mailbox_error=guard.get("mailbox_error"))
     try:
-        mailbox = read_json(Path(directory) / "mailbox-state.json")
-        event = mailbox.get("active_notice_event_id")
-        notice = (mailbox.get("notices") or {}).get(event, {})
-        result["mailbox"] = {key: mailbox.get(key) for key in
-                             ("last_poll_at", "last_successful_poll_at", "next_poll_at", "last_error", "pending_resumes", "messages")}
-        result["mailbox"].update(active_notice_event_id=event, notice_requested=bool(notice.get("requested")),
-                                  observed_notice=bool(notice.get("observed_comment_id")),
-                                  observed_comment_id=notice.get("observed_comment_id"))
+        result["mailbox"] = read_mailbox_status(Path(directory) / "mailbox-state.json")
     except FileNotFoundError:
         pass
     return result

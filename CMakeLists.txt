@@ -289,7 +289,7 @@ if (EXISTS ${PROJECT_SOURCE_DIR}/${IHK_SOURCE_DIR}/CMakeLists.txt)
 elseif (EXISTS /${IHK_SOURCE_DIR}/CMakeLists.txt)
 	set(IHK_FULL_SOURCE_DIR /${IHK_SOURCE_DIR})
 else()
-	message(FATAL_ERROR "Could not find ihk dir, or it does not contain CMakeLists.txt, either clone ihk or run git submodule update --init")
+	message(FATAL_ERROR "Could not find IHK sources; restore the tracked ihk/ directory or set IHK_SOURCE_DIR to a complete IHK source tree")
 endif()
 
 add_subdirectory(${IHK_SOURCE_DIR} ihk)

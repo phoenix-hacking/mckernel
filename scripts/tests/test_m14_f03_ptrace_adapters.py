@@ -33,7 +33,8 @@ class PtraceAdaptersTests(unittest.TestCase):
             self.skipTest("C and Rust compilers required")
         generic = (ROOT / "kernel/syscall.c").read_text()
         header = (ROOT / "kernel/include/process.h").read_text()
-        start = generic.index("#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS\n"
+        start = generic.index("#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || "
+                              "defined(MCKERNEL_RUST_F06_PTRACE_RESUME_CALLBACKS)\n"
                               "extern long ptrace_detach_do_kill_bridge")
         end_marker = "#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS */"
         end = generic.index(end_marker, start) + len(end_marker)

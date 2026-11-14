@@ -1,4 +1,4 @@
-"""A bounded GitHub PR-comment mailbox for the existing same-Root instruction queue.
+"""A paginated GitHub mailbox for the existing same-Root instruction queue.
 
 Network access uses supported ``gh api`` authentication without reading or logging
 credentials. Replies are plain instructions, never shell commands. This module
@@ -19,22 +19,42 @@ import time
 from uuid import uuid4
 
 from run_os_goal import queue_instruction
+from os_goal_mailbox_protocol import parse_instruction_part, split_message
+from os_goal_file_mailbox import read_revision, write_reply
+from os_goal_mailbox_status import summarize_mailbox_state
 from os_goal_stop_log import _text as _redacted_text
 
 
 STATE_FILE = "mailbox-state.json"
 MARKER = "<!-- mckernel-mailbox:{event_id} -->"
-_MAX_JSON = 2 * 1024 * 1024
+_COMMENT_PAGE_SIZE = 50
+_COMMENTS_QUERY = """query($owner: String!, $name: String!, $number: Int!, $after: String) {
+  repository(owner: $owner, name: $name) {
+    pullRequest(number: $number) {
+      comments(first: 50, after: $after) {
+        nodes {
+          id: fullDatabaseId body created_at: createdAt updated_at: updatedAt
+          user: author { type: __typename login ... on User { id: databaseId } }
+        }
+        pageInfo { endCursor hasNextPage }
+      }
+    }
+  }
+}"""
 
 
 def _read(path):
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     try:
         info = os.fstat(fd)
-        if not stat.S_ISREG(info.st_mode) or info.st_size > _MAX_JSON:
-            raise ValueError("Mailbox JSON must be a bounded regular file")
-        raw = os.read(fd, _MAX_JSON + 1)
-        value = json.loads(raw)
+        if not stat.S_ISREG(info.st_mode):
+            raise ValueError("Mailbox JSON must be a regular file")
+        with os.fdopen(fd, "r", encoding="utf-8", closefd=False) as stream:
+            value = json.load(stream)
+        after = os.fstat(fd)
+        if (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns) != (
+                after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns, after.st_ctime_ns):
+            raise ValueError("Mailbox JSON changed while reading")
         if not isinstance(value, dict):
             raise ValueError("Mailbox JSON must contain an object")
         return value
@@ -61,12 +81,16 @@ def _save(path, value):
         temporary.unlink(missing_ok=True)
 
 
-def _gh_api(endpoint, *, method="GET", payload=None, timeout=10):
+def _gh_api(endpoint, *, method="GET", payload=None, timeout=10, accept=None):
     """No shell, token discovery, credential output, or unbounded network wait."""
     gh = shutil.which("gh")
     if gh is None:
         raise RuntimeError("GitHub mailbox requires authenticated gh CLI")
     command = [gh, "api", "--method", method, endpoint]
+    if accept is not None:
+        if accept != "application/vnd.github.object+json":
+            raise ValueError("Unsupported mailbox media type")
+        command += ["--header", "Accept: " + accept]
     if payload is not None:
         command += ["--input", "-"]
     completed = subprocess.run(command, input=json.dumps(payload) if payload is not None else None,
@@ -75,12 +99,12 @@ def _gh_api(endpoint, *, method="GET", payload=None, timeout=10):
         # gh stderr can include request details; retain only the exit class here.
         raise RuntimeError("GitHub mailbox API " + method + " failed (exit "
                            + str(completed.returncode) + "); check gh authentication/network")
-    if len(completed.stdout.encode("utf-8")) > _MAX_JSON:
-        raise ValueError("GitHub mailbox response exceeded the bounded limit")
     return json.loads(completed.stdout) if completed.stdout.strip() else None
 
 
-def _safe(value, limit=400):
+def _safe(value, limit=None):
+    if limit is None:
+        limit = len(value) if isinstance(value, str) else 400
     return " ".join((_redacted_text(value, limit) or "").split()).replace("@", "@\u200b")
 
 
@@ -114,6 +138,7 @@ class Mailbox:
             raise ValueError("Mailbox poll_seconds must be between 30 and 3600")
         self.binding = _sha([self.remote, self.issue, self.user_id])
         self.path = self.directory / STATE_FILE
+        self.file_enabled = bool(cfg.get("file_inbox_path"))
 
     @contextmanager
     def _locked(self):
@@ -134,7 +159,7 @@ class Mailbox:
                 raise ValueError("Invalid mailbox comment baseline")
             return {"schema_version": 1, "binding": self.binding,
                     "last_seen_comment_id": baseline, "reply_epoch": 0,
-                    "notices": {}, "messages": {}, "pending_resumes": [], "failures": 0, "next_poll_at": 0}
+                    "notices": {}, "messages": {}, "multipart": {}, "pending_resumes": [], "failures": 0, "next_poll_at": 0}
         if (state.get("schema_version") != 1 or state.get("binding") != self.binding
                 or type(state.get("last_seen_comment_id")) is not int
                 or not isinstance(state.get("notices"), dict)
@@ -143,37 +168,65 @@ class Mailbox:
         state.setdefault("messages", {})
         if not isinstance(state["messages"], dict):
             raise ValueError("Mailbox message receipts are invalid")
+        if state.get("comment_cursor") is not None and not isinstance(state["comment_cursor"], str):
+            raise ValueError("Mailbox comment cursor is invalid")
+        state.setdefault("multipart", {})
+        if not isinstance(state["multipart"], dict):
+            raise ValueError("Mailbox multipart receipts are invalid")
         return state
 
     def _result(self, state, status, **fields):
-        event_id = state.get("active_notice_event_id")
-        notice = state["notices"].get(event_id, {})
-        result = {"status": status, "issue_number": self.issue, "notice_event_id": event_id,
-                  "notice_requested": bool(notice.get("requested")),
-                  "observed_notice": bool(notice.get("observed_comment_id")),
-                  "next_poll_at": state.get("next_poll_at", 0),
-                  "messages": state["messages"],
-                  "outbox_pending": sum(not n.get("observed_comment_id") and not n.get("superseded") for n in state["notices"].values()), **fields}
+        # Keep full history in durable state; order and compact the status view
+        # independently of JSON key order and opaque file-revision identities.
+        result = summarize_mailbox_state(state)
+        result.update(status=status, issue_number=self.issue,
+                      notice_event_id=state.get("active_notice_event_id"),
+                      next_poll_at=state.get("next_poll_at", 0),
+                      comment_scan_pending=bool(state.get("comment_scan_pending")), **fields)
         if state["pending_resumes"]:
             request = state["pending_resumes"][0]
             result.update(resume_request_id=request["request_id"], resume_comment_id=request["comment_id"],
                           resume_created_at=request["resume_created_at"])
         return result
 
-    def _comments(self):
-        comments, deadline = [], time.monotonic() + 30
-        for page in range(1, 11):
+    def _comment_pages(self, state):
+        """Checkpointed connection cursors have no total history/page limit.
+
+        The per-poll deadline limits work, not mailbox capacity. The caller
+        commits each cursor only after every comment on that page is durable.
+        """
+        owner, name = self.remote.split("/", 1)
+        cursor, deadline = state.get("comment_cursor"), time.monotonic() + 30
+        while True:
             remaining = deadline - time.monotonic()
             if remaining <= 0:
-                raise RuntimeError("GitHub mailbox pagination exceeded poll time budget")
-            rows = _gh_api(f"repos/{self.remote}/issues/{self.issue}/comments?per_page=100&page={page}",
-                           timeout=min(10, remaining))
-            if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+                return  # A subsequent scheduled poll continues the saved cursor.
+            reply = _gh_api("graphql", method="POST", payload={"query": _COMMENTS_QUERY,
+                "variables": {"owner": owner, "name": name, "number": self.issue, "after": cursor}},
+                timeout=min(10, remaining))
+            try:
+                if not isinstance(reply, dict) or reply.get("errors"):
+                    raise ValueError
+                connection = reply["data"]["repository"]["pullRequest"]["comments"]
+                rows, page_info = connection["nodes"], connection["pageInfo"]
+                next_cursor, more = page_info["endCursor"], page_info["hasNextPage"]
+            except (KeyError, TypeError, ValueError):
+                raise ValueError("GitHub returned malformed mailbox comments") from None
+            if (not isinstance(rows, list) or len(rows) > _COMMENT_PAGE_SIZE
+                    or any(not isinstance(row, dict) for row in rows)
+                    or type(more) is not bool
+                    or (rows and (not isinstance(next_cursor, str) or not next_cursor or next_cursor == cursor))
+                    or (not rows and more)):
                 raise ValueError("GitHub returned malformed mailbox comments")
-            comments.extend(rows)
-            if len(rows) < 100:
-                return sorted(comments, key=lambda row: row.get("id") if type(row.get("id")) is int else -1)
-        raise RuntimeError("GitHub mailbox exceeds bounded pagination; reconcile before polling")
+            for row in rows:
+                # GraphQL BigInt preserves comment IDs that exceed signed Int32.
+                if isinstance(row.get("id"), str) and re.fullmatch(r"[0-9]+", row["id"]):
+                    row["id"] = int(row["id"])
+            rows.sort(key=lambda row: row.get("id") if type(row.get("id")) is int else -1)
+            yield rows, next_cursor if rows else cursor, more
+            if not more:
+                return
+            cursor = next_cursor
 
     @staticmethod
     def _current_stop(stop, state, context, mode):
@@ -232,17 +285,11 @@ class Mailbox:
                     "missing_input": _safe(context.get("missing_input")),
                     "next_action": _safe(context.get("next_action") or stop.get("remedy")),
                     "route": _safe(context.get("route") or stop.get("route"))}
-        lines = ["## 📤 SENT — computer → phone", "", "### ⏳ WAITING FOR YOUR REPLY", "",
-                 "Original M14/M15 acceptance is unfinished. Current blocker:"]
+        lines = ["M14/M15 is blocked.", ""]
         lines += [f"- **{key.replace('_', ' ')}:** {value}" for key, value in material.items() if value]
         if not any(material.values()):
             lines.append("- The campaign is blocked; the exact missing input still needs diagnosis.")
-        lines += ["", "Reply in this PR with `/mckernel-instruct` on the first line and your instruction below it,",
-                  "or `/mckernel-resume` for explicit manual continuation. Existing service, permission,",
-                  "usage, source and native/resource holds remain binding. GitHub notification requested;",
-                  "email delivery depends on your GitHub notification settings."]
-        body = "\n".join(lines).encode("utf-8")[:6000].decode("utf-8", errors="ignore")
-        return material, body
+        return material, "\n".join(lines)
 
     @staticmethod
     def _utc(epoch=None):
@@ -252,7 +299,8 @@ class Mailbox:
         event_id = _sha([self.binding, kind, key])
         if event_id not in state["notices"]:
             state["notices"][event_id] = {"event_id": event_id, "kind": kind, "body": body,
-                "requested": False, "created_order": len(state["notices"]), "created_at": self._utc(), **fields}
+                "requested": False, "created_order": len(state["notices"]), "created_at": self._utc(),
+                "publish_to_file": bool(self.config.get("file_reply_path")), **fields}
         return event_id
 
     def _received(self, state, intent, request_id=None, reason=None):
@@ -266,18 +314,14 @@ class Mailbox:
                    "received_at": intent.get("received_at"),
                    "command_recognized": intent.get("command") in {"/mckernel-instruct", "/mckernel-resume"},
                    "delivery_status": "WAITING" if request_id else "NOT_QUEUED"}
-        lines = ["## 📥 RECEIVED — phone → computer", "",
-                 f"- Your message: [comment #{comment_id}]({url})",
-                 "- 📤 GitHub sent timestamp: " + (message["source_created_at"] or "unavailable in preserved record"),
-                 "- 📥 Computer received timestamp: " + (message["received_at"] or "unavailable in preserved record")]
+        lines = [f"📥 RECEIVED: [message #{comment_id}]({url})."]
         if request_id:
-            lines += [f"- Queued instruction: `{request_id}`", "", "**⏳ WAITING for controller acceptance.**",
-                      "The instruction is saved once. Queueing does not prove controller acceptance or completed work."]
+            raw = intent["instruction"].encode("utf-8")
+            message.update(instruction_utf8_bytes=len(raw), instruction_sha256=hashlib.sha256(raw).hexdigest())
+            lines += ["⏳ WAITING for controller acceptance."]
         else:
             message["not_queued_reason"] = reason or "No supported first-line command was supplied."
-            lines += ["", "**⏳ WAITING for a new valid instruction — NOT QUEUED.**",
-                      message["not_queued_reason"],
-                      "Put `/mckernel-instruct` or `/mckernel-resume` on the first line of a new comment; put your instruction below it."]
+            lines += ["Not queued: " + message["not_queued_reason"]]
         message["received_event_id"] = self._event(state, "received", comment_id, "\n".join(lines), comment_id=comment_id)
         state["messages"][key] = message
         return message
@@ -305,16 +349,135 @@ class Mailbox:
                 continue
             message.update(delivery_status="ACCEPTED", controller_accepted_at=receipt["delivered_at"],
                            controller_thread_id=receipt["thread_id"], controller_turn_id=receipt["turn_id"])
-            body = "\n".join(["## ✅ RECEIVED BY CONTROLLER — instruction accepted", "",
-                f"- Your message: [comment #{message['comment_id']}]({message['comment_url']})",
-                "- 📤 GitHub sent timestamp: " + (message["source_created_at"] or "unavailable in preserved record"),
-                "- 📥 Computer received timestamp: " + (message["received_at"] or "unavailable in preserved record"),
-                f"- Queued instruction: `{ident}`",
-                "- ✅ Controller accepted timestamp: " + receipt["delivered_at"],
-                f"- Controller thread / turn: `{_safe(receipt['thread_id'])}` / `{_safe(receipt['turn_id'])}`", "",
-                "Controller acceptance is confirmed. **⏳ WAITING for the work result**; this does not claim completed work or release a genuine hold."])
+            if (message.get("source_kind") == "file"
+                    and state.get("file_inbox", {}).get("request_id") == ident):
+                state["file_inbox"].update(status="ACCEPTED", controller_accepted_at=receipt["delivered_at"])
+            label = message.get("source_label") or f"message #{message['comment_id']}"
+            url = message.get("source_url") or message["comment_url"]
+            body = (f"✅ RECEIVED BY CONTROLLER: [{label}]({url}).\n"
+                    "⏳ WAITING for the work result.")
             message["accepted_event_id"] = self._event(state, "accepted", ident, body,
-                comment_id=message["comment_id"], requires_event_id=message["received_event_id"])
+                comment_id=message.get("comment_id"), source_key=message.get("source_key"),
+                requires_event_id=message["received_event_id"])
+
+    def _received_file(self, state, intent, request_id):
+        revision = intent["file_revision"]
+        source_key = "file:" + revision["commit_sha"]
+        if source_key in state["messages"]:
+            return state["messages"][source_key]
+        label = self.config["file_inbox_path"] + " revision " + revision["commit_sha"][:10]
+        raw = intent["instruction"].encode("utf-8")
+        message = {"source_kind": "file", "source_key": source_key,
+                   "source_label": label, "source_url": revision["source_url"],
+                   "source_commit_sha": revision["commit_sha"], "source_blob_sha": revision["blob_sha"],
+                   "received_at": intent["received_at"], "request_id": request_id,
+                   "command_recognized": True, "delivery_status": "WAITING",
+                   "instruction_utf8_bytes": len(raw), "instruction_sha256": hashlib.sha256(raw).hexdigest()}
+        body = f"📥 RECEIVED: [{label}]({revision['source_url']}).\n⏳ WAITING for controller acceptance."
+        message["received_event_id"] = self._event(state, "received", source_key, body, source_key=source_key)
+        state["messages"][source_key] = message
+        return message
+
+    def _poll_file(self, state, now):
+        if not self.file_enabled:
+            return [], False
+        binding = _sha([self.remote, self.config.get("file_inbox_branch"), self.config["file_inbox_path"], self.user_id])
+        current = state.setdefault("file_inbox", {"binding": binding})
+        if current.get("binding") != binding:
+            raise ValueError("File mailbox binding changed; reconcile retained receipts first")
+        current["last_poll_at"] = self._utc(now)
+        try:
+            revision = read_revision(self.config, api=_gh_api)
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
+            current.update(status="ERROR", last_error=_safe(str(error)))
+            self._event(state, "received", ["file-error", binding, current["last_error"]],
+                        self.config["file_inbox_path"] + " was not queued: " + current["last_error"])
+            _save(self.path, state)
+            return [], False  # A file read failure must not disable PR comments.
+        current.update(last_error=None, last_successful_poll_at=self._utc(now))
+        if revision["status"] == "EMPTY":
+            current.update(status="EMPTY", last_seen_commit=revision.get("commit_sha"),
+                           source_url=revision.get("source_url"))
+            _save(self.path, state)
+            return [], False
+        if revision["commit_sha"] == current.get("last_seen_commit"):
+            if current.get("status") == "ERROR":
+                retained = state["messages"].get("file:" + revision["commit_sha"], {})
+                delivery = retained.get("delivery_status")
+                current["status"] = {"ACCEPTED": "ACCEPTED", "WAITING": "QUEUED"}.get(delivery, "UNCHANGED")
+            return [], False
+        instruction = (f"Verified GitHub file instruction from {self.login} (user id {self.user_id}).\n"
+                       f"Source: {revision['source_url']}\n"
+                       f"Reply file: {self.config.get('file_reply_path', 'status.txt')} on "
+                       f"{self.config['file_inbox_branch']}. Publish the work result or exact blocker there "
+                       f"through the normal GitHub publisher.\n\n{revision['text']}")
+        metadata = {key: value for key, value in revision.items() if key != "text"}
+        state["enqueue_intent"] = {"source_kind": "file", "command": "/mckernel-instruct",
+            "source_id": "github-file:" + _sha([binding, revision["commit_sha"]]),
+            "instruction": instruction, "text_sha256": _sha(instruction),
+            "file_revision": metadata, "received_at": self._utc(now)}
+        _save(self.path, state)
+        request_id = self._finish_enqueue(state)
+        return [request_id], True
+
+    def _publish_reply(self, state, now):
+        candidates = [notice for notice in state["notices"].values()
+                      if notice.get("publish_to_file") and not notice.get("superseded")]
+        if not candidates:
+            return
+        notice = max(candidates, key=lambda n: n.get("created_order", 0))
+        receipt = state.get("file_reply", {})
+        if receipt.get("event_id") == notice["event_id"] and receipt.get("status") in {"POSTED", "OBSERVED", "PRESERVED"}:
+            return
+        if receipt.get("status") in {"ERROR", "PENDING"} and now < receipt.get("retry_after", 0):
+            return
+        # Save intent first. If a PUT outcome is lost, the next attempt reads
+        # the remote blob before considering any new write.
+        options = {}
+        if notice.get("kind") == "accepted":
+            # A controller may publish its result before the monitor sees the
+            # acceptance receipt. Do not replace that newer result with WAITING.
+            expected = (receipt.get("expected_blob_sha")
+                        if receipt.get("event_id") == notice["event_id"]
+                        else receipt.get("blob_sha") if receipt.get("status") in {"POSTED", "OBSERVED"} else None)
+            options["expected_blob_sha"] = expected
+        state["file_reply"] = {"event_id": notice["event_id"], "status": "PENDING",
+                               "retry_after": now + self.poll_seconds, **options}
+        _save(self.path, state)
+        try:
+            result = write_reply(self.config, notice["body"], api=_gh_api, **options)
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
+            state["file_reply"].update(status="ERROR", last_error=_safe(str(error)))
+        else:
+            state["file_reply"].update(result, checked_at=self._utc(now))
+            if result["status"] in {"POSTED", "OBSERVED"}:
+                state["file_reply"]["published_at"] = self._utc(now)
+        _save(self.path, state)
+
+    @staticmethod
+    def _notice_parts(notice):
+        if "parts" in notice:
+            return notice["parts"]
+        chunks = split_message(notice["body"])
+        if len(chunks) == 1:
+            return [notice]  # Keep existing event IDs/receipts compatible.
+        notice["parts"] = [{"event_id": _sha([notice["event_id"], "part", index]),
+                            "body": body, "requested": False}
+                           for index, body in enumerate(chunks, 1)]
+        return notice["parts"]
+
+    def _observe_notice(self, state, comment, now):
+        body, ident = comment["body"], comment["id"]
+        for notice in state["notices"].values():
+            parts = self._notice_parts(notice)
+            for part in parts:
+                if MARKER.format(event_id=part["event_id"]) in body:
+                    part.update(observed_comment_id=ident, observed_sent_at=comment.get("created_at"),
+                                observed_at=self._utc(now))
+            if "parts" in notice and all(part.get("observed_comment_id") for part in parts):
+                notice.update(observed_comment_id=parts[-1]["observed_comment_id"],
+                              observed_comment_ids=[part["observed_comment_id"] for part in parts],
+                              observed_sent_at=parts[-1]["observed_sent_at"], observed_at=self._utc(now))
 
     def _drain_outbox(self, state, now):
         if state.get("last_comments_read_at", 0) < state.get("outbox_retry_poll_after", 0):
@@ -327,22 +490,29 @@ class Mailbox:
             prerequisite = notice.get("requires_event_id")
             if prerequisite and not state["notices"].get(prerequisite, {}).get("observed_comment_id"):
                 continue
-            if notice.get("last_dispatch_at") is not None and (
-                    now < notice["last_dispatch_at"] + max(600, self.poll_seconds)
-                    or state.get("last_comments_read_at", 0) < notice.get("retry_after_poll_at", 0)):
-                continue
-            notice.update(last_dispatch_at=now, retry_after_poll_at=now + max(600, self.poll_seconds))
-            _save(self.path, state)
-            try:
-                _gh_api(f"repos/{self.remote}/actions/workflows/{self.workflow}/dispatches", method="POST",
-                        payload={"ref": self.workflow_ref, "inputs": {"event_id": notice["event_id"], "body": notice["body"]}}, timeout=10)
-            except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
-                state["outbox_retry_poll_after"] = now + max(600, self.poll_seconds)
+            parts = self._notice_parts(notice)
+            for part in parts:
+                if part.get("observed_comment_id"):
+                    continue
+                if part.get("last_dispatch_at") is not None and (
+                        now < part["last_dispatch_at"] + max(600, self.poll_seconds)
+                        or state.get("last_comments_read_at", 0) < part.get("retry_after_poll_at", 0)):
+                    continue
+                part.update(last_dispatch_at=now, retry_after_poll_at=now + max(600, self.poll_seconds))
                 _save(self.path, state)
-                raise
-            notice.update(requested=True, requested_at=self._utc(now))
-            _save(self.path, state)
-            return notice["event_id"]  # At most one bounded POST per monitor tick.
+                try:
+                    _gh_api(f"repos/{self.remote}/actions/workflows/{self.workflow}/dispatches", method="POST",
+                            payload={"ref": self.workflow_ref, "inputs": {"event_id": part["event_id"], "body": part["body"]}}, timeout=10)
+                except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
+                    state["outbox_retry_poll_after"] = now + max(600, self.poll_seconds)
+                    _save(self.path, state)
+                    raise
+                part.update(requested=True, requested_at=self._utc(now))
+                notice["requested"] = all(p.get("requested") or p.get("observed_comment_id") for p in parts)
+                if notice["requested"]:
+                    notice["requested_at"] = self._utc(now)
+                _save(self.path, state)
+                return part["event_id"]  # One transport part per monitor tick.
         return None
 
     def _finish_enqueue(self, state):
@@ -356,12 +526,135 @@ class Mailbox:
                 item["request_id"] == request_id for item in state["pending_resumes"]):
             state["pending_resumes"].append({"request_id": request_id, "comment_id": intent["comment_id"],
                                              "resume_created_at": intent["resume_created_at"]})
-        self._received(state, intent, request_id)
+        if intent.get("source_kind") == "file":
+            self._received_file(state, intent, request_id)
+            state["file_inbox"].update(status="QUEUED", last_seen_commit=intent["file_revision"]["commit_sha"],
+                source_url=intent["file_revision"]["source_url"], request_id=request_id,
+                blob_sha=intent["file_revision"]["blob_sha"], received_at=intent["received_at"])
+        else:
+            self._received(state, intent, request_id)
+        if intent.get("multipart_id"):
+            group = state["multipart"][intent["multipart_id"]]
+            group["request_id"] = request_id
+            group["completed_comment_id"] = intent["comment_id"]
+            for prior in state["messages"].values():
+                if (prior.get("multipart_id") == intent["multipart_id"]
+                        and prior.get("delivery_status") == "ASSEMBLING"
+                        and prior["comment_id"] != intent["comment_id"]):
+                    prior.update(delivery_status="PART_OF_QUEUED", logical_request_id=request_id,
+                                 completed_comment_id=intent["comment_id"])
         state["reply_epoch"] += 1
-        state["last_seen_comment_id"] = max(state["last_seen_comment_id"], intent["comment_id"])
+        if intent.get("source_kind") != "file":
+            state["last_seen_comment_id"] = max(state["last_seen_comment_id"], intent["comment_id"])
         state.pop("enqueue_intent")
         _save(self.path, state)
         return request_id
+
+    def _multipart_text(self, state, intent, part, text):
+        """Keep authenticated parts durable; queue only the complete exact text."""
+        groups = state.setdefault("multipart", {})
+        group = groups.setdefault(part["message_id"], {"total": part["total"], "parts": {}})
+        if group.get("failure_reason"):
+            rejected = group.get("rejected_attempts", []) + [{
+                "parts": group["parts"], "total": group["total"], "reason": group["failure_reason"]}]
+            group = {"total": part["total"], "parts": {}, "rejected_attempts": rejected}
+            groups[part["message_id"]] = group
+        if group["total"] != part["total"]:
+            raise ValueError("Conflicting multipart count; send a corrected new message.")
+        key = str(part["index"])
+        prior = group["parts"].get(key)
+        if prior is not None and prior["text"] != text:
+            raise ValueError("Conflicting multipart content; send a corrected new message.")
+        if not text:
+            raise ValueError("Multipart content is empty.")
+        group["parts"].setdefault(key, {"text": text, "comment_id": intent["comment_id"],
+            "comment_created_at": intent["comment_created_at"], "received_at": intent["received_at"]})
+        if len(group["parts"]) == group["total"] and not group.get("request_id"):
+            complete = "".join(group["parts"][str(index)]["text"] for index in range(1, group["total"] + 1))
+            if not complete.strip() or hashlib.sha256(complete.encode("utf-8")).hexdigest() != part["message_id"]:
+                group["failure_reason"] = "Multipart message digest does not match; resend every part as new comments."
+                for receipt in state["messages"].values():
+                    if (receipt.get("multipart_id") == part["message_id"]
+                            and receipt.get("delivery_status") == "ASSEMBLING"):
+                        receipt.update(delivery_status="REJECTED_ASSEMBLY", reason=group["failure_reason"])
+                raise ValueError(group["failure_reason"])
+            intent["multipart_id"] = part["message_id"]
+            return complete
+        # Part receipts remain local; send one receipt for the assembled message,
+        # rather than an email for every transport fragment.
+        state["messages"][str(intent["comment_id"])] = {
+            "comment_id": intent["comment_id"], "multipart_id": part["message_id"],
+            "part_index": part["index"], "part_count": part["total"],
+            "source_created_at": intent["comment_created_at"], "received_at": intent["received_at"],
+            "command_recognized": True,
+            "delivery_status": "PART_OF_QUEUED" if group.get("request_id") else "ASSEMBLING",
+            "logical_request_id": group.get("request_id")}
+        return None
+
+    def _consume_comment(self, state, comment, now):
+        ident = comment.get("id")
+        if type(ident) is not int or ident <= 0:
+            return [], False
+        user = comment.get("user") if isinstance(comment.get("user"), dict) else {}
+        body = comment.get("body")
+        if user.get("type") == "Bot" and user.get("login") == "github-actions[bot]" and isinstance(body, str):
+            self._observe_notice(state, comment, now)
+        if ident <= state["last_seen_comment_id"]:
+            return [], False
+        owner = (type(user.get("id")) is int and user["id"] == self.user_id
+                 and user.get("type") == "User" and isinstance(user.get("login"), str)
+                 and user["login"].casefold() == self.login.casefold())
+        queued = []
+        if owner:
+            for notice in state["notices"].values():
+                if notice.get("kind", "blocker") == "blocker":
+                    notice["superseded"] = True
+            first, separator, text = body.partition("\n") if isinstance(body, str) else ("", "", "")
+            command = first.strip()
+            intent = {"comment_id": ident, "command": command,
+                      "comment_created_at": comment.get("created_at"), "received_at": self._utc(now)}
+            unedited = (isinstance(comment.get("created_at"), str) and bool(comment["created_at"])
+                        and comment["created_at"] == comment.get("updated_at"))
+            reason = "No supported first-line command was supplied."
+            if not unedited:
+                reason = "Edited or unattributed comments are not executed; post a new comment."
+            else:
+                try:
+                    part = parse_instruction_part(command)
+                    if part is not None:
+                        text = self._multipart_text(state, intent, part, text)
+                        command = "/mckernel-instruct"
+                        intent["command"] = command
+                    if command == "/mckernel-resume" and not text.strip():
+                        text = "Explicit manual continuation requested. Reconcile current controls and continue eligible work; genuine holds remain binding."
+                    if command in {"/mckernel-instruct", "/mckernel-resume"} and text is not None and text.strip():
+                        url = f"https://github.com/{self.remote}/pull/{self.issue}#issuecomment-{ident}"
+                        instruction = (f"Verified GitHub mailbox instruction from {self.login} (user id {self.user_id}).\n"
+                                       f"Source: {url}\nCommand: {command}\n\n{text}")
+                        source_id = f"github:{self.remote}:{self.issue}:" + (
+                            "multipart:" + intent["multipart_id"] if intent.get("multipart_id") else str(ident))
+                        intent.update(source_id=source_id, instruction=instruction, text_sha256=_sha(instruction))
+                        if command == "/mckernel-resume":
+                            intent["resume_created_at"] = datetime.strptime(comment["created_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp()
+                        state["enqueue_intent"] = intent
+                        _save(self.path, state)
+                        queued.append(self._finish_enqueue(state))
+                    elif command == "/mckernel-instruct" and text is not None:
+                        reason = "The instruction body is empty; post a new comment with the direction below its first-line command."
+                except ValueError as error:
+                    # A bad source message does not prevent later valid messages.
+                    # An already-durable enqueue intent is instead reconciled by
+                    # the existing queue path; it must never be silently skipped.
+                    if state.get("enqueue_intent"):
+                        raise
+                    reason = str(error)
+                    state["rejected_comment"] = {"comment_id": ident, "reason": reason}
+            if str(ident) not in state["messages"]:
+                self._received(state, intent, reason=reason)
+                state["reply_epoch"] += 1
+        state["last_seen_comment_id"] = max(state["last_seen_comment_id"], ident)
+        _save(self.path, state)
+        return queued, owner
 
     def poll(self, context):
         """Read phone comments at the configured cadence; drain one receipt per tick."""
@@ -378,62 +671,18 @@ class Mailbox:
                     queued.append(self._finish_enqueue(state))
                     replied = True
                 if due:
-                    comments = self._comments()
-                    state["last_comments_read_at"] = now
-                    for comment in comments:
-                        ident = comment.get("id")
-                        if type(ident) is not int or ident <= 0:
-                            continue
-                        user = comment.get("user") if isinstance(comment.get("user"), dict) else {}
-                        body = comment.get("body")
-                        if user.get("type") == "Bot" and user.get("login") == "github-actions[bot]" and isinstance(body, str):
-                            for event_id, notice in state["notices"].items():
-                                if MARKER.format(event_id=event_id) in body:
-                                    notice.update(observed_comment_id=ident, observed_sent_at=comment.get("created_at"),
-                                                  observed_at=self._utc(now))
-                        if ident <= state["last_seen_comment_id"]:
-                            continue
-                        owner = (type(user.get("id")) is int and user["id"] == self.user_id
-                                 and user.get("type") == "User" and isinstance(user.get("login"), str)
-                                 and user["login"].casefold() == self.login.casefold())
-                        if owner:
-                            for notice in state["notices"].values():
-                                if notice.get("kind", "blocker") == "blocker":
-                                    notice["superseded"] = True
-                            lines = body.splitlines() if isinstance(body, str) else []
-                            command = lines[0].strip() if lines else ""
-                            intent = {"comment_id": ident, "command": command,
-                                      "comment_created_at": comment.get("created_at"), "received_at": self._utc(now)}
-                            unedited = (isinstance(comment.get("created_at"), str) and bool(comment["created_at"])
-                                        and comment["created_at"] == comment.get("updated_at"))
-                            text = "\n".join(lines[1:]).strip()
-                            if command == "/mckernel-resume" and not text:
-                                text = "Explicit manual continuation requested. Reconcile current controls and continue eligible work; genuine holds remain binding."
-                            reason = "No supported first-line command was supplied."
-                            if not unedited:
-                                reason = "Edited or unattributed comments are not executed; post a new comment."
-                            elif command in {"/mckernel-instruct", "/mckernel-resume"} and text:
-                                url = f"https://github.com/{self.remote}/pull/{self.issue}#issuecomment-{ident}"
-                                instruction = (f"Verified GitHub mailbox instruction from {self.login} (user id {self.user_id}).\n"
-                                               f"Source: {url}\nCommand: {command}\n\n{text}")
-                                if len(instruction.encode("utf-8")) <= 8192:
-                                    intent.update(source_id=f"github:{self.remote}:{self.issue}:{ident}",
-                                                  instruction=instruction, text_sha256=_sha(instruction))
-                                    if command == "/mckernel-resume":
-                                        intent["resume_created_at"] = datetime.strptime(comment["created_at"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc).timestamp()
-                                    state["enqueue_intent"] = intent
-                                    _save(self.path, state)
-                                    queued.append(self._finish_enqueue(state))
-                                else:
-                                    reason = "Instruction exceeds 8192 UTF-8 bytes; post a shorter new comment."
-                                    state["rejected_comment"] = {"comment_id": ident, "reason": reason}
-                            elif command == "/mckernel-instruct":
-                                reason = "The instruction body is empty; post a new comment with the direction below its first-line command."
-                            if str(ident) not in state["messages"]:
-                                self._received(state, intent, reason=reason)
-                                state["reply_epoch"] += 1
-                            replied = True
-                        state["last_seen_comment_id"] = ident
+                    file_ids, file_reply = self._poll_file(state, now)
+                    queued.extend(file_ids)
+                    replied = replied or file_reply
+                    for comments, cursor, more in self._comment_pages(state):
+                        for comment in comments:
+                            new_ids, owner_reply = self._consume_comment(state, comment, now)
+                            queued.extend(new_ids)
+                            replied = replied or owner_reply
+                        state["comment_cursor"] = cursor
+                        state["comment_scan_pending"] = more
+                        if not more:
+                            state["last_comments_read_at"] = now
                         _save(self.path, state)
                     state["next_poll_at"] = now + self.poll_seconds
                     _save(self.path, state)
@@ -448,9 +697,11 @@ class Mailbox:
                 if due and blocker is not None and not replied and event_id not in state["notices"]:
                     state["active_notice_event_id"] = event_id
                     state["notices"][event_id] = {"event_id": event_id, "kind": "blocker", "body": blocker[1],
-                        "requested": False, "superseded": False, "created_order": len(state["notices"]), "created_at": self._utc(now)}
+                        "requested": False, "superseded": False, "created_order": len(state["notices"]), "created_at": self._utc(now),
+                        "publish_to_file": bool(self.config.get("file_reply_path"))}
                 self._inspect_deliveries(state)
                 _save(self.path, state)
+                self._publish_reply(state, now)
                 dispatched = self._drain_outbox(state, now)
                 if due:
                     state.update(failures=0, last_error=None, last_successful_poll_at=now)
@@ -470,3 +721,4 @@ class Mailbox:
             state = self._state()
             state["pending_resumes"] = [item for item in state["pending_resumes"] if item["request_id"] != request_id]
             _save(self.path, state)
+

@@ -104,7 +104,12 @@ def _validate_checkout_modes(repo):
     tree is not an exact source preimage.  lstat keeps links un-followed and
     checked_input applies the same parent/path confinement as inventory.
     """
-    for root in (Path(repo), Path(repo) / 'ihk'):
+    try:
+        layout, unused_revision = provenance.ihk_source_identity(repo, _git)
+    except provenance.BuildError as error:
+        raise ManifestError(str(error))
+    roots = (Path(repo),) if layout == 'vendored' else (Path(repo), Path(repo) / 'ihk')
+    for root in roots:
         for relative, mode, unused_oid in _index_rows(root):
             if mode == '160000':
                 continue
@@ -159,11 +164,16 @@ def generate(repo, assets, output, candidate_sha):
     _check_output_parent(output)
     if _head(repo) != candidate_sha:
         raise ManifestError('main HEAD differs from candidate')
-    if _head(repo / 'ihk') != EXPECTED_IHK_HEAD:
-        raise ManifestError('IHK HEAD differs')
+    try:
+        ihk_layout, ihk_revision = provenance.ihk_source_identity(repo, _git)
+    except provenance.BuildError as error:
+        raise ManifestError(str(error))
+    if ihk_revision != EXPECTED_IHK_HEAD:
+        raise ManifestError('IHK source revision differs')
     production_overlay = EXPECTED_IHK_HEAD == provenance.REVIEWED_IHK_HEAD
     files, gitlinks = _inventory(repo, allow_ihk_overlay=production_overlay)
-    if gitlinks.get('ihk') != EXPECTED_IHK_HEAD:
+    if ((ihk_layout == 'submodule' and gitlinks.get('ihk') != EXPECTED_IHK_HEAD) or
+            (ihk_layout == 'vendored' and 'ihk' in gitlinks)):
         raise ManifestError('IHK gitlink differs')
     # Preparation applies the one reviewed overlay to the pinned IHK checkout
     # before manifest generation.  Bind that exact resulting state.

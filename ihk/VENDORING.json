@@ -1,0 +1,19 @@
+{
+  "schema": "mckernel.vendored-ihk.v1",
+  "source_repository": "https://github.com/ihkmckernel/ihk.git",
+  "source_commit": "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7",
+  "source_tree": "901e5ddb2c8fab1ffe34973836ef4c16730cf694",
+  "source_file_count": 1342,
+  "source_license": "LICENSE",
+  "integration_changes": {
+    "CMakeLists.txt": {
+      "original_blob": "9e575b765c48dbc42ffa5fa601440d84483920af",
+      "original_sha256": "7d91805dac7ed1fb0514e536383dd6cde43b91fe8b4114fe6ed00ba3e4b0e65d",
+      "vendored_sha256": "ac793a4062b2d3142c48c07348adac3014968e25af6cbe204aea4d41852313b1",
+      "purpose": "Use VENDORED-REVISION for BUILDID while retaining the historical Git/version fallback."
+    }
+  },
+  "added_metadata": ["VENDORED-REVISION", "VENDORING.json"],
+  "historical_oracles": "Frozen Git-object checks may use an external checkout from scripts/restore_ihk_source.py via MCKERNEL_IHK_HISTORY. Builds consume this tracked directory. Historical refs, source hashes and retained commands are unchanged.",
+  "preservation": "All 1342 upstream paths and modes are retained; only the listed CMake build-metadata rule differs. Original IHK repository and history remain untouched."
+}
