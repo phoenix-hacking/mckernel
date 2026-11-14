@@ -11,6 +11,7 @@ import socket
 import stat
 import struct
 import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -44,10 +45,10 @@ class CancellationTests(unittest.TestCase):
         poller.poll.return_value = [(51, select.POLLIN)] if terminal else []
         return scope, review, poller
 
-    def run_cancel(self, scope, review, poller, *, table=None, actor_error=None):
+    def run_cancel(self, scope, review, poller, *, table=None, actor_error=None, now_ns=2):
         journal = MemoryJournal()
         with patch.object(cleanup, "read", return_value=b"boot\n"), \
-             patch.object(cleanup.time, "monotonic_ns", return_value=2), \
+             patch.object(cleanup.time, "monotonic_ns", return_value=now_ns), \
              patch.object(cleanup, "same_actor", side_effect=actor_error), \
              patch.object(cleanup, "process_table", return_value=table or {101: {"parent": 1}}), \
              patch.object(cleanup.pidfd_compat, "open_pidfd", return_value=51), \
@@ -105,6 +106,35 @@ class CancellationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "review"):
             cleanup.cancel(scope, review, MemoryJournal(), kill_after_term=True)
 
+    def test_pidfd_error_readiness_never_counts_as_terminal(self):
+        for mask in (select.POLLERR, select.POLLNVAL):
+            scope, review, poller = self.fixture(False)
+            poller.poll.return_value = [(51, mask)]
+            journal, send = self.run_cancel(scope, review, poller)
+            send.assert_not_called()
+            self.assertEqual(journal.rows[-1]["state"], "CANCELLATION_UNKNOWN_RETAINED")
+
+    def test_old_identity_plan_still_requires_fresh_exact_actor_revalidation(self):
+        scope, review, poller = self.fixture(False)
+        journal, send = self.run_cancel(scope, review, poller, now_ns=1_000_000_000_000,
+                                        actor_error=ValueError("current actor differs"))
+        send.assert_not_called()
+        self.assertEqual(journal.rows[-1]["state"], "CANCELLATION_UNKNOWN_RETAINED")
+
+    def test_journal_parent_name_is_durable_before_first_signal_checkpoint(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            calls, original = [], cleanup.os.fsync
+            def synced(fd):
+                calls.append(stat.S_ISDIR(cleanup.os.fstat(fd).st_mode))
+                return original(fd)
+            with patch.object(cleanup.os, "fsync", side_effect=synced):
+                journal = cleanup.Journal(str(Path(temporary) / "cancel.jsonl"))
+                try:
+                    journal.append("CANCELLATION_REQUESTED")
+                finally:
+                    journal.close()
+            self.assertEqual(calls, [True, False])
+
 
 class UnixDiagnosticTests(unittest.TestCase):
     def message(self, inode=10, peer=11, flags=0):
@@ -143,6 +173,19 @@ class UnixDiagnosticTests(unittest.TestCase):
         graph = {10: {"inode": 10, "peer": 11, "pending_connection_inodes": []}}
         with patch.object(cleanup.os, "readlink", return_value="net:[1]"):
             self.assertEqual(cleanup.scoped_unix_graph(actors, graph)["missing_socket_inodes"], [11])
+
+    def test_shared_journald_fan_in_is_not_lease_control_scope(self):
+        actors = [{"pid": 2318474, "start": "65818157", "namespaces": {"net": "net:[1]"},
+                   "fds": [{"fd": 19, "mode": stat.S_IFSOCK, "inode": 10},
+                           {"fd": 4, "mode": stat.S_IFSOCK, "inode": 20}]}]
+        graph = {10: {"inode": 10, "type": socket.SOCK_SEQPACKET, "peer": 0, "pending_connection_inodes": []},
+                 20: {"inode": 20, "type": socket.SOCK_DGRAM, "peer": 18588, "pending_connection_inodes": []},
+                 18588: {"inode": 18588, "type": socket.SOCK_DGRAM, "peer": None, "pending_connection_inodes": []},
+                 99: {"inode": 99, "type": socket.SOCK_DGRAM, "peer": 18588, "pending_connection_inodes": []}}
+        with patch.object(cleanup.os, "readlink", return_value="net:[1]"):
+            result = cleanup.scoped_unix_graph(actors, graph)
+        self.assertEqual(result["source_identified_lease_control_socket_inodes"], [10])
+        self.assertTrue(result["shared_datagram_peers_are_not_exclusive_owners"])
 
 
 if __name__ == "__main__":

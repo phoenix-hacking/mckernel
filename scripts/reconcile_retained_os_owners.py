@@ -200,7 +200,13 @@ def scoped_unix_graph(actors, graph):
         if not added:
             break
         selected.update(added)
+    control = {fd["inode"] for actor in actors if (actor.get("pid"), actor.get("start")) == (2318474, "65818157")
+               for fd in actor["fds"] if fd["fd"] == 19 and fd["inode"] in graph
+               and graph[fd["inode"]]["type"] == socket.SOCK_SEQPACKET}
     return {"socket_inodes": sorted(selected), "missing_socket_inodes": sorted(selected - graph.keys()),
+            "source_identified_lease_control_socket_inodes": sorted(control),
+            "shared_datagram_peers_are_not_exclusive_owners": True,
+            "missing_UNIX_rows_may_be_other_socket_families": True,
             "rows": [graph[inode] for inode in sorted(selected) if inode in graph],
             "same_network_namespace": all(actor["namespaces"].get("net") == os.readlink("/proc/self/ns/net")
                                           for actor in actors)}
@@ -241,12 +247,27 @@ def plan():
 
 class Journal:
     def __init__(self, path):
-        self.fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC, 0o600)
+        target = Path(path)
+        require(target.is_absolute() and ".." not in target.parts
+                and not any(part.is_symlink() for part in (target.parent, *target.parent.parents)),
+                "Fresh absolute nonsymlink cancellation journal required")
+        parent = os.open(target.parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        self.fd = None
+        try:
+            self.fd = os.open(target.name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW | os.O_CLOEXEC,
+                              0o600, dir_fd=parent)
+            os.fsync(parent)  # The checkpoint name must survive before any signal.
+        except BaseException:
+            if self.fd is not None:
+                os.close(self.fd); self.fd = None
+            raise
+        finally:
+            os.close(parent)
         self.previous = None
 
     def append(self, state, **data):
         event = dict(data, state=state, previous_sha256=self.previous,
-                     observed_monotonic_ns=time.monotonic_ns(), operation_result="UNKNOWN",
+                     observed_monotonic_ns=time.monotonic_ns(), observed_utc_ns=time.time_ns(), operation_result="UNKNOWN",
                      historical_direct_wait_reconstructed=False, release_authorized=False)
         raw = canonical(event) + b"\n"
         offset = 0
@@ -268,6 +289,14 @@ def same_actor(expected):
     require(all(actual[key] == expected[key] for key in keys), "Exact actor identity changed")
 
 
+def pidfd_terminal(fd):
+    poller = select.poll(); poller.register(fd, select.POLLIN | select.POLLHUP | select.POLLERR)
+    events = poller.poll(0)
+    require(all(handle == fd and not mask & (select.POLLERR | select.POLLNVAL) for handle, mask in events),
+            "Ambiguous/error pidfd readiness is not terminal evidence")
+    return any(mask & (select.POLLIN | select.POLLHUP) for handle, mask in events)
+
+
 def cancel(scope, review, journal, *, kill_after_term=False):
     require(review == {"schema": "mckernel-old-owner-cancellation-review-v1",
         "decision": "GO_EXACT_CANCELLATION_ONLY", "plan_sha256": sha(canonical(scope)),
@@ -279,8 +308,12 @@ def cancel(scope, review, journal, *, kill_after_term=False):
             and scope["credit_run"] == CREDIT_RUN
             and scope["boot_id"] == read("/proc/sys/kernel/random/boot_id", 128).decode().strip(),
             "Cancellation plan owner/boot differs")
-    require(0 <= time.monotonic_ns() - scope["observed_monotonic_ns"] <= 120_000_000_000,
-            "Cancellation plan must be freshly reviewed within 120 seconds")
+    # A saved plan is an identity constraint, never an execution admission.
+    # Fresh actual Root admission remains external. Revalidate every actor and
+    # complete current descendant cut below; never rewrite an old observation's
+    # timestamp merely to make independent review fit a short freshness window.
+    require(type(scope["observed_monotonic_ns"]) is int and scope["observed_monotonic_ns"] > 0
+            and scope["observed_monotonic_ns"] <= time.monotonic_ns(), "Cancellation identity plan is from the future")
     handles = []
     try:
         for row in scope["actors"]:
@@ -299,8 +332,7 @@ def cancel(scope, review, journal, *, kill_after_term=False):
             if signum == signal.SIGKILL and not kill_after_term:
                 break
             for row, fd in handles:
-                poller = select.poll(); poller.register(fd, select.POLLIN)
-                if poller.poll(0):
+                if pidfd_terminal(fd):
                     continue
                 journal.append("BEFORE_SIGNAL", pid=row["pid"], start=row["start"], signal=int(signum))
                 try:
@@ -312,13 +344,13 @@ def cancel(scope, review, journal, *, kill_after_term=False):
             while time.monotonic() < until:
                 polls = []
                 for row, fd in handles:
-                    poller = select.poll(); poller.register(fd, select.POLLIN)
-                    polls.append(bool(poller.poll(0)))
+                    polls.append(pidfd_terminal(fd))
                 if all(polls):
                     journal.append("ALL_PINNED_PIDFDS_TERMINAL_RESOURCE_PROOF_PENDING")
-                    return
+                    return "ALL_PINNED_PIDFDS_TERMINAL_RESOURCE_PROOF_PENDING"
                 time.sleep(0.05)
         journal.append("CANCELLATION_BOUNDED_CHECKPOINT_UNRESOLVED")
+        return "CANCELLATION_BOUNDED_CHECKPOINT_UNRESOLVED"
     except BaseException as error:
         journal.append("CANCELLATION_UNKNOWN_RETAINED", error_type=type(error).__name__)
         raise
@@ -400,9 +432,12 @@ def main(argv=None):
         raw = read(args.review); require(sha(raw) == args.review_sha256, "Review bytes differ")
         journal = Journal(args.journal)
         try:
-            cancel(scope, json.loads(raw), journal, kill_after_term=args.allow_sigkill)
+            status = cancel(scope, json.loads(raw), journal, kill_after_term=args.allow_sigkill)
         finally:
             journal.close()
+        print(json.dumps({"status": status, "journal": args.journal,
+                          "journal_sha256": sha(read(args.journal)), "operation_result": "UNKNOWN",
+                          "historical_direct_wait_reconstructed": False, "release_authorized": False}, sort_keys=True))
     else:
         print(json.dumps(verify(scope), sort_keys=True, indent=2))
 
