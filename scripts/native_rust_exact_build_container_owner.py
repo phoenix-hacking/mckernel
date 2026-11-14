@@ -191,9 +191,22 @@ def _validate_git_metadata(source_root, label):
 
 
 def validate_git_roots(source_root):
-    """Validate both repositories before any lease or container is created."""
+    """Validate actual repositories before any lease or container is created."""
     _validate_git_metadata(source_root, 'source_root')
-    _validate_git_metadata(Path(source_root) / 'ihk', 'source_root/ihk')
+    def git(root, *args):
+        command = ['/usr/bin/git', '-c', 'safe.directory=' + str(root), '-c',
+                   'core.fsmonitor=false', '-c', 'core.hooksPath=/dev/null',
+                   '-C', str(root)] + list(args)
+        result = subprocess.run(command, env=ENV, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if result.returncode:
+            raise ValueError('cannot resolve IHK source layout')
+        return result.stdout
+    try:
+        layout, unused_revision = provenance.ihk_source_identity(source_root, git)
+    except provenance.BuildError as error:
+        raise ValueError(str(error))
+    if layout == 'submodule':
+        _validate_git_metadata(Path(source_root) / 'ihk', 'source_root/ihk')
 
 
 _MEMORY_BACKED_FILESYSTEMS = frozenset(('tmpfs', 'ramfs'))

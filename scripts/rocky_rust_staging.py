@@ -40,6 +40,8 @@ PROFILE_ID = "rocky-10.2-native-rust-host-modules-v1"
 DEFAULT_MANIFEST = "host-kernel/kbuild/stage-manifest.json"
 COMPAT_BUILD_ID_FILE = "ihk-compat-build-id.bin"
 IHK_COMPAT_CMAKE_SHA256 = "7d91805dac7ed1fb0514e536383dd6cde43b91fe8b4114fe6ed00ba3e4b0e65d"
+VENDORED_IHK_CMAKE_SHA256 = "ac793a4062b2d3142c48c07348adac3014968e25af6cbe204aea4d41852313b1"
+VENDORED_IHK_REVISION = "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7"
 COMPAT_BUILD_ID_INCLUDE = (
     'const IHK_COMPAT_BUILD_ID: &[u8] = include_bytes!("ihk-compat-build-id.bin");'
 )
@@ -1473,6 +1475,25 @@ def _compatibility_build_identity(repo_root):
     identified independently by the staging manifest and input digests.
     """
     source = _repo_regular_file(repo_root, "ihk/CMakeLists.txt", "IHK consumer BUILDID rule")
+    if os.path.lexists(os.path.join(repo_root, "ihk", "VENDORED-REVISION")):
+        _validate_digest(source, VENDORED_IHK_CMAKE_SHA256, "vendored IHK consumer BUILDID rule")
+        marker = _repo_regular_file(repo_root, "ihk/VENDORED-REVISION", "vendored IHK revision")
+        with open(marker, "rb") as stream:
+            if stream.read() != (VENDORED_IHK_REVISION + "\n").encode("ascii"):
+                raise ValidationError("vendored IHK revision differs from the reviewed source")
+        if os.path.lexists(os.path.join(repo_root, "ihk", ".git")):
+            raise ValidationError("vendored IHK source must not contain nested Git metadata")
+        value = VENDORED_IHK_REVISION[:7]
+        payload = value.encode("ascii") + b"\0"
+        return {
+            "path": COMPAT_BUILD_ID_FILE,
+            "value": value,
+            "origin": "ihk-vendored-revision",
+            "source_rule_path": "ihk/CMakeLists.txt",
+            "source_rule_sha256": sha256_file(source),
+            "sha256": sha256_bytes(payload),
+            "bytes": len(payload),
+        }
     _validate_digest(source, IHK_COMPAT_CMAKE_SHA256, "IHK consumer BUILDID rule")
     cmake = _read_text(source, "IHK consumer BUILDID rule")
     version = re.search(r'^set\(IHK_VERSION "([A-Za-z0-9.+_-]{1,40})"\)$', cmake, re.MULTILINE)

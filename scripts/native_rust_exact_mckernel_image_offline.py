@@ -324,14 +324,21 @@ def _validate_source(source, candidate_sha, ihk_sha, manifest_path, git_tool):
     _fail(manifest.get("candidate_sha") == candidate_sha, "candidate manifest identity")
     _fail(manifest.get("ihk_sha") == ihk_sha and re.fullmatch(r"[0-9a-f]{40}", ihk_sha),
           "IHK manifest identity")
-    _fail(isinstance(manifest.get("gitlinks"), dict) and
-          manifest["gitlinks"].get("ihk") == ihk_sha, "IHK gitlink identity")
+    _fail(isinstance(manifest.get("gitlinks"), dict), "source gitlink inventory missing")
     git = lambda root, *args: _git(root, *args, tool=git_tool)
     _fail(git(source, "rev-parse", "HEAD").decode().strip() == candidate_sha,
           "source HEAD differs from candidate")
     ihk = _canonical(source / "ihk", "IHK checkout")
     _fail(ihk.is_dir(), "IHK checkout missing")
-    _fail(git(ihk, "rev-parse", "HEAD").decode().strip() == ihk_sha, "IHK HEAD differs")
+    try:
+        ihk_layout, ihk_revision = provenance.ihk_source_identity(source, git)
+    except provenance.BuildError as exc:
+        raise ImageBuildError(str(exc)) from exc
+    _fail(ihk_revision == ihk_sha, "IHK source revision differs")
+    if ihk_layout == "submodule":
+        _fail(manifest["gitlinks"].get("ihk") == ihk_sha, "IHK gitlink identity")
+    else:
+        _fail("ihk" not in manifest["gitlinks"], "vendored IHK must not be a gitlink")
     overlay = manifest.get("ihk_overlay")
     production_overlay = ihk_sha == provenance.REVIEWED_IHK_HEAD
     if production_overlay:
@@ -357,7 +364,8 @@ def _validate_source(source, candidate_sha, ihk_sha, manifest_path, git_tool):
     _fail(manifest.get("gitlinks") == gitlinks, "source gitlink inventory differs")
     _fail(manifest.get("repository_files") == files, "source file inventory differs")
     main_status = git(source, "status", "--porcelain=1", "--untracked-files=all", "-z")
-    ihk_status = git(ihk, "status", "--porcelain=1", "--untracked-files=all", "-z")
+    ihk_status = (b"" if ihk_layout == "vendored" else
+                  git(ihk, "status", "--porcelain=1", "--untracked-files=all", "-z"))
     if production_overlay:
         # verify_ihk_overlay already established the exact nested working diff;
         # porcelain v1 reports this submodule modification with uppercase M.

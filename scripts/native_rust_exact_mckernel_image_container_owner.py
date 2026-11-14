@@ -31,8 +31,8 @@ REQUEST_SCHEMA = "mckernel.native-exact-mckernel-image-container-request.v1"
 RECEIPT_SCHEMA = "mckernel.native-exact-mckernel-image-container-receipt.v1"
 OWNER_RECEIPT_NAME = "owner-receipt.json"
 EXPECTED_DRIVER_SHA256 = "91aa047f61167dd93002a0bc12e55b18f4b2fcaf65e246e574e8350a0c37f4cc"
-EXPECTED_PROVENANCE_SHA256 = "cc243126ab8cc0754c62175c77e46d6ba0d98294f8168cc77893a2c12249cd1a"
-EXPECTED_HOST_OWNER_SHA256 = "96d17547bfc71454d54e95a705138cc9b26faa1e2cafc34105c9ed8d5a68f4d1"
+EXPECTED_PROVENANCE_SHA256 = "45d7d4d4ad27089499164c11f5a067b474893a743f1243ea0602df0ccb0e56a8"
+EXPECTED_HOST_OWNER_SHA256 = "0146487f63bb18ccb1991193e2790f4aac602f400b69558162b041e04ab50153"
 EXPECTED_HEAVY_ENTRY_CONTRACT_SHA256 = "c252ee341eb61752704f8b818503c0a5dc97400845494707ca3110f5f23df6d1"
 # The image owner advances with the image-candidate namespace.  Keep consumed
 # exclusions explicit: accepting one of these would allow a request to race a
@@ -858,8 +858,8 @@ def _validate_authenticated_source(source, manifest, candidate, ihk, tools, prov
         _fail(git(source, "rev-parse", "HEAD").decode().strip() == candidate,
               "source HEAD differs from candidate")
         ihk_root = _canonical(source / "ihk", "IHK checkout", directory=True)
-        _fail(git(ihk_root, "rev-parse", "HEAD").decode().strip() == ihk,
-              "IHK HEAD differs from manifest")
+        unused_layout, revision = provenance.ihk_source_identity(source, git)
+        _fail(revision == ihk, "IHK source revision differs from manifest")
         production = ihk == provenance.REVIEWED_IHK_HEAD
         if production:
             provenance.verify_ihk_overlay(source, git, applied=True)
