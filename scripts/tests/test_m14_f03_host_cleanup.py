@@ -227,9 +227,10 @@ class HostCleanupTests(unittest.TestCase):
         if not cc:
             self.skipTest("C compiler required")
         source = (ROOT / "kernel/syscall.c").read_text()
-        start = source.index("#ifdef MCKERNEL_RUST_F03_FORWARD_ADAPTERS\n"
+        start = source.index("#if defined(MCKERNEL_RUST_F03_FORWARD_ADAPTERS) || "
+                             "defined(MCKERNEL_RUST_F03_HOST_CLEANUP)\n"
                              "extern void terminate_host(")
-        closing = "#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS */"
+        closing = "#endif /* MCKERNEL_RUST_F03_FORWARD_ADAPTERS || MCKERNEL_RUST_F03_HOST_CLEANUP */"
         guard = source[start:source.index(closing, start) + len(closing)]
         # Calls into the fallback body are opaque observations in this object
         # check; only the actual entry selector is under examination.
@@ -250,16 +251,20 @@ void (*const entry)(int, struct thread *) = terminate_host;
             path = Path(temporary)
             csource = path / "guard.c"
             csource.write_text(fixture)
-            for selected in (False, True):
-                obj = path / f"{selected}.o"
-                command = [cc, "-O0", "-c", str(csource), "-o", str(obj)]
-                if selected:
-                    command.append("-DMCKERNEL_RUST_F03_FORWARD_ADAPTERS=1")
-                self.checked(command)
-                symbols = self.checked(["nm", "--format=posix", str(obj)])
-                matches = [line.split()[1] for line in symbols.splitlines()
-                           if line.split()[0] == "terminate_host"]
-                self.assertEqual(matches, ["U" if selected else "T"])
+            for forward, cleanup in ((False, False), (True, False),
+                                     (False, True), (True, True)):
+                with self.subTest(forward=forward, cleanup=cleanup):
+                    obj = path / f"{forward}-{cleanup}.o"
+                    command = [cc, "-O0", "-c", str(csource), "-o", str(obj)]
+                    if forward:
+                        command.append("-DMCKERNEL_RUST_F03_FORWARD_ADAPTERS=1")
+                    if cleanup:
+                        command.append("-DMCKERNEL_RUST_F03_HOST_CLEANUP=1")
+                    self.checked(command)
+                    symbols = self.checked(["nm", "--format=posix", str(obj)])
+                    matches = [line.split()[1] for line in symbols.splitlines()
+                               if line.split()[0] == "terminate_host"]
+                    self.assertEqual(matches, ["U" if forward or cleanup else "T"])
 
     def test_real_cleanup_bodies_preserve_lifetime_and_notification_order(self):
         cc = os.environ.get("CC") or shutil.which("gcc")

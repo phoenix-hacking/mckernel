@@ -301,6 +301,37 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "dependency set"):
             lifecycle.validate_repository(self.repo)
 
+    def test_stage_manifest_requires_exact_rust_assembly_suffixes(self) -> None:
+        lifecycle.validate_repository(self.repo)
+        path = self.repo / self.contract["stage_manifest"]
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual([".rs", ".S"], manifest["build_contract"]["allowed_project_source_suffixes"])
+        for suffixes in ([".rs"], [".rs", ".S", ".c"], [".rs", ".s"], [".S", ".rs"]):
+            with self.subTest(suffixes=suffixes):
+                manifest["build_contract"]["allowed_project_source_suffixes"] = suffixes
+                path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "source suffixes differ"):
+                    lifecycle.validate_repository(self.repo)
+
+    def test_refreshed_application_and_runtime_inputs_reject_byte_drift(self) -> None:
+        lifecycle.validate_repository(self.repo)
+        cases = (
+            ("host-kernel/native-rust/abi/application.rs", "module digest is stale"),
+            ("host-kernel/native-rust/os_runtime.rs", r"support_sources\[6\] digest is stale"),
+            ("scripts/tests/fixtures/ihk_os_runtime_compile.rs", "native OS adapter contract differs"),
+            ("scripts/tests/test_ihk_os_runtime.py", "native OS adapter contract differs"),
+        )
+        for relative, error in cases:
+            path = self.repo / relative
+            original = path.read_bytes()
+            with self.subTest(input=relative):
+                path.write_bytes(original + b"\n")
+                try:
+                    with self.assertRaisesRegex(lifecycle.ValidationError, error):
+                        lifecycle.validate_repository(self.repo)
+                finally:
+                    path.write_bytes(original)
+
     def test_support_source_drift_is_rejected(self) -> None:
         support = self.contract["support_sources"][1]
         self.mutate_text(
@@ -913,6 +944,8 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
             "ihk_os_application_open_v1",
             "ihk_os_application_invoke_v1",
             "ihk_os_application_close_v1",
+            "ihk_os_application_adopt_current_v4",
+            "ihk_os_application_fork_control_current_v1",
             "ihk_os_create_unbooted_v2",
             "ihk_os_create_unbooted_v3",
             "ihk_os_create_unbooted_v4",
@@ -928,11 +961,14 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         lifecycle._validate_provider_export_symbols(
             symbols, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
         )
-        symbols.remove("__ksymtab_ihk_os_service_register_v1")
-        with self.assertRaisesRegex(lifecycle.ValidationError, "lacks provider GPL export metadata"):
-            lifecycle._validate_provider_export_symbols(
-                symbols, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
-            )
+        for name in ("ihk_os_service_register_v1", "ihk_os_application_adopt_current_v4",
+                     "ihk_os_application_fork_control_current_v1"):
+            with self.subTest(missing_metadata=name):
+                missing = symbols - {"__ksymtab_" + name}
+                with self.assertRaisesRegex(lifecycle.ValidationError, "lacks provider GPL export metadata"):
+                    lifecycle._validate_provider_export_symbols(
+                        missing, set(lifecycle.EXPECTED_NATIVE_LIFECYCLE_EXPORTS)
+                    )
 
     def test_unknown_unexported_ihk_os_definition_is_rejected(self) -> None:
         summary = lifecycle.validate_repository(REPO_ROOT)

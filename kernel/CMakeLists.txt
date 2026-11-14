@@ -109,6 +109,7 @@ set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
 set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
 set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED OFF)
 set(MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED OFF)
+set(MCKERNEL_EXECVEAT_COMPLETE_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -717,6 +718,37 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                 "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/transactions.rs"
 )
         endif()
+        # Complete UTI orchestration uses only the already selected ordinary
+        # dispatch, thread-exit, terminate and actual DATA-provider contracts.
+        # No broad adapter, owned-fork or alternate profile is enabled here.
+        if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
+            set(MCKERNEL_UTIL_THREAD_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_util_thread_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_util_thread.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/uti_data_providers.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/cls.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/kmalloc.h"
+                "${PROJECT_SOURCE_DIR}/executer/include/uti.h"
+                "${PROJECT_SOURCE_DIR}/executer/include/uprotocol.h"
+                "${IHK_FULL_SOURCE_DIR}/cokernel/smp/x86_64/include/ihk/memconst.h")
+        endif()
+        # Complete exec uses the already selected genuine ordinary provider
+        # cohort; C body and callback exclusion are paired with this Rust cfg.
+        if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
+            set(MCKERNEL_EXECVEAT_COMPLETE_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_execveat_complete_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_execveat_complete.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/cls.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${PROJECT_SOURCE_DIR}/executer/include/uprotocol.h"
+                "${PROJECT_SOURCE_DIR}/lib/include/string.h"
+                "${PROJECT_SOURCE_DIR}/lib/include/memory.h")
+        endif()
         # One exact kernel codegen profile for rebuilt builtins and consumer.
         set(MCKERNEL_RUST_CODEGEN_FLAGS
             -C panic=abort -C opt-level=2 -C debuginfo=2
@@ -1252,6 +1284,10 @@ if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
     set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL)
 endif()
+if (MCKERNEL_EXECVEAT_COMPLETE_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_EXECVEAT_COMPLETE)
+endif()
 if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_MEMORY_HOST_OFFLOAD
@@ -1266,6 +1302,11 @@ if (MCKERNEL_DO_SYSCALL_OUTER_SELECTED)
         COMPILE_DEFINITIONS MCKERNEL_RUST_DO_SYSCALL_OUTER
         "MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS=${MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS}"
         "MCKERNEL_DO_SYSCALL_C_FILE=\"${MCKERNEL_DO_SYSCALL_C_FILE}\"")
+endif()
+
+if (MCKERNEL_UTIL_THREAD_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_UTIL_THREAD)
 endif()
 
 if (MCKERNEL_DO_SYSCALL2_BRIDGE_SELECTED)

@@ -14,6 +14,7 @@ on:
   push:
     branches:
       - codex/m15-focused-checks-20261030
+      - codex/local-native-staging-repair
     paths:
       - 'kernel/**'
       - 'arch/x86_64/kernel/**'
@@ -27,6 +28,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   focused:
@@ -60,6 +65,11 @@ jobs:
           test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD_SHA"
           git fetch --no-tags --depth=1 origin 5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71
           git show 5a5d7e77ab4ada91777f1ee06c5d7fbdb98f5b71:arch/x86_64/kernel/syscall.c > /dev/null
+
+      - name: Run source runner and metadata reuse regressions
+        run: |
+          set -euo pipefail
+          python3 -B -m unittest -v scripts.tests.test_run_m14_focused_checks scripts.tests.test_m14_metadata_reuse
 
       - name: Select the pinned ordinary HOST test tools
         run: |

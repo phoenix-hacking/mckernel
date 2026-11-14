@@ -16,6 +16,17 @@ PROFILE_SHA256 = "49dba5414cae3d4f7aff20d6d90c1554bc75630d461885bdda650f468ff003
 SOURCE_BINDING_SHA256 = "2f27bbfeed79d85867565118474bd83f7679b3cb294338009dddf6b884315471"
 
 
+def _write_text_if_changed(path, content):
+    # Preserve dependency timestamps when a reconfigure derives identical bytes.
+    data = content.encode("utf-8")
+    try:
+        if path.read_bytes() == data:
+            return
+    except FileNotFoundError:
+        pass
+    path.write_bytes(data)
+
+
 def derive(profile_path, source_path, binding_path=None):
     raw = profile_path.read_bytes()
     if hashlib.sha256(raw).hexdigest() != PROFILE_SHA256:
@@ -123,24 +134,23 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     # Simple pinned ASCII origin means JSON/C and CMake literals agree exactly.
     literal = json.dumps(origin)
-    (args.output / "f06_rt_sigreturn_origin.h").write_text(
+    _write_text_if_changed(args.output / "f06_rt_sigreturn_origin.h",
         "/* Functional OS only; no security testing. Generated; no C objects. */\n"
         "#ifndef MCKERNEL_F06_RT_SIGRETURN_ORIGIN\n"
         f"#define MCKERNEL_F06_RT_SIGRETURN_ORIGIN {literal}\n"
         "#else\n#error origin must come from the qualified generated header only\n#endif\n")
-    (args.output / "f06_rt_sigreturn_origin.cmake").write_text(
-        f"set(MCKERNEL_F06_RT_SIGRETURN_ORIGIN {literal})\n")
     metadata_path = args.output / "f06_clone_cpuid_metadata.rs"
-    metadata_path.write_text(
+    _write_text_if_changed(args.output / "f06_rt_sigreturn_origin.cmake",
+        f"set(MCKERNEL_F06_RT_SIGRETURN_ORIGIN {literal})\n"
+        f"set(MCKERNEL_F06_CLONE_CPUID_METADATA_RS {json.dumps(str(metadata_path))})\n")
+    _write_text_if_changed(metadata_path,
         "// Functional OS only; no security testing. Generated from exact C origin/body/retained descriptors.\n"
         f"const F06_CLONE_CPU_SAMPLE_LINE_FLAGS: u32 = {clone_slots[0]['line_flags']};\n"
         f"const F06_CLONE_CPU_CHOICE_LINE_FLAGS: u32 = {clone_slots[1]['line_flags']};\n")
-    with (args.output / "f06_rt_sigreturn_origin.cmake").open("a") as stream:
-        stream.write(f"set(MCKERNEL_F06_CLONE_CPUID_METADATA_RS {json.dumps(str(metadata_path))})\n")
-    (args.output / "rust-environment.json").write_text(json.dumps(
+    _write_text_if_changed(args.output / "rust-environment.json", json.dumps(
         {"MCKERNEL_F06_RT_SIGRETURN_ORIGIN": origin,
          "MCKERNEL_F06_CLONE_CPUID_METADATA_RS": str(metadata_path)}, indent=2) + "\n")
-    (args.output / "ORIGIN-BINDING.json").write_text(json.dumps({
+    _write_text_if_changed(args.output / "ORIGIN-BINDING.json", json.dumps({
         "scope": __doc__.splitlines()[0],
         "status": "GENERATED_SOURCE_ONLY_NO_COMPILER_RESULT",
         "profile_sha256": PROFILE_SHA256,

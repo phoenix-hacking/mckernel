@@ -124,9 +124,9 @@ def _text(data, label):
 
 
 def _git_blob(repo_root, path):
-    ihk = os.path.join(repo_root, "ihk")
-    if not os.path.isdir(ihk):
-        raise ContractError("frozen IHK submodule is not initialized")
+    ihk = os.environ.get("MCKERNEL_IHK_HISTORY", os.path.join(repo_root, "ihk"))
+    if not os.path.exists(os.path.join(ihk, ".git")):
+        raise ContractError("frozen IHK Git history is required; set MCKERNEL_IHK_HISTORY")
     process = subprocess.Popen(
         ["git", "show", IHK_REF + ":" + path], cwd=ihk,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE)

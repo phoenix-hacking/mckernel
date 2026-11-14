@@ -1,0 +1,12 @@
+--- old_CMakeLists.txt	2020-09-08 18:12:25.488239040 +0700
++++ new_CMakeLists.txt	2020-09-08 18:12:18.980326108 +0700
+@@ -78,6 +78,9 @@
+ 	#add_subdirectory("linux/driver/builtin")
+ elseif(BUILD_TARGET MATCHES "smp.*")
+ 	add_subdirectory("linux/driver/smp")
++        add_subdirectory("test/ihklib/whitebox/src/driver/smp")
++        add_subdirectory("test/ihklib/whitebox/src/driver/smp/arch/arm64")
++        add_subdirectory("test/ihklib/whitebox/src/driver/ihk")
+ else()
+ 	message(FATAL_ERROR "Invalid target ${BUILD_TARGET}")
+ endif()

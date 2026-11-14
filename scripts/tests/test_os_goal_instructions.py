@@ -167,10 +167,40 @@ class ReconciliationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.run_reconcile(execute=True, note="bad")
 
-    def test_oversized_regular_file_refused(self):
-        self.original.write_bytes(b"x" * (instructions._MAX_BYTES + 1))
-        with self.assertRaisesRegex(ValueError, "bounded byte limit"):
-            self.run_reconcile(execute=True)
+    def test_large_utf8_envelope_is_preserved_and_replayed_without_a_size_cap(self):
+        text = "λ🙂\0\n" * 262145
+        self.assertGreater(len(text.encode("utf-8")), 2 * 1024 * 1024)
+        raw = (json.dumps({"id": HOLD_ID, "text": text}) + "\n").encode("utf-8")
+        self.original.write_bytes(raw)
+        self.binding = [{"id": HOLD_ID, "sha256": hashlib.sha256(raw).hexdigest()}]
+        first = self.run_reconcile(execute=True)
+        archived = self.control / "superseded" / self.original.name
+        self.assertEqual(archived.read_bytes(), raw)
+        self.assertEqual(json.loads(archived.read_bytes())["text"], text)
+        before = self.snapshot()
+        self.assertEqual(self.run_reconcile(execute=True), first)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_changed_entry_is_refused_before_archival(self):
+        real_read = os.read
+        changed = False
+        def change_after_read(fd, size):
+            nonlocal changed
+            raw = real_read(fd, size)
+            if not changed:
+                changed = True
+                self.original.write_bytes(RAW + b"changed")
+            return raw
+        with patch.object(instructions.os, "read", side_effect=change_after_read):
+            with self.assertRaisesRegex(ValueError, "changed during read"):
+                self.run_reconcile(execute=True)
+        self.assertFalse((self.control / "superseded").exists())
+
+    def test_short_file_reads_still_preserve_the_entire_original(self):
+        real_read = os.read
+        with patch.object(instructions.os, "read", side_effect=lambda fd, size: real_read(fd, min(size, 7))):
+            self.assertEqual(self.run_reconcile(execute=True)[0]["status"], "superseded")
+        self.assertEqual((self.control / "superseded" / self.original.name).read_bytes(), RAW)
 
     def test_corrupt_archived_bytes_or_receipt_blocks(self):
         self.run_reconcile(execute=True)
@@ -184,14 +214,30 @@ class ReconciliationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Invalid reconciliation receipt"):
             self.run_reconcile(execute=True)
 
-    def test_unknown_non_json_pending_and_entry_limit_refused(self):
+    def test_unknown_non_json_pending_refused(self):
         (self.pending / "unknown.txt").write_bytes(b"unknown")
         with self.assertRaisesRegex(ValueError, "Unexpected pending"):
             self.run_reconcile(execute=True)
-        with patch.object(instructions, "_MAX_ENTRIES", 1):
-            with self.assertRaisesRegex(ValueError, "bounded entry limit"):
-                self.run_reconcile(execute=True)
+
+    def test_all_explicit_bindings_are_validated_without_queue_count_caps(self):
+        self.original.unlink()
+        bindings = []
+        for index in range(300):
+            ident = f"20261017T{index:012d}Z-{index:032x}"
+            raw = json.dumps({"id": ident, "text": f"instruction {index}"}).encode("utf-8")
+            (self.pending / (ident + ".json")).write_bytes(raw)
+            bindings.append({"id": ident, "sha256": hashlib.sha256(raw).hexdigest()})
+        before = self.snapshot()
+        result = self.run_reconcile(bindings=bindings)
+        self.assertEqual(len(result), 300)
+        self.assertEqual({row["status"] for row in result}, {"would_supersede"})
+        self.assertEqual(self.snapshot(), before)
+        bindings[-1]["sha256"] = "f" * 64
+        with self.assertRaisesRegex(ValueError, "hash mismatch"):
+            self.run_reconcile(execute=True, bindings=bindings)
+        self.assertEqual(self.snapshot(), before)
 
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -1077,6 +1077,47 @@ pub struct UtiAttr {
     pub flags: u64,
 }
 
+// Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
+// Reuse the reviewed ABI35 current-header DATA declarations without layout changes.
+// executer/include/uti.h struct uti_info: preserve raw address domains exactly.
+// A kmalloc-backed instance is only PARTIALLY initialized by util_thread. Do not
+// zero it, form a whole initialized value/reference, or read host-filled pointer
+// slots before the original peer has initialized them. These fields confer no
+// ownership, reference, pin, completion ACK, or permission to access peer memory.
+#[repr(C)]
+pub struct UtiInfo {
+    pub thread_va: CULong,
+    pub uti_futex_resp: *mut c_void,
+    pub ikc2linux: *mut c_void,
+    pub uti_futex_resp_pa: CULong,
+    pub ikc2linux_pa: CULong,
+    pub tid: CInt,
+    pub cpu: CInt,
+    pub status: *mut c_void,
+    pub spin_sleep_lock: *mut c_void,
+    pub spin_sleep: *mut c_void,
+    pub vm: *mut c_void,
+    pub futex_q: *mut c_void,
+    pub status_pa: CULong,
+    pub spin_sleep_lock_pa: CULong,
+    pub spin_sleep_pa: CULong,
+    pub vm_pa: CULong,
+    pub futex_q_pa: CULong,
+    pub mc_idle_halt: CInt,
+    pub futex_queue: *mut c_void,
+    pub os: *mut c_void,
+    pub futex_queue_pa: CULong,
+}
+
+// Exact shape of util_thread's local struct kuti_attr and uprotocol.h's peer.
+// This is not a new initialized value or a copy/zero constructor. Only the
+// existing nonnull-arg branch initializes the two fields before synchronous use.
+#[repr(C)]
+pub struct UtiKattr {
+    pub parent_cpuid: CLong,
+    pub attr: UtiAttr,
+}
+
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct UtiCtxRefill {

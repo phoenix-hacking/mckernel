@@ -22,6 +22,7 @@ import ast
 import difflib
 import hashlib
 import json
+import os
 import posixpath
 import re
 import subprocess
@@ -156,13 +157,19 @@ def git_blob(repo: Path, ref: str, path: str) -> bytes:
     return completed.stdout
 
 
+def ihk_history_repo(repo: Path) -> Path:
+    root = Path(os.environ.get("MCKERNEL_IHK_HISTORY", str(repo / "ihk")))
+    if not (root / ".git").exists():
+        raise InventoryError(
+            "frozen IHK Git history is required; restore_ihk_source.py --destination "
+            "an external directory and set MCKERNEL_IHK_HISTORY to it"
+        )
+    return root
+
+
 def source_blob(repo: Path, path: str) -> bytes:
     if path.startswith("ihk/"):
-        ihk_repo = repo / "ihk"
-        if not (ihk_repo / ".git").exists():
-            raise InventoryError(
-                "IHK submodule is not initialized; run 'git submodule update --init ihk'"
-            )
+        ihk_repo = ihk_history_repo(repo)
         return git_blob(ihk_repo, IHK_REF, path[len("ihk/") :])
     return git_blob(repo, PARENT_REF, path)
 
@@ -1212,7 +1219,7 @@ def build_inventory(
     parent_actual = run(["git", "rev-parse", PARENT_REF], repo).strip()
     if parent_actual != PARENT_REF:
         raise InventoryError(f"cannot resolve frozen parent commit {PARENT_REF}")
-    ihk_actual = run(["git", "rev-parse", IHK_REF], repo / "ihk").strip()
+    ihk_actual = run(["git", "rev-parse", IHK_REF], ihk_history_repo(repo)).strip()
     if ihk_actual != IHK_REF:
         raise InventoryError(f"cannot resolve frozen IHK commit {IHK_REF}")
 

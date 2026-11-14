@@ -113,6 +113,36 @@ def git_head(raw):
     return raw[:-1].decode('ascii')
 
 
+def ihk_source_identity(repo, git):
+    """Return IHK's own (layout, revision), without parent-repository fallback."""
+    repo = Path(repo)
+    raw = git(repo, 'ls-tree', '-z', 'HEAD', '--', 'ihk')
+    if not isinstance(raw, bytes) or not raw.endswith(b'\0') or raw.count(b'\0') != 1:
+        raise BuildError('committed IHK source entry is missing or malformed')
+    metadata, separator, name = raw[:-1].partition(b'\t')
+    fields = metadata.split()
+    if not separator or name != b'ihk' or len(fields) != 3:
+        raise BuildError('committed IHK source entry is missing or malformed')
+    mode, kind, object_id = fields
+    if (mode, kind) == (b'160000', b'commit'):
+        root = git(repo / 'ihk', 'rev-parse', '--show-toplevel').decode().strip()
+        if Path(root).resolve() != (repo / 'ihk').resolve():
+            raise BuildError('historical IHK submodule is not initialized')
+        head = git_head(git(repo / 'ihk', 'rev-parse', 'HEAD'))
+        if head.encode('ascii') != object_id:
+            raise BuildError('IHK checkout differs from its committed gitlink')
+        return 'submodule', head
+    if (mode, kind) != (b'040000', b'tree'):
+        raise BuildError('IHK source entry is neither a tree nor a gitlink')
+    marker = checked_input(repo, 'ihk/VENDORED-REVISION')
+    committed = git(repo, 'show', 'HEAD:ihk/VENDORED-REVISION')
+    revision = git_head(committed)
+    if (marker.is_symlink() or not marker.is_file() or marker.read_bytes() != committed
+            or os.path.lexists(str(repo / 'ihk' / '.git'))):
+        raise BuildError('vendored IHK revision or layout differs')
+    return 'vendored', revision
+
+
 def checked_input(root, relative, allow_missing=False):
     # A tracked path may be a link, but none of its parents may be links.
     root = Path(root)
@@ -166,8 +196,10 @@ def tracked_digest(path, mode, object_id, alternate_sha256=None):
 def source_inventory(repo, git, allow_ihk_overlay=False):
     """One provenance invariant for manifest production and consumption."""
     repo = Path(repo)
+    layout, unused_revision = ihk_source_identity(repo, git)
+    roots = (repo,) if layout == 'vendored' else (repo, repo / 'ihk')
     inventories = []
-    for root in (repo, repo / 'ihk'):
+    for root in roots:
         index = git_rows(git(root, 'ls-files', '-s', '-z'))
         tree = git_rows(git(root, 'ls-tree', '-r', '-z', '--full-tree', 'HEAD'), tree=True)
         if index != tree:
@@ -178,9 +210,11 @@ def source_inventory(repo, git, allow_ihk_overlay=False):
             raise BuildError('path-bearing Git output must be raw bytes')
         if untracked:
             raise BuildError('source checkout is dirty: ' + str(root))
-    main, ihk = inventories
-    if any(p.startswith('ihk/') or p == 'ihk' and m != '160000'
-           for p, (m, unused) in main.items()):
+    main = inventories[0]
+    ihk = {} if layout == 'vendored' else inventories[1]
+    if layout != 'vendored' and any(
+            p.startswith('ihk/') or p == 'ihk' and m != '160000'
+            for p, (m, unused) in main.items()):
         raise BuildError('main/IHK inventory collision')
     files, gitlinks = {}, {}
     for root, rows, prefix in ((repo, main, ''), (repo / 'ihk', ihk, 'ihk/')):
@@ -309,8 +343,9 @@ def verify_inputs(repo, candidate, assets, manifest, runner):
                             '-C', str(root), *args], repo)
     if git_head(git(repo, 'rev-parse', 'HEAD')) != candidate:
         raise BuildError('HEAD differs')
-    if git_head(git(repo / 'ihk', 'rev-parse', 'HEAD')) != EXPECTED_IHK_HEAD:
-        raise BuildError('submodule identity differs')
+    ihk_layout, ihk_revision = ihk_source_identity(repo, git)
+    if ihk_revision != EXPECTED_IHK_HEAD:
+        raise BuildError('IHK source identity differs')
     # The production candidate is prepared from pristine IHK and then has the
     # single reviewed overlay applied.  Test fixtures may substitute another
     # IHK identity; those retain the historical pristine-only contract.
@@ -329,7 +364,9 @@ def verify_inputs(repo, candidate, assets, manifest, runner):
     elif overlay is not None:
         raise BuildError('unexpected IHK overlay contract')
     files, gitlinks = source_inventory(repo, git, allow_ihk_overlay=production_overlay)
-    if manifest.get('gitlinks') != gitlinks or gitlinks.get('ihk') != EXPECTED_IHK_HEAD:
+    if (manifest.get('gitlinks') != gitlinks or
+            (ihk_layout == 'submodule' and gitlinks.get('ihk') != EXPECTED_IHK_HEAD) or
+            (ihk_layout == 'vendored' and 'ihk' in gitlinks)):
         raise BuildError('gitlink inventory differs')
     # Manifest must cover every ordinary tracked file, not a convenient subset.
     if set(manifest.get('repository_files', {})) != set(files):

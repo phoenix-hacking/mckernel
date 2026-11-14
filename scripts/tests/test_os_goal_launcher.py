@@ -45,7 +45,7 @@ class FakeRPC:
         self.bad_config = False
         self.bad_environment = False
         self.worker_model = "gpt-6.1-sol"
-        self.worker_effort = "high"
+        self.worker_effort = "max"
         self.models = {"gpt-6.1-sol": ["low", "medium", "high", "max"]}
         self.account_type = "chatgpt"
         self.limits = {"primary": {"usedPercent": 0, "windowDurationMins": 10080},
@@ -183,7 +183,7 @@ class CampaignTests(unittest.TestCase):
         self.assertIn('model="gpt-6.1-sol"', command)
         self.assertIn('model_reasoning_effort="max"', command)
         self.assertIn('agents.default_subagent_model="gpt-6.1-sol"', command)
-        self.assertIn('agents.default_subagent_reasoning_effort="high"', command)
+        self.assertIn('agents.default_subagent_reasoning_effort="max"', command)
         self.assertIn('sandbox_mode="danger-full-access"', command)
         self.assertIn('approval_policy="never"', command)
         self.assertNotIn("--dangerously-bypass-approvals-and-sandbox", command)
@@ -192,10 +192,10 @@ class CampaignTests(unittest.TestCase):
         routing = launcher.model_routing(self.args)
         self.assertEqual(routing, {
             "dispatcher": {"model": "gpt-6.1-sol", "effort": "max"},
-            "default_worker": {"model": "gpt-6.1-sol", "effort": "high"},
-            "complex_worker": {"model": "gpt-6.1-sol", "effort": "high"},
-            "auditor": {"model": "gpt-6.1-sol", "effort": "high"},
-            "reviewer": {"model": "gpt-6.1-sol", "effort": "high"},
+            "default_worker": {"model": "gpt-6.1-sol", "effort": "max"},
+            "complex_worker": {"model": "gpt-6.1-sol", "effort": "max"},
+            "auditor": {"model": "gpt-6.1-sol", "effort": "max"},
+            "reviewer": {"model": "gpt-6.1-sol", "effort": "max"},
         })
         self.assertTrue(all(selection["model"] == "gpt-6.1-sol" for selection in routing.values()))
 
@@ -233,7 +233,7 @@ class CampaignTests(unittest.TestCase):
                 self.assertEqual(settings["model_routing"]["dispatcher"],
                                  {"model": "gpt-6.1-sol", "effort": effort})
                 self.assertEqual(settings["model_routing"]["default_worker"],
-                                 {"model": "gpt-6.1-sol", "effort": "high"})
+                                 {"model": "gpt-6.1-sol", "effort": "max"})
                 self.assertEqual(settings["agents"]["default_subagent_model"], "gpt-6.1-sol")
                 self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
@@ -274,26 +274,29 @@ class CampaignTests(unittest.TestCase):
             ])
 
     def test_advertised_fallback_resumes_exact_pair_and_preserves_worker_efforts(self):
-        self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
+        # An unavailable default effort can fall back while Sol/MAX remains
+        # advertised for required workers. Removing Sol/MAX from the catalogue
+        # would now correctly deny worker admission, regardless of dispatcher.
+        with patch.object(launcher, "DEFAULT_DISPATCHER_EFFORT", "ultra"):
+            self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
         self.saved(goal("paused"))
         rpc = FakeRPC(self.args, goal("paused"),
                       [lambda r: (r.completed(), r.status("complete"))])
-        rpc.models["gpt-6.1-sol"].remove("max")
         rpc.models["gpt-6-astra"] = ["high", "max", "ultra"]
         state = self.run_campaign(rpc, 0)
         settings = state["settings"]
         self.assertEqual(settings["requested_dispatcher"],
-                         {"model": "gpt-6.1-sol", "effort": "max"})
+                         {"model": "gpt-6.1-sol", "effort": "ultra"})
         self.assertEqual(settings["server_defaults"], settings["requested_dispatcher"])
         self.assertEqual(settings["dispatcher_selection"], "advertised_preference")
         self.assertEqual(settings["model_routing"]["dispatcher"],
-                         {"model": "gpt-6-astra", "effort": "max"})
+                         {"model": "gpt-6.1-sol", "effort": "max"})
         params = next(p for m, p in rpc.calls if m == "thread/resume")
-        self.assertEqual(params["model"], "gpt-6-astra")
+        self.assertEqual(params["model"], "gpt-6.1-sol")
         self.assertEqual(params["config"]["model_reasoning_effort"], "max")
-        self.assertEqual(settings["agents"]["default_subagent_reasoning_effort"], "high")
+        self.assertEqual(settings["agents"]["default_subagent_reasoning_effort"], "max")
         self.assertEqual(settings["model_routing"]["reviewer"],
-                         {"model": "gpt-6.1-sol", "effort": "high"})
+                         {"model": "gpt-6.1-sol", "effort": "max"})
 
     def test_explicit_dispatcher_pair_is_pinned_even_if_fallback_is_advertised(self):
         for argv in (["--model", "gpt-6.1-sol", "--effort", "max"],
@@ -310,7 +313,8 @@ class CampaignTests(unittest.TestCase):
                 self.assertFalse(any(method.startswith("thread/") for method, _ in rpc.calls))
 
     def test_fallback_with_mismatched_thread_readback_stops(self):
-        self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
+        with patch.object(launcher, "DEFAULT_DISPATCHER_EFFORT", "ultra"):
+            self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
         class WrongModelRPC(FakeRPC):
             def call(rpc, method, params, **kwargs):
                 result = super().call(method, params, **kwargs)
@@ -319,7 +323,6 @@ class CampaignTests(unittest.TestCase):
                 return result
         self.saved(goal("paused"))
         rpc = WrongModelRPC(self.args, goal("paused"))
-        rpc.models["gpt-6.1-sol"].remove("max")
         rpc.models["gpt-6-astra"] = ["max"]
         state = self.run_campaign(rpc, 1)
         self.assertIn("model/effort differs", state["last_error"])
@@ -361,8 +364,9 @@ class CampaignTests(unittest.TestCase):
             campaign.save()
             with self.assertRaises(ValueError):
                 launcher.queue_instruction(self.directory, "   ")
-            with self.assertRaises(ValueError):
-                launcher.queue_instruction(self.directory, "x" * 8193)
+            for invalid in (None, "\ud800"):
+                with self.subTest(invalid=repr(invalid)), self.assertRaises(ValueError):
+                    launcher.queue_instruction(self.directory, invalid)
             ident = launcher.queue_instruction(self.directory, "Continue after checkpoint")
             campaign.checkpoint_requested = True
             campaign.rpc = FakeRPC(self.args, goal())
@@ -452,17 +456,20 @@ class CampaignTests(unittest.TestCase):
         self.assertIsNone(state["stop_reason"])
         self.assertFalse(any(m == "turn/steer" for m, p in rpc.calls))
 
-    def test_blocked_resume_replaces_historical_window_instructions(self):
+    def test_blocked_recovery_replaces_instructions_without_activating_goal(self):
         self.saved(goal("blocked"))
         self.args.recovered = True
-        rpc = FakeRPC(self.args, goal("blocked"), [lambda r: (r.completed(), r.status("complete"))])
-        state = self.run_campaign(rpc, 0)
+        rpc = FakeRPC(self.args, goal("blocked"))
+        state = self.run_campaign(rpc, 20)
         params = next(p for m, p in rpc.calls if m == "thread/resume")
         self.assertIn("no time limit", params["developerInstructions"])
         self.assertIn("explicit user pause remains authoritative", params["developerInstructions"])
         self.assertIn("Reconcile source changes", params["developerInstructions"])
         self.assertEqual(state["goal"]["objective"], launcher.OBJECTIVE)
         self.assertEqual(state["goal"]["tokensUsed"], 1234)
+        self.assertEqual(state["goal"]["status"], "blocked")
+        self.assertFalse(any(m == "thread/goal/set" and p.get("status") == "active"
+                             for m, p in rpc.calls))
         self.assertFalse(any("objective" in p or "tokenBudget" in p for m, p in rpc.calls))
 
     def test_explicit_window_instructions_preserve_user_limit(self):
@@ -641,7 +648,7 @@ class CampaignTests(unittest.TestCase):
             initial = {"primary": {"usedPercent": 100},
                        "credits": {"hasCredits": True, "unlimited": False, "balance": "1000"}}
             campaign.record_rate_limits(initial)
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             current = dict(initial, credits=dict(initial["credits"], balance="900"))
             campaign.rpc.call.return_value = {"rateLimits": current}
             campaign.refresh_credit_budget()
@@ -655,7 +662,7 @@ class CampaignTests(unittest.TestCase):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = TimeoutError("account unavailable")
             campaign.refresh_credit_budget()
             self.assertEqual(campaign.stop_reason, "credit_budget_unknown")
@@ -689,7 +696,7 @@ class CampaignTests(unittest.TestCase):
             campaign.save(credit_budget_error="historical transport failure")
             current = dict(initial, primary={"usedPercent": 1},
                            credits=dict(initial["credits"], balance="950"))
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = [self.transport_usage_error(), {"rateLimits": current}]
             with patch.object(launcher.time, "sleep") as sleep:
                 campaign.refresh_credit_budget()
@@ -715,7 +722,7 @@ class CampaignTests(unittest.TestCase):
             campaign.record_rate_limits(initial)
             campaign.save(credit_budget_error="historical failure")
             current = dict(initial, credits=dict(initial["credits"], balance="950"))
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = [self.unavailable_usage_error(),
                                              self.unavailable_usage_error(), {"rateLimits": current}]
             with patch.object(launcher.time, "sleep") as sleep:
@@ -736,7 +743,7 @@ class CampaignTests(unittest.TestCase):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = [self.transport_usage_error(),
                                              self.unavailable_usage_error(),
                                              self.transport_usage_error()]
@@ -772,7 +779,7 @@ class CampaignTests(unittest.TestCase):
             with self.subTest(error=str(error)):
                 campaign = launcher.Campaign(self.args, self.directory, self.directory)
                 try:
-                    campaign.rpc = Mock()
+                    campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
                     campaign.rpc.call.side_effect = error
                     with patch.object(launcher.time, "sleep") as sleep:
                         campaign.refresh_credit_budget()
@@ -787,7 +794,7 @@ class CampaignTests(unittest.TestCase):
         self.credit_arguments()
         campaign = launcher.Campaign(self.args, self.directory, self.directory)
         try:
-            campaign.rpc = Mock()
+            campaign.rpc = Mock(last_account_read_completion=None, last_account_notification=None)
             campaign.rpc.call.side_effect = self.unavailable_usage_error()
             with patch.object(launcher.time, "sleep", side_effect=lambda _: setattr(campaign, "stop_reason", "signal_2")):
                 campaign.refresh_credit_budget()
@@ -1022,11 +1029,21 @@ class CampaignTests(unittest.TestCase):
                     else:
                         rpc.emit(event, {"threadId": "test-thread", "turn": {
                             "id": "turn-1", "status": "failed", "error": error}})
-                    rpc.status("blocked")
                 self.saved(goal())
                 rpc = FakeRPC(self.args, goal(), steps=[fail])
                 state = self.run_campaign(rpc, 23)
                 self.assertTrue(watcher.should_restart(23, state))
+
+    def test_service_transient_does_not_override_an_unattributed_blocked_goal(self):
+        def fail(rpc):
+            rpc.emit("error", {"threadId": "test-thread", "willRetry": False,
+                              "error": {"message": "temporary capacity limit",
+                                        "codexErrorInfo": "serverOverloaded"}})
+            rpc.status("blocked")
+        self.saved(goal())
+        rpc = FakeRPC(self.args, goal(), steps=[fail])
+        state = self.run_campaign(rpc, 23)
+        self.assertFalse(watcher.should_restart(23, state))
 
     def test_active_resume_is_not_replaced_or_started_twice(self):
         self.saved(goal())
@@ -1075,7 +1092,8 @@ class CampaignTests(unittest.TestCase):
 
     def test_misconfigured_worker_model_or_effort_fails_before_resume(self):
         for attribute, value in (("worker_model", "gpt-5.6-luna"),
-                                 ("worker_effort", "low"), ("worker_effort", "medium")):
+                                 ("worker_effort", "low"), ("worker_effort", "medium"),
+                                 ("worker_effort", "high")):
             with self.subTest(attribute=attribute):
                 self.saved(goal("paused"))
                 rpc = FakeRPC(self.args, goal("paused"))
@@ -1093,16 +1111,18 @@ class CampaignTests(unittest.TestCase):
                       "gpt-5.6-luna": ["low", "medium", "high"],
                       "gpt-6-astra": ["low", "medium", "high"]}
         state = self.run_campaign(rpc, 1)
-        self.assertIn("gpt-6.1-sol/high", state["last_error"])
+        self.assertIn("gpt-6.1-sol/max", state["last_error"])
         self.assertEqual(rpc.goal["status"], "paused")
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
 
-    def test_unadvertised_routed_effort_refuses_resume_without_fallback(self):
-        for effort in ("high",):
+    def test_missing_worker_max_refuses_resume_even_with_dispatcher_fallback(self):
+        for effort in ("max",):
             with self.subTest(effort=effort):
+                self.args = launcher.arguments(["--allow-dispatcher-fallback", "--agent-windows", "off"])
                 self.saved(goal("paused"))
                 rpc = FakeRPC(self.args, goal("paused"))
                 rpc.models["gpt-6.1-sol"].remove(effort)
+                rpc.models["gpt-6-astra"] = ["max"]
                 state = self.run_campaign(rpc, 1)
                 self.assertIn("gpt-6.1-sol/" + effort, state["last_error"])
                 self.assertEqual(rpc.goal["status"], "paused")
@@ -1112,7 +1132,7 @@ class CampaignTests(unittest.TestCase):
         rpc = FakeRPC(self.args)
         settings = launcher.preflight(rpc, self.args, self.directory)
         self.assertEqual(settings["model_routing"]["auditor"],
-                         {"model": "gpt-6.1-sol", "effort": "high"})
+                         {"model": "gpt-6.1-sol", "effort": "max"})
         self.assertTrue(all(selection["model"] == "gpt-6.1-sol"
                             for selection in settings["model_routing"].values()))
         self.assertFalse(any(m.startswith("thread/") for m, p in rpc.calls))
@@ -1761,6 +1781,7 @@ from pathlib import Path
 path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
 state={'thread_id':'quiet-thread','worker_pid':os.getpid(),'phase':'running',
        'agent_event_count':1,'goal':{'status':'active'}}
+state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
 signal.signal(signal.SIGTERM, signal.SIG_IGN)
 signal.signal(signal.SIGUSR1, signal.SIG_IGN)
 if '--recovered' in sys.argv:
@@ -1798,6 +1819,7 @@ from pathlib import Path
 path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
 state={'thread_id':'busy-thread','worker_pid':os.getpid(),'phase':'running',
        'agent_event_count':0,'goal':{'status':'active'}}
+state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
 deadline=time.monotonic()+1
 while True:
     state['agent_event_count']+=1
@@ -1820,9 +1842,11 @@ while True:
             self.assertNotIn("agent_progress_stalled", (directory / "watcher.jsonl").read_text())
 
     def test_only_recoverable_failures_restart(self):
-        self.assertTrue(watcher.should_restart(1, {"retryable": True}))
-        self.assertTrue(watcher.should_restart(-9, {}))
-        self.assertTrue(watcher.should_restart(24, {}))
+        self.assertFalse(watcher.should_restart(1, {"retryable": True}))
+        self.assertFalse(watcher.should_restart(-9, {}))
+        self.assertTrue(watcher.should_restart(-9, {
+            "thread_id": "saved-thread", "goal": {"status": "active"}}))
+        self.assertFalse(watcher.should_restart(24, {}))
         self.assertFalse(watcher.should_restart(1, {"retryable": False}))
         for status in ("complete", "usageLimited", "budgetLimited"):
             self.assertFalse(watcher.should_restart(-9, {"goal": {"status": status}}, watchdog=True))
@@ -1830,12 +1854,12 @@ while True:
             self.assertFalse(watcher.should_restart(code, {}))
         self.assertFalse(watcher.should_restart(-9, {}, stopped=True))
 
-    def test_only_classified_transients_restart_and_user_stops_do_not(self):
+    def test_unowned_transient_hints_and_user_stops_do_not_restart(self):
         for code, state in ((23, {"stop_reason": "turn_failed", "last_error": {"codexErrorInfo": "serverOverloaded"}}),
                             (23, {"stop_reason": "server_error", "last_error": {"codexErrorInfo": "rateLimitExceeded"}}),
                             (23, {"stop_reason": "rate_limit"})):
             with self.subTest(code=code, state=state):
-                self.assertTrue(watcher.should_restart(code, state))
+                self.assertFalse(watcher.should_restart(code, state))
                 self.assertFalse(watcher.should_restart(code, state, stopped=True))
         for reason in ("work_window", "signal_2", "signal_15", "signal_1"):
             state = {"goal": {"status": "paused"}, "stop_reason": reason}
@@ -1857,12 +1881,15 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
 state=json.loads(path.read_text()) if path.exists() else {'thread_id':'retained-thread','attempts':0,'windows':[]}
 state['attempts']+=1
 state['windows'].append(float(sys.argv[sys.argv.index('--hours')+1]))
-scenarios=[(23,'blocked','turn_failed'),(23,'active','server_error'),(23,'paused','rate_limit'),
-           (1,'paused','launcher_error'),(24,'active','active_goal_did_not_continue'),
-           (21,'blocked','quota_exhausted')]
+scenarios=[(1,'active','launcher_error')]*5+[(21,'blocked','quota_exhausted')]
 code,status,reason=scenarios[state['attempts']-1]
 state.update(worker_pid=os.getpid(),retryable=True,goal={'status':status},stop_reason=reason)
-state['last_error']={'codexErrorInfo':'serverOverloaded'}
+state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
+state['last_error']='Codex app server disconnected; see retained stderr.'
+state['transport_failure']={'schema_version':1,'worker_pid':os.getpid(),
+ 'worker_start':state['worker_start'],'thread_id':state['thread_id'],
+ 'class':'disconnected','error':state['last_error'],'error_type':'RecoverableFailure',
+ 'method':None,'mutating':False}
 path.write_text(json.dumps(state))
 sys.exit(code)
 '''
@@ -1889,8 +1916,14 @@ path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
 state=json.loads(path.read_text()) if path.exists() else {'thread_id':'retained-thread','windows':[]}
 state['windows'].append(float(sys.argv[sys.argv.index('--hours')+1]))
 state['worker_pid']=os.getpid()
+state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
 state['retryable']=True
 state['goal']={'status':'complete' if '--recovered' in sys.argv else 'active'}
+state['stop_reason']='launcher_error'
+state['transport_failure']={'schema_version':1,'worker_pid':os.getpid(),
+ 'worker_start':state['worker_start'],'thread_id':state['thread_id'],
+ 'class':'disconnected','error':'Codex app server disconnected; see retained stderr.',
+ 'error_type':'RecoverableFailure','method':None,'mutating':False}
 path.write_text(json.dumps(state))
 sys.exit(0 if '--recovered' in sys.argv else 1)
 '''
@@ -1910,13 +1943,13 @@ sys.exit(0 if '--recovered' in sys.argv else 1)
             self.assertEqual(json.loads((directory / "watcher.json").read_text())["restarts"], 1)
 
     def test_server_retirement_does_not_signal_reused_or_unverified_pid(self):
-        state = {"server_pid": 123, "server_start": "original", "worker_pid": 456}
-        with patch.object(watcher, "process_start", return_value="replacement"), patch.object(watcher.os, "kill") as kill:
+        state = {"server_pid": 123, "server_start": "700", "worker_pid": 456}
+        with patch.object(watcher, "process_start", return_value="701"), patch.object(watcher, "pidfd_open") as pidfd:
             self.assertTrue(watcher.retire_server(state, 456))
-            kill.assert_not_called()
-        with patch.object(watcher, "process_start", return_value="original"), patch.object(watcher.os, "kill") as kill:
+            pidfd.assert_not_called()
+        with patch.object(watcher, "process_start", return_value="700"), patch.object(watcher, "pidfd_open") as pidfd:
             self.assertFalse(watcher.retire_server(state, 999))
-            kill.assert_not_called()
+            pidfd.assert_not_called()
 
     def test_stalled_worker_recovers_without_losing_session(self):
         source = r'''
@@ -1925,6 +1958,7 @@ from pathlib import Path
 path=Path(__file__).resolve().parents[1]/'.git/os-autopilot/state.json'
 state={'thread_id':'stalled-thread','worker_pid':os.getpid(),
        'goal':{'status':'complete' if '--recovered' in sys.argv else 'active'}}
+state['worker_start']=Path('/proc/self/stat').read_text().rsplit(')',1)[1].split()[19]
 path.write_text(json.dumps(state))
 if '--recovered' not in sys.argv: time.sleep(10)
 '''

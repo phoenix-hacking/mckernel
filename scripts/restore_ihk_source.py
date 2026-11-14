@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Restore the committed IHK gitlink using pinned public Git history and bundles.
+"""Use tracked IHK sources or restore a historical checkout from pinned bundles.
 
 Only Git data is imported. No archived script, controller, build or runtime is
 executed. Bundles come from the committed parent tree, including in a sparse
@@ -7,10 +7,12 @@ checkout. An optional local base repository changes transport, never identities.
 The working IHK checkout is left untouched unless the destination is empty.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path, PurePosixPath
 import re
+import stat
 import subprocess
 import tempfile
 
@@ -77,10 +79,14 @@ def load_manifest(repo, revision, manifest_path=None):
             if mode != "100644" or kind != "blob" or oid != bundle["blob"]:
                 raise RestoreError(f"bundle blob does not match committed tree: {path}")
         mode, kind, target = tree_entry(repo, revision, "ihk")
-        if mode != "160000" or kind != "commit":
-            raise RestoreError("committed ihk entry must be a Git submodule")
+        if mode == "040000" and kind == "tree":
+            target = object_id(
+                git(repo, "cat-file", "blob", f"{revision}:ihk/VENDORED-REVISION")
+                .decode("ascii").strip(), "vendored IHK revision")
+        elif mode != "160000" or kind != "commit":
+            raise RestoreError("committed ihk entry must be a source tree or Git submodule")
         if bundles[-1]["tip"] != target:
-            raise RestoreError("final bundle tip does not match committed ihk gitlink")
+            raise RestoreError("final bundle tip does not match committed IHK source revision")
         return base, bundles, target
     except (OSError, ValueError, KeyError, TypeError) as error:
         raise RestoreError(f"invalid IHK source manifest: {error}") from error
@@ -115,12 +121,44 @@ def destination_ready(destination, target):
     return True
 
 
+def vendored_destination_ready(repo, destination, revision):
+    """Verify tracked bytes directly without creating a nested Git repository."""
+    if (destination.is_symlink() or not destination.is_dir()
+            or os.path.lexists(str(destination / ".git"))):
+        raise RestoreError("vendored ihk/ must be a materialized directory without .git")
+    git(repo, "diff-index", "--cached", "--quiet", revision, "--", "ihk")
+    if git(repo, "ls-files", "--others", "--exclude-standard", "-z", "--", "ihk"):
+        raise RestoreError("vendored IHK source contains untracked files")
+    for row in git(repo, "ls-tree", "-r", "-z", revision, "--", "ihk").split(b"\0"):
+        if not row:
+            continue
+        metadata, name = row.split(b"\t", 1)
+        mode, kind, expected = metadata.split()
+        path = repo / name.decode("utf-8")
+        info = path.lstat()
+        if mode == b"120000" and stat.S_ISLNK(info.st_mode):
+            data = os.fsencode(os.readlink(str(path)))
+        elif mode in (b"100644", b"100755") and stat.S_ISREG(info.st_mode):
+            if stat.S_IMODE(info.st_mode) != (0o755 if mode == b"100755" else 0o644):
+                raise RestoreError("vendored IHK file mode differs: " + str(path))
+            data = path.read_bytes()
+        else:
+            raise RestoreError("vendored IHK entry type differs: " + str(path))
+        actual = hashlib.sha1(b"blob " + str(len(data)).encode("ascii") + b"\0" + data)
+        if kind != b"blob" or actual.hexdigest().encode("ascii") != expected:
+            raise RestoreError("vendored IHK file bytes differ: " + str(path))
+
+
 def restore(repo, destination=None, base_repository=None, manifest_path=None):
     repo = Path(repo).resolve()
     # Freeze the parent revision once: every subsequent tree lookup uses it.
     revision = git(repo, "rev-parse", "HEAD^{commit}").decode().strip()
     base, bundles, target = load_manifest(repo, revision, manifest_path)
     destination = Path(os.path.abspath(destination if destination is not None else repo / "ihk"))
+    mode, kind, unused_id = tree_entry(repo, revision, "ihk")
+    if mode == "040000" and kind == "tree" and destination == repo / "ihk":
+        vendored_destination_ready(repo, destination, revision)
+        return target, False
     if destination_ready(destination, target):
         return target, False
     source = base["url"]
@@ -165,7 +203,7 @@ def restore(repo, destination=None, base_repository=None, manifest_path=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--destination", type=Path, help="absent/empty destination; default: REPO/ihk")
+    parser.add_argument("--destination", type=Path, help="optional historical Git checkout destination; default: use REPO/ihk")
     parser.add_argument("--base-repository", type=Path, help="local transport for the same pinned public base commit")
     args = parser.parse_args()
     try:

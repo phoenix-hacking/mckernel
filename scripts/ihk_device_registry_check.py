@@ -202,9 +202,9 @@ def _load_json_bytes(data, label):
 
 
 def _git_blob(repo_root, ref, path):
-    ihk = os.path.join(repo_root, "ihk")
-    if not os.path.isdir(ihk):
-        raise ContractError("frozen IHK submodule is not initialized")
+    ihk = os.environ.get("MCKERNEL_IHK_HISTORY", os.path.join(repo_root, "ihk"))
+    if not os.path.exists(os.path.join(ihk, ".git")):
+        raise ContractError("frozen IHK Git history is required; set MCKERNEL_IHK_HISTORY")
     process = subprocess.Popen(
         ["git", "show", ref + ":" + path],
         cwd=ihk,

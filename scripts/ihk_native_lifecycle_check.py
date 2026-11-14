@@ -570,7 +570,7 @@ def _validate_contract(contract: dict[str, Any]) -> None:
         {
             "destination": "abi/application.rs",
             "path": "host-kernel/native-rust/abi/application.rs",
-            "sha256": "d2b3770a111777d4f28a7a81814a03414d318a90d3ec7082d5c89149b1704a0f",
+            "sha256": "b51c8066f6f7002ddd26fe98c330c1dcebc10e31182955cfcf764879d60d4e88",
         },
     ]
     if contract["crate_modules"] != expected_modules:
@@ -1155,8 +1155,8 @@ def _validate_stage_manifest(
     build = manifest.get("build_contract", {})
     if build.get("project_c_link_objects") != 0:
         raise ValidationError("stage manifest does not enforce zero project C objects")
-    if build.get("allowed_project_source_suffixes") != [".rs"]:
-        raise ValidationError("stage manifest permits non-Rust project sources")
+    if build.get("allowed_project_source_suffixes") != [".rs", ".S"]:
+        raise ValidationError("stage manifest source suffixes differ from locked Rust/assembly policy")
     modules = [item for item in manifest.get("modules", []) if item.get("crate") == "ihk"]
     if len(modules) != 1:
         raise ValidationError("stage manifest must contain exactly one ihk crate")

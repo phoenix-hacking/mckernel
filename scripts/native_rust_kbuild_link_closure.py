@@ -629,6 +629,7 @@ def _validate_compatibility_build_identity(identity, digests):
         raise LinkClosureError("{0} source rule path differs".format(label))
     patterns = {
         "ihk-git-short-head": r"[0-9a-f]{4,40}",
+        "ihk-vendored-revision": r"8d288b8",
         "ihk-version-fallback": r"[A-Za-z0-9.+_-]{1,40}",
     }
     origin = identity["origin"]
