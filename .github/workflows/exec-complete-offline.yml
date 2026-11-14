@@ -21,4 +21,4 @@ jobs:
       - name: Complete actual Rust exec lifecycle and paired C selection
         env:
           RUSTUP_TOOLCHAIN: nightly-2026-02-19
-        run: python3 -B -m unittest -v scripts.tests.test_f03_execveat_complete
+        run: python3 -B -m unittest -v scripts.tests.test_f03_execveat_complete.CompleteExecTests.test_actual_rust_exec_module_preserves_error_and_lifetime_contracts

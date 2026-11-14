@@ -22,13 +22,14 @@ struct Case {
     name: &'static str, admission: i32, allocation: bool, phase1: i64,
     argv: i32, envp: i32, ranges: i32, pte: i64, phase2: i64, ptrace: i32,
     shebang: bool, diagnostic_allocation: bool, error_output: bool, change_process: bool,
+    user_length: CULong,
 }
 impl Case {
     fn success(name: &'static str) -> Self {
         Self { name, admission: 0, allocation: true, phase1: 0,
             argv: 24, envp: 16, ranges: 0, pte: 0, phase2: 0, ptrace: 0,
             shebang: false, diagnostic_allocation: true, error_output: false,
-            change_process: false }
+            change_process: false, user_length: 0x9000 }
     }
 }
 struct State {
@@ -259,7 +260,8 @@ unsafe extern "C" fn do_syscall(request: *mut SyscallRequest, cpu: CInt) -> CLon
 unsafe extern "C" fn clear_host_pte(start: CULong, length: SizeT, holding: CInt) -> CLong {
     observe(|s| {
         assert!(s.unmapped && s.preempt_disabled && s.descriptor_live);
-        assert_eq!((start, length, holding), (0x1000, 0x9000, 0));
+        assert_eq!((start, holding), (0x1000, 0));
+        assert_eq!(length as CULong, s.case.user_length);
         s.events.push("pte"); s.case.pte
     })
 }
@@ -290,7 +292,7 @@ unsafe fn run(case: Case, expected: &[&str], expected_result: i32) {
     let mut argv = [filename.cast_mut(), null_mut()]; let mut envp = [filename.cast_mut(), null_mut()];
     (*cpu).current = thread; (*thread).proc = proc; (*thread).vm = vm; (*thread).tid = 301;
     (*proc).pid = 101; (*other_proc).pid = 202;
-    (*vm).region.user_start = 0x1000; (*vm).region.user_end = 0xa000;
+    (*vm).region.user_start = 0x1000; (*vm).region.user_end = 0x1000 + case.user_length;
     write_bytes(ctx.cast::<u8>(), 0xa5, size_of::<X86UserContext>());
     let original_context = core::slice::from_raw_parts(ctx.cast::<u8>(), size_of::<X86UserContext>()).to_vec();
     let name = case.name;
@@ -354,6 +356,9 @@ fn main() { unsafe {
         c.change_process = change_process; run(c, &success, -14); cases += 1;
     }}}
     let mut c = Case::success("host-pte-error-is-ignored"); c.pte = -22;
+    run(c, &success, -14); cases += 1;
+    let mut c = Case::success("host-pte-length-preserves-upper32-bits");
+    c.user_length = 0x1_0000_9000;
     run(c, &success, -14); cases += 1;
     println!("PASS {cases} complete exec cases");
 }}

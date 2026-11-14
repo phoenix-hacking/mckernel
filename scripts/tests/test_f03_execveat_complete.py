@@ -94,7 +94,7 @@ class CompleteExecTests(unittest.TestCase):
                 command += ["--cfg", cfg]
             self.checked(command, env=environment)
             output = self.checked([str(binary)])
-            self.assertIn("PASS 29 complete exec cases\n", output)
+            self.assertIn("PASS 30 complete exec cases\n", output)
 
 
 if __name__ == "__main__":

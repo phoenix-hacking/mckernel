@@ -160,7 +160,7 @@ unsafe extern "C" fn do_execveat(ctx: *mut X86UserContext, dirfd: CInt,
                     kill_after_unmap(thread);
                 } else {
                     let _ = clear_host_pte((*vm).region.user_start,
-                        (*vm).region.user_end.wrapping_sub((*vm).region.user_start), 0);
+                        (*vm).region.user_end.wrapping_sub((*vm).region.user_start) as SizeT, 0);
                     request.number = SYS_EXECVE;
                     request.args[0] = 2;
                     request.args[1] = crate::x86_memory_helpers::virt_to_phys(desc.cast());
@@ -235,5 +235,6 @@ pub static f03_execveat_complete_rust_abi_words: [CULong; 35] = [
 ];
 const _: () = {
     assert!(size_of::<CInt>() == 4 && size_of::<CLong>() == 8);
+    assert!(size_of::<SizeT>() == 8 && size_of::<SizeT>() == size_of::<CULong>());
     assert!(size_of::<SyscallRequest>() == 72 && align_of::<SyscallRequest>() == 8);
 };
