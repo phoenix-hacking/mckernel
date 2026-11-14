@@ -677,7 +677,8 @@ def observe_progress(repo, state, now=None):
     snapshot["closure_velocity"] = {
         "window_seconds": VELOCITY_WINDOW_SECONDS, "target_min": VELOCITY_TARGET_LOW,
         "target_max": VELOCITY_TARGET_HIGH, "new_verified_in_window": recent,
-        "state": velocity_state, "baseline_started_at": _utc(velocity_start)}
+        "state": velocity_state, "baseline_started_at": _utc(velocity_start),
+        "observed_at": _utc(now)}
     if previous_closed - current_closed or previous_gates - current_gates:
         snapshot["acceptance_regression"] = "UNKNOWN or regressed original closure; reconcile canonical evidence before claiming progress"
     progress_keys = {key for key, record in records.items() if record["semantic"]["kind"] == "required_evidence"

@@ -78,6 +78,21 @@ class StatusTextTests(unittest.TestCase):
         self.assertIn(f"{closed}/156 closed; {156 - closed} remaining", text)
         self.assertLessEqual(len(text.encode()), subject.MAX_BYTES)
 
+    def test_closure_velocity_is_displayed_only_from_fresh_matched_controller_evidence(self):
+        from os_goal_progress import project_progress
+        ledger = json.loads((Path(__file__).resolve().parents[2] /
+                             "docs/verification/m14-m15-closure-progress.json").read_text())
+        snap = project_progress(ledger, state={}, now=NOW)
+        snap["closure_velocity"] = {"observed_at": NOW.isoformat(), "window_seconds": 1800,
+                                     "target_min": 1, "target_max": 5,
+                                     "new_verified_in_window": 2, "state": "meeting_target"}
+        runtime = {"state": {"closure_target": None, "progress_snapshot": snap}}
+        live = subject.render_status_text(ledger, generated_at=NOW, runtime=runtime)
+        self.assertIn("Original-check closure velocity: 2 verified in rolling 30m; target 1-5", live)
+        snap["closure_velocity"]["observed_at"] = "2026-11-10T04:55:00Z"
+        stale = subject.render_status_text(ledger, generated_at=NOW, runtime=runtime)
+        self.assertIn("Original-check closure velocity: UNKNOWN", stale)
+
     def test_current_agents_are_union_of_roster_and_observed_turns(self):
         self.runtime["state"]["agents"]["root"].update(last_event_at="2026-11-10T04:59:54Z",
             quiet_seconds=6.0, retired=False, role="recorded dispatcher")

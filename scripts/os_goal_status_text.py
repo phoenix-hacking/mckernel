@@ -91,7 +91,8 @@ def _closure_summary(ledger, runtime, now, source_repo=None):
                 and snapshot.get("authority") == "derived_only" and target_matches
                 and snapshot.get("closed_original_checks") == current["closed_original_checks"]):
             for key in ("current_target", "target_status", "next_action", "operation", "remaining_conditions",
-                        "retained_capacity", "review_required", "decision_pending_seconds", "decision_status", "results"):
+                        "retained_capacity", "review_required", "decision_pending_seconds", "decision_status",
+                        "results", "closure_velocity"):
                 if key in snapshot:
                     current[key] = snapshot[key]
         elif state.get("closure_target") is not None:
@@ -103,6 +104,20 @@ def _closure_summary(ledger, runtime, now, source_repo=None):
     except (OSError, ValueError, TypeError, KeyError) as error:
         return ["CLOSURE DECISION VIEW", "Original closure state: UNKNOWN; " + _text(str(error)),
                 "Current target/next action: reconcile canonical inputs; no readiness or acceptance inferred.", ""]
+    velocity = current.get("closure_velocity")
+    velocity_text = "UNKNOWN (no fresh matching controller observation)"
+    if isinstance(velocity, dict):
+        try:
+            observed = _time(velocity.get("observed_at"))
+            age = (_time(now) - observed).total_seconds()
+            count = velocity.get("new_verified_in_window")
+            if (0 <= age <= 120 and type(count) is int and 0 <= count <= 156
+                    and velocity.get("window_seconds") == 1800
+                    and velocity.get("target_min") == 1 and velocity.get("target_max") == 5
+                    and velocity.get("state") in {"UNKNOWN", "warming_up", "below_target", "meeting_target"}):
+                velocity_text = str(count) + " verified in rolling 30m; target 1-5; " + velocity["state"]
+        except (ValueError, TypeError, OverflowError):
+            pass
     last = current.get("last_original_closure") or {}
     target = current.get("current_target") or {}
     operation = current.get("operation") or {}
@@ -110,6 +125,8 @@ def _closure_summary(ledger, runtime, now, source_repo=None):
              "Original checks: " + str(len(current["closed_original_checks"])) + "/" + str(current["counted_total"])
              + " closed; " + str(current["remaining_count"]) + " remaining. Original conditions and weights unchanged.",
              "Last original closure: " + _text(", ".join(last.get("original_checks", [])) or None) + " | UTC=" + _utc(last.get("at")),
+             "Current sequential milestone: " + _text(current.get("priority_milestone")),
+             "Original-check closure velocity: " + velocity_text,
              "Current target: " + _text(target.get("original_check")) + " | owner=" + _text(target.get("owner"))
              + " | state=" + _text(current.get("target_status")),
              "Next concrete action: " + _text(current.get("next_action")),
