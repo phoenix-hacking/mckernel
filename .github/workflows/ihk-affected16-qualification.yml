@@ -17,7 +17,7 @@ jobs:
       - name: Check out immutable reviewed source candidate
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: c1388ca7c0c94dd7c57513f593e3782b19a1f19d
+          ref: 06712df907bb6a9a72621234f4cbe1f74b2a47df
           fetch-depth: 1
           persist-credentials: false
           submodules: false
@@ -46,8 +46,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/ihk-affected-output"
-          test "$(git rev-parse HEAD)" = 'c1388ca7c0c94dd7c57513f593e3782b19a1f19d'
-          test "$(git rev-parse 'HEAD^{tree}')" = '87b385838f17bb0ac0134c03bffb3107cb8343ca'
+          test "$(git rev-parse HEAD)" = '06712df907bb6a9a72621234f4cbe1f74b2a47df'
+          test "$(git rev-parse 'HEAD^{tree}')" = 'b7412bb993b06ce6afee7d1c4b8bc03b60c55f71'
           test "$(git rev-parse HEAD:ihk)" = '9f1d0170ba199eb1a477f1ed85de44442f985cd1'
           test ! -e ihk/.git
           git rev-parse HEAD 'HEAD^{tree}' HEAD:ihk > "$RUNNER_TEMP/ihk-affected-output/source-identity.txt"
@@ -75,6 +75,7 @@ jobs:
           b46b4dd67eeb0b68db31235acd2d5995c7b0f38971a6a69e4deca31a1c068499  scripts/tests/test_native_rust_exact_build_workflow.py
           30f346a323975b89c41a229b51c15f82a2249b2c6ff8b50a2522bf7416035054  scripts/tests/test_restore_ihk_source.py
           5b1a7f3a85e94555a1449d3260424e257a3028faed72e6bbe2a3b9cbcffa06a3  scripts/tests/test_rocky_rust_staging.py
+          e7093537b711164f216ca2ef30414b705da1fc27e2bfda86717eb4f3b050606e  scripts/native_rust_runtime_evidence.py
           PINS
           /usr/bin/python3 -E -s scripts/ihk_source_layout.py --repo "$GITHUB_WORKSPACE" --expect 8d288b8bd81b50cc3a3f814d949b89bf416a6ec7 > "$RUNNER_TEMP/ihk-affected-output/layout.txt"
           cat "$RUNNER_TEMP/ihk-affected-output/source-pins.txt"
