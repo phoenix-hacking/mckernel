@@ -15,6 +15,8 @@ from os_goal_transport import (READ_ONLY_RPC_METHODS, classify_rpc_failure,
                                classify_service_failure, classify_usage_failure)
 from os_goal_handoff import write_recovery_handoff
 from os_goal_stop_log import write_stop_record
+from os_goal_custody import (current_owner_identity, retention_enabled,
+                             retention_matches)
 
 
 def process_start(pid):
@@ -355,8 +357,26 @@ def pidfd_send_signal(fd, signum):
     _linux_pidfd_syscall(424, ctypes.c_int(fd), ctypes.c_int(signum), ctypes.c_void_p(None), ctypes.c_uint(0))
 
 
-def retire_server(state, worker_pid):
+def unresolved_retention_claim(state):
+    """A different observer cannot release a structurally bound UNKNOWN owner."""
+    if not isinstance(state, dict):
+        return False
+    row = state.get("owner_retention")
+    owner = current_owner_identity(state, worker_pid=state.get("worker_pid"),
+                                   worker_start=state.get("worker_start"))
+    return (owner is not None and isinstance(row, dict)
+            and type(row.get("schema_version")) is int and row["schema_version"] == 1
+            and row.get("phase") == "owner_retained" and row.get("custody") == "UNKNOWN"
+            and row.get("invocation") == owner["log_dir"]
+            and all(row.get(key) == value for key, value in owner.items()))
+
+
+def retire_server(state, worker_pid, *, worker_start=None):
     """Retire only the recorded model server through a birth-checked pinned pidfd."""
+    # Authentication for supervising a controller is not proof of child/handle
+    # closure. Missing caller birth or a changed watcher never releases UNKNOWN.
+    if unresolved_retention_claim(state):
+        return False
     pid, birth = state.get("server_pid"), state.get("server_start")
     if pid is None:
         return True
@@ -428,12 +448,18 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     server_retirement_attempted = False
     child_start = None
     last_state = {}
+    current = {}
+    retain_owner = retention_enabled(args)
+    watcher_start = process_start(os.getpid()) if retain_owner else None
+    retained_owner = None
+    known_owner = None
+    owner_drift = False
     final_code = 1
     log = (directory / "watcher.jsonl").open("a", buffering=1)
 
     def record(event, **values):
         data = dict(event=event, at=time.time(), watcher_pid=os.getpid(),
-                    watcher_start=process_start(os.getpid()),
+                    watcher_start=watcher_start if retain_owner else process_start(os.getpid()),
                     guardian_run_id=getattr(args, "guardian_run_id", None),
                     worker_pid=child.pid if child else None, restarts=restarts,
                     credit_timeout_recovery=timeout_recovery, transport_recovery=transport_recovery,
@@ -445,7 +471,8 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                            and last_state.get("worker_start") == child_start)
             diagnostic = (dict(last_state) if same_worker else
                           {"worker_pid": child.pid if child else None, "worker_start": child_start})
-            diagnostic.update(watcher_pid=os.getpid(), watcher_start=process_start(os.getpid()))
+            diagnostic.update(watcher_pid=os.getpid(),
+                              watcher_start=watcher_start if retain_owner else process_start(os.getpid()))
             diagnostic["recovery_handoff"] = recovery_handoff
             decision = diagnostic.get("stop_decision")
             if (isinstance(decision, dict) and decision.get("log_dir") == diagnostic.get("log_dir")
@@ -467,6 +494,12 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
     def on_signal(signum, frame):
         stop_signals.append(signum)
         if child and child.poll() is None:
+            if retain_owner:
+                # Once confirmed, even the first signal must not disturb the
+                # retained controller. Before confirmation request its normal
+                # stop once; a failed receipt never permits SIGKILL escalation.
+                if retained_owner is not None or len(stop_signals) > 1:
+                    return
             child.send_signal(signum if len(stop_signals) == 1 else signal.SIGKILL)
 
     for signum in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
@@ -480,6 +513,12 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
             # An explicit fresh first launch is not authorization to reset every
             # replacement. Fresh recovery has its own opt-in and retirement proof.
             worker_argv = saved_recovery_argv(argv) if restarts or guardian_proof else list(argv)
+            if getattr(args, "continuous", False):
+                for option in ("--same-owner-control", "--retain-owner-on-stop", "--repair-agent-failures"):
+                    if option not in worker_argv:
+                        worker_argv.append(option)
+            if retain_owner and "--retain-owner-on-stop" not in worker_argv:
+                worker_argv.append("--retain-owner-on-stop")
             command = [sys.executable, "-B", str(repo / "scripts/run_os_goal.py"),
                        *worker_argv, "--worker", "--hours", str(remaining / 3600 if args.hours else 0)]
             if restarts or guardian_proof:
@@ -514,6 +553,27 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 if mtime != last_mtime:
                     heartbeat, last_mtime = now, mtime
                     current = snapshot(state_path)
+                    if retain_owner:
+                        owner = current_owner_identity(current, worker_pid=child.pid,
+                                                       worker_start=child_start)
+                        if known_owner is None and owner is not None:
+                            known_owner = owner
+                            last_state = dict(current)
+                        elif known_owner is not None:
+                            if owner == known_owner:
+                                last_state = dict(current)
+                            elif not owner_drift:
+                                owner_drift = True
+                                record("owner_identity_drift", owner_identity=known_owner,
+                                       observed_owner_identity=owner, custody="UNKNOWN",
+                                       operator_required=True, recovery_held=True,
+                                       native_release_authorized=False)
+                        if retained_owner is None and owner == known_owner and retention_matches(
+                                current, worker_pid=child.pid, worker_start=child_start,
+                                watcher_pid=os.getpid(), watcher_start=watcher_start):
+                            retained_owner = dict(current)
+                            record("owner_retained", owner_retention=current["owner_retention"],
+                                   recovery_held=True, native_release_authorized=False)
                     if timeout_recovery is not None and progress_marker(current, child.pid) is not None:
                         timeout_recovery = None
                     if transport_recovery is not None and progress_marker(current, child.pid) is not None:
@@ -528,11 +588,19 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                           + "; uptime=" + str(int(now - started))
                           + "s; state_updated=" + str(round(now - heartbeat, 1)) + "s ago", flush=True)
                     next_notice = now + args.heartbeat_seconds
+                if retained_owner is not None:
+                    # A work/grace/stall deadline is not custody closure. This
+                    # latch cannot be cleared by a later missing/changed receipt.
+                    time.sleep(0.25)
+                    continue
                 if not shutdown_at:
                     if stop_signals or now >= deadline:
                         if not stop_signals:
                             stop_signals.append(signal.SIGTERM)
-                            child.terminate()
+                            if retain_owner:
+                                child.send_signal(signal.SIGTERM)
+                            else:
+                                child.terminate()
                         shutdown_at = now + min(args.grace_seconds + 15, 615)
                     elif (args.watchdog_seconds and now - heartbeat > args.watchdog_seconds
                           or args.stall_seconds and marker is not None and now - progress_at > args.stall_seconds):
@@ -550,14 +618,14 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                             requested = False
                             try:
                                 worker_start = process_start(child.pid)
-                                watcher_start = process_start(os.getpid())
+                                current_watcher_start = process_start(os.getpid())
                                 if (not isinstance(worker_start, str) or not worker_start.isdigit()
-                                        or not isinstance(watcher_start, str) or not watcher_start.isdigit()):
+                                        or not isinstance(current_watcher_start, str) or not current_watcher_start.isdigit()):
                                     raise ValueError("Watchdog process identity is unresolved")
                                 request = directory / ("watchdog-request-" + str(child.pid)
                                                        + "-" + worker_start + ".json")
                                 write_json(request, {"schema_version": 1,
-                                    "watcher_pid": os.getpid(), "watcher_start": watcher_start,
+                                    "watcher_pid": os.getpid(), "watcher_start": current_watcher_start,
                                     "worker_pid": child.pid, "worker_start": worker_start,
                                     "reason": kind})
                                 requested = True
@@ -566,14 +634,24 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                             finally:
                                 if requested:
                                     child.send_signal(signal.SIGUSR1)
+                                elif retain_owner:
+                                    child.send_signal(signal.SIGTERM)
                                 else:
                                     child.terminate()
                         shutdown_at = now + min(args.grace_seconds, 30)
                 elif now >= shutdown_at and killed_at is None:
-                    child.kill()
-                    killed_at = now
-                    record("worker_forced_stop", grace_expired=True)
-                if len(stop_signals) > 1 and killed_at is None:
+                    if retain_owner:
+                        # Publication or the RPC pump may have failed. Keep the
+                        # original objects instead of treating silence as release.
+                        shutdown_at = float("inf")
+                        record("owner_retention_unconfirmed", owner_identity=known_owner,
+                               custody="UNKNOWN", operator_required=True,
+                               recovery_held=True, native_release_authorized=False)
+                    else:
+                        child.kill()
+                        killed_at = now
+                        record("worker_forced_stop", grace_expired=True)
+                if not retain_owner and len(stop_signals) > 1 and killed_at is None:
                     killed_at = now
                 if killed_at is not None and now - killed_at >= 5:
                     record("worker_kill_timed_out", recovery_stopped=True)
@@ -581,9 +659,28 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 time.sleep(0.25)
             final_code = child.returncode
             state = snapshot(state_path)
-            last_state = state
-            record("worker_exited", exit_code=final_code, thread_id=state.get("thread_id"),
-                   goal_status=(state.get("goal") or {}).get("status"))
+            if not retain_owner:
+                last_state = state
+            attributed = last_state if retain_owner and known_owner is not None else state
+            record("worker_exited", exit_code=final_code, thread_id=attributed.get("thread_id"),
+                   goal_status=(attributed.get("goal") or {}).get("status"))
+            if retain_owner:
+                owner = current_owner_identity(state, worker_pid=child.pid, worker_start=child_start)
+                if known_owner is None and owner is not None:
+                    known_owner = owner
+                    last_state = dict(state)
+                elif owner == known_owner and owner is not None:
+                    last_state = dict(state)
+                elif known_owner is not None and not owner_drift:
+                    owner_drift = True
+                    record("owner_identity_drift", owner_identity=known_owner,
+                           observed_owner_identity=owner, custody="UNKNOWN",
+                           operator_required=True, recovery_held=True, native_release_authorized=False)
+                record("owner_controller_lost", exit_code=final_code, owner_identity=known_owner,
+                       custody="UNKNOWN", operator_required=True, recovery_held=True,
+                       server_retirement_attempted=False, native_release_authorized=False)
+                final_code = 1
+                break
             if state.get("worker_pid") != child.pid:
                 record("recovery_stopped_worker_snapshot_mismatch", observed_worker_pid=state.get("worker_pid"))
                 final_code = 1
@@ -594,7 +691,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                 final_code = 1
                 break
             server_retirement_attempted = True
-            server_retired = retire_server(state, child.pid)
+            server_retired = retire_server(state, child.pid, worker_start=child_start)
             if not server_retired:
                 record("recovery_stopped_server_identity_unresolved")
                 final_code = 1
@@ -666,7 +763,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
             until = min(time.monotonic() + delay, deadline)
             while not stop_signals and time.monotonic() < until:
                 time.sleep(max(0, min(0.25, until - time.monotonic())))
-        if stop_signals:
+        if stop_signals and not retain_owner:
             final_code = 10
         record("watcher_stopped", exit_code=final_code)
         return final_code if final_code >= 0 else 1
@@ -683,7 +780,8 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
         try:
             if child is not None:
                 worker_retired = child.poll() is not None
-                if not worker_retired and isinstance(child_start, str) and child_start.isdigit():
+                if (not retain_owner and not worker_retired
+                        and isinstance(child_start, str) and child_start.isdigit()):
                     if process_start(child.pid) == child_start:
                         child.terminate()
                         try:
@@ -696,7 +794,7 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                                 except subprocess.TimeoutExpired:
                                     pass
                         worker_retired = child.poll() is not None
-                if worker_retired and not server_retirement_attempted:
+                if not retain_owner and worker_retired and not server_retirement_attempted:
                     try:
                         observed = snapshot(state_path)
                     except Exception:
@@ -706,11 +804,17 @@ def supervise(args, repo, directory, argv, lease_factory, write_json):
                             and observed.get("worker_start") == child_start):
                         last_state = observed
                         server_retirement_attempted = True
-                        server_retired = retire_server(observed, child.pid)
+                        server_retired = retire_server(observed, child.pid, worker_start=child_start)
             try:
                 record("watcher_retirement", worker_retired=worker_retired,
                        server_retirement_attempted=server_retirement_attempted,
-                       server_retired=server_retired, recovery_held=not (worker_retired and server_retired),
+                       server_retired=server_retired,
+                       recovery_held=(retain_owner and child is not None
+                                      or not (worker_retired and server_retired)),
+                       owner_identity=known_owner if retain_owner else None,
+                       owner_identity_drift=owner_drift if retain_owner else False,
+                       custody="UNKNOWN" if retain_owner and child is not None else None,
+                       operator_required=retain_owner and child is not None,
                        native_release_authorized=False)
             except Exception as error:
                 print("[os-watch] Retirement reporting unavailable: " + str(error), flush=True)

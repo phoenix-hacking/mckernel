@@ -77,7 +77,7 @@ def derive_contract(repo):
             },
             "current_boot_application_service_shutdown": {
                 "boot_prepare": "runs only while registry status is NotBooted; a nonzero result returns before Booting, remains NotBooted and leaves prior admission state unchanged",
-                "boot_start": "publishes Booting before start; zero publishes Ready, nonzero publishes Failed",
+                "boot_start": "publishes Booting before start; zero publishes Running for v6 callback ABI 2 and Ready for historical callback ABI 1; nonzero publishes Failed",
                 "boot_start_nonzero": "may have CPU effects and retains non-destroyable generation, owners and resources",
                 "resident_application_or_service": "returns EBUSY before v5 shutdown callback until its resident admission owner releases",
                 "shutdown_v5_nonzero": "callback must make no teardown effects; ShutdownGuard drop restores the original live registry status while preserving references",
@@ -87,7 +87,7 @@ def derive_contract(repo):
                 "shutdown_admission_rollback": "ShutdownAdmission drop reopens only an open gate closed by this attempt; a borrowed prior close and overflow poison stay closed",
                 "closed_gate_retry": "an idle closed non-poisoned gate can be borrowed for a shutdown retry and remains closed if that retry fails",
                 "successful_shutdown": "commits NotBooted with admission closed",
-                "reboot": "only successful start reopens a closed non-poisoned gate after Ready publication; a nonzero reboot start publishes Failed and leaves the prior closed gate closed",
+                "reboot": "only successful start reopens a closed non-poisoned gate after Ready or Running publication; a nonzero reboot start publishes Failed and leaves the prior closed gate closed",
                 "owner_release_order": "FileService or BackendApplication Close runs before its AdmissionOwner release, which runs before the OS lease release",
             },
             "image_load": {
@@ -103,8 +103,8 @@ def derive_contract(repo):
         },
         "verification_requirements": {
             "host_fixture": "complete production source with fault-injectable mocked Linux calls",
-            "adapter_cases": 24,
-            "total_cases": 62,
+            "adapter_cases": 32,
+            "total_cases": 70,
             "embedded_provider_registry_cases": 31,
             "kernel_abi_layout_proven_by_mock": False,
             "exact_rocky_build_and_guest_required": True,

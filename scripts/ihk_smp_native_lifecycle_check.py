@@ -45,13 +45,13 @@ EXPECTED_CRATE_MODULES = [{'destination': 'smp_resource.rs',
   'sha256': 'd4a5794f60be7fa5e549e7c9b806e366276d87370adbc5df94e51b8d464e8dcd'},
  {'destination': 'smp_cpu.rs',
   'path': 'host-kernel/native-rust/smp_cpu.rs',
-  'sha256': 'ed5520878d89e9a79d7ffeb128ccbb54fbab5472b4b0f57abd00a0399fc8e9cb'},
+  'sha256': 'f65f3aea00dfdd0a7905d3dd396e67684fd428c71cf34dd6e15a56896c73f912'},
  {'destination': 'abi/x86_64.rs',
   'path': 'host-kernel/native-rust/abi/x86_64.rs',
   'sha256': '89e0f72e821cbef91ad4771f4b4b24515d89035d357dc9c23c935a313b7d12c3'},
  {'destination': 'smp_memory.rs',
   'path': 'host-kernel/native-rust/smp_memory.rs',
-  'sha256': 'db0c5f94b5ea41610c501002ff359b7f23a38841715a0307e8b8f7872ac65522'},
+  'sha256': '60758aeafac150bd8aac62455844e3f4e4200a082f82f80ce66c3c871d4909be'},
  {'destination': 'ihk_mapping.rs',
   'path': 'host-kernel/native-rust/ihk_mapping.rs',
   'sha256': '085f4f4e7935bd273d89ae4c7f7d600da557ce1da8873f57a142dc12bf9677dc'},
@@ -1336,6 +1336,11 @@ struct ProviderOpenLease {
     expected_os_request = EXPECTED_OS_REQUEST.replace(
         "ihk_os_create_unbooted_v2", "ihk_os_create_unbooted_v6"
     ).replace(
+        "                    1,\n",
+        "                    // v6 callback ABI 2 publishes Running only after start\n"
+        "                    // awaits full guest readiness and all service workers.\n"
+        "                    2,\n",
+    ).replace(
         "                    Some(ihk_smp_os_release_v2),\n",
         "                    Some(ihk_smp_os_release_v2),\n"
         "                    Some(ihk_smp_prepare_boot_v3),\n"
@@ -1932,8 +1937,8 @@ def _validate_stage_manifest(
     build = manifest.get("build_contract", {})
     if build.get("project_c_link_objects") != 0:
         raise ValidationError("stage manifest does not enforce zero project C objects")
-    if build.get("allowed_project_source_suffixes") != [".rs"]:
-        raise ValidationError("stage manifest permits non-Rust project sources")
+    if build.get("allowed_project_source_suffixes") != [".rs", ".S"]:
+        raise ValidationError("stage manifest source suffixes differ from locked Rust/assembly policy")
     modules = [
         item for item in manifest.get("modules", []) if item.get("crate") == "ihk_smp_x86_64"
     ]

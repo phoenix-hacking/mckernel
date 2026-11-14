@@ -8,6 +8,7 @@ from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import os_goal_guard_protocol as protocol
+from os_goal_mailbox_status import summarize_mailbox_state
 import os_goal_status_feed as subject
 
 
@@ -82,7 +83,7 @@ class StatusFeedTests(unittest.TestCase):
             self.save(name, data)
         self.feed.tick()
         self.assertEqual(self.render.call_args.kwargs['runtime'], {
-            key: values[name] for key, name in (
+            key: summarize_mailbox_state(values[name]) if key == 'mailbox' else values[name] for key, name in (
                 ('state', 'state.json'), ('guardian', 'guardian.json'), ('watcher', 'watcher.json'),
                 ('mailbox', 'mailbox-state.json'), ('latest_stop', 'latest-stop.json'))})
 

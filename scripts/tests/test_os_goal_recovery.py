@@ -8,12 +8,15 @@ import json
 import os
 from pathlib import Path
 import signal
+import sys
 import tempfile
 import time
 from types import SimpleNamespace
 import unittest
 from unittest.mock import Mock, patch
 
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 SOURCE = Path(__file__).resolve().parents[1] / "watch_os_goal.py"
 SPEC = importlib.util.spec_from_file_location("os_goal_recovery_watch", SOURCE)
@@ -29,12 +32,12 @@ class RecoveryTests(unittest.TestCase):
             for code in (10, 20, 23, 24, 1, -9):
                 for watchdog in (False, True):
                     with self.subTest(reason=reason, code=code, watchdog=watchdog):
-                        state = {"goal": {"status": "paused"}, "stop_reason": reason,
+                        state = {"thread_id": "saved-thread", "goal": {"status": "paused"}, "stop_reason": reason,
                                  "retryable": True}
                         self.assertFalse(watcher.should_restart(code, state, watchdog=watchdog))
 
     def test_terminal_goals_and_supervisor_stop_override_transient_errors(self):
-        state = {"stop_reason": "server_error",
+        state = {"thread_id": "saved-thread", "stop_reason": "server_error",
                  "last_error": {"codexErrorInfo": "serverOverloaded"}}
         for status in ("complete", "usageLimited", "budgetLimited"):
             with self.subTest(status=status):
@@ -50,7 +53,7 @@ class RecoveryTests(unittest.TestCase):
                 for watchdog in (False, True):
                     with self.subTest(status=status, code=code, watchdog=watchdog):
                         self.assertFalse(watcher.should_restart(
-                            code, {"goal": {"status": status}}, watchdog=watchdog))
+                            code, {"thread_id": "saved-thread", "goal": {"status": status}}, watchdog=watchdog))
 
     def test_generic_failures_need_structured_transient_evidence(self):
         for reason in ("server_error", "turn_failed"):
@@ -63,33 +66,39 @@ class RecoveryTests(unittest.TestCase):
                             "stop_reason": reason, "last_error": error, "retryable": True,
                             "goal": {"status": "blocked"}}, watchdog=watchdog))
 
-    def test_recognized_transients_and_transport_continuation_still_recover(self):
+    def test_recognized_transients_require_current_typed_active_or_owned_paused_context(self):
         for status in ("active", "paused", "blocked"):
-            for reason in ("server_error", "turn_failed"):
+            for reason in ("server_error", "turn_failed", "rate_limit"):
                 for info in ("serverOverloaded", "rateLimitExceeded"):
+                    error = {"codexErrorInfo": info, "message": "Temporary backend unavailable"}
+                    state = {"thread_id": "saved-thread", "worker_pid": 100, "worker_start": "1100",
+                             "goal": {"status": status}, "stop_reason": reason, "last_error": error,
+                             "transport_failure": {"schema_version": 1, "worker_pid": 100,
+                                 "worker_start": "1100", "thread_id": "saved-thread", "class": "service_transient",
+                                 "error_type": "ServiceTransient", "method": None, "mutating": False,
+                                 "error": json.dumps(error, sort_keys=True, separators=(",", ":"))}}
                     with self.subTest(status=status, reason=reason, info=info):
-                        self.assertTrue(watcher.should_restart(23, {
-                            "goal": {"status": status}, "stop_reason": reason,
-                            "last_error": {"codexErrorInfo": info}}))
-            state = {"goal": {"status": status}}
-            self.assertTrue(watcher.should_restart(23, dict(state, stop_reason="rate_limit")))
-            self.assertTrue(watcher.should_restart(24, dict(state, stop_reason="active_goal_did_not_continue")))
-            self.assertTrue(watcher.should_restart(1, dict(state, stop_reason="launcher_error", retryable=True)))
-        self.assertTrue(watcher.should_restart(24, {}))
-        self.assertFalse(watcher.should_restart(1, {"retryable": False}))
+                        self.assertEqual(watcher.should_restart(23, state), status == "active")
+                    historical = dict(state); historical.pop("transport_failure")
+                    self.assertFalse(watcher.should_restart(23, historical))
+            state = {"thread_id": "saved-thread", "goal": {"status": status}}
+            self.assertFalse(watcher.should_restart(24, dict(state, stop_reason="active_goal_did_not_continue")))
+            self.assertFalse(watcher.should_restart(1, dict(state, stop_reason="launcher_error", retryable=True)))
+        self.assertFalse(watcher.should_restart(24, {}))
+        self.assertFalse(watcher.should_restart(1, {"thread_id": "saved-thread", "goal": {"status": "active"}, "retryable": False}))
 
     def test_direct_stop_signals_are_not_crashes(self):
         for signum in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
             with self.subTest(signal=signum):
-                self.assertFalse(watcher.should_restart(-signum, {"goal": {"status": "active"}}))
-        self.assertTrue(watcher.should_restart(-signal.SIGTERM, {"goal": {"status": "active"}}, watchdog=True))
-        self.assertTrue(watcher.should_restart(-signal.SIGKILL, {"goal": {"status": "active"}}))
+                self.assertFalse(watcher.should_restart(-signum, {"thread_id": "saved-thread", "goal": {"status": "active"}}))
+        self.assertTrue(watcher.should_restart(-signal.SIGTERM, {"thread_id": "saved-thread", "goal": {"status": "active"}}, watchdog=True))
+        self.assertTrue(watcher.should_restart(-signal.SIGKILL, {"thread_id": "saved-thread", "goal": {"status": "active"}}))
 
     def test_usage_auth_and_policy_stops_survive_crash_and_watchdog(self):
-        states = [{"stop_reason": reason} for reason in (
+        states = [{"thread_id": "saved-thread", "stop_reason": reason} for reason in (
             "included_usage_guard", "included_usage_unknown", "credit_balance_decreased",
             "credit_balance_unknown", "chatgpt_auth_required", "chatgpt_auth_changed")]
-        states.extend({"stop_reason": "launcher_error", "last_error": {"codexErrorInfo": info}}
+        states.extend({"thread_id": "saved-thread", "stop_reason": "launcher_error", "last_error": {"codexErrorInfo": info}}
                       for info in ("cyberPolicy", "unauthorized", "quotaExceeded",
                                    "insufficientCredits", {"cyberPolicy": {}}))
         for state in states:
@@ -100,8 +109,8 @@ class RecoveryTests(unittest.TestCase):
 
     def test_watchdog_checkpoint_requires_positive_supervisor_classification(self):
         for status in ("active", "paused", "blocked"):
-            state = {"stop_reason": "watchdog_recovery", "goal": {"status": status}}
-            self.assertTrue(watcher.should_restart(10, state, watchdog=True))
+            state = {"thread_id": "saved-thread", "stop_reason": "watchdog_recovery", "goal": {"status": status}}
+            self.assertEqual(watcher.should_restart(10, state, watchdog=True), status in {"active", "paused"})
             self.assertFalse(watcher.should_restart(10, state))
             self.assertFalse(watcher.should_restart(10, state, watchdog=True, stopped=True))
             self.assertFalse(watcher.should_restart(21, state, watchdog=True))
@@ -118,6 +127,10 @@ class RecoveryTests(unittest.TestCase):
             child.poll.return_value = child.returncode
         if watchdog:
             children[0].poll.side_effect = [None, None, children[0].returncode]
+        states = [dict(row, worker_start=row.get("worker_start", str(1000 + row.get("worker_pid", 0))))
+                  for row in states]
+        if watchdog and states and states[0].get("worker_pid") == children[0].pid:
+            states[0]["worker_start"] = "12345"
         lease, writes = Mock(), []
         with tempfile.TemporaryDirectory(prefix="os-goal-recovery-test-") as temporary:
             directory = Path(temporary)
@@ -132,6 +145,8 @@ class RecoveryTests(unittest.TestCase):
             def process_start(pid):
                 if watchdog and pid == children[0].pid:
                     return "12345"
+                if any(child.pid == pid for child in children):
+                    return str(1000 + pid)
                 return original_process_start(pid)
 
             def snapshot(path):
@@ -172,8 +187,12 @@ class RecoveryTests(unittest.TestCase):
 
     def test_code24_resumes_saved_session_after_server_retirement(self):
         states = [{"thread_id": "saved-thread", "worker_pid": 100,
-                   "goal": {"status": "paused"}, "cleanup_verified": False,
-                   "stop_reason": "active_goal_did_not_continue"},
+                   "goal": {"status": "active"}, "cleanup_verified": False,
+                   "stop_reason": "active_goal_did_not_continue", "retryable": True,
+                   "transport_failure": {"schema_version": 1, "worker_pid": 100,
+                       "worker_start": "1100", "thread_id": "saved-thread", "class": "continuation_stall",
+                       "error": "active_goal_did_not_continue", "error_type": "ContinuationStall",
+                       "method": None, "mutating": False}},
                   {"thread_id": "saved-thread", "worker_pid": 101,
                    "goal": {"status": "complete"}, "cleanup_verified": False}]
         code, spawns, records, retired = self.supervise([24, 0], states)
@@ -196,7 +215,7 @@ class RecoveryTests(unittest.TestCase):
     def test_fresh_recovery_preserves_same_prepaid_credit_run(self):
         states = [{"thread_id": "old-thread", "worker_pid": 100,
                    "goal": {"status": "active"}},
-                  {"thread_id": "new-thread", "worker_pid": 101,
+                  {"thread_id": "old-thread", "worker_pid": 101,
                    "goal": {"status": "complete"}}]
         ident = "a" * 32
         argv = ["--fresh-on-recovery", "--credit-budget", "100", "--credit-run-id", ident]
@@ -219,33 +238,22 @@ class RecoveryTests(unittest.TestCase):
         self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
         self.assertIn("restarting_saved_session", [row["event"] for row in records])
 
-    def test_fresh_recovery_receipt_binds_classified_retired_worker_snapshot(self):
+    def test_fresh_opt_in_cannot_archive_unreconciled_remote_cursor(self):
         states = [{"thread_id": "old-thread", "worker_pid": 100,
                    "phase": "running", "goal": {"status": "active"}},
-                  {"thread_id": "new-thread", "worker_pid": 101,
+                  {"thread_id": "old-thread", "worker_pid": 101,
                    "goal": {"status": "complete"}}]
         code, spawns, records, retired = self.supervise(
             [-9, 0], states, fresh=True, argv=["--fresh-session", "--fresh-on-recovery"])
         self.assertEqual(code, 0)
-        self.assertNotIn("--fresh-recovery-proof", spawns[0].args[0])
         self.assertNotIn("--fresh-session", spawns[1].args[0])
-        command = spawns[1].args[0]
-        proof_path = Path(command[command.index("--fresh-recovery-proof") + 1])
-        self.assertTrue(proof_path.name.startswith("fresh-recovery-"))
-        proofs = [row for row in records if row.get("schema_version") == 1]
-        self.assertEqual(len(proofs), 1)
-        proof = proofs[0]
-        self.assertEqual(proof["worker_pid"], 100)
-        self.assertEqual(proof["thread_id"], "old-thread")
-        self.assertEqual(proof["exit_code"], -9)
-        self.assertTrue(proof["server_retired"])
-        self.assertFalse(proof["stopped"])
-        self.assertFalse(proof["watchdog"])
-        self.assertEqual(proof["state_sha256"], hashlib.sha256(
-            json.dumps(states[0]).encode()).hexdigest())
-        self.assertIsNotNone(proof["watcher_start"])
+        self.assertNotIn("--fresh-on-recovery", spawns[1].args[0])
+        self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
+        self.assertIn("--recovery-require-active", spawns[1].args[0])
         self.assertEqual([call.args[1] for call in retired], [100, 101])
-        self.assertIn("restarting_fresh_session", [row.get("event") for row in records])
+        self.assertIn("restarting_saved_session", [row.get("event") for row in records])
+        self.assertNotIn("restarting_fresh_session", [row.get("event") for row in records])
+        self.assertTrue(any(row.get("recovery_handoff") for row in records))
 
     def test_fresh_opt_in_cannot_override_stop_or_unresolved_retirement(self):
         cases = [("signal_15", True), ("included_usage_guard", True),
@@ -260,25 +268,25 @@ class RecoveryTests(unittest.TestCase):
                 self.assertEqual(len(spawns), 1)
                 self.assertFalse(any(row.get("schema_version") == 1 for row in records))
 
-    def test_watchdog_termination_can_authorize_fresh_recovery_after_retirement(self):
+    def test_watchdog_termination_reconnects_same_cursor_after_retirement(self):
         states = [{"thread_id": "hung-thread", "worker_pid": 100,
                    "phase": "running", "goal": {"status": "active"}},
-                  {"thread_id": "new-thread", "worker_pid": 101,
+                  {"thread_id": "hung-thread", "worker_pid": 101,
                    "goal": {"status": "complete"}}]
         code, spawns, records, _ = self.supervise(
             [-signal.SIGTERM, 0], states, fresh=True, watchdog=True)
         self.assertEqual(code, 0)
         self.assertEqual(len(spawns), 2)
         self.assertIn("heartbeat_stalled", [row.get("event") for row in records])
-        proof = next(row for row in records if row.get("server_retired") is True)
-        self.assertTrue(proof["watchdog"])
-        self.assertTrue(proof["server_retired"])
+        self.assertIn("--recovery-require-active", spawns[1].args[0])
+        self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
+        self.assertTrue(any(row.get("server_retired") is True for row in records))
 
     def test_responsive_watchdog_checkpoint_recovers_paused_goal(self):
         states = [{"thread_id": "hung-thread", "worker_pid": 100,
                    "phase": "stopped", "goal": {"status": "paused"},
                    "stop_reason": "watchdog_recovery"},
-                  {"thread_id": "new-thread", "worker_pid": 101,
+                  {"thread_id": "hung-thread", "worker_pid": 101,
                    "goal": {"status": "complete"}}]
         code, spawns, records, _ = self.supervise([10, 0], states, fresh=True, watchdog=True)
         self.assertEqual(code, 0)
@@ -286,21 +294,20 @@ class RecoveryTests(unittest.TestCase):
         request = next(row for row in records if row.get("reason") == "heartbeat_stalled"
                        and "watcher_start" in row)
         self.assertEqual(request["worker_start"], "12345")
-        proof = next(row for row in records if row.get("server_retired") is True)
-        self.assertTrue(proof["watchdog"])
+        self.assertIn("--recovery-goal-sha256", spawns[1].args[0])
+        self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
+        restart = next(row for row in records if row.get("event") == "restarting_saved_session")
+        self.assertEqual(restart["transport_recovery"]["origin_kind"], "authenticated_watchdog")
 
-    def test_fresh_recovery_resumes_prepared_bootstrap_without_archiving(self):
+    def test_unknown_bootstrap_goal_is_held_without_new_thread(self):
         for thread_id in (None, "bootstrapping-thread"):
             states = [{"thread_id": thread_id, "worker_pid": 100,
-                       "phase": "starting", "previous_session": {"thread_id": "prior-thread"}},
-                      {"thread_id": "new-thread", "worker_pid": 101,
-                       "goal": {"status": "complete"}}]
+                       "phase": "starting", "previous_session": {"thread_id": "prior-thread"}}]
             with self.subTest(thread_id=thread_id):
-                _, spawns, records, _ = self.supervise([-9, 0], states, fresh=True)
-                self.assertEqual(len(spawns), 2)
-                self.assertNotIn("--fresh-recovery-proof", spawns[1].args[0])
-                self.assertFalse(any(row.get("server_retired") is True for row in records))
-                self.assertIn("restarting_saved_session", [row.get("event") for row in records])
+                _, spawns, records, _ = self.supervise([-9], states, fresh=True)
+                self.assertEqual(len(spawns), 1)
+                self.assertNotIn("restarting_saved_session", [row.get("event") for row in records])
+                self.assertNotIn("restarting_fresh_session", [row.get("event") for row in records])
 
     def test_restart_limit_prevents_fresh_recovery_receipt(self):
         _, spawns, records, _ = self.supervise([-9], [{

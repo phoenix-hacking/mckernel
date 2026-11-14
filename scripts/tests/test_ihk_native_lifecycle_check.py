@@ -301,6 +301,37 @@ class IhkNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "dependency set"):
             lifecycle.validate_repository(self.repo)
 
+    def test_stage_manifest_requires_exact_rust_assembly_suffixes(self) -> None:
+        lifecycle.validate_repository(self.repo)
+        path = self.repo / self.contract["stage_manifest"]
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual([".rs", ".S"], manifest["build_contract"]["allowed_project_source_suffixes"])
+        for suffixes in ([".rs"], [".rs", ".S", ".c"], [".rs", ".s"], [".S", ".rs"]):
+            with self.subTest(suffixes=suffixes):
+                manifest["build_contract"]["allowed_project_source_suffixes"] = suffixes
+                path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+                with self.assertRaisesRegex(lifecycle.ValidationError, "source suffixes differ"):
+                    lifecycle.validate_repository(self.repo)
+
+    def test_refreshed_application_and_runtime_inputs_reject_byte_drift(self) -> None:
+        lifecycle.validate_repository(self.repo)
+        cases = (
+            ("host-kernel/native-rust/abi/application.rs", "module digest is stale"),
+            ("host-kernel/native-rust/os_runtime.rs", r"support_sources\[6\] digest is stale"),
+            ("scripts/tests/fixtures/ihk_os_runtime_compile.rs", "native OS adapter contract differs"),
+            ("scripts/tests/test_ihk_os_runtime.py", "native OS adapter contract differs"),
+        )
+        for relative, error in cases:
+            path = self.repo / relative
+            original = path.read_bytes()
+            with self.subTest(input=relative):
+                path.write_bytes(original + b"\n")
+                try:
+                    with self.assertRaisesRegex(lifecycle.ValidationError, error):
+                        lifecycle.validate_repository(self.repo)
+                finally:
+                    path.write_bytes(original)
+
     def test_support_source_drift_is_rejected(self) -> None:
         support = self.contract["support_sources"][1]
         self.mutate_text(

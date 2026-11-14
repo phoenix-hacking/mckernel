@@ -173,6 +173,35 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "overclaims readiness"):
             lifecycle.validate_repository(self.repo)
 
+    def test_cpu_and_memory_dependency_pins_reject_byte_drift(self) -> None:
+        lifecycle.validate_repository(self.repo)
+        for dependency in self.contract["crate_modules"]:
+            if dependency["destination"] not in ("smp_cpu.rs", "smp_memory.rs"):
+                continue
+            path = self.repo / dependency["path"]
+            original = path.read_bytes()
+            with self.subTest(dependency=dependency["destination"]):
+                path.write_bytes(original + b"\n")
+                try:
+                    with self.assertRaisesRegex(
+                        lifecycle.ValidationError, "compiled dependency digest differs"
+                    ):
+                        lifecycle.validate_repository(self.repo)
+                finally:
+                    path.write_bytes(original)
+
+    def test_stage_manifest_requires_exact_rust_assembly_suffixes(self) -> None:
+        lifecycle.validate_repository(self.repo)
+        relative = self.contract["stage_manifest"]
+        manifest = json.loads((self.repo / relative).read_text(encoding="utf-8"))
+        self.assertEqual([".rs", ".S"], manifest["build_contract"]["allowed_project_source_suffixes"])
+        for suffixes in ([".rs"], [".rs", ".S", ".c"], [".rs", ".s"], [".S", ".rs"]):
+            with self.subTest(suffixes=suffixes):
+                manifest["build_contract"]["allowed_project_source_suffixes"] = suffixes
+                self.write_json(relative, manifest)
+                with self.assertRaisesRegex(lifecycle.ValidationError, "source suffixes differ"):
+                    lifecycle.validate_repository(self.repo)
+
     def test_stage_manifest_cannot_omit_smp_resource_policy(self) -> None:
         manifest = json.loads(
             (self.repo / self.contract["stage_manifest"]).read_text(encoding="utf-8")
@@ -604,6 +633,38 @@ class IhkSmpNativeLifecycleCheckTests(unittest.TestCase):
                 ),
                 self.contract,
             )
+
+    def test_unbooted_v6_dispatcher_requires_abi2_owner_and_ordered_callbacks(self) -> None:
+        source = (self.repo / self.contract["production_source"]).read_text(
+            encoding="utf-8"
+        )
+        lifecycle._validate_rust_source(source, self.contract)
+        start = source.index("fn control_device_request(")
+        end = source.index("\n}\n", start) + 2
+        dispatcher = source[start:end]
+        self.assertEqual(source.count(dispatcher), 1)
+        cases = (
+            ("ABI1", "                    2,\n", "                    1,\n"),
+            ("module-owner", "THIS_MODULE.as_ptr().cast()", "core::ptr::null_mut()"),
+            ("release", "Some(ihk_smp_os_release_v2)", "None"),
+            (
+                "boot-order",
+                "Some(ihk_smp_prepare_boot_v3),\n                    Some(ihk_smp_start_boot_v3)",
+                "Some(ihk_smp_start_boot_v3),\n                    Some(ihk_smp_prepare_boot_v3)",
+            ),
+            (
+                "application-order",
+                "Some(application_open),\n                    Some(application_invoke)",
+                "Some(application_invoke),\n                    Some(application_open)",
+            ),
+            ("shutdown", "Some(ihk_smp_shutdown_v6)", "None"),
+        )
+        for label, old, new in cases:
+            with self.subTest(dispatch_contract=label):
+                self.assertEqual(dispatcher.count(old), 1)
+                changed = source.replace(dispatcher, dispatcher.replace(old, new, 1), 1)
+                with self.assertRaisesRegex(lifecycle.ValidationError, "unbooted OS request"):
+                    lifecycle._validate_rust_source(changed, self.contract)
 
     def test_control_device_ioctl_surface_is_bounded_to_identity_and_unbooted_os(self) -> None:
         source = (self.repo / self.contract["production_source"]).read_text(

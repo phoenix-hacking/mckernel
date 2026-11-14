@@ -565,6 +565,38 @@ class McctrlNativeLifecycleCheckTests(unittest.TestCase):
         with self.assertRaisesRegex(lifecycle.ValidationError, "import namespace"):
             lifecycle.validate_repository(self.repo)
 
+    def test_stage_manifest_requires_exact_rust_assembly_suffixes(self) -> None:
+        lifecycle.validate_repository(self.repo)
+        relative = self.contract["stage_manifest"]
+        manifest = json.loads((self.repo / relative).read_text(encoding="utf-8"))
+        self.assertEqual([".rs", ".S"], manifest["build_contract"]["allowed_project_source_suffixes"])
+        for suffixes in ([".rs"], [".rs", ".S", ".c"], [".rs", ".s"], [".S", ".rs"]):
+            with self.subTest(suffixes=suffixes):
+                manifest["build_contract"]["allowed_project_source_suffixes"] = suffixes
+                self.write_json(relative, manifest)
+                with self.assertRaisesRegex(lifecycle.ValidationError, "source suffixes differ"):
+                    lifecycle.validate_repository(self.repo)
+
+    def test_kbuild_requires_only_the_exact_ordered_rust_assembly_composite(self) -> None:
+        text = (self.repo / self.contract["kbuild"]["path"]).read_text(encoding="utf-8")
+        lifecycle._validate_kbuild(text, self.contract)
+        composite = "mcctrl-y := mcctrl_rust.o m15_mmap_trace_gates.o m15_mm_write_warning.o"
+        self.assertEqual(text.count(composite), 1)
+        cases = (
+            ("missing-rust", "mcctrl-y := m15_mmap_trace_gates.o m15_mm_write_warning.o"),
+            ("reordered", "mcctrl-y := mcctrl_rust.o m15_mm_write_warning.o m15_mmap_trace_gates.o"),
+            ("duplicate-owner", composite + " mcctrl_rust.o"),
+            ("extra-object", composite + " unqualified.o"),
+            ("C-input", composite + " legacy.c"),
+            ("alternate-list", composite.replace("mcctrl-y :=", "mcctrl-objs :=")),
+            ("duplicate-mapping", composite + "\n" + composite),
+        )
+        for label, changed in cases:
+            with self.subTest(composite=label), self.assertRaisesRegex(
+                lifecycle.ValidationError, "shared native Rust Kbuild policy"
+            ):
+                lifecycle._validate_kbuild(text.replace(composite, changed, 1), self.contract)
+
     def test_shared_kbuild_continued_comment_is_rejected(self) -> None:
         self.mutate_text(
             self.contract["kbuild"]["path"],
