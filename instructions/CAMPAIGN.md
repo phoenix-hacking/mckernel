@@ -1,65 +1,123 @@
 # McKernel: M14 → M15 → complete supported system
 
-## ACTIVE manual eleven-slot run — 2026-11-14T06:45:32.649815+00:00
+## ACTIVE manual eleven-slot run — current checkpoint 2026-11-14T08:40:30.782985+00:00
 
-Operator completed the controlled same-Root restart. Current invocation
-20261114T063545Z-0eca897f is ACTIVE, worker2661996/b72441123 and server2661998/
-b72441133. Strict live backend/settings/env readbackd0969a52 is exactly11,
-Sol/xhigh/depth1; account is genuinely freshACCEPTED with unchanged finite7c6
-ceiling52079.8011050000/history. Eleven is a source coordination ceiling, not
-11 active owners or payload budgets. HOST0,6,7/max3/4GiB TOTAL includingALL
-controllers/owners/retained charges and fresh26GiB/floors remain; native2-5/
-12GiB/singleowner separate actual admission. No further restart/pause or capacity
-verification is needed. Earlier configuration-pause headings below are historical.
+Same savedRoot01a18bc3-e072-7810-9426-75101b0856c0, invocation
+20261114T063545Z-0eca897f, worker2661996/b72441123/server2661998/b72441133.
+Actual strict11/Sol/xhigh/depth1 transitiond0969a52 is COMPLETE; no restart,
+capacity audit, newRoot, reset or hotpatch. Source slots do not multiply HOST
+budgets. Keep fresh genuine account/credit/source/permission/owner/resource gates.
+Same finite7c6 ceiling52079.8011050000/history; every actual stop wins.
 
-Current original111/156 (45open), M14=80.19%, M15=74.59%, neither milestone accepted.
-Root explicitly accepted original M14-I01 source/ABI/image ownership using full-clause
-GO3aa05996; E1/E2/E3 stay closed. No new test/build/native operation or hold release.
-Public acceptance: docs/verification/m14-i01-original-acceptance-20261114/.
-Six counted source/image checks stay closed, including original I01 acceptance;
-no green adjudication/build rerun.
-Original18067/40491 HOST2.25/jobs2 is genuinely Q39/Root49 scoped retired; original
-outcomes remainUNKNOWN. Failed F02 compoundfamily1.125GiB/job1 is Q917/Root4dae
-retired and container removed. Native12/source-publication/otherlease/IPC/account/
-policy/scratch21/globalUNKNOWN/rejected-worker/turn/nonces remain preserved.
+Original111/156 accepted (45open), M14=80.19%, M15=74.59%, NEITHER milestone
+accepted. Root explicitly accepted original M14-I01 using full-clauseGO3aa05996
+and existing E1/E2/E3/current C4/ABI35/final13-input image ownership; no new test
+or native quota. Six counted source/image checks remain closed. Original criteria,
+weights and156 denominator unchanged. Acceptance checkpoint e6deeb36e and production
+artifact checkpoint41d7a5166 are pushed/fetched verified. Public evidence:
+docs/verification/m14-i01-original-acceptance-20261114/ and
+docs/verification/m15-f02-production-continuation-20261114/.
 
-Foreground active_source_integration exclusively authors the actual failed
-passive-B GNU nm correction and no-compile/no-relink continuation. Saved production
-A objectb245426d and actual linkedELF80a5598d/map are retained; DO NOT compile A or
-relink green inputs. Changed-source GObd244f51 is complete; Root next executes only failed passive
-continuation28f3123f under fresh admission. Actual119/124 provider Q1f0dda13 passes
-with zero deltas/unknowns and is reused; remaining unique-definition/lifetime
-metadata and actual own-family closure are unproved until this operation. Canonical disjoint source work
-may prepare normal-native-current/publication bindings and exact cached46d vendor
-RedHat192 compiler/runtime acquisition; Root alone performs privileged/native or
-payload execution after actual gates. The immutable SDK46d is reused, no imagebuild.
+CURRENT owned HOST reservation is268435456B/job1 for the FAILED, never-started
+cached supplier scope. Do not use older HOST0 snapshots as current clearance.
+Original18067/40491 HOST2.25GiB/jobs2 writer/privatelease scope is genuinely Q39/
+Root49 retired, original outcomesUNKNOWN. Failed production compound Q917/Root4dae,
+passiveB Q8329/Rootf54a and first F05 Q456/Root8a25 are separately scoped retired.
+Native12/currentfree/source-publication/otherlease/IPC/account/service/policy/
+scratch21/globalUNKNOWN/rejected-worker/turn/nonces remain distinct and preserved.
+HOST0,6,7/max3jobs/4GiB TOTAL includes this retained charge, ALL controls/models/
+captures and every new family, fresh26GiB and packet disk floors. Native2-5/
+12GiB/singleowner requires separate actual admission; never borrow its CPUs.
 
-Actual passive-B continuation now returned0 under fresh Root admission in exact46d,
-container857bb767/CPU7/1GiB. No compile/relink/readelf/undefined rerun: only supported
-nm and two descriptor-order disassemblies plus input/artifact captures. All11
-readonly inputs match before/after;9 original CLI waits/18streams are closed and
-fsynced, nonOOM/exited/Pid0/remove/absence proved. FullRoot4813a07a and actual
-EXECUTION are at passive-B-correction-1/ROOT-ACTUAL-PASSIVE-EXECUTION-1. NativeBinding
-independently qualifies final definitions/lifetime (foreground owner; duplicate
-canonical review stopped). Actual own-familyQ8329f3ad and Root scoped receipt
-f54a9171 now retire ONLY this1.125GiB/job1/exactCID. Current known Root HOST
-payload census is0bytes/jobs plus measured overhead, not native/UNKNOWN clearance
-or a future grant. ArtifactQe11ecf97 now passes598uniqueRust+3ASM/current119-124
-providers and actual descriptor release order. Public exact artifact/providerQ and
-Root scoped receipt summary: docs/verification/m15-f02-production-continuation-20261114/.
-M15Leaf reviews only the literal whole complete-ABI-behavior clause using this and
-unchanged valid behavior evidence; wholeF02/native is not accepted.
-Supplier Proc reviewc23d0236 found only buffer-before-bound/lost owning-context
-contract; originalTimeSource is correcting that exact routine in private fresh
-capture-contract-correction-1, no compiler/network or green image review. Healthy
-NativeCurrent retains publication failure-boundary repair; no duplicate author.
+Actual completed executor increment: whole production objectb245426d/ELF80a5598d/
+mapc134 were reused, no compile/relink/ABI/green fixture rerun. Passive continuation
+28f3123f returned0 in exact46d. ArtifactQe11ecf97 covers598Rust globals+3ASM,
+119/124 providersQ1f0dda13 and actual descriptor-release ordering. Own-familyQ8329
+covers9 original waits/18 closed/fsynced streams/exactCID terminal/nonOOM/Pid0/
+remove/absence/fullRoot4813; Rootf54a retires ONLY1.125GiB/job1. WholeF02/native
+acceptance was NOT earned by this metadata/artifact increment.
 
-All new source owners/reviewers explicitly gpt-6.1-sol/xhigh/depth1. Excluded
-worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02
-and rejected collector/equivalents remain excluded, no replay/rephrase/reassign.
-No ledger reset, purchase/account/model workaround, auto-relaunch or fake holds
-clear. Continue real eligible original work; stop actual user/account/budget stop,
-M14 final beforeM15, checkpoint/pause after BOTH original acceptances only.
+Actual F05 first attempt: outer2681635/b72824872 returned1; createdCID704bb1f4
+profile check refused BEFORE start/compiler because Config.Env order differed,
+with all13 exact names/values identical. Q456fd865+Root8a25 retire ONLY805306368B/
+job1/exactCID; raw fullRoot31760, original errors/EXTERNAL_REQUIRED snapshots stay.
+One bounded strict Env-map correction has operationGO2162c727 and literalargv9f4f:
+env-order-correction-1 under m15-f05-current-invocation-binding-20261114. It rejects
+malformed/duplicate/missing/extra/changed variables and preserves every other
+Config/HostConfig/mount guard. This corrected batch has NOT launched: Root's reuse
+wrapper hit shellmode then current-contract KeyError PREINPUT, before grant/cap/
+Popen/job. Those failed wrappers are retained; NativeBinding fixes the exact contract
+and same-Popen timeout/report/FD custody boundary after ProcNO_GO902fd2cd. No
+unchanged retry or extra source/oracle/ABI review. Next execution is only caller
+compile/link then passive readelf, after wrapperGO and fresh actual805MiB grant
+including the retained supplier256MiB/job1; protected preflight requires Docker[].
+
+Actual supplier attempt7bb4a70f: createdCIDba0238ea was NEVER started (Pid0,
+zeroStartedAt); no compiler/version/query payload ran. Complete HostConfig check
+refused only Ulimits ORDER; core0/cpu60/fsize134217728 values are identical. Its
+new256MiB/job1 remains charged. Current originaltool14790 and exact own parent/
+outer/Root-wait-wrapper are retained; saved3-role metadata5db8 and genuine original
+source63d9/started6033 are private at validator-pin-binding-correction-1/
+ROOT-ACTUAL-EXECUTION-1. Outer1200s query and Root300s wait timed out; current source
+has no supported terminal-consume route. No original wait/FD-close success is
+invented. TimeSource froze separate THREE-role cancellation/reconciliation packet
+under actual-failure-disposition-1/three-role-cancellation-1; Proc independently
+reviews exact createdCID nonforce cleanup and guarded ownpidfd parent→outer→
+Rootwrapper scope. NEVER signal tool14790 runtime, its2685744 owner, live controls,
+healthy peers/native/shared services. Parent-only packet75a8 is unexecuted and
+inapplicable. NEW cleanup128MiB/CPU0/job1 is UNISSUED until exactGO/fresh admission.
+Actual originaltool terminal/currentFD/channel/container/source proof plus independent
+canceled-physical-scopeQ/Root receipt are required for any256MiB retirement;
+nested Popen outcomes may stayUNSAVED/UNKNOWN. No process-death-only release.
+Future Ulimits fix must compare unique exact Name/Soft/Hard rows keyed byName,
+retain all other guards and make a known CREATED-only failure finite via reviewed
+ownCID cleanup; UNKNOWN running/FD outcomes still retain original custody.
+
+Immediate original M15-F02-complete-ABI-behavior source delta: real-file shebang
+work found lost getline allocation base through recursion/argv. Repaired complete
+production helper61710a98 has independent SOURCE GOd603cb31; unchanged publicABI,
+provider declarations/public borrowed helper and defined string behavior, truebase/
+packed-copy ownership through lastborrow/errors, explicit errno-or-ENOEXEC read
+failure cleanup. Canonical/source selection remains unchanged pending real changed
+compile/link/case validation. NEW producer6171 packet e81edb86 has foreground SOURCE-
+PREPARATION GO3be9f59c; new caller372cd208/b792e639 has separate GO359b3267. No new
+object/ELF/test result exists yet. Compile ONLY changed whole executorRust object
+once (19570eb/46d/110B8d/other15 inputs unchanged), preserve actualA checkpoint,
+link unchanged providers once using corrected B --extern-only, then qualify new
+artifacts/lifecycle and bind their TRUE identities into minimal real-libc/file cases.
+Never substitute oldb245/80a or test-owned free for repaired production cleanup.
+Successful terminalELF/main/phase1 backend behavior remains separately unproved.
+Foreground review owners are healthy; no duplicate canonical reviews or green
+SDK/Linux/module/C4/78wordABI/provider/fixture reruns.
+
+F08 current-invocation packet has exact operationGO5c6b153f/fullargv9a1d2133 after
+fixing old prefixed-scope/unprefixed-operation contradiction while retaining both
+identity guards. Root finalized actual request23372def with genuine current-owner
+676B/f650 and shared7994B account consumerd072/SOURCE_GO517e; the latter changes
+ONLY validator pin to actual canonical6c926984, all account guards identical.
+No F08 nonce/seed/provider-lifetime/no-event/source-permission/fresh33field grant or
+case has been issued. No successful publication/native prerequisite is added to
+this HOST no-event slice, but its exact real exclusive/lifetime/resource gates bind.
+
+Publication prospective observability repair parent823b/keeper08e7/phase0af6f has
+independent SOURCE GOfda62213. Normal/FULL bodies and original signals/waits stay
+exact. Separate failure-only owned lease/custody/finite-exit authority remains
+UNISSUED/UNIMPLEMENTED; no publisher/native replay or installation success inferred.
+Native source/SDK/currentfree admission, real normal publication+NEW30physicalQ/
+BOTH namespaces precede designated signal.alternate-repeat c964/a2f/f133. New C4
+c818 direct-recipe proof is not silently substituted into that frozen case.
+
+All new assignments explicitSol/xhigh/depth1, up11 USEFUL direct slots, one Root
+compositor/executor. No reporting/inventory jobs or empty containers. Foreground
+owns per-subgoal reporting and user-authorized20minute assistance; no duplicate
+15minute timer or automatic relaunch. Private reproducibility draft stays private
+until actual workflow stable, then verified instructions runbook before finalpause.
+Rejected worker01a1c48d-4d96-7cc3-b733-73a97973152f/turn01a1ce01-20cf-7e03-9442-f6d521fb8b02
+and collector/equivalents stay excluded, no replay/rephrase/reassign or workaround.
+No ledger reset/deletion/backups/purchase/account/model switch or fakeholdclear.
+M14 FINAL before M15 FINAL; after BOTH checkpoint/pause largergoal and assistance,
+never mark wholeOS complete from source/tooling/partial runtime evidence.
+Earlier pause/configuration headings below are HISTORY, not current instructions.
 
 ## USER-AUTHORIZED CONFIGURATION CHECKPOINT: pause for same-Root11 restart — 2026-11-14T06:10:24.016074+00:00
 
