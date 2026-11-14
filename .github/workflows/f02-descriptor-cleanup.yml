@@ -1,0 +1,77 @@
+name: M15 F02 execve copied descriptor cleanup
+on:
+  push:
+    branches: [codex/m15-f02-descriptor-cleanup-ci-20261114]
+permissions:
+  contents: read
+jobs:
+  focused:
+    name: Exact F02 copied descriptor lifetime6 Rust cases
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      LANG: C
+      LC_ALL: C
+    steps:
+      - name: Check out immutable reviewed source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 6b9ac7515291fda8bc3c83edb522b365facb3cad
+          persist-credentials: false
+          submodules: false
+          lfs: false
+          sparse-checkout: |
+            executer
+            scripts
+      - name: Verify exact source and provider joins
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/f02-descriptor-output"
+          test "$(git rev-parse HEAD)" = '6b9ac7515291fda8bc3c83edb522b365facb3cad'
+          test "$(git rev-parse 'HEAD^{tree}')" = 'e04823993af6f76a5187fb0e8e9ade3ae9e3b89b'
+          git rev-parse HEAD 'HEAD^{tree}' > "$RUNNER_TEMP/f02-descriptor-output/source-identity.txt"
+          sha256sum --check > "$RUNNER_TEMP/f02-descriptor-output/source-pins.txt" <<'PINS'
+          1770a59cf4486380eb5aa483d3634dc1e4c9c9c16d1bf09865d4ff8f71191e69  executer/include/uprotocol.h
+          00d83f9ad7cf6c7bd263a33933aa3f5b89e4e399c2245b86ff90be87d1be3221  executer/kernel/mcctrl/control.c
+          abc99c0e160d3a8aa1aa182f37f297cf3827f86faaac559117ae4df3197e9d14  executer/kernel/mcctrl/rust/mcctrl_helpers.rs
+          c33b6018308b1648287a38182e4efb95f6639f2798311a2acea218f44faf5b57  executer/user/rust/mcexec_helpers.rs
+          3e012767d9c88134cb2898f15a84d5851a2e97e0408aa34e98498e097ae41060  executer/user/rust/mcexec_load_descriptor.rs
+          1124b976cce679b2dd5588004359a70ada1fc10df701d75c923962bf6039f78b  scripts/tests/fixtures/m15_f02_execve_descriptor_cleanup.rs
+          a30d7a1f60f873502b95f1f7a5b81bdd94f9d7165d06a7d7a1746db4abb41054  scripts/tests/test_m15_executor_libdir.py
+          476b62b80a8c412871b75e40715705098f74eb44ab3b1ef54e1eec8f402ac5db  scripts/tests/test_m15_f02_execve_descriptor_cleanup.py
+          PINS
+          cat "$RUNNER_TEMP/f02-descriptor-output/source-pins.txt"
+      - name: Select the already qualified ordinary HOST Rust compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install nightly-2026-02-19 --profile minimal
+          compiler=$(rustup which --toolchain nightly-2026-02-19 rustc)
+          test "$("$compiler" --version)" = 'rustc 1.95.0-nightly (c04308580 2026-02-18)'
+          test "$(sha256sum "$compiler" | cut -d ' ' -f 1)" = '70ebcbbaa352a2d0ef5401eea226b0e61320840430b5c15ad016fb3dc8b54e09'
+          echo "RUSTC=$compiler" >> "$GITHUB_ENV"
+          { "$compiler" --version --verbose; sha256sum "$compiler"; python3 --version; } > "$RUNNER_TEMP/f02-descriptor-output/toolchain.txt"
+          cat "$RUNNER_TEMP/f02-descriptor-output/toolchain.txt"
+      - name: Run only the reviewed new descriptor lifetime fixture
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          python3 -B -m unittest scripts.tests.test_m15_f02_execve_descriptor_cleanup > "$RUNNER_TEMP/f02-descriptor-output/command.stdout" 2> "$RUNNER_TEMP/f02-descriptor-output/command.stderr"
+          status=$?
+          printf '%s\n' "$status" > "$RUNNER_TEMP/f02-descriptor-output/command.exit"
+          cat "$RUNNER_TEMP/f02-descriptor-output/command.stdout"
+          cat "$RUNNER_TEMP/f02-descriptor-output/command.stderr" >&2
+          test "$status" = 0 || exit "$status"
+          grep -Eq '^Ran 1 test in [0-9.]+s$' "$RUNNER_TEMP/f02-descriptor-output/command.stderr" || exit 1
+          test "$(tail -n 1 "$RUNNER_TEMP/f02-descriptor-output/command.stderr")" = OK || exit 1
+      - name: Preserve original focused fixture captures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: m15-f02-execve-descriptor-cleanup
+          path: ${{ runner.temp }}/f02-descriptor-output/
+          if-no-files-found: error
+          retention-days: 14
