@@ -1,0 +1,24 @@
+name: Complete util_thread changed-scope qualification
+on:
+  push:
+    branches: ['codex/util-thread-complete-ci-20261114']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  util-thread:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          sparse-checkout: |
+            scripts
+            kernel/rust
+          persist-credentials: false
+      - name: Use the existing pinned compiler
+        run: rustup toolchain install nightly-2026-02-19 --profile minimal
+      - name: Complete actual Rust body, ABI and lifecycle fixtures
+        env:
+          RUSTUP_TOOLCHAIN: nightly-2026-02-19
+        run: python3 -B -m unittest -v scripts.tests.test_m14_util_thread

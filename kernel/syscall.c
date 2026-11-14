@@ -29494,6 +29494,24 @@ int util_show_syscall_profile()
 	return 0;
 }
 #endif
+#ifdef MCKERNEL_RUST_F03_UTIL_THREAD
+#if !defined(MCKERNEL_RUST_SYSCALL_POLICY_HELPERS) || !defined(MCKERNEL_RUST_DO_SYSCALL_OUTER) || !defined(MCKERNEL_RUST_F03_DO_EXIT_V2) || !defined(MCKERNEL_RUST_F03_TERMINATE_HOST_PROVIDER) || !defined(__x86_64__) || defined(DCFA_KMOD)
+#error "complete Rust util_thread requires its genuine ordinary dispatch/exit providers"
+#endif
+_Static_assert(sizeof(int) == 4 && sizeof(long) == 8,
+               "qualify changed util_thread C integer ABI");
+_Static_assert(sizeof(struct syscall_request) == 72 &&
+               __alignof__(struct syscall_request) == 8 &&
+               offsetof(struct syscall_request, args) == 24,
+               "qualify changed util_thread request ABI");
+_Static_assert(sizeof(struct uti_ctx) == 4096 &&
+               sizeof(struct uti_info) == 160 &&
+               sizeof(struct uti_attr) == 136,
+               "qualify changed util_thread DATA ABI");
+extern int util_thread(struct uti_attr *);
+_Static_assert(__builtin_types_compatible_p(__typeof__(&util_thread),
+               int (*)(struct uti_attr *)), "util_thread exact int(pointer) ABI");
+#else
 #line 28297
 
 
@@ -29601,6 +29619,8 @@ int util_thread(struct uti_attr *arg)
 	return rc;
 }
 
+#endif
+#line 28403
 #ifdef MCKERNEL_RUST_SYSCALL_POLICY_HELPERS
 extern long syscall_util_thread_bridge(void *);
 #else

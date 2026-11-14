@@ -34,6 +34,7 @@ MODULES = (
     "scripts.tests.test_m14_f06_sigreturn_transaction",
     "scripts.tests.test_m14_f06_signal_xsave_cleanup",
     "scripts.tests.test_m14_f06_signal_restart",
+    "scripts.tests.test_m14_util_thread",
     "scripts.tests.test_m14_rust_rebuild",
 )
 SOURCE_PATHS = (
@@ -43,6 +44,8 @@ SOURCE_PATHS = (
     "kernel/rust/syscall_policy.rs", "kernel/rust/abi.rs", "kernel/rust/lib.rs",
     "kernel/rust/f03_forward_adapters.rs", "kernel/rust/f03_ptrace_adapters.rs",
     "kernel/rust/f03_host_cleanup.rs",
+    "kernel/rust/f03_util_thread.rs", "kernel/rust/uti_data_providers.rs",
+    "scripts/tests/fixtures/f03_util_thread_lifecycle.rs",
     "kernel/rust/f06_signal_ptrace_diagnostics.rs", "kernel/rust/f06_signal_trap_info.rs",
     "kernel/rust/x86_cpu_helpers.rs", "kernel/rust/native_signal.rs",
     "kernel/rust/cls.rs", "kernel/rust/debug.rs", "kernel/rust/lock_helpers.rs",
