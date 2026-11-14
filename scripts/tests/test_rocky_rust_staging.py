@@ -26,6 +26,33 @@ def digest(path):
 
 
 class RockyRustStagingTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Existing archive/fallback fixtures keep their authentic historical
+        # consumer rule.  The live vendored rule is checked independently below.
+        marker = os.path.join(REPO_ROOT, "ihk", "VENDORED-REVISION")
+        if os.path.lexists(marker):
+            history = os.environ.get("MCKERNEL_IHK_HISTORY")
+            if not history:
+                raise RuntimeError("vendored fixtures require restored MCKERNEL_IHK_HISTORY")
+            expected = "8d288b8bd81b50cc3a3f814d949b89bf416a6ec7"
+            root = subprocess.check_output([
+                "/usr/bin/git", "-C", history, "rev-parse", "--show-toplevel",
+            ]).decode("utf-8").strip()
+            head = subprocess.check_output([
+                "/usr/bin/git", "-C", history, "rev-parse", "HEAD",
+            ]).decode("ascii").strip()
+            if os.path.realpath(root) != os.path.realpath(history) or head != expected:
+                raise RuntimeError("fixture IHK history is not its own exact8d checkout")
+            cls.fixture_ihk_cmake = subprocess.check_output([
+                "/usr/bin/git", "-C", history, "show", expected + ":CMakeLists.txt",
+            ])
+        else:
+            with open(os.path.join(REPO_ROOT, "ihk", "CMakeLists.txt"), "rb") as stream:
+                cls.fixture_ihk_cmake = stream.read()
+        if hashlib.sha256(cls.fixture_ihk_cmake).hexdigest() != staging.IHK_COMPAT_CMAKE_SHA256:
+            raise RuntimeError("historical fixture IHK consumer rule identity differs")
+
     def setUp(self):
         self.temporary = tempfile.mkdtemp(prefix="rocky-rust-stage-test-")
         self.repo = os.path.join(self.temporary, "repo")
@@ -33,10 +60,8 @@ class RockyRustStagingTests(unittest.TestCase):
         os.makedirs(os.path.join(self.repo, "host-kernel", "rocky"))
         os.makedirs(os.path.join(self.repo, "host-kernel", "native-rust"))
         os.makedirs(os.path.join(self.repo, "ihk"))
-        shutil.copyfile(
-            os.path.join(REPO_ROOT, "ihk", "CMakeLists.txt"),
-            os.path.join(self.repo, "ihk", "CMakeLists.txt"),
-        )
+        with open(os.path.join(self.repo, "ihk", "CMakeLists.txt"), "wb") as stream:
+            stream.write(self.fixture_ihk_cmake)
         for item in staging.EXPECTED_INPUTS:
             source = os.path.join(REPO_ROOT, item["repository_path"])
             destination = os.path.join(self.repo, item["repository_path"])
@@ -564,13 +589,24 @@ macro_rules! áinclude { () => {} }
         )
 
     def test_generated_identity_reproduces_unchanged_ihk_consumer_git_rule(self):
-        identity = staging._compatibility_build_identity(REPO_ROOT)
-        expected = subprocess.check_output([
-            "git", "--git-dir=" + os.path.join(REPO_ROOT, "ihk", ".git"),
-            "rev-parse", "--short", "HEAD",
-        ]).rstrip(b"\r\n")
+        marker = os.path.join(REPO_ROOT, "ihk", "VENDORED-REVISION")
+        if os.path.lexists(marker):
+            with open(marker, "rb") as stream:
+                self.assertEqual(b"8d288b8bd81b50cc3a3f814d949b89bf416a6ec7\n", stream.read())
+            # Vendored identity must never fall back to the enclosing parent Git.
+            with mock.patch.object(staging.subprocess, "Popen", side_effect=AssertionError("unexpected Git BUILDID")), \
+                    mock.patch.object(staging.subprocess, "check_output", side_effect=AssertionError("unexpected Git BUILDID")):
+                identity = staging._compatibility_build_identity(REPO_ROOT)
+            expected = b"8d288b8"
+            self.assertEqual("ihk-vendored-revision", identity["origin"])
+        else:
+            identity = staging._compatibility_build_identity(REPO_ROOT)
+            expected = subprocess.check_output([
+                "git", "--git-dir=" + os.path.join(REPO_ROOT, "ihk", ".git"),
+                "rev-parse", "--short", "HEAD",
+            ]).rstrip(b"\r\n")
+            self.assertEqual("ihk-git-short-head", identity["origin"])
         self.assertEqual(expected.decode("ascii"), identity["value"])
-        self.assertEqual("ihk-git-short-head", identity["origin"])
         self.assertEqual(len(expected) + 1, identity["bytes"])
         self.assertEqual(hashlib.sha256(expected + b"\0").hexdigest(), identity["sha256"])
 

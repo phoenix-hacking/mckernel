@@ -38,6 +38,12 @@ class FakeRunner:
             raise AssertionError('unexpected identity command ' + repr(argv))
         c = argv.index('-C')
         root, args = Path(argv[c + 1]), argv[c + 2:]
+        if args == ['ls-tree', '-z', 'HEAD', '--', 'ihk'] and root == self.repo:
+            commit = self.gitlinks.get('ihk')
+            return (('160000 commit ' + commit + '\tihk\0').encode('ascii')
+                    if commit is not None else b'')
+        if args == ['rev-parse', '--show-toplevel'] and root == self.repo / 'ihk':
+            return (str(root.resolve()) + '\n').encode('utf-8')
         if args == ['rev-parse', 'HEAD']:
             return ((self.head if root == self.repo else self.submodule) + '\n').encode('ascii')
         if args == ['ls-files', '--others', '--exclude-standard', '-z']:

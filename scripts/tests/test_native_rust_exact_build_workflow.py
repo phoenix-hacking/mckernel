@@ -2365,10 +2365,19 @@ exec {modinfo_fd}<&-
     def test_frozen_legacy_oracle_and_shared_evidence_path_are_available(self):
         self.assertIn("submodules: recursive", self.workflow)
         self.assertIn(
-            'test "$(/usr/bin/git -C ihk rev-parse HEAD)" = '
-            '"8d288b8bd81b50cc3a3f814d949b89bf416a6ec7"',
+            '/usr/bin/python3 -E -s scripts/ihk_source_layout.py \\\n'
+            '            --repo "$GITHUB_WORKSPACE" --expect 8d288b8bd81b50cc3a3f814d949b89bf416a6ec7',
             self.workflow,
         )
+        self.assertIn(
+            'if test -f ihk/VENDORED-REVISION; then\n'
+            '            /usr/bin/python3 -E -s scripts/restore_ihk_source.py \\\n'
+            '              --repo "$GITHUB_WORKSPACE" --destination "$RUNNER_TEMP/ihk-history"\n'
+            '            export MCKERNEL_IHK_HISTORY="$RUNNER_TEMP/ihk-history"\n'
+            '          fi',
+            self.workflow,
+        )
+        self.assertNotIn('test "$(/usr/bin/git -C ihk rev-parse HEAD)"', self.workflow)
         self.assertGreaterEqual(
             self.workflow.count('$RUNNER_TEMP/native-rust-build-evidence'), 3
         )
