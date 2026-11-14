@@ -60,6 +60,8 @@ mod smp_ikc;
 mod spinlock_helpers;
 mod string;
 mod syscall_policy;
+#[cfg(f03_execveat_complete_candidate)]
+mod f03_execveat_complete;
 #[cfg(f03_do_mmap_candidate)]
 mod f03_do_mmap;
 #[cfg(f03_do_fork_candidate)]

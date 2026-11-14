@@ -109,6 +109,7 @@ set(MCKERNEL_POLICY_FORWARD_CONTEXT_SELECTED OFF)
 set(MCKERNEL_SIGNAL_FORWARD_PROVIDER_SELECTED OFF)
 set(MCKERNEL_WAIT_HOST_PROVIDER_SELECTED OFF)
 set(MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED OFF)
+set(MCKERNEL_EXECVEAT_COMPLETE_SELECTED OFF)
 set(MCKERNEL_DO_SYSCALL_C_FILE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c")
 set(MCKERNEL_DO_SYSCALL_DDEBUG_FLAGS 0)
 set(RUST_KERNEL_ENABLED OFF)
@@ -717,6 +718,20 @@ if (ENABLE_RUST_KERNEL AND "${ARCH}" STREQUAL "x86_64")
                 "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_perf_owner/transactions.rs"
 )
         endif()
+        # Complete exec uses the already selected genuine ordinary provider
+        # cohort; C body and callback exclusion are paired with this Rust cfg.
+        if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
+            set(MCKERNEL_EXECVEAT_COMPLETE_SELECTED ON)
+            list(APPEND RUST_KERNEL_CFG "--cfg" "f03_execveat_complete_candidate")
+            list(APPEND RUST_KERNEL_SRCS
+                "${CMAKE_CURRENT_SOURCE_DIR}/rust/f03_execveat_complete.rs"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/cls.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/process.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/include/syscall.h"
+                "${PROJECT_SOURCE_DIR}/executer/include/uprotocol.h"
+                "${PROJECT_SOURCE_DIR}/lib/include/string.h"
+                "${PROJECT_SOURCE_DIR}/lib/include/memory.h")
+        endif()
         # One exact kernel codegen profile for rebuilt builtins and consumer.
         set(MCKERNEL_RUST_CODEGEN_FLAGS
             -C panic=abort -C opt-level=2 -C debuginfo=2
@@ -1251,6 +1266,10 @@ endif()
 if (MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED)
     set_property(SOURCE "${MCKERNEL_DO_SYSCALL_C_FILE}" APPEND PROPERTY
         COMPILE_DEFINITIONS MCKERNEL_RUST_F03_PERF_OWNER_PROTOCOL)
+endif()
+if (MCKERNEL_EXECVEAT_COMPLETE_SELECTED)
+    set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY
+        COMPILE_DEFINITIONS MCKERNEL_RUST_F03_EXECVEAT_COMPLETE)
 endif()
 if (MCKERNEL_MEMORY_HOST_OFFLOAD_SELECTED)
     set_property(SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/syscall.c" APPEND PROPERTY

@@ -33965,10 +33965,10 @@ mod ptrace_entry {
 }
 
 // Functional McKernel OS/apps and Rust/assembly migration only; no security testing.
-// Complete live sys_execve/sys_execveat entries; existing C exec lifecycle is debt.
+// Complete live sys_execve/sys_execveat entries; exact selected exec callback ABI.
 extern "C" {
     #[link_name = "syscall_execveat_bridge"]
-    fn f03_execveat_existing_C_provider(
+    fn f03_execveat_selected_provider(
         ctx: *mut c_void, dirfd: CInt, filename: *const c_void,
         argv: *mut *mut c_void, envp: *mut *mut c_void, flags: CInt,
     ) -> CInt;
@@ -33984,7 +33984,7 @@ pub unsafe extern "C" fn sys_execve(_n: CInt, ctx: *mut X86UserContext) -> CLong
         crate::x86_cpu_helpers::ihk_mc_syscall_arg0(ctx) as *const c_void,
         crate::x86_cpu_helpers::ihk_mc_syscall_arg1(ctx) as *mut *mut c_void,
         crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) as *mut *mut c_void,
-        Some(f03_execveat_existing_C_provider),
+        Some(f03_execveat_selected_provider),
     )
 }
 
@@ -34002,7 +34002,7 @@ pub unsafe extern "C" fn sys_execveat(_n: CInt, ctx: *mut X86UserContext) -> CLo
         crate::x86_cpu_helpers::ihk_mc_syscall_arg2(ctx) as *mut *mut c_void,
         crate::x86_cpu_helpers::ihk_mc_syscall_arg3(ctx) as *mut *mut c_void,
         flags, *filename.cast::<i8>() as CInt,
-        Some(f03_execveat_existing_C_provider),
+        Some(f03_execveat_selected_provider),
     )
 }
 

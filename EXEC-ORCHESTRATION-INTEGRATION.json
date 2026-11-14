@@ -1,0 +1,78 @@
+{
+  "scope": "Functional McKernel OS/apps and Rust/assembly migration only; NO SECURITY TESTING",
+  "status": "PRIVATE SOURCE PREPARATION; all changed-target compilation, tests, ABI readback, link and native qualification PENDING",
+  "base": "655c36d2538e6bf026a45b03e4229de791dbe774",
+  "private_checkout": "/home/holden/mckernel-work/exec-orchestration-complete-20261114",
+  "canonical_compositor_and_executor": "same saved Root only",
+  "canonical_source_modified": false,
+  "source_inputs": {
+    "entrypoint": "/home/holden/mckernel/AGENTS.md",
+    "active_plan": "/home/holden/mckernel/CAMPAIGN.md",
+    "c4_contract": "/home/holden/mckernel-work/m14-blocker-resolution-20261110/m14-i01-e1-ownership-assessment-p04source-max-1/C4-SOURCE-OWNER-CONTRACTS.json",
+    "original_c_functions": ["kernel/syscall.c:8005 do_execveat", "kernel/syscall.c:8245 syscall_execveat_bridge"],
+    "actual_callers": "kernel/rust/syscall_policy.rs sys_execve/sys_execveat -> selected syscall_execveat_bridge link symbol",
+    "actual_host_consumer": "executer/user/rust/mcexec_helpers.rs act_execve_phase1/act_execve_phase2/act_execve"
+  },
+  "nonduplication_and_coordination": {
+    "complete_exec_owner_found": false,
+    "basis": "live canonical task list had Root, production_coordination, verified_120_path and this newly assigned exec owner; canonical retained both complete C exec bodies and only partial Rust helpers",
+    "util_owner": "/root/verified_120_path",
+    "util_private_commit": "51824aeaffd5dcaaa5e02ae46b024e621a109247",
+    "coordination": "util owner confirmed complete util_thread only, new f03_util_thread.rs and disjoint syscall.c body; Root composes adjacent CMake/lib additions",
+    "disabled_uti_logger": "reuse source5dd6/review29b0 unchanged; no duplicate implementation"
+  },
+  "integration": {
+    "selection": "MCKERNEL_PERF_OWNER_PROTOCOL_SELECTED -> f03_execveat_complete_candidate + MCKERNEL_RUST_F03_EXECVEAT_COMPLETE atomically",
+    "public_abi": "int syscall_execveat_bridge(void*,int,const void*,void**,void**,int)",
+    "c_header_abi": "int(void*,int,const char*,char**,char**,int); pointer representations and exact C-int result unchanged",
+    "c_body_exclusion": ["complete static do_execveat", "selected public syscall_execveat_bridge"],
+    "other_profiles": "retain original complete C bodies and original logical entry line numbers",
+    "shared_hunks": ["kernel/CMakeLists.txt flag initialization, narrow source dependencies before codegen and lower paired source macro", "kernel/rust/lib.rs guarded module", "kernel/rust/syscall_policy.rs:33969 private link-alias rename only, same public symbol and caller ABI"],
+    "new_runtime_source": "kernel/rust/f03_execveat_complete.rs",
+    "new_c_runtime_provider": false,
+    "new_abi_types": false,
+    "abi_readback": "35 C-header-derived words f03_execveat_complete_c_abi_words paired with f03_execveat_complete_rust_abi_words; affected actual objects must be compared after admitted compilation"
+  },
+  "semantics": {
+    "transaction": "copy entry context; filename admission; zeroed four-page descriptor; host phase1; shebang pre-arguments; argv flatten; descriptor args reset; envp flatten; irreversible unmap; preemption-disable/context install; ranges; host PTE clear; host phase2; signal reset; ptrace; cached entry-process execed publication; ordered temporaries release; original switch tail",
+    "phase1_failure": "negate host long result before cleanup and original C-int narrowing",
+    "phase2_failure": "retain host long result unchanged; enable preemption then read live thread->proc PID/thread TID and real SIGKILL; original ordered cleanup",
+    "ranges_failure": "retain real int result sign-extended to long; log then same preempt-enable/live-owner kill path; never continue host transfer",
+    "ptrace_failure": "retain diagnostic and continue successful exec publication",
+    "host_pte_failure": "retain original ignored return",
+    "ownership": "borrow current thread/entry VM/entry process under original lifetime; no new thread/process reference, refcount update, wait/status/TID state substitute or cleanup policy; actual do_syscall transport/scheduler providers own all nested request/reply work",
+    "request_source_correction": "initialize complete SyscallRequest once, defining formerly uninitialized args5 and metadata bytes; named host phase1 args0..4 and phase2 args0..2 unchanged, same request pointer and phase2 args3/4 reuse; no parity claim for indeterminate-byte behavior",
+    "cleanup": "envp then argv then four-page descriptor, once each; explicit preexisting tracked origins7142/7285/7288/7290 preserved",
+    "debug_identity": "three original do_execveat Ddebug records7600/7606/7727 and diagnostic allocation/free origins7623/7628/7640/7645 derived from baseline selected #line7179 at physical7652"
+  },
+  "genuine_providers_reused": [
+    "cls::get_this_cpu_local_var and preempt_enable",
+    "real do_syscall and ihk_mc_get_processor_id",
+    "x86_memory_helpers::virt_to_phys/strlen_user/strcpy_from_user",
+    "string::flatten_strings_from_user",
+    "host_helpers::prepare_process_ranges_args_envs",
+    "real clear_host_pte and do_kill",
+    "mem_helpers::kmalloc_tracked/kfree_tracked",
+    "syscall_policy::f03_munmap_all_current_v1",
+    "syscall_policy::f03_execveat_filename_admission_v1/f03_execveat_allocate_descriptor_v1",
+    "syscall_policy::f03_execveat_install_user_context_v1/exec_reset_signal_state_current_v1",
+    "syscall_policy::f03_execveat_ptrace_report_v1/f03_execveat_release_temporaries_v1/f03_execveat_finish_switch_v1"
+  ],
+  "hosted_ready_validation": {
+    "command": "python3 -B -m unittest scripts.tests.test_f03_execveat_complete",
+    "tests_executed_here": false,
+    "prepared_behavior_cases": 29,
+    "coverage": ["actual unmodified Rust exec module and real ABI source", "atomic selected C body exclusion, original fallback and unpaired-provider refusal", "admission/allocation errors", "phase1 sign negation and phase2 unchanged signed/wide results before C-int narrowing", "argv/envp failures with absent/present diagnostic allocation and partial output ownership", "irreversible range/phase2 errors enable preemption before real kill ABI/live PID/TID", "shebang argument placement and descriptor args reset", "original ignored host-PTE error and nonfatal ptrace error", "copied complete original context survives mutation of caller context", "cached entry-process publication despite changed live process", "same live stack request survives joined reader and retains provider metadata/phase2 old args3/4", "exactly-once ordered releases with poisoned released buffers/descriptor before finish"],
+    "observer_limit": "HOST observers are test doubles and never production/link/native ownership evidence",
+    "remaining_root_checks": ["admitted hosted test run", "affected genuine kernel/syscall.c C and Rust compilation with35-word ABI comparison", "actual selected image/provider closure and absence of C do_execveat/syscall_execveat_bridge body ownership", "matching admitted functional exec/workload/lifetime/error native qualification"]
+  },
+  "reuse": "retain passing unchanged SDK/ABI/provider/image proofs at exact scopes until material inputs change; only changed affected objects need new qualification",
+  "execution_and_holds": {
+    "local_compiler_test_build_native_service_or_original_handle_poll": false,
+    "account_live_controller_state_or_ledger_edit": false,
+    "harness_candidate_modified": false,
+    "backup_restore_ledger_reset_held_task_replay_or_spawn": false,
+    "retained_original_charge": "2415919104B/jobs2 PLUS all overhead; all UNKNOWN/native/account/source/lease/privateIPC/resource/failed-nonce holds unchanged",
+    "m14_or_m15_acceptance_claimed": false
+  }
+}
